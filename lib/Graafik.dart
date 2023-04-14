@@ -181,6 +181,8 @@ class Graafik extends StatelessWidget {
       var url1 = Uri.parse(
           'https://shelly-64-eu.shelly.cloud/device/relay/settings/schedule_rules');
       var res1 = await http.post(url1, headers: headers1, body: data1);
+      print(graafik);
+      print(res1.body);
       vastus.add(res1.body);
       await Future.delayed(const Duration(seconds: 1));
     }
