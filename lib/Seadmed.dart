@@ -37,7 +37,9 @@ void main() async {
   for (var device in devices.values) {
     var id = device['id'];
     var name = device['name'];
+    var gen = device['gen'];
     print(id);
     print(name);
+    print(gen);
   }
 }
