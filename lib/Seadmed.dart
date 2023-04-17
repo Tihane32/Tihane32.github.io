@@ -1,45 +1,153 @@
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:crypto/crypto.dart';
+import 'package:flutter/material.dart';
 
 void main() async {
-  String message = 'kalatraaler';
+  runApp(MyApp());
+}
 
-  String sha1Hash = sha1.convert(message.codeUnits).toString();
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Login Demo',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+        visualDensity: VisualDensity.adaptivePlatformDensity,
+      ),
+      home: LoginPage(),
+    );
+  }
+}
 
-  var headers = {
-    'Content-Type': 'application/x-www-form-urlencoded',
-  };
+class LoginPage extends StatefulWidget {
+  @override
+  _LoginPageState createState() => _LoginPageState();
+}
 
-  var data = {
-    'email': 'jaakob.lambot@gmail.com',
-    'password': sha1Hash,
-    'var': '2',
-  };
-  var url = Uri.parse('https://api.shelly.cloud/auth/login');
-  var res = await http.post(url, headers: headers, body: data);
-  var resjson = json.decode(res.body) as Map<String, dynamic>;
-  var token = resjson['data']['token'];
-  print(resjson);
-  print(token);
+class _LoginPageState extends State<LoginPage> {
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final TextEditingController kasutajanimi = TextEditingController();
+  final TextEditingController parool = TextEditingController();
+  final GlobalKey<ScaffoldMessengerState> _scaffoldMessengerKey =
+      GlobalKey<ScaffoldMessengerState>();
+  Future<void> _submitForm() async {
+    String ajutineParool = parool.text as String;
+    String ajutineKastuajanimi = kasutajanimi.text as String;
 
-  var headers1 = {
-    'Authorization': 'Bearer $token',
-  };
+    String sha1Hash = sha1.convert(ajutineParool.codeUnits).toString();
 
-  var url1 = Uri.parse(
-      'https://shelly-64-eu.shelly.cloud/interface/device/get_all_lists');
-  var res1 = await http.post(url1, headers: headers1);
-  var res1json = json.decode(res1.body) as Map<String, dynamic>;
-  var devices = res1json['data']['devices'];
-  print(devices);
+    var headers = {
+      'Content-Type': 'application/x-www-form-urlencoded',
+    };
 
-  for (var device in devices.values) {
-    var id = device['id'];
-    var name = device['name'];
-    var gen = device['gen'];
-    print(id);
-    print(name);
-    print(gen);
+    var kasutajaAndmed = {
+      'email': ajutineKastuajanimi,
+      'password': sha1Hash,
+      'var': '2',
+    };
+    var sisselogimiseUrl = Uri.parse('https://api.shelly.cloud/auth/login');
+    var sisselogimiseVastus = await http.post(sisselogimiseUrl,
+        headers: headers, body: kasutajaAndmed);
+    if (sisselogimiseVastus.statusCode == 200) {
+      _scaffoldMessengerKey.currentState?.showSnackBar(
+        SnackBar(
+          backgroundColor: Colors.green,
+          content: Text('Login successful'),
+          duration: Duration(seconds: 5),
+        ),
+      );
+    } else {
+      _scaffoldMessengerKey.currentState?.showSnackBar(
+        SnackBar(
+          backgroundColor: Colors.red,
+          content: Text('Login unsuccessful'),
+          duration: Duration(seconds: 5),
+        ),
+      );
+      return;
+    }
+    var vastusJSON =
+        json.decode(sisselogimiseVastus.body) as Map<String, dynamic>;
+    var token = vastusJSON['data']['token'];
+
+    var headers1 = {
+      'Authorization': 'Bearer $token',
+    };
+
+    var seadmeteSaamiseUrl = Uri.parse(
+        'https://shelly-64-eu.shelly.cloud/interface/device/get_all_lists');
+    var seadmeteSaamiseVastus =
+        await http.post(seadmeteSaamiseUrl, headers: headers1);
+    var seadmeteSaamiseVastusJSON =
+        json.decode(seadmeteSaamiseVastus.body) as Map<String, dynamic>;
+    var seadmeteMap = seadmeteSaamiseVastusJSON['data']['devices'];
+
+    var i = 0;
+    var seadmed = new Map<String, dynamic>();
+
+    for (var device in seadmeteMap.values) {
+      var seade = new Map<String, dynamic>();
+      seade['Seadme ID'] = device['id'];
+      seade['Seadme nimi'] = device['name'];
+      seade['Seadme generatsioon'] = device['gen'];
+      seadmed['Seade$i'] = seade;
+      i++;
+    }
+
+    print(seadmed);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ScaffoldMessenger(
+        key: _scaffoldMessengerKey,
+        child: Scaffold(
+          appBar: AppBar(
+            title: Text('Login'),
+          ),
+          body: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Form(
+              key: _formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  TextFormField(
+                    controller: kasutajanimi,
+                    decoration: InputDecoration(labelText: 'Username'),
+                    validator: (value) {
+                      if (value!.trim().isEmpty) {
+                        return 'Username is required';
+                      }
+                      return null;
+                    },
+                  ),
+                  TextFormField(
+                    controller: parool,
+                    decoration: InputDecoration(labelText: 'Password'),
+                    obscureText: true,
+                    validator: (value) {
+                      if (value!.trim().isEmpty) {
+                        return 'Password is required';
+                      }
+                      return null;
+                    },
+                  ),
+                  SizedBox(height: 16.0),
+                  ElevatedButton(
+                    onPressed: () {
+                      if (_formKey.currentState!.validate()) {
+                        _submitForm();
+                      }
+                    },
+                    child: Text('Login'),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ));
   }
 }
