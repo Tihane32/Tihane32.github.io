@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:convert';
 
 void main() {
   runApp(const MyApp());
@@ -29,7 +30,7 @@ class DeviceSettingsPage extends StatefulWidget {
 
 class _DeviceSettingsPageState extends State<DeviceSettingsPage> {
   late TextEditingController _controller;
-  late SharedPreferences _prefs;
+  late SharedPreferences prefs;
 
   @override
   void initState() {
@@ -39,15 +40,20 @@ class _DeviceSettingsPageState extends State<DeviceSettingsPage> {
   }
 
   Future<void> _loadPreferences() async {
-    _prefs = await SharedPreferences.getInstance();
-    String name = _prefs.getString('device_name') ?? 'My Device';
+    prefs = await SharedPreferences.getInstance();
+    String? storedJsonMap = prefs.getString('seadmed');
+
+    Map<String, dynamic> storedMap = json.decode(storedJsonMap!);
+
+    var name = storedMap['Seade0']['Seadme_nimi'];
+
     setState(() {
       _controller.text = name;
     });
   }
 
   Future<void> _savePreferences(String name) async {
-    await _prefs.setString('device_name', name);
+    await prefs.setString('seadmed', name);
   }
 
   @override

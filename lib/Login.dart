@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'SeadmeSeaded.dart';
 
 void main() async {
   runApp(LoginApp());
@@ -56,9 +57,17 @@ class _LoginPageState extends State<LoginPage> {
         SnackBar(
           backgroundColor: Colors.green,
           content: Text('Login successful'),
-          duration: Duration(seconds: 5),
+          duration: Duration(seconds: 3),
         ),
       );
+
+      // Navigate to another page after 5 seconds.
+      Future.delayed(Duration(seconds: 3), () {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => MyApp()),
+        );
+      });
     } else {
       _scaffoldMessengerKey.currentState?.showSnackBar(
         SnackBar(
