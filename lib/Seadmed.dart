@@ -2,6 +2,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
   runApp(MyApp());
@@ -89,14 +90,44 @@ class _LoginPageState extends State<LoginPage> {
 
     for (var device in seadmeteMap.values) {
       var seade = new Map<String, dynamic>();
-      seade['Seadme ID'] = device['id'];
-      seade['Seadme nimi'] = device['name'];
-      seade['Seadme generatsioon'] = device['gen'];
+      seade['Seadme_ID'] = device['id'];
+      seade['Seadme_nimi'] = device['name'];
+      seade['Seadme_generatsioon'] = device['gen'];
       seadmed['Seade$i'] = seade;
       i++;
     }
 
-    print(seadmed);
+    var keySaamiseUrl =
+        Uri.parse('https://shelly-64-eu.shelly.cloud/user/get_user_key');
+    var keyVastus = await http.post(keySaamiseUrl, headers: headers1);
+    var keyVastusJSON = json.decode(keyVastus.body);
+
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String seadmedMap = json.encode(seadmed);
+    await prefs.setString('seadmed', seadmedMap);
+
+    /* Näide kuidas võtta mälust seadmete map
+    String? storedJsonMap = prefs.getString('seadmed');
+    if (storedJsonMap != null) {
+      Map<String, dynamic> storedMap = json.decode(storedJsonMap);
+      /*
+      Näide, kuidas saada kätte kindla seadme id.
+      var testmap;
+      testmap = storedMap['Seade0'];
+      testmap = storedMap['Seade0']['Seadme_ID'];
+      */
+    }
+    */
+
+    /*Näide kuidas võtta mälust auth key
+    String keyMap = json.encode(keyVastusJSON['data']['key']);
+    await prefs.setString('key', keyMap);
+    String? storedKey = prefs.getString('key');
+    if (storedKey != null) {
+      String storedKeyString = jsonDecode(storedKey);
+      print(storedKeyString);
+    }
+    */
   }
 
   @override
