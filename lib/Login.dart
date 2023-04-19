@@ -5,9 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'SeadmeSeaded.dart';
 
-void main() async {
-  runApp(LoginApp());
-}
+
 
 class LoginApp extends StatelessWidget {
   @override
