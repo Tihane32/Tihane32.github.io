@@ -43,6 +43,7 @@ dependencies:
   hive: ^2.2.3
   shared_preferences: ^2.0.18
   crypto: ^3.0.2
+  syncfusion_flutter_charts: ^21.1.41
 
 
 dev_dependencies:
