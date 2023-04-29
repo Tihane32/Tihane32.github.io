@@ -25,24 +25,12 @@ class _MyChartPageState extends State<MyChartPage> {
 
   Future<void> fetchData() async {
     var headers = {
-      'User-Agent':
-          'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/112.0',
-      'Accept': 'application/json, text/plain, */*',
-      'Accept-Language': 'en-US,en;q=0.5',
-      'Accept-Encoding': 'gzip, deflate, br',
       'Authorization':
           'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwd2QiLCJpYXQiOjE2ODI3MTI3ODIsInVzZXJfaWQiOiIxNTE0MDQ0Iiwic24iOiIxIiwidXNlcl9hcGlfdXJsIjoiaHR0cHM6XC9cL3NoZWxseS02NC1ldS5zaGVsbHkuY2xvdWQiLCJuIjo0ODkxLCJleHAiOjE2ODI3OTkxODJ9.bYPlbAuHARSarJ6J_8l8PLzJG463YePltVS5jxKR-QI',
-      'Content-Type': 'application/x-www-form-urlencoded',
-      'Origin': 'https://home.shelly.cloud',
-      'Connection': 'keep-alive',
-      'Referer': 'https://home.shelly.cloud/',
-      'Sec-Fetch-Dest': 'empty',
-      'Sec-Fetch-Mode': 'cors',
-      'Sec-Fetch-Site': 'same-site',
     };
     print('siin');
     var data = {
-      'id': '30c6f7828098',
+      'id': '80646f81ad9a',
       'channel': '0',
       'date_range': 'custom',
       'date_from': '2023-04-01 00:00:00',
@@ -63,8 +51,10 @@ class _MyChartPageState extends State<MyChartPage> {
         .toList();
   }
 
+  late TooltipBehavior _tooltipBehavior;
   @override
   void initState() {
+    _tooltipBehavior = TooltipBehavior(enable: true, header: 'Tarbitud:');
     super.initState();
     fetchData();
   }
@@ -73,7 +63,7 @@ class _MyChartPageState extends State<MyChartPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('My Chart'),
+        title: Text('Tarbimise graafik'),
       ),
       body: FutureBuilder<void>(
         future: fetchData(),
@@ -81,12 +71,20 @@ class _MyChartPageState extends State<MyChartPage> {
           if (snapshot.connectionState == ConnectionState.done) {
             return Center(
               child: SfCartesianChart(
-                primaryXAxis: DateTimeAxis(),
+                primaryXAxis: DateTimeAxis(
+                    title: AxisTitle(text: 'Kuupäev'), interval: 1),
+                primaryYAxis: NumericAxis(
+                    labelFormat: '{value} Wh',
+                    title: AxisTitle(text: 'Tarbimine'),
+                    interval: 10),
+                tooltipBehavior: _tooltipBehavior,
                 series: <ChartSeries<_ChartData, DateTime>>[
-                  LineSeries<_ChartData, DateTime>(
+                  SplineSeries<_ChartData, DateTime>(
+                    splineType: SplineType.monotonic,
                     dataSource: chartData,
                     xValueMapper: (_ChartData data, _) => data.date,
                     yValueMapper: (_ChartData data, _) => data.consumption,
+                    enableTooltip: true,
                   ),
                 ],
               ),
