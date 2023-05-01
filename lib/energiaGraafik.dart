@@ -24,6 +24,7 @@ class _MyChartPageState extends State<MyChartPage> {
   List<_ChartData> chartData = [];
 
   Future<void> fetchData() async {
+    //Todo peab lisama beareri saamise
     var headers = {
       'Authorization':
           'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwd2QiLCJpYXQiOjE2ODI3MTI3ODIsInVzZXJfaWQiOiIxNTE0MDQ0Iiwic24iOiIxIiwidXNlcl9hcGlfdXJsIjoiaHR0cHM6XC9cL3NoZWxseS02NC1ldS5zaGVsbHkuY2xvdWQiLCJuIjo0ODkxLCJleHAiOjE2ODI3OTkxODJ9.bYPlbAuHARSarJ6J_8l8PLzJG463YePltVS5jxKR-QI',
