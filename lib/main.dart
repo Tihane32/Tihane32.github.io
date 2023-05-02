@@ -236,7 +236,7 @@ class _KoduLehtState extends State<KoduLeht> {
 
                   context,
 
-                  MaterialPageRoute(builder: (context) => Seadmetelisamine()),
+                  MaterialPageRoute(builder: (context) => MinuSeadmed()),
                 );
               }
             });
@@ -561,7 +561,7 @@ class _HinnaGraafikState extends State<HinnaGraafik> {
               Navigator.push(
                 //Kui vajutatakse Teie seadmed ikooni peale, siis viiakse Seadmetelisamine lehele
                 context,
-                MaterialPageRoute(builder: (context) => Seadmetelisamine()),
+                MaterialPageRoute(builder: (context) => MinuSeadmed()),
               );
             }
           },
