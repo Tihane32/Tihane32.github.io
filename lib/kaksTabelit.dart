@@ -1,11 +1,7 @@
 import 'package:flutter/material.dart';
 import 'main.dart';
 
-void main() {
-  runApp(MyApp());
-}
-
-class MyApp extends StatelessWidget {
+class MinuSeadmed extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -73,7 +69,6 @@ class ManuaalsedSeadmed extends StatelessWidget {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: DataTable(
-        showCheckboxColumn: false,
         columns: const <DataColumn>[
           DataColumn(
             label: Text(
@@ -103,7 +98,7 @@ class ManuaalsedSeadmed extends StatelessWidget {
                   DataCell(Text(e.value[2])),
                 ],
                 onSelectChanged: (isSelected) {
-                 {
+                  if (isSelected != null && isSelected) {
                     onTap(e.value);
                     Navigator.push(
                       context,
