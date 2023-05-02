@@ -14,6 +14,7 @@ import 'Graafik.dart';
 import 'OnOff.dart';
 import 'Login.dart';
 import 'kaksTabelit.dart';
+import 'funktsioonid/graafikGen2.dart';
 
 //Maini käivitamine, home on koduleht.
 

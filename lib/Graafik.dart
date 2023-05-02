@@ -4,7 +4,7 @@ TalTech
 */
 
 import 'package:flutter/material.dart';
-import 'package:testuus4/graafikGen2.dart';
+import 'funktsioonid/graafikGen2.dart';
 import 'Kontroll.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
