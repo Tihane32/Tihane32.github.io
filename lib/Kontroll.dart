@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'main.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+
 //Kontroll lehe loomine
 class Kontroll extends StatefulWidget {
   @override

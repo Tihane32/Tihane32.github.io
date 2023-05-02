@@ -12,6 +12,8 @@ import 'Elering.dart';
 import 'CurrentPrice.dart';
 import 'Graafik.dart';
 import 'OnOff.dart';
+import 'Login.dart';
+
 
 //Maini käivitamine, home on koduleht.
 
@@ -22,6 +24,7 @@ void main() {
 }
 
 //Defineerime kodulehe
+
 
 class KoduLeht extends StatefulWidget {
   const KoduLeht({Key? key}) : super(key: key);
@@ -1215,6 +1218,17 @@ class _SeadmetelisamineState extends State<Seadmetelisamine> {
       appBar: AppBar(
         backgroundColor: Colors.red[600],
         title: const Text('Shelly pistik'),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.home),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => LoginApp()),
+              );
+            },
+          ),
+        ],
       ),
       body: Column(
         children: [

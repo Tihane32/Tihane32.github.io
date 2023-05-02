@@ -40,12 +40,15 @@ class Graafik extends StatelessWidget {
 
     for (var i = 0; i < users.length; i++) //Teeb iga seadme kohta ühe loopi
     {
+      //
+      //Siia if gen2 et läheks graafikGen2 faili. Peab selected ja valitudPaev edasi passima
+      //
+
       List<String> kasutajaTunnused = users[i].split(
           ','); //Teeb koma juures pooleks sest iga seadme id ja key on eraldatud komaga
       var test = Map();
 
       String graafik = '';
-      var entryList;
 
       //järgnevat tehakse kui moodustatakse homset graafikut
       //all olev osa on selleks, et homse graafiku moodustamisel ei kaoks ära tänase päeva graafik
@@ -67,8 +70,6 @@ class Graafik extends StatelessWidget {
         //Kui post läheb läbi siis:
         if (res.statusCode == 200) {
           final httpPackageJson = json.decode(res.body) as Map<String, dynamic>;
-
-          entryList = httpPackageJson.entries.toList();
 
           final scheduleRules1 = httpPackageJson['data']['device_settings']
               ['relays'][0]['schedule_rules'];
