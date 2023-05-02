@@ -190,15 +190,14 @@ class KontoSeadmed extends StatefulWidget {
 }
 
 class _KontoSeadmedState extends State<KontoSeadmed> {
-  late Map<String, List<String>> minuSeadmedK = {
-  };
+  late Map<String, List<String>> minuSeadmedK = {};
   void initState() {
     super.initState();
     _submitForm();
   }
 
   Future _submitForm() async {
-    //minuSeadmedK.clear();
+    minuSeadmedK.clear();
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? storedJsonMap = prefs.getString('seadmed');
     if (storedJsonMap != null) {
@@ -272,6 +271,6 @@ class _KontoSeadmedState extends State<KontoSeadmed> {
       ),
     );
   }
-  
+
   void onTap(List<String> value) {}
 }
