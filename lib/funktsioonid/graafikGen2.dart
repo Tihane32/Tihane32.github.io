@@ -1,16 +1,36 @@
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:shared_preferences/shared_preferences.dart';
 
-void main() async {
+gen2GraafikuLoomine(var selected, var valitudPaev) async {
   var graafikud = Map<String, dynamic>();
   await graafikuteSaamine(graafikud);
   print(graafikud);
 }
 
 graafikuteSaamine(Map<String, dynamic> graafikud) async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  String? ajutineKasutajanimi = prefs.getString('Kasutajanimi');
+  String? sha1Hash = prefs.getString('Kasutajaparool');
+
+  var headers1 = {
+    'Content-Type': 'application/x-www-form-urlencoded',
+  };
+
+  var kasutajaAndmed = {
+    'email': ajutineKasutajanimi,
+    'password': sha1Hash,
+    'var': '2',
+  };
+  var sisselogimiseUrl = Uri.parse('https://api.shelly.cloud/auth/login');
+  var sisselogimiseVastus = await http.post(sisselogimiseUrl,
+      headers: headers1, body: kasutajaAndmed);
+  var vastusJSON =
+      json.decode(sisselogimiseVastus.body) as Map<String, dynamic>;
+  var token = vastusJSON['data']['token'];
+  //Todo peab lisama beareri saamise
   var headers = {
-    'Authorization':
-        'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwd2QiLCJpYXQiOjE2ODI1Mjk3NDcsInVzZXJfaWQiOiIxNTE0MDQ0Iiwic24iOiIxIiwidXNlcl9hcGlfdXJsIjoiaHR0cHM6XC9cL3NoZWxseS02NC1ldS5zaGVsbHkuY2xvdWQiLCJuIjo4NzQ5LCJleHAiOjE2ODI2MTYxNDd9.SV0T6T8CgTfJJ40qBgCtyRJ1owqgxTfkPXUgW-uooDQ',
+    'Authorization': 'Bearer $token',
   };
 
   var data = {

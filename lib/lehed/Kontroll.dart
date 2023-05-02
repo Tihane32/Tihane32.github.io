@@ -3,10 +3,9 @@ Trevor Uuna, Jaakob Lambot 27.03.2023
 TalTech
 */
 import 'package:flutter/material.dart';
-import 'main.dart';
+import '../main.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-
+import 'koduleht.dart';
 //Kontroll lehe loomine
 class Kontroll extends StatefulWidget {
   @override
