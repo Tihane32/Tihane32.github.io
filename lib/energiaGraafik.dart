@@ -2,10 +2,10 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:syncfusion_flutter_charts/charts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+//void main() => runApp(MyApp());
 
-void main() => runApp(MyApp());
-
-class MyApp extends StatelessWidget {
+class EnergiaGraafikApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -24,10 +24,28 @@ class _MyChartPageState extends State<MyChartPage> {
   List<_ChartData> chartData = [];
 
   Future<void> fetchData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? ajutineKasutajanimi = prefs.getString('Kasutajanimi');
+    String? sha1Hash = prefs.getString('Kasutajaparool');
+
+var headers1 = {
+      'Content-Type': 'application/x-www-form-urlencoded',
+    };
+
+    var kasutajaAndmed = {
+      'email': ajutineKasutajanimi,
+      'password': sha1Hash,
+      'var': '2',
+    };
+    var sisselogimiseUrl = Uri.parse('https://api.shelly.cloud/auth/login');
+    var sisselogimiseVastus = await http.post(sisselogimiseUrl,
+        headers: headers1, body: kasutajaAndmed);
+var vastusJSON =
+        json.decode(sisselogimiseVastus.body) as Map<String, dynamic>;
+    var token = vastusJSON['data']['token'];
     //Todo peab lisama beareri saamise
     var headers = {
-      'Authorization':
-          'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwd2QiLCJpYXQiOjE2ODI3MTI3ODIsInVzZXJfaWQiOiIxNTE0MDQ0Iiwic24iOiIxIiwidXNlcl9hcGlfdXJsIjoiaHR0cHM6XC9cL3NoZWxseS02NC1ldS5zaGVsbHkuY2xvdWQiLCJuIjo0ODkxLCJleHAiOjE2ODI3OTkxODJ9.bYPlbAuHARSarJ6J_8l8PLzJG463YePltVS5jxKR-QI',
+    'Authorization': 'Bearer $token',
     };
     print('siin');
     var data = {

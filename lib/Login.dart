@@ -4,8 +4,8 @@ import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'SeadmeSeaded.dart';
-
-
+import 'energiaGraafik.dart';
+void main() => runApp(LoginApp());
 
 class LoginApp extends StatelessWidget {
   @override
@@ -58,12 +58,15 @@ class _LoginPageState extends State<LoginPage> {
           duration: Duration(seconds: 3),
         ),
       );
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      await prefs.setString('Kasutajanimi', ajutineKastuajanimi);
+      await prefs.setString('Kasutajaparool', sha1Hash);
 
       // Navigate to another page after 5 seconds.
       Future.delayed(Duration(seconds: 3), () {
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => MyApp()),
+          MaterialPageRoute(builder: (context) => EnergiaGraafikApp()),
         );
       });
     } else {
