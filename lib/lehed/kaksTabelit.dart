@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import '../main.dart';
-
+import 'hinnaGraafik.dart';
 
 class MinuSeadmed extends StatelessWidget {
   @override
@@ -100,7 +99,7 @@ class ManuaalsedSeadmed extends StatelessWidget {
                   DataCell(Text(e.value[2])),
                 ],
                 onSelectChanged: (isSelected) {
-                 {
+                  {
                     onTap(e.value);
                     Navigator.push(
                       context,

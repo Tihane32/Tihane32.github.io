@@ -3,7 +3,8 @@ import 'dart:convert';
 import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../SeadmeSeaded.dart';
+//import '/SeadmeSeaded.dart';
+import 'package:testuus4/lehed/seadmeSeaded.dart';
 import 'energiaGraafik.dart';
 void main() => runApp(LoginApp());
 
