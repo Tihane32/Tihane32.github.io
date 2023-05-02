@@ -9,7 +9,7 @@ import 'Graafik.dart';
 import 'OnOff.dart';
 import 'Login.dart';
 import 'kaksTabelit.dart';
-import 'liigsedLehed.dart';
+import 'graafikuValimine.dart';
 import 'hinnaGraafik.dart';
 
 class KoduLeht extends StatefulWidget {
