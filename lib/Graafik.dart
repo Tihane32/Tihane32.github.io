@@ -4,6 +4,7 @@ TalTech
 */
 
 import 'package:flutter/material.dart';
+import 'package:testuus4/graafikGen2.dart';
 import 'Kontroll.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -41,9 +42,9 @@ class Graafik extends StatelessWidget {
     for (var i = 0; i < users.length; i++) //Teeb iga seadme kohta ühe loopi
     {
       //
-      //Siia if gen2 et läheks graafikGen2 faili. Peab selected ja valitudPaev edasi passima
+      //TODO: Siia if gen2 et läheks graafikGen2 faili. Peab selected ja valitudPaev edasi passima
       //
-
+      gen2GraafikuLoomine(selected, valitudPaev);
       List<String> kasutajaTunnused = users[i].split(
           ','); //Teeb koma juures pooleks sest iga seadme id ja key on eraldatud komaga
       var test = Map();
