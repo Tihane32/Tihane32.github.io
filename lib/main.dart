@@ -13,7 +13,7 @@ import 'CurrentPrice.dart';
 import 'Graafik.dart';
 import 'OnOff.dart';
 import 'Login.dart';
-
+import 'kaksTabelit.dart';
 
 //Maini käivitamine, home on koduleht.
 
@@ -24,7 +24,6 @@ void main() {
 }
 
 //Defineerime kodulehe
-
 
 class KoduLeht extends StatefulWidget {
   const KoduLeht({Key? key}) : super(key: key);
