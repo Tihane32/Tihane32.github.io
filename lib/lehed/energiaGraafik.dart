@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:testuus4/funktsioonid/token.dart';
 //void main() => runApp(MyApp());
 
 class EnergiaGraafikApp extends StatelessWidget {
@@ -24,7 +25,7 @@ class _MyChartPageState extends State<MyChartPage> {
   List<_ChartData> chartData = [];
 
   Future<void> fetchData() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
+    /*SharedPreferences prefs = await SharedPreferences.getInstance();
     String? ajutineKasutajanimi = prefs.getString('Kasutajanimi');
     String? sha1Hash = prefs.getString('Kasutajaparool');
 
@@ -43,7 +44,8 @@ var headers1 = {
 var vastusJSON =
         json.decode(sisselogimiseVastus.body) as Map<String, dynamic>;
     var token = vastusJSON['data']['token'];
-    //Todo peab lisama beareri saamise
+    */
+
     var headers = {
     'Authorization': 'Bearer $token',
     };

@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import '../main.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'koduleht.dart';
+
 //Kontroll lehe loomine
 class Kontroll extends StatefulWidget {
   @override
@@ -28,7 +29,8 @@ class _KontrollState extends State<Kontroll> {
         []; //Võtab mälust 'vastus' asukohast väärtused, siin on Shelly responsid graafiku koostamisele
     final String? asendus = prefs.getString(
         'Aeg'); //Võtab mälust 'Aeg' asukohast väärtused, siin on Ajahetk, kui Shelly responsid loodi
-
+    print(stringList);
+    print('object');
     setState(() {
       _stringList = stringList;
       aeg = asendus;

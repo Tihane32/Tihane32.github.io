@@ -4,7 +4,7 @@ import 'dart:convert';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:testuus4/funktsioonid/Elering.dart';
-import 'CurrentPrice.dart';
+import '../funktsioonid/CurrentPrice.dart';
 import 'Graafik.dart';
 import 'OnOff.dart';
 import 'Login.dart';

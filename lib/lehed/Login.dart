@@ -116,7 +116,8 @@ class _LoginPageState extends State<LoginPage> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String seadmedMap = json.encode(seadmed);
     await prefs.setString('seadmed', seadmedMap);
-
+    String keyMap = json.encode(keyVastusJSON['data']['key']);
+    await prefs.setString('key', keyMap);
     /* Näide kuidas võtta mälust seadmete map
     String? storedJsonMap = prefs.getString('seadmed');
     if (storedJsonMap != null) {
@@ -131,8 +132,7 @@ class _LoginPageState extends State<LoginPage> {
     */
 
     /*Näide kuidas võtta mälust auth key
-    String keyMap = json.encode(keyVastusJSON['data']['key']);
-    await prefs.setString('key', keyMap);
+    
     String? storedKey = prefs.getString('key');
     if (storedKey != null) {
       String storedKeyString = jsonDecode(storedKey);
