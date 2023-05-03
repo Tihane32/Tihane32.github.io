@@ -11,7 +11,7 @@ import 'lehed/koduleht.dart';
 
 void main() {
   runApp(const MaterialApp(
-    home: KoduLeht(),
+    home: KoduLeht(), //Alustab appi kodulehest
   ));
 }
 
