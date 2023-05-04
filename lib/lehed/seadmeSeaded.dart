@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:testuus4/lehed/energiaGraafik.dart';
 import 'dart:convert';
 
 import 'package:testuus4/lehed/kaksTabelit.dart';
@@ -73,57 +74,66 @@ class _DeviceSettingsPageState extends State<DeviceSettingsPage> {
   }
 
   @override
- Widget build(BuildContext context) {
-  return Scaffold(
-    appBar: AppBar(
-      title: const Text('Device Settings'),
-      leading: IconButton(
-        icon: const Icon(Icons.navigate_before),
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => MinuSeadmed()),
-          );
-        },
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Device Settings'),
+        leading: IconButton(
+          icon: const Icon(Icons.navigate_before),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => MinuSeadmed()),
+            );
+          },
+        ),
       ),
-    ),
-    body: Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          const Text(
-            'Device Name',
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 18.0,
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            const Text(
+              'Device Name',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 18.0,
+              ),
             ),
-          ),
-          const SizedBox(height: 8.0),
-          TextField(
-            controller: _controller,
-            decoration: const InputDecoration(
-              border: OutlineInputBorder(),
-              hintText: 'Enter device name',
+            const SizedBox(height: 8.0),
+            TextField(
+              controller: _controller,
+              decoration: const InputDecoration(
+                border: OutlineInputBorder(),
+                hintText: 'Enter device name',
+              ),
             ),
-          ),
-          const SizedBox(height: 16.0),
-          ElevatedButton(
-            onPressed: () async {
-              String name = _controller.text.trim();
-              await _savePreferences(name);
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text('Device name saved: $name'),
-                ),
-              );
-            },
-            child: const Text('Save'),
-          ),
-        ],
+            const SizedBox(height: 16.0),
+            ElevatedButton(
+              onPressed: () async {
+                String name = _controller.text.trim();
+                await _savePreferences(name);
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text('Device name saved: $name'),
+                  ),
+                );
+              },
+              child: const Text('Save'),
+            ),
+            const SizedBox(height: 16.0),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => EnergiaGraafikApp()),
+                );
+              },
+              child: const Text('Vaata tarbimise graafikut'),
+            ),
+          ],
+        ),
       ),
-    ),
-  );
-}
-
+    );
+  }
 }
