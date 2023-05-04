@@ -103,6 +103,7 @@ class _LoginPageState extends State<LoginPage> {
       var seade = new Map<String, dynamic>();
       seade['Seadme_ID'] = device['id'];
       seade['Seadme_nimi'] = device['name'];
+      seade['Seadme_pistik']=device['name'];
       seade['Seadme_generatsioon'] = device['gen'];
       seadmed['Seade$i'] = seade;
       i++;

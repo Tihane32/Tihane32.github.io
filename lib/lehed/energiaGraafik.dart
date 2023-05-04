@@ -47,7 +47,7 @@ var vastusJSON =
     */
 
     var headers = {
-    'Authorization': 'Bearer $token',
+      'Authorization': 'Bearer $getToken',
     };
     print('siin');
     var data = {

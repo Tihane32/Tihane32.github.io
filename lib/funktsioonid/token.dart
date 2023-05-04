@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
-Future<dynamic> token() async {
+Future<String> getToken() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   String? ajutineKasutajanimi = prefs.getString('Kasutajanimi');
   String? sha1Hash = prefs.getString('Kasutajaparool');

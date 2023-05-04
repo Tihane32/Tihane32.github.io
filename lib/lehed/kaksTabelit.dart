@@ -4,6 +4,8 @@ import 'Login.dart';
 import 'koduleht.dart';
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'seadmeSeaded.dart';
+import 'package:testuus4/funktsioonid/seisukord.dart';
 
 class MinuSeadmed extends StatelessWidget {
   @override
@@ -203,17 +205,16 @@ class _KontoSeadmedState extends State<KontoSeadmed> {
     if (storedJsonMap != null) {
       Map<String, dynamic> storedMap = json.decode(storedJsonMap);
 
-      var testmap;
-      testmap = storedMap['Seade0'];
-      testmap = storedMap['Seade0']['Seadme_ID'];
-
       var i = 0;
       for (String Seade in storedMap.keys) {
+        seisukord();
         var id = storedMap['Seade$i']['Seadme_ID'];
         var name = storedMap['Seade$i']['Seadme_nimi'];
-
+        var pistik = storedMap['Seade$i']['Seadme_pistik'];
+        var olek = storedMap['Seade$i']['Seadme_olek'];
+        print('olek: $olek');
         Map<String, List<String>> ajutineMap = {
-          Seade: ['$id', '$name', 'Shelly plug S'],
+          Seade: ['$id', '$name', '$pistik', '$olek'],
         };
         minuSeadmedK.addAll(ajutineMap);
         i++;
@@ -249,6 +250,12 @@ class _KontoSeadmedState extends State<KontoSeadmed> {
               style: TextStyle(fontStyle: FontStyle.italic),
             ),
           ),
+          DataColumn(
+            label: Text(
+              'Olek',
+              style: TextStyle(fontStyle: FontStyle.italic),
+            ),
+          ),
         ],
         rows: minuSeadmedK.entries
             .map((e) => DataRow(
@@ -256,13 +263,17 @@ class _KontoSeadmedState extends State<KontoSeadmed> {
                     DataCell(Text(e.value[0])),
                     DataCell(Text(e.value[1])),
                     DataCell(Text(e.value[2])),
+                    DataCell(Text(e.value[3])),
                   ],
                   onSelectChanged: (isSelected) {
                     if (isSelected != null && isSelected) {
                       onTap(e.value);
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => HinnaGraafik()),
+                        MaterialPageRoute(
+                            builder: (context) => SeadmeSeaded(
+                                  value: e.value[0],
+                                )),
                       );
                     }
                   },
