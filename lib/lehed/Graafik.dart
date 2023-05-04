@@ -63,7 +63,7 @@ class Graafik extends StatelessWidget {
       if (seadeGen == 1) {
         print(seadeID);
 
-        await Future.delayed(const Duration(seconds: 3));
+        await Future.delayed(const Duration(seconds: 2));
         //
         //TODO: Siia if gen2 et läheks graafikGen2 faili. Peab selected ja valitudPaev edasi passima
         //
@@ -91,7 +91,7 @@ class Graafik extends StatelessWidget {
           var url =
               Uri.parse('https://shelly-64-eu.shelly.cloud/device/settings');
           var res = await http.post(url, headers: headers, body: data);
-          await Future.delayed(const Duration(seconds: 3));
+          await Future.delayed(const Duration(seconds: 2));
           //Kui post läheb läbi siis:
           if (res.statusCode == 200) {
             final httpPackageJson =
@@ -192,7 +192,7 @@ class Graafik extends StatelessWidget {
 
           graafik = filteredList.join(',');
         }
-        await Future.delayed(const Duration(seconds: 10));
+        await Future.delayed(const Duration(seconds: 2));
         var headers1 = {
           'Content-Type': 'application/x-www-form-urlencoded',
         };
@@ -213,7 +213,9 @@ class Graafik extends StatelessWidget {
         print(res1.body);
         vastus.add(res1.body);
         print(vastus);
-        await Future.delayed(const Duration(seconds: 10));
+        await Future.delayed(const Duration(seconds: 3));
+      } else {
+        gen2GraafikuLoomine(selected, valitudPaev);
       }
     }
     print(vastus);

@@ -44,7 +44,7 @@ class _SeadmeTabelState extends State<SeadmeTabel> {
                 MaterialPageRoute(builder: (context) => LoginApp()),
               );
             },
-            child: const Text('LOG IN'),
+            child: const Text('Log in'),
           ),
         ],
       ),
@@ -65,7 +65,7 @@ class _SeadmeTabelState extends State<SeadmeTabel> {
           const DecoratedBox(
             decoration: const BoxDecoration(color: Colors.cyan),
             child: Text(
-              'Manualselt lisatud Seadmed:',
+              'Manuaalselt lisatud Seadmed:',
               style: TextStyle(fontSize: 20),
             ),
           ),

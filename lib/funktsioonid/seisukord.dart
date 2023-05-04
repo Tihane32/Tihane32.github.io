@@ -4,11 +4,11 @@ import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 
 seisukord() async {
-
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  var token = await getToken(); //Kutsub funktsiooni getTokeni, mis on vajalik sisselogimiseks
-  
-  //Kutsub kasutaja 
+  var token =
+      await getToken(); //Kutsub funktsiooni getTokeni, mis on vajalik sisselogimiseks
+
+  //Kutsub kasutaja
   var headers = {
     'Authorization': 'Bearer $token',
     'Content-Type': 'application/x-www-form-urlencoded',
@@ -17,10 +17,10 @@ seisukord() async {
   var url = Uri.parse('https://shelly-64-eu.shelly.cloud/device/all_status');
   var res = await http.post(url, headers: headers);
   if (res.statusCode != 200)
-  throw Exception('http.post error: statusCode= ${res.statusCode}');
+    throw Exception('http.post error: statusCode= ${res.statusCode}');
   var vastus = json.decode(res.body);
   vastus as Map<String, dynamic>;
-
+  print(vastus['data']['devices_status']);
   String? storedJsonMap = prefs.getString('seadmed');
   if (storedJsonMap != null) {
     Map<String, dynamic> storedMap = json.decode(storedJsonMap);
