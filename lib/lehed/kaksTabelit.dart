@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:testuus4/funktsioonid/lulitamine.dart';
 import 'hinnaGraafik.dart';
 import 'Login.dart';
 import 'koduleht.dart';
@@ -204,7 +205,7 @@ class _KontoSeadmedState extends State<KontoSeadmed> {
     String? storedJsonMap = prefs.getString('seadmed');
     if (storedJsonMap != null) {
       Map<String, dynamic> storedMap = json.decode(storedJsonMap);
-
+      await Future.delayed(const Duration(seconds: 3));
       var i = 0;
       for (String Seade in storedMap.keys) {
         seisukord();
@@ -263,7 +264,20 @@ class _KontoSeadmedState extends State<KontoSeadmed> {
                     DataCell(Text(e.value[0])),
                     DataCell(Text(e.value[1])),
                     DataCell(Text(e.value[2])),
-                    DataCell(Text(e.value[3])),
+                    DataCell(
+                      IgnorePointer(
+                          ignoring: e.value[3] != "on" && e.value[3] != "off",
+                          child: TextButton(
+                              onPressed: () {
+                                lulitamine(e.value[0]);
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => MinuSeadmed()),
+                                );
+                              },
+                              child: Text(e.value[3]))),
+                    )
                   ],
                   onSelectChanged: (isSelected) {
                     if (isSelected != null && isSelected) {
