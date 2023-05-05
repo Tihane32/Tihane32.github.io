@@ -10,17 +10,17 @@ class EnergiaGraafikApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'My Chart App',
-      home: MyChartPage(),
+      home: EGraafik(),
     );
   }
 }
 
-class MyChartPage extends StatefulWidget {
+class EGraafik extends StatefulWidget {
   @override
-  _MyChartPageState createState() => _MyChartPageState();
+  _EGraafikState createState() => _EGraafikState();
 }
 
-class _MyChartPageState extends State<MyChartPage> {
+class _EGraafikState extends State<EGraafik> {
   List<_ChartData> chartData = [];
 
   Future<void> fetchData() async {
@@ -28,7 +28,7 @@ class _MyChartPageState extends State<MyChartPage> {
     String? ajutineKasutajanimi = prefs.getString('Kasutajanimi');
     String? sha1Hash = prefs.getString('Kasutajaparool');
 
-var headers1 = {
+    var headers1 = {
       'Content-Type': 'application/x-www-form-urlencoded',
     };
 
@@ -40,12 +40,12 @@ var headers1 = {
     var sisselogimiseUrl = Uri.parse('https://api.shelly.cloud/auth/login');
     var sisselogimiseVastus = await http.post(sisselogimiseUrl,
         headers: headers1, body: kasutajaAndmed);
-var vastusJSON =
+    var vastusJSON =
         json.decode(sisselogimiseVastus.body) as Map<String, dynamic>;
     var token = vastusJSON['data']['token'];
     //Todo peab lisama beareri saamise
     var headers = {
-    'Authorization': 'Bearer $token',
+      'Authorization': 'Bearer $token',
     };
     print('siin');
     var data = {
