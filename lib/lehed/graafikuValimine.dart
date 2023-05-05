@@ -10,30 +10,26 @@ import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 //import 'Elering.dart';
 import 'package:testuus4/funktsioonid/Elering.dart';
-import 'CurrentPrice.dart';
+import '../funktsioonid/CurrentPrice.dart';
 import 'Graafik.dart';
 import 'OnOff.dart';
 import 'Login.dart';
 import 'kaksTabelit.dart';
 import 'koduleht.dart';
 
-
 //Maini käivitamine, home on koduleht.
 
-
-
-
 //Defineerime hinnagraafiku lehe
-
 
 //Defineerime tanaste tundide valimise lehe
 
 class TundideValimineTana extends StatelessWidget {
-  TundideValimineTana({Key? key, required this.soovitudTunnid})
+  TundideValimineTana(
+      {Key? key, required this.soovitudTunnid, required this.value})
       : super(key: key);
 
   final int soovitudTunnid;
-
+  final String value;
   final String valitudPaev = 'täna';
 
   final List<bool> selected = List<bool>.generate(
@@ -58,9 +54,9 @@ class TundideValimineTana extends StatelessWidget {
                   context,
                   MaterialPageRoute(
                       builder: (context) => Graafik(
-                            selected: selected,
-                            valitudPaev: valitudPaev,
-                          )),
+                          selected: selected,
+                          valitudPaev: valitudPaev,
+                          value: value)),
                 );
               },
             ),
@@ -69,6 +65,7 @@ class TundideValimineTana extends StatelessWidget {
         body: MyStatefulWidget(
           soovitudTunnid: soovitudTunnid,
           selected: selected,
+          value: value,
         ),
       ),
     );
@@ -82,10 +79,11 @@ class MyStatefulWidget extends StatefulWidget {
     Key? key,
     required this.soovitudTunnid,
     required this.selected,
+    required this.value,
   }) : super(key: key);
 
   final int soovitudTunnid;
-
+  final String value;
   final List<bool> selected;
 
   @override
@@ -285,8 +283,8 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
                     context,
                     MaterialPageRoute(
                         builder: (context) => tundideValimineHomme(
-                              soovitudTunnid: widget.soovitudTunnid,
-                            )),
+                            soovitudTunnid: widget.soovitudTunnid,
+                            value: widget.value)),
                   );
                 }
               }));
@@ -297,11 +295,11 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
 //Defineerime homsete tundide valimise lehe
 
 class tundideValimineHomme extends StatelessWidget {
-  tundideValimineHomme({Key? key, required this.soovitudTunnid})
+  tundideValimineHomme({Key? key, required this.soovitudTunnid, required this.value})
       : super(key: key);
 
   final int soovitudTunnid;
-
+  final String value;
   final String valitudPaev = 'homme';
 
   final List<bool> selected1 = List<bool>.generate(
@@ -328,6 +326,7 @@ class tundideValimineHomme extends StatelessWidget {
                       builder: (context) => Graafik(
                             selected: selected1,
                             valitudPaev: valitudPaev,
+                            value: value,
                           )),
                 );
               },
@@ -552,6 +551,7 @@ class _MyStatefulWidgetStatehomme extends State<MyStatefulWidgethomme> {
                     MaterialPageRoute(
                         builder: (context) => TundideValimineTana(
                               soovitudTunnid: widget.soovitudTunnid,
+                              value: '',
                             )),
                   );
                 }
@@ -559,4 +559,3 @@ class _MyStatefulWidgetStatehomme extends State<MyStatefulWidgethomme> {
     }
   }
 }
-

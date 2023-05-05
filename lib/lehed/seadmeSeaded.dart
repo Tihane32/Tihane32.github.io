@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:testuus4/lehed/energiaGraafik.dart';
 import 'dart:convert';
-import 'package:http/http.dart' as http;
-import 'package:syncfusion_flutter_charts/charts.dart';
+import 'graafikuKoostamine.dart';
+import 'package:testuus4/lehed/kaksTabelit.dart';
 
-void main() => runApp(SeadmeInfo());
-
-class SeadmeInfo extends StatelessWidget {
-  const SeadmeInfo({Key? key}) : super(key: key);
+class SeadmeSeaded extends StatelessWidget {
+  final String value;
+  const SeadmeSeaded({Key? key, required this.value}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -16,13 +16,14 @@ class SeadmeInfo extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const DeviceSettingsPage(),
+      home: DeviceSettingsPage(value: value),
     );
   }
 }
 
 class DeviceSettingsPage extends StatefulWidget {
-  const DeviceSettingsPage({Key? key}) : super(key: key);
+  final String value;
+  const DeviceSettingsPage({Key? key, required this.value}) : super(key: key);
 
   @override
   _DeviceSettingsPageState createState() => _DeviceSettingsPageState();
@@ -70,42 +71,79 @@ class _SeadmeNimiState extends State<SeadmeNimi> {
   void initState() {
     super.initState();
     _controller = TextEditingController();
-    _loadPreferences();
+    _loadPreferences(widget.value);
   }
 
-  Future<void> _loadPreferences() async {
-    _prefs = await SharedPreferences.getInstance();
-    String? storedJsonMap = _prefs.getString('seadmed');
+  Future<void> _loadPreferences(String value) async {
+    prefs = await SharedPreferences.getInstance();
+    String? storedJsonMap = prefs.getString('seadmed');
+    print(value);
+    Map<String, dynamic> storedMap = json.decode(storedJsonMap!);
+    var j = 0;
+    for (var i in storedMap.values) {
+      if (storedMap['Seade$j']['Seadme_ID'] == value) {
+        await prefs.setString('KohaNumber', '$j');
+        var name = storedMap['Seade$j']['Seadme_nimi'];
+        setState(() {
+          _controller.text = name;
+        });
+      }
 
-    if (storedJsonMap != null) {
-      Map<String, dynamic> storedMap = json.decode(storedJsonMap);
-      var name = storedMap['Seade0']['Seadme_nimi'];
-      setState(() {
-        _controller.text = name;
-      });
+      j++;
     }
   }
 
   Future<void> _savePreferences(String name) async {
-    await _prefs.setString(
-        'seadmed',
-        json.encode({
-          'Seade0': {'Seadme_nimi': name}
-        }));
+    prefs = await SharedPreferences.getInstance();
+    String? storedJsonMap = prefs.getString('seadmed');
+    String? koht = prefs.getString('KohaNumber');
+    Map<String, dynamic> storedMap = json.decode(storedJsonMap!);
+    print('map $storedMap');
+
+    var seade = storedMap['Seade$koht'];
+    seade['Seadme_nimi'] = name;
+    storedMap['Seade$koht'] = seade;
+    await prefs.setString('seadmed', json.encode(storedMap));
+    print(storedMap);
   }
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          const Text(
-            'Device Name',
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 18.0,
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Device Settings'),
+        leading: IconButton(
+          icon: const Icon(Icons.navigate_before),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => MinuSeadmed()),
+            );
+          },
+        ),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.calendar_today_rounded),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => GraafikLeht(widget.value)),
+              );
+            },
+          ),
+        ],
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            const Text(
+              'Device Name',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 18.0,
+              ),
             ),
           ),
           const SizedBox(height: 8.0),

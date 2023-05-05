@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:testuus4/funktsioonid/token.dart';
 //void main() => runApp(MyApp());
+import 'package:shared_preferences/shared_preferences.dart';
 
 class EnergiaGraafikApp extends StatelessWidget {
   @override
@@ -24,32 +26,21 @@ class _EGraafikState extends State<EGraafik> {
   List<_ChartData> chartData = [];
 
   Future<void> fetchData() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? ajutineKasutajanimi = prefs.getString('Kasutajanimi');
-    String? sha1Hash = prefs.getString('Kasutajaparool');
-
-    var headers1 = {
-      'Content-Type': 'application/x-www-form-urlencoded',
-    };
-
-    var kasutajaAndmed = {
-      'email': ajutineKasutajanimi,
-      'password': sha1Hash,
-      'var': '2',
-    };
-    var sisselogimiseUrl = Uri.parse('https://api.shelly.cloud/auth/login');
-    var sisselogimiseVastus = await http.post(sisselogimiseUrl,
-        headers: headers1, body: kasutajaAndmed);
-    var vastusJSON =
-        json.decode(sisselogimiseVastus.body) as Map<String, dynamic>;
-    var token = vastusJSON['data']['token'];
-    //Todo peab lisama beareri saamise
+   
+    var prefs = await SharedPreferences.getInstance();
+    String? storedJsonMap = prefs.getString('seadmed');
+    String? koht = prefs.getString('KohaNumber');
+    Map<String, dynamic> storedMap = json.decode(storedJsonMap!);
+    print('map $storedMap');
+var token = await getToken();
+    var seade = storedMap['Seade$koht'];
+    var id = seade['Seadme_ID'];
     var headers = {
       'Authorization': 'Bearer $token',
     };
     print('siin');
     var data = {
-      'id': '80646f81ad9a',
+      'id': '$id',
       'channel': '0',
       'date_range': 'custom',
       'date_from': '2023-04-01 00:00:00',
@@ -83,6 +74,10 @@ class _EGraafikState extends State<EGraafik> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Tarbimise graafik'),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () => Navigator.pop(context),
+        ),
       ),
       body: FutureBuilder<void>(
         future: fetchData(),

@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:testuus4/funktsioonid/lulitamine.dart';
 import 'hinnaGraafik.dart';
 import 'Login.dart';
 import 'koduleht.dart';
-
-void main() {
-  runApp(const MaterialApp(
-    home: SeadmeTabel(),
-  ));
-}
+import 'dart:convert';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'seadmeSeaded.dart';
+import 'package:testuus4/funktsioonid/seisukord.dart';
 
 class MinuSeadmed extends StatelessWidget {
   @override
@@ -45,7 +44,7 @@ class _SeadmeTabelState extends State<SeadmeTabel> {
                 MaterialPageRoute(builder: (context) => LoginApp()),
               );
             },
-            child: const Text('LOG IN'),
+            child: const Text('Log in'),
           ),
         ],
       ),
@@ -58,13 +57,15 @@ class _SeadmeTabelState extends State<SeadmeTabel> {
               style: TextStyle(fontSize: 20),
             ),
           ),
-          Expanded(
-            child: KontoSeadmed(),
+           Expanded(
+            child: KontoSeadmed(onTap1: (rowData) {
+              print('Tapped row with data: $rowData');
+            }),
           ),
           const DecoratedBox(
             decoration: const BoxDecoration(color: Colors.cyan),
             child: Text(
-              'Manualselt lisatud Seadmed:',
+              'Manuaalselt lisatud Seadmed:',
               style: TextStyle(fontSize: 20),
             ),
           ),
@@ -183,24 +184,54 @@ class ManuaalsedSeadmed extends StatelessWidget {
   }
 }
 
-class KontoSeadmed extends StatelessWidget {
-  KontoSeadmed({Key? key}) : super(key: key);
+class KontoSeadmed extends StatefulWidget {
+  KontoSeadmed({Key? key, required this.onTap1}) : super(key: key);
 
-  final Map<String, List<String>> minuSeadmedK = {
-    '123': ['123', 'Boiler 1', 'Shelly plug S'],
-    '456': ['456', 'Kaevu pump', 'Shelly plug'],
-    '789': ['789', 'Boiler 2', 'Shelly plug S'],
-    '78': ['789', 'Boiler 2', 'Shelly plug S'],
-    '13': ['123', 'Boiler 1', 'Shelly plug S'],
-    '56': ['456', 'Kaevu pump', 'Shelly plug'],
-    '89': ['789', 'Boiler 2', 'Shelly plug S'],
-    '8': ['789', 'Boiler 2', 'Shelly plug S'],
-  };
+  final Function(List<String>) onTap1;
+  @override
+  _KontoSeadmedState createState() => _KontoSeadmedState();
+}
+
+class _KontoSeadmedState extends State<KontoSeadmed> {
+  late Map<String, List<String>> minuSeadmedK = {};
+  void initState() {
+    super.initState();
+    _submitForm();
+  }
+
+  Future _submitForm() async {
+    minuSeadmedK.clear();
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? storedJsonMap = prefs.getString('seadmed');
+    if (storedJsonMap != null) {
+      Map<String, dynamic> storedMap = json.decode(storedJsonMap);
+      await Future.delayed(const Duration(seconds: 3));
+      var i = 0;
+      for (String Seade in storedMap.keys) {
+        seisukord();
+        var id = storedMap['Seade$i']['Seadme_ID'];
+        var name = storedMap['Seade$i']['Seadme_nimi'];
+        var pistik = storedMap['Seade$i']['Seadme_pistik'];
+        var olek = storedMap['Seade$i']['Seadme_olek'];
+        print('olek: $olek');
+        Map<String, List<String>> ajutineMap = {
+          Seade: ['$id', '$name', '$pistik', '$olek'],
+        };
+        minuSeadmedK.addAll(ajutineMap);
+        i++;
+      }
+      print(minuSeadmedK);
+    }
+    setState(() {
+      minuSeadmedK = minuSeadmedK;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: DataTable(
+        showCheckboxColumn: false,
         columns: const <DataColumn>[
           DataColumn(
             label: Text(
@@ -220,15 +251,51 @@ class KontoSeadmed extends StatelessWidget {
               style: TextStyle(fontStyle: FontStyle.italic),
             ),
           ),
+          DataColumn(
+            label: Text(
+              'Olek',
+              style: TextStyle(fontStyle: FontStyle.italic),
+            ),
+          ),
         ],
         rows: minuSeadmedK.entries
-            .map((e) => DataRow(cells: [
-                  DataCell(Text(e.value[0])),
-                  DataCell(Text(e.value[1])),
-                  DataCell(Text(e.value[2])),
-                ]))
+            .map((e) => DataRow(
+                  cells: [
+                    DataCell(Text(e.value[0])),
+                    DataCell(Text(e.value[1])),
+                    DataCell(Text(e.value[2])),
+                    DataCell(
+                      IgnorePointer(
+                          ignoring: e.value[3] != "on" && e.value[3] != "off",
+                          child: TextButton(
+                              onPressed: () {
+                                lulitamine(e.value[0]);
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => MinuSeadmed()),
+                                );
+                              },
+                              child: Text(e.value[3]))),
+                    )
+                  ],
+                  onSelectChanged: (isSelected) {
+                    if (isSelected != null && isSelected) {
+                      onTap(e.value);
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => SeadmeSeaded(
+                                  value: e.value[0],
+                                )),
+                      );
+                    }
+                  },
+                ))
             .toList(),
       ),
     );
   }
+  
+  void onTap(List<String> value) {}
 }
