@@ -2,8 +2,12 @@ import 'package:flutter/material.dart';
 import 'hinnaGraafik.dart';
 import 'Login.dart';
 import 'koduleht.dart';
-import 'dart:convert';
-import 'package:shared_preferences/shared_preferences.dart';
+
+void main() {
+  runApp(const MaterialApp(
+    home: SeadmeTabel(),
+  ));
+}
 
 class MinuSeadmed extends StatelessWidget {
   @override
@@ -55,9 +59,7 @@ class _SeadmeTabelState extends State<SeadmeTabel> {
             ),
           ),
           Expanded(
-            child: KontoSeadmed(onTap1: (rowData) {
-              print('Tapped row with data: $rowData');
-            }),
+            child: KontoSeadmed(),
           ),
           const DecoratedBox(
             decoration: const BoxDecoration(color: Colors.cyan),
@@ -181,55 +183,24 @@ class ManuaalsedSeadmed extends StatelessWidget {
   }
 }
 
-class KontoSeadmed extends StatefulWidget {
-  KontoSeadmed({Key? key, required this.onTap1}) : super(key: key);
+class KontoSeadmed extends StatelessWidget {
+  KontoSeadmed({Key? key}) : super(key: key);
 
-  final Function(List<String>) onTap1;
-  @override
-  _KontoSeadmedState createState() => _KontoSeadmedState();
-}
-
-class _KontoSeadmedState extends State<KontoSeadmed> {
-  late Map<String, List<String>> minuSeadmedK = {};
-  void initState() {
-    super.initState();
-    _submitForm();
-  }
-
-  Future _submitForm() async {
-    minuSeadmedK.clear();
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? storedJsonMap = prefs.getString('seadmed');
-    if (storedJsonMap != null) {
-      Map<String, dynamic> storedMap = json.decode(storedJsonMap);
-
-      var testmap;
-      testmap = storedMap['Seade0'];
-      testmap = storedMap['Seade0']['Seadme_ID'];
-
-      var i = 0;
-      for (String Seade in storedMap.keys) {
-        var id = storedMap['Seade$i']['Seadme_ID'];
-        var name = storedMap['Seade$i']['Seadme_nimi'];
-
-        Map<String, List<String>> ajutineMap = {
-          Seade: ['$id', '$name', 'Shelly plug S'],
-        };
-        minuSeadmedK.addAll(ajutineMap);
-        i++;
-      }
-      print(minuSeadmedK);
-    }
-    setState(() {
-      minuSeadmedK = minuSeadmedK;
-    });
-  }
+  final Map<String, List<String>> minuSeadmedK = {
+    '123': ['123', 'Boiler 1', 'Shelly plug S'],
+    '456': ['456', 'Kaevu pump', 'Shelly plug'],
+    '789': ['789', 'Boiler 2', 'Shelly plug S'],
+    '78': ['789', 'Boiler 2', 'Shelly plug S'],
+    '13': ['123', 'Boiler 1', 'Shelly plug S'],
+    '56': ['456', 'Kaevu pump', 'Shelly plug'],
+    '89': ['789', 'Boiler 2', 'Shelly plug S'],
+    '8': ['789', 'Boiler 2', 'Shelly plug S'],
+  };
 
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: DataTable(
-        showCheckboxColumn: false,
         columns: const <DataColumn>[
           DataColumn(
             label: Text(
@@ -251,26 +222,13 @@ class _KontoSeadmedState extends State<KontoSeadmed> {
           ),
         ],
         rows: minuSeadmedK.entries
-            .map((e) => DataRow(
-                  cells: [
-                    DataCell(Text(e.value[0])),
-                    DataCell(Text(e.value[1])),
-                    DataCell(Text(e.value[2])),
-                  ],
-                  onSelectChanged: (isSelected) {
-                    if (isSelected != null && isSelected) {
-                      onTap(e.value);
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => HinnaGraafik()),
-                      );
-                    }
-                  },
-                ))
+            .map((e) => DataRow(cells: [
+                  DataCell(Text(e.value[0])),
+                  DataCell(Text(e.value[1])),
+                  DataCell(Text(e.value[2])),
+                ]))
             .toList(),
       ),
     );
   }
-
-  void onTap(List<String> value) {}
 }

@@ -6,7 +6,6 @@ TalTech
 import 'package:flutter/material.dart';
 import 'lehed/koduleht.dart';
 
-
 //Maini käivitamine, home on koduleht.
 
 void main() {
@@ -14,5 +13,3 @@ void main() {
     home: KoduLeht(), //Alustab appi kodulehest
   ));
 }
-
-
