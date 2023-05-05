@@ -93,7 +93,7 @@ class _DeviceSettingsPageState extends State<DeviceSettingsPage> {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => GraafikLeht()),
+                MaterialPageRoute(builder: (context) => GraafikLeht(widget.value)),
               );
             },
           ),

@@ -159,7 +159,7 @@ class _KoduLehtState extends State<KoduLeht> {
                       context,
                       MaterialPageRoute(
                           builder: (context) => TundideValimineTana(
-                              soovitudTunnid: onTunnidSisestatud)),
+                              soovitudTunnid: onTunnidSisestatud, value: '',)),
                     );
                   },
                   child: const Icon(Icons.check_circle_outline_rounded),

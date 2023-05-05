@@ -13,33 +13,24 @@ import 'graafikuValimine.dart';
 import 'hinnaGraafik.dart';
 
 class GraafikLeht extends StatefulWidget {
-  const GraafikLeht({Key? key}) : super(key: key);
+  final String value; // Add a parameter to receive the value String
+  const GraafikLeht(this.value, {Key? key}) : super(key: key);
 
   @override
   State<GraafikLeht> createState() => _GraafikLehtState();
 }
 
 class _GraafikLehtState extends State<GraafikLeht> {
-  String onoffNupp = 'Shelly ON';
-
   int koduindex = 1;
 
   int onTunnidSisestatud = 0;
 
-  var hetkeHind = '0';
-
-  
-
-//Lehe avamisel toob hetke hinna ja tundide arvu
-
   @override
   void initState() {
     super.initState();
-    
+
     _tooTund();
   }
-
-//Toob tunnid mälust
 
   Future<void> _tooTund() async {
     final prefs = await SharedPreferences.getInstance();
@@ -49,41 +40,27 @@ class _GraafikLehtState extends State<GraafikLeht> {
     });
   }
 
-  //Lisab tundide arvule ühe juurde
-
   Future<void> _tundLisa() async {
     final prefs = await SharedPreferences.getInstance();
 
     setState(() {
       if (onTunnidSisestatud < 24) {
-        onTunnidSisestatud = (prefs.getInt('counter') ?? 0) +
-            1; //Pluss märgile vajutades lisab tundide arvule ühe juurde
-
+        onTunnidSisestatud = (prefs.getInt('counter') ?? 0) + 1;
         prefs.setInt('counter', onTunnidSisestatud);
       }
     });
   }
-
-  //Eemaldab tundide arvust ühe
 
   Future<void> _tundEemalda() async {
     final prefs = await SharedPreferences.getInstance();
 
     setState(() {
       if (onTunnidSisestatud > 0) {
-        onTunnidSisestatud = (prefs.getInt('counter') ?? 0) -
-            1; //Miinus märgile vajutades vähendab tundide arvu ühe võrra
-
+        onTunnidSisestatud = (prefs.getInt('counter') ?? 0) - 1;
         prefs.setInt('counter', onTunnidSisestatud);
       }
     });
   }
-
-  //Võtab Eleringi API-st hetke hinna
-
-  
-
-//Määrab kodulehe struktuuri
 
   @override
   Widget build(BuildContext context) {
@@ -94,12 +71,6 @@ class _GraafikLehtState extends State<GraafikLeht> {
       ),
       body: Center(
         child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-          
-          
-              Text(
-                  '$hetkeHind',
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-                ),
           const Text(
             'Sisselülitatud tundide arv:',
             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
@@ -117,13 +88,13 @@ class _GraafikLehtState extends State<GraafikLeht> {
               ),
               ElevatedButton(
                 onPressed: () {
-                  //Võtab soovitud tundide arvu ja saadab selle TundideValimineTana lehele
-
                   Navigator.push(
                     context,
                     MaterialPageRoute(
                         builder: (context) => TundideValimineTana(
-                            soovitudTunnid: onTunnidSisestatud)),
+                            soovitudTunnid: onTunnidSisestatud,
+                            value: widget
+                                .value)), // Pass the value String to TundideValimineTana
                   );
                 },
                 child: const Icon(Icons.check_circle_outline_rounded),
@@ -134,10 +105,8 @@ class _GraafikLehtState extends State<GraafikLeht> {
               ),
             ],
           ),
-          
         ]),
       ),
-      
     );
   }
 }
