@@ -5,13 +5,13 @@ import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 //import 'Elering.dart';
 import 'package:testuus4/funktsioonid/Elering.dart';
-import 'CurrentPrice.dart';
+import '../funktsioonid/CurrentPrice.dart';
 import 'Graafik.dart';
 import 'OnOff.dart';
 import 'Login.dart';
 import 'kaksTabelit.dart';
 import 'koduleht.dart';
-import 'graafikuValimine.dart';
+import 'hinnaGraafik.dart';
 
 //defineerime kasutaja info
 
