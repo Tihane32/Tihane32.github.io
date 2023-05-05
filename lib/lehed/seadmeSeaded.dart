@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:testuus4/lehed/energiaGraafik.dart';
 import 'dart:convert';
-
+import 'graafikuKoostamine.dart';
 import 'package:testuus4/lehed/kaksTabelit.dart';
 
 class SeadmeSeaded extends StatelessWidget {
@@ -87,6 +87,17 @@ class _DeviceSettingsPageState extends State<DeviceSettingsPage> {
             );
           },
         ),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.calendar_today_rounded),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => GraafikLeht()),
+              );
+            },
+          ),
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
