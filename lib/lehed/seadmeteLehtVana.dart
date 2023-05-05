@@ -11,7 +11,7 @@ import 'OnOff.dart';
 import 'Login.dart';
 import 'kaksTabelit.dart';
 import 'koduleht.dart';
-import 'liigsedLehed.dart';
+import 'hinnaGraafik.dart';
 
 //defineerime kasutaja info
 
