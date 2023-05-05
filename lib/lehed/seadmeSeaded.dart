@@ -4,6 +4,8 @@ import 'package:testuus4/lehed/energiaGraafik.dart';
 import 'dart:convert';
 import 'graafikuKoostamine.dart';
 import 'package:testuus4/lehed/kaksTabelit.dart';
+import 'package:http/http.dart' as http;
+import 'package:syncfusion_flutter_charts/charts.dart';
 
 class SeadmeSeaded extends StatelessWidget {
   final String value;
@@ -26,20 +28,45 @@ class DeviceSettingsPage extends StatefulWidget {
   const DeviceSettingsPage({Key? key, required this.value}) : super(key: key);
 
   @override
-  _DeviceSettingsPageState createState() => _DeviceSettingsPageState();
+  _DeviceSettingsPageState createState() =>
+      _DeviceSettingsPageState(value: value);
 }
 
 class _DeviceSettingsPageState extends State<DeviceSettingsPage> {
+  final String value;
+  _DeviceSettingsPageState({Key? key, required this.value});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
           title: const Text('Device Settings'),
+          leading: IconButton(
+            icon: const Icon(Icons.navigate_before),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => MinuSeadmed()),
+              );
+            },
+          ),
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.calendar_today_rounded),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => GraafikLeht(widget.value)),
+                );
+              },
+            ),
+          ],
         ),
         body: Column(
           children: [
             Expanded(
-              child: SeadmeNimi(),
+              child: SeadmeNimi(value: value),
             ),
             const DecoratedBox(
               decoration: BoxDecoration(color: Colors.blue),
@@ -57,7 +84,8 @@ class _DeviceSettingsPageState extends State<DeviceSettingsPage> {
 }
 
 class SeadmeNimi extends StatefulWidget {
-  const SeadmeNimi({Key? key}) : super(key: key);
+  final String value;
+  const SeadmeNimi({Key? key, required this.value}) : super(key: key);
 
   @override
   _SeadmeNimiState createState() => _SeadmeNimiState();
@@ -65,7 +93,7 @@ class SeadmeNimi extends StatefulWidget {
 
 class _SeadmeNimiState extends State<SeadmeNimi> {
   late TextEditingController _controller;
-  late SharedPreferences _prefs;
+  late SharedPreferences prefs;
 
   @override
   void initState() {
@@ -109,41 +137,16 @@ class _SeadmeNimiState extends State<SeadmeNimi> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Device Settings'),
-        leading: IconButton(
-          icon: const Icon(Icons.navigate_before),
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => MinuSeadmed()),
-            );
-          },
-        ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.calendar_today_rounded),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => GraafikLeht(widget.value)),
-              );
-            },
-          ),
-        ],
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            const Text(
-              'Device Name',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 18.0,
-              ),
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          const Text(
+            'Device Name',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 18.0,
             ),
           ),
           const SizedBox(height: 8.0),
@@ -245,7 +248,7 @@ class _EGraafikState extends State<EGraafik> {
           return Center(
             child: SfCartesianChart(
               primaryXAxis:
-                  DateTimeAxis(title: AxisTitle(text: 'Kuupäev'), interval: 1),
+                  DateTimeAxis(title: AxisTitle(text: 'Kuupäev'), interval: 5),
               primaryYAxis: NumericAxis(
                   labelFormat: '{value} Wh',
                   title: AxisTitle(text: 'Tarbimine'),
