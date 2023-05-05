@@ -33,23 +33,30 @@ graafikuteSaamine(Map<String, dynamic> graafikud) async {
   var url = Uri.parse(
       'https://shelly-64-eu.shelly.cloud/fast/device/gen2_generic_command');
   var res = await http.post(url, headers: headers, body: data);
-  if (res.statusCode != 200)
-    throw Exception('http.post error: statusCode= ${res.statusCode}');
+  if (res.statusCode == 200) {
+    print(res.body);
+    var resJSON = jsonDecode(res.body) as Map<String, dynamic>;
+    if (resJSON == null) {
+      return; // stop the function if resJSON is null
+    }
+    var jobs = resJSON['data']['jobs'];
+    if (jobs == null) {
+      // handle the case where jobs is null
+      return;
+    }
+    jobs = resJSON['data']['jobs'] as List<dynamic>;
+    for (var job in jobs) {
+      var id = job['id'] as int;
+      var timespec = job['timespec'] as String;
+      var calls = job['calls'] as List<dynamic>;
+      var graafik = Map<String, dynamic>();
+      for (var call in calls) {
+        var params = call['params']['on'];
 
-  var resJSON = jsonDecode(res.body) as Map<String, dynamic>;
-  var jobs = resJSON['data']['jobs'] as List<dynamic>;
-
-  for (var job in jobs) {
-    var id = job['id'] as int;
-    var timespec = job['timespec'] as String;
-    var calls = job['calls'] as List<dynamic>;
-    var graafik = Map<String, dynamic>();
-    for (var call in calls) {
-      var params = call['params']['on'];
-
-      graafik['Timespec'] = timespec;
-      graafik['On/Off'] = params;
-      graafikud['$id'] = graafik;
+        graafik['Timespec'] = timespec;
+        graafik['On/Off'] = params;
+        graafikud['$id'] = graafik;
+      }
     }
   }
 }
