@@ -4,7 +4,7 @@ import 'dart:convert';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:testuus4/funktsioonid/Elering.dart';
-import '../funktsioonid/CurrentPrice.dart';
+import 'CurrentPrice.dart';
 import 'Graafik.dart';
 import 'OnOff.dart';
 import 'Login.dart';
@@ -117,84 +117,88 @@ class _KoduLehtState extends State<KoduLeht> {
         title: const Text('Shelly pistik'),
       ),
       body: Container(
-        alignment: Alignment.center,
         decoration: BoxDecoration(
-            image: DecorationImage(
-          image: NetworkImage(
-              'https://st.depositphotos.com/1015682/1464/i/600/depositphotos_14649595-stock-photo-wind-turbines-with-distant-mountains.jpg'),
-          fit: BoxFit.fill,
-        )),
+          image: DecorationImage(
+            image: AssetImage(
+                "https://www.google.com/url?sa=i&url=https%3A%2F%2Fdepositphotos.com%2Fvector-images%2Flightning.html&psig=AOvVaw0ejPIecxjBZkJJI89VuceR&ust=1683181176916000&source=images&cd=vfe&ved=0CBEQjRxqFwoTCPCDqdLA2P4CFQAAAAAdAAAAABAU"),
+            fit: BoxFit.cover,
+          ),
+        ),
         child: Center(
-          child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-            const Text(
-              'Hetkel hind (€/MWh):',
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
-            ),
-            isLoading
-                ? CircularProgressIndicator()
-                : Text(
-                    '$hetkeHind',
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Text(
+                'Hetkel hind (€/MWh):',
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
+              ),
+              isLoading
+                  ? CircularProgressIndicator()
+                  : Text(
+                      '$hetkeHind',
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                    ),
+              const Text(
+                'Sisselülitatud tundide arv:',
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
+              ),
+              Text(
+                '$onTunnidSisestatud',
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+              ),
+              ButtonBar(
+                alignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  ElevatedButton(
+                    onPressed: _tundEemalda,
+                    child: const Icon(Icons.remove),
                   ),
-            const Text(
-              'Sisselülitatud tundide arv:',
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
-            ),
-            Text(
-              '$onTunnidSisestatud',
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-            ),
-            ButtonBar(
-              alignment: MainAxisAlignment.center,
-              children: <Widget>[
-                ElevatedButton(
-                  onPressed: _tundEemalda,
-                  child: const Icon(Icons.remove),
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    //Võtab soovitud tundide arvu ja saadab selle TundideValimineTana lehele
+                  ElevatedButton(
+                    onPressed: () {
+                      //Võtab soovitud tundide arvu ja saadab selle TundideValimineTana lehele
 
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => TundideValimineTana(
-                              soovitudTunnid: onTunnidSisestatud)),
-                    );
-                  },
-                  child: const Icon(Icons.check_circle_outline_rounded),
-                ),
-                ElevatedButton(
-                  onPressed: _tundLisa,
-                  child: const Icon(Icons.add),
-                ),
-              ],
-            ),
-            Text(
-              'Shelly töörežiim:',
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                setState(
-                  () {
-                    if (onoffNupp == 'Shelly OFF') {
-                      onoffNupp = 'Shelly ON';
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => TundideValimineTana(
+                                soovitudTunnid: onTunnidSisestatud)),
+                      );
+                    },
+                    child: const Icon(Icons.check_circle_outline_rounded),
+                  ),
+                  ElevatedButton(
+                    onPressed: _tundLisa,
+                    child: const Icon(Icons.add),
+                  ),
+                ],
+              ),
+              Text(
+                'Shelly töörežiim:',
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  setState(
+                    () {
+                      if (onoffNupp == 'Shelly OFF') {
+                        onoffNupp = 'Shelly ON';
 
-                      onoff(
-                          "on"); //Kui on "on", siis kutsub esile funktsiooni onoff, mis lülitab seadme sisse
-                    } else if (onoffNupp == 'Shelly ON') {
-                      onoffNupp = 'Shelly OFF';
+                        onoff(
+                            "on"); //Kui on "on", siis kutsub esile funktsiooni onoff, mis lülitab seadme sisse
+                      } else if (onoffNupp == 'Shelly ON') {
+                        onoffNupp = 'Shelly OFF';
 
-                      onoff(
-                          "off"); //Kui on "off", siis kutsub esile funktsiooni onoff, mis lülitab seadme välja
-                    }
-                  },
-                );
-              },
-              child: Text(onoffNupp),
-            ),
-          ]),
+                        onoff(
+                            "off"); //Kui on "off", siis kutsub esile funktsiooni onoff, mis lülitab seadme välja
+                      }
+                    },
+                  );
+                },
+                child: Text(onoffNupp),
+              ),
+            ],
+          ),
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(
@@ -226,15 +230,7 @@ class _KoduLehtState extends State<KoduLeht> {
 
                   MaterialPageRoute(builder: (context) => HinnaGraafik()),
                 );
-              } else if (koduindex == 0) {
-                Navigator.push(
-                  //Kui vajutatakse Teie seade ikooni peale, siis viiakse Seadmetelisamine lehele
-
-                  context,
-
-                  MaterialPageRoute(builder: (context) => MinuSeadmed()),
-                );
-              }
+              } else if (koduindex == 0) {}
             });
           }),
     );

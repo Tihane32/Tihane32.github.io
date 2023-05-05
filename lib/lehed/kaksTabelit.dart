@@ -58,9 +58,7 @@ class _SeadmeTabelState extends State<SeadmeTabel> {
             ),
           ),
           Expanded(
-            child: KontoSeadmed(onTap1: (rowData) {
-              print('Tapped row with data: $rowData');
-            }),
+            child: KontoSeadmed(),
           ),
           const DecoratedBox(
             decoration: const BoxDecoration(color: Colors.cyan),
@@ -231,7 +229,6 @@ class _KontoSeadmedState extends State<KontoSeadmed> {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: DataTable(
-        showCheckboxColumn: false,
         columns: const <DataColumn>[
           DataColumn(
             label: Text(
@@ -296,6 +293,4 @@ class _KontoSeadmedState extends State<KontoSeadmed> {
       ),
     );
   }
-
-  void onTap(List<String> value) {}
 }
