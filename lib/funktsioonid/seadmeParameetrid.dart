@@ -1,14 +1,14 @@
 import 'dart:convert';
-
+import 'token.dart';
 import 'package:http/http.dart' as http;
 
 void main() async {
   var headers = {
     'Authorization':
-        'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwd2QiLCJpYXQiOjE2ODI1Mjk3NDcsInVzZXJfaWQiOiIxNTE0MDQ0Iiwic24iOiIxIiwidXNlcl9hcGlfdXJsIjoiaHR0cHM6XC9cL3NoZWxseS02NC1ldS5zaGVsbHkuY2xvdWQiLCJuIjo4NzQ5LCJleHAiOjE2ODI2MTYxNDd9.SV0T6T8CgTfJJ40qBgCtyRJ1owqgxTfkPXUgW-uooDQ',
+        'Bearer $getToken()',
   };
   var data = {
-    'id': '30c6f7828098',
+    'id': '80646f81ad9a',
     'auth_key':
         'MTcxYTNjdWlk99F3FBAA1664CCBA1DB1A6FE1A156072DB6AF5A8F1B4A1B0ACB7C82002649DADF1114D97483D4E12'
   };
@@ -17,19 +17,20 @@ void main() async {
   var res = await http.post(url, headers: headers, body: data);
   //print(res.body);
   var resJson = json.decode(res.body) as Map<String, dynamic>;
-  //print(resJson);
-  print(resJson['data']['device_status']['switch:0']['apower']);
-  print(resJson['data']['device_status']['switch:0']['voltage']);
-  print(resJson['data']['device_status']['switch:0']['current']);
-  print(resJson['data']['device_status']['switch:0']['pf']);
-  print(resJson['data']['device_status']['switch:0']['aenergy']);
-  await energia();
+  print(resJson);
+  print(resJson['data']['device_status']['meters'][0]['power']);
+  //print(resJson['data']['device_status']['switch:0']['apower']);
+  //print(resJson['data']['device_status']['switch:0']['voltage']);
+  //print(resJson['data']['device_status']['switch:0']['current']);
+  //print(resJson['data']['device_status']['switch:0']['pf']);
+  //print(resJson['data']['device_status']['switch:0']['aenergy']);
+  //await energia();
 }
 
 energia() async {
   var headers = {
     'Authorization':
-        'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwd2QiLCJpYXQiOjE2ODI3MTI3ODIsInVzZXJfaWQiOiIxNTE0MDQ0Iiwic24iOiIxIiwidXNlcl9hcGlfdXJsIjoiaHR0cHM6XC9cL3NoZWxseS02NC1ldS5zaGVsbHkuY2xvdWQiLCJuIjo0ODkxLCJleHAiOjE2ODI3OTkxODJ9.bYPlbAuHARSarJ6J_8l8PLzJG463YePltVS5jxKR-QI',
+        'Bearer $getToken()',
     //'Content-Type': 'application/x-www-form-urlencoded',
   };
   print('siin');
