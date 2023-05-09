@@ -4,18 +4,18 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'token.dart';
 
 //TODO: peab tegema nii, et topelt graafikut ei laseks panna
-gen2GraafikuLoomine(var selected, var valitudPaev) async {
+gen2GraafikuLoomine(var selected, var valitudPaev, String value) async {
   print(selected);
   print(valitudPaev);
   var graafikud = Map<String, dynamic>();
-  await graafikuteSaamine(graafikud);
+  await graafikuteSaamine(graafikud,value);
   print('vana: $graafikud');
-  await graafikuKustutamine(graafikud);
+  await graafikuKustutamine(graafikud,value);
   print('uus: $graafikud');
-  await graafikuloomine(graafikud, selected, valitudPaev);
+  await graafikuloomine(graafikud, selected, valitudPaev,value);
 }
 
-graafikuteSaamine(Map<String, dynamic> graafikud) async {
+graafikuteSaamine(Map<String, dynamic> graafikud, String value) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   String? ajutineKasutajanimi = prefs.getString('Kasutajanimi');
   String? sha1Hash = prefs.getString('Kasutajaparool');
@@ -26,7 +26,7 @@ graafikuteSaamine(Map<String, dynamic> graafikud) async {
   };
 
   var data = {
-    'id': '30c6f7828098',
+    'id': value,
     'method': 'schedule.list',
   };
 
@@ -61,7 +61,7 @@ graafikuteSaamine(Map<String, dynamic> graafikud) async {
   }
 }
 
-graafikuloomine(Map<String, dynamic> graafikud, selected, valitudPaev) async {
+graafikuloomine(Map<String, dynamic> graafikud, selected, valitudPaev, String value) async {
   var j = 1;
   for (var i in graafikud.keys) {
     print(i);
@@ -78,14 +78,14 @@ graafikuloomine(Map<String, dynamic> graafikud, selected, valitudPaev) async {
         tund = '$i';
         print(lulitus);
         print(i);
-        graafikuSaatmine(lulitus, tund, valitudPaev);
+        graafikuSaatmine(lulitus, tund, valitudPaev,value);
       } else {
         if (selected[i] != selected[i - 1]) {
           lulitus = true;
           tund = '$i';
           print(lulitus);
           print(i);
-          graafikuSaatmine(lulitus, tund, valitudPaev);
+          graafikuSaatmine(lulitus, tund, valitudPaev,value);
         }
       }
     }
@@ -97,21 +97,21 @@ graafikuloomine(Map<String, dynamic> graafikud, selected, valitudPaev) async {
         tund = '$i';
         print(lulitus);
         print(i);
-        graafikuSaatmine(lulitus, tund, valitudPaev);
+        graafikuSaatmine(lulitus, tund, valitudPaev,value);
       } else {
         if (selected[i] != selected[i - 1]) {
           lulitus = false;
           tund = '$i';
           print(lulitus);
           print(i);
-          graafikuSaatmine(lulitus, tund, valitudPaev);
+          graafikuSaatmine(lulitus, tund, valitudPaev,value);
         }
       }
     }
   }
 }
 
-graafikuSaatmine(bool lulitus, String tund, valitudPaev) async {
+graafikuSaatmine(bool lulitus, String tund, valitudPaev, String value) async {
   print(valitudPaev);
   DateTime now = DateTime.now();
   print(now.weekday);
@@ -153,7 +153,7 @@ graafikuSaatmine(bool lulitus, String tund, valitudPaev) async {
   };
 
   var data = {
-    'id': '30c6f7828098',
+    'id': value,
     'method': 'schedule.create',
     'params':
         '{"enable":true,"timespec":"0 0 $tund * * $nadalapaev","calls":[{"method":"Switch.Set","params":{"id":0,"on":$lulitus}}]}',
@@ -168,7 +168,7 @@ graafikuSaatmine(bool lulitus, String tund, valitudPaev) async {
   print(res.body);
 }
 
-graafikuKustutamine(Map<String, dynamic> graafikud) async {
+graafikuKustutamine(Map<String, dynamic> graafikud, String value) async {
   DateTime now = DateTime.now();
   print(now.weekday);
   var nadalapaev;
@@ -240,7 +240,7 @@ graafikuKustutamine(Map<String, dynamic> graafikud) async {
       };
 
       var data = {
-        'id': '30c6f7828098',
+        'id': value,
         'method': 'schedule.delete',
         'params': '{"id":$i}',
       };

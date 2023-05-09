@@ -12,17 +12,17 @@ class EnergiaGraafikApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'My Chart App',
-      home: MyChartPage(),
+      home: EGraafik(),
     );
   }
 }
 
-class MyChartPage extends StatefulWidget {
+class EGraafik extends StatefulWidget {
   @override
-  _MyChartPageState createState() => _MyChartPageState();
+  _EGraafikState createState() => _EGraafikState();
 }
 
-class _MyChartPageState extends State<MyChartPage> {
+class _EGraafikState extends State<EGraafik> {
   List<_ChartData> chartData = [];
 
   Future<void> fetchData() async {
