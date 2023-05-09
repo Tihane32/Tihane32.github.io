@@ -39,47 +39,56 @@ class _DeviceSettingsPageState extends State<DeviceSettingsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: const Text('Device Settings'),
-          leading: IconButton(
-            icon: const Icon(Icons.navigate_before),
+      appBar: AppBar(
+        title: const Text('Device Settings'),
+        leading: IconButton(
+          icon: const Icon(Icons.navigate_before),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => MinuSeadmed()),
+            );
+          },
+        ),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.calendar_today_rounded),
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => MinuSeadmed()),
+                MaterialPageRoute(
+                    builder: (context) => GraafikLeht(widget.value)),
               );
             },
           ),
-          actions: [
-            IconButton(
-              icon: const Icon(Icons.calendar_today_rounded),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => GraafikLeht(widget.value)),
-                );
-              },
-            ),
-          ],
-        ),
-        body: Column(
-          children: [
-            Expanded(
-              child: SeadmeNimi(value: value),
-            ),
-            const DecoratedBox(
-              decoration: BoxDecoration(color: Colors.blue),
-              child: Text(
-                'Tarbimise graafik:',
-                style: TextStyle(fontSize: 20),
+        ],
+      ),
+      body: Column(
+        children: [
+          Expanded(
+            child: SeadmeNimi(value: value),
+          ),
+          Container(
+            width: MediaQuery.of(context).size.width * 0.9,
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                color: Colors.green,
+                borderRadius: BorderRadius.circular(20.0),
+                border: Border.all(style: BorderStyle.solid, width: 1.0),
               ),
+              child: Center(
+                  child: Text(
+                'Tarbimise graafik:',
+                style: TextStyle(fontSize: 20, color: Colors.white),
+              )),
             ),
-            Expanded(
-              child: EGraafik(),
-            ),
-          ],
-        ));
+          ),
+          Expanded(
+            child: EGraafik(value: value),
+          ),
+        ],
+      ),
+    );
   }
 }
 
@@ -177,6 +186,9 @@ class _SeadmeNimiState extends State<SeadmeNimi> {
 }
 
 class EGraafik extends StatefulWidget {
+  final String value;
+
+  EGraafik({required this.value});
   @override
   _EGraafikState createState() => _EGraafikState();
 }
@@ -184,7 +196,7 @@ class EGraafik extends StatefulWidget {
 class _EGraafikState extends State<EGraafik> {
   List<_ChartData> chartData = [];
 
-  Future<void> fetchData() async {
+  Future<void> fetchData(value) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? ajutineKasutajanimi = prefs.getString('Kasutajanimi');
     String? sha1Hash = prefs.getString('Kasutajaparool');
@@ -210,7 +222,7 @@ class _EGraafikState extends State<EGraafik> {
     };
     print('siin');
     var data = {
-      'id': '80646f81ad9a',
+      'id': value,
       'channel': '0',
       'date_range': 'custom',
       'date_from': '2023-04-01 00:00:00',
@@ -236,13 +248,13 @@ class _EGraafikState extends State<EGraafik> {
   void initState() {
     _tooltipBehavior = TooltipBehavior(enable: true, header: 'Tarbitud:');
     super.initState();
-    fetchData();
+    fetchData(widget.value);
   }
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<void>(
-      future: fetchData(),
+      future: fetchData(widget.value),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
           return Center(
@@ -250,9 +262,9 @@ class _EGraafikState extends State<EGraafik> {
               primaryXAxis:
                   DateTimeAxis(title: AxisTitle(text: 'Kuupäev'), interval: 5),
               primaryYAxis: NumericAxis(
-                  labelFormat: '{value} Wh',
-                  title: AxisTitle(text: 'Tarbimine'),
-                  interval: 10),
+                labelFormat: '{value} Wh',
+                title: AxisTitle(text: 'Tarbimine'),
+              ),
               tooltipBehavior: _tooltipBehavior,
               series: <ChartSeries<_ChartData, DateTime>>[
                 SplineSeries<_ChartData, DateTime>(
