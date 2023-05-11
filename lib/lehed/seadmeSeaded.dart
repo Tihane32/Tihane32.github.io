@@ -253,34 +253,39 @@ class _EGraafikState extends State<EGraafik> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<void>(
-      future: fetchData(widget.value),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.done) {
-          return Center(
-            child: SfCartesianChart(
-              primaryXAxis:
-                  DateTimeAxis(title: AxisTitle(text: 'Kuupäev'), interval: 5),
-              primaryYAxis: NumericAxis(
-                labelFormat: '{value} Wh',
-                title: AxisTitle(text: 'Tarbimine'),
-              ),
-              tooltipBehavior: _tooltipBehavior,
-              series: <ChartSeries<_ChartData, DateTime>>[
-                SplineSeries<_ChartData, DateTime>(
-                  splineType: SplineType.monotonic,
-                  dataSource: chartData,
-                  xValueMapper: (_ChartData data, _) => data.date,
-                  yValueMapper: (_ChartData data, _) => data.consumption,
-                  enableTooltip: true,
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical:20.0, horizontal: 10),
+      child: FutureBuilder<void>(
+        future: fetchData(widget.value),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            return Center(
+              child: SfCartesianChart(
+                primaryXAxis:
+                    DateTimeAxis(title: AxisTitle(text: 'Kuupäev')),
+                primaryYAxis: NumericAxis(
+                  title: AxisTitle(text: 'Tarbimine'),
+                  labelFormat: '{value} Wh',
+                  labelRotation: 45,
+                 
                 ),
-              ],
-            ),
-          );
-        } else {
-          return Center(child: CircularProgressIndicator());
-        }
-      },
+                tooltipBehavior: _tooltipBehavior,
+                series: <ChartSeries<_ChartData, DateTime>>[
+                  SplineSeries<_ChartData, DateTime>(
+                    splineType: SplineType.monotonic,
+                    dataSource: chartData,
+                    xValueMapper: (_ChartData data, _) => data.date,
+                    yValueMapper: (_ChartData data, _) => data.consumption,
+                    enableTooltip: true,
+                  ),
+                ],
+              ),
+            );
+          } else {
+            return Center(child: CircularProgressIndicator());
+          }
+        },
+      ),
     );
   }
 }

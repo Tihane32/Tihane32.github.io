@@ -59,5 +59,5 @@ void lulitamine(String seade) async {
 
     j++;
   }
-  await Future.delayed(const Duration(seconds: 3));
+  
 }

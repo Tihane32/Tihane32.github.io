@@ -30,6 +30,7 @@ class _SeadmeTabelState extends State<SeadmeTabel> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color.fromARGB(255, 155, 216, 220), //Taustavärv
       appBar: AppBar(
         backgroundColor: Colors.red[600],
         title: const Text('Shelly pistik'),
@@ -57,7 +58,7 @@ class _SeadmeTabelState extends State<SeadmeTabel> {
               style: TextStyle(fontSize: 20),
             ),
           ),
-           Expanded(
+          Expanded(
             child: KontoSeadmed(onTap1: (rowData) {
               print('Tapped row with data: $rowData');
             }),
@@ -194,6 +195,7 @@ class KontoSeadmed extends StatefulWidget {
 
 class _KontoSeadmedState extends State<KontoSeadmed> {
   late Map<String, List<String>> minuSeadmedK = {};
+  bool isLoading = true;
   void initState() {
     super.initState();
     _submitForm();
@@ -224,78 +226,100 @@ class _KontoSeadmedState extends State<KontoSeadmed> {
     }
     setState(() {
       minuSeadmedK = minuSeadmedK;
+      isLoading = false;
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      child: DataTable(
-        showCheckboxColumn: false,
-        columns: const <DataColumn>[
-          DataColumn(
-            label: Text(
-              'ID',
-              style: TextStyle(fontStyle: FontStyle.italic),
-            ),
-          ),
-          DataColumn(
-            label: Text(
-              'Nimi',
-              style: TextStyle(fontStyle: FontStyle.italic),
-            ),
-          ),
-          DataColumn(
-            label: Text(
-              'Pistik',
-              style: TextStyle(fontStyle: FontStyle.italic),
-            ),
-          ),
-          DataColumn(
-            label: Text(
-              'Olek',
-              style: TextStyle(fontStyle: FontStyle.italic),
-            ),
-          ),
-        ],
-        rows: minuSeadmedK.entries
-            .map((e) => DataRow(
-                  cells: [
-                    DataCell(Text(e.value[0])),
-                    DataCell(Text(e.value[1])),
-                    DataCell(Text(e.value[2])),
-                    DataCell(
-                      IgnorePointer(
-                          ignoring: e.value[3] != "on" && e.value[3] != "off",
-                          child: TextButton(
-                              onPressed: () {
-                                lulitamine(e.value[0]);
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => MinuSeadmed()),
-                                );
-                              },
-                              child: Text(e.value[3]))),
-                    )
+        child: isLoading
+            ? Center(
+                child: CircularProgressIndicator(),
+              )
+            : Center(
+                child: DataTable(
+                  showCheckboxColumn: false,
+                  columns: const <DataColumn>[
+                    // Remove the DataColumn with the 'ID' label
+                    DataColumn(
+                      label: Text(
+                        'Nimi',
+                        style: TextStyle(fontStyle: FontStyle.italic),
+                      ),
+                    ),
+                    DataColumn(
+                      label: Text(
+                        'Pistik',
+                        style: TextStyle(fontStyle: FontStyle.italic),
+                      ),
+                    ),
+                    DataColumn(
+                      label: Text(
+                        'Olek',
+                        style: TextStyle(fontStyle: FontStyle.italic),
+                      ),
+                    ),
                   ],
-                  onSelectChanged: (isSelected) {
-                    if (isSelected != null && isSelected) {
-                      onTap(e.value);
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => SeadmeSeaded(
-                                  value: e.value[0],
-                                )),
-                      );
-                    }
-                  },
-                ))
-            .toList(),
-      ),
-    );
+                  rows: minuSeadmedK.entries
+                      .map(
+                        (e) => DataRow(
+                          cells: [
+                            // Remove the DataCell with the hidden ID text
+                            DataCell(Text(e.value[1])),
+                            DataCell(Text(e.value[2])),
+                            DataCell(
+                              IgnorePointer(
+                                ignoring:
+                                    e.value[3] != "on" && e.value[3] != "off",
+                                child: TextButton( //Saab nuppu värvi muuta
+                                  style: TextButton.styleFrom(
+                                    backgroundColor: e.value[3] == "Offline"
+                                        ? Colors.blue[0]
+                                        : Colors.blue[100],
+                                  ),
+                                  onPressed: () {
+                                    lulitamine(e.value[0]);
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => MinuSeadmed(),
+                                      ),
+                                    );
+                                  },
+                                  child: Text( //Saab nuppude texti värvi muuta
+                                    e.value[3],
+                                    style: TextStyle(
+                                      color: e.value[3] == "on"
+                                          ? Color.fromARGB(255, 38, 152, 41)
+                                          : e.value[3] == "off"
+                                              ? Colors.red
+                                              : Colors.grey,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                          onSelectChanged: (isSelected) {
+                            if (isSelected != null && isSelected) {
+                              onTap(e.value);
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => SeadmeSeaded(
+                                    value: e.value[0],
+                                  ),
+                                ),
+                              );
+                            }
+                          },
+                        ),
+                      )
+                      .toList(),
+                ),
+              ));
   }
-  
+
   void onTap(List<String> value) {}
 }
