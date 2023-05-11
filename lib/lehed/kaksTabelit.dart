@@ -194,6 +194,7 @@ class KontoSeadmed extends StatefulWidget {
 
 class _KontoSeadmedState extends State<KontoSeadmed> {
   late Map<String, List<String>> minuSeadmedK = {};
+  bool isLoading = true;
   void initState() {
     super.initState();
     _submitForm();
@@ -224,13 +225,18 @@ class _KontoSeadmedState extends State<KontoSeadmed> {
     }
     setState(() {
       minuSeadmedK = minuSeadmedK;
+       isLoading = false;
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      child: DataTable(
+      child: isLoading
+          ? Center(
+              child: CircularProgressIndicator(),
+            )
+            : Center(child: DataTable(
         showCheckboxColumn: false,
         columns: const <DataColumn>[
           DataColumn(
@@ -294,7 +300,7 @@ class _KontoSeadmedState extends State<KontoSeadmed> {
                 ))
             .toList(),
       ),
-    );
+    ));
   }
   
   void onTap(List<String> value) {}
