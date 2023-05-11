@@ -97,15 +97,33 @@ class _LoginPageState extends State<LoginPage> {
     var seadmeteMap = seadmeteSaamiseVastusJSON['data']['devices'];
 
     var i = 0;
-    var seadmed = new Map<String, dynamic>();
-
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+     String? storedJsonMap = prefs.getString('seadmed');
+    
+      Map<String, dynamic> seadmed = json.decode(storedJsonMap!);
+   
+    var j = 0;
     for (var device in seadmeteMap.values) {
       var seade = new Map<String, dynamic>();
       seade['Seadme_ID'] = device['id'];
-      seade['Seadme_nimi'] = device['name'];
-      seade['Seadme_pistik']=device['name'];
+      print('alg');
+      print(seade['Seadme_ID']);
+      print(seadmed['Seade$i']['Seadme_ID']);
+      print('lõpp');
+      for (String Seade in seadmed.keys) {
+        if (seade['Seadme_ID'] == seadmed['Seade$j']['Seadme_ID']) {
+          j++;
+          print('break');
+          break;
+        }
+        print('no break $j');
+        j++;
+        seade['Seadme_nimi'] = device['name'];
+      seade['Seadme_pistik'] = device['name'];
       seade['Seadme_generatsioon'] = device['gen'];
       seadmed['Seade$i'] = seade;
+      }
+      
       i++;
     }
 
@@ -114,7 +132,7 @@ class _LoginPageState extends State<LoginPage> {
     var keyVastus = await http.post(keySaamiseUrl, headers: headers1);
     var keyVastusJSON = json.decode(keyVastus.body);
 
-    SharedPreferences prefs = await SharedPreferences.getInstance();
+    
     String seadmedMap = json.encode(seadmed);
     await prefs.setString('seadmed', seadmedMap);
     String keyMap = json.encode(keyVastusJSON['data']['key']);

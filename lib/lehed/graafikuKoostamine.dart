@@ -1,16 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
-import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:testuus4/funktsioonid/Elering.dart';
-import '../funktsioonid/CurrentPrice.dart';
-import 'Graafik.dart';
-import 'OnOff.dart';
-import 'Login.dart';
-import 'kaksTabelit.dart';
 import 'graafikuValimine.dart';
-import 'hinnaGraafik.dart';
+
 
 class GraafikLeht extends StatefulWidget {
   final String value; // Add a parameter to receive the value String
