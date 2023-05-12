@@ -201,7 +201,11 @@ class _LulitusGraafikState extends State<_LulitusGraafik> {
                 asendus = asendus + '00';
               }
               print(asendus);
-              lulitus[asendus][1] = elering[i]['price'];
+              
+              
+                lulitus[asendus][1] = elering[i]['price'];
+              
+
               //print(lulitus[asendus][1]);
 
               //print(elering[i]['price']);

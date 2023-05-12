@@ -31,7 +31,7 @@ class _SeadmeTabelState extends State<SeadmeTabel> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color.fromARGB(255, 147, 247, 131), //Taustavärv
+      backgroundColor: Color.fromARGB(255, 189, 216, 225), //Taustavärv
       appBar: AppBar(
         backgroundColor: Colors.red[600],
         title: const Text('Shelly pistik'),

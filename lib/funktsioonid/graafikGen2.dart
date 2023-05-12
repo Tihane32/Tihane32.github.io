@@ -8,11 +8,11 @@ gen2GraafikuLoomine(var selected, var valitudPaev, String value) async {
   print(selected);
   print(valitudPaev);
   var graafikud = Map<String, dynamic>();
-  await graafikuteSaamine(graafikud,value);
+  await graafikuteSaamine(graafikud, value);
   print('vana: $graafikud');
-  await graafikuKustutamine(graafikud,value);
+  await graafikuKustutamine(graafikud, value);
   print('uus: $graafikud');
-  await graafikuloomine(graafikud, selected, valitudPaev,value);
+  await graafikuloomine(graafikud, selected, valitudPaev, value);
 }
 
 graafikuteSaamine(Map<String, dynamic> graafikud, String value) async {
@@ -61,7 +61,8 @@ graafikuteSaamine(Map<String, dynamic> graafikud, String value) async {
   }
 }
 
-graafikuloomine(Map<String, dynamic> graafikud, selected, valitudPaev, String value) async {
+graafikuloomine(
+    Map<String, dynamic> graafikud, selected, valitudPaev, String value) async {
   var j = 1;
   for (var i in graafikud.keys) {
     print(i);
@@ -78,14 +79,14 @@ graafikuloomine(Map<String, dynamic> graafikud, selected, valitudPaev, String va
         tund = '$i';
         print(lulitus);
         print(i);
-        graafikuSaatmine(lulitus, tund, valitudPaev,value);
+        graafikuSaatmine(lulitus, tund, valitudPaev, value);
       } else {
         if (selected[i] != selected[i - 1]) {
           lulitus = true;
           tund = '$i';
           print(lulitus);
           print(i);
-          graafikuSaatmine(lulitus, tund, valitudPaev,value);
+          graafikuSaatmine(lulitus, tund, valitudPaev, value);
         }
       }
     }
@@ -97,14 +98,14 @@ graafikuloomine(Map<String, dynamic> graafikud, selected, valitudPaev, String va
         tund = '$i';
         print(lulitus);
         print(i);
-        graafikuSaatmine(lulitus, tund, valitudPaev,value);
+        graafikuSaatmine(lulitus, tund, valitudPaev, value);
       } else {
         if (selected[i] != selected[i - 1]) {
           lulitus = false;
           tund = '$i';
           print(lulitus);
           print(i);
-          graafikuSaatmine(lulitus, tund, valitudPaev,value);
+          graafikuSaatmine(lulitus, tund, valitudPaev, value);
         }
       }
     }
@@ -158,7 +159,7 @@ graafikuSaatmine(bool lulitus, String tund, valitudPaev, String value) async {
     'params':
         '{"enable":true,"timespec":"0 0 $tund * * $nadalapaev","calls":[{"method":"Switch.Set","params":{"id":0,"on":$lulitus}}]}',
   };
-
+  print(data);
   var url = Uri.parse(
       'https://shelly-64-eu.shelly.cloud/fast/device/gen2_generic_command');
   var res = await http.post(url, headers: headers, body: data);
