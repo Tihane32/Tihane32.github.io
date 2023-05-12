@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:testuus4/funktsioonid/graafikGen2.dart';
 import 'package:testuus4/lehed/energiaGraafik.dart';
 import 'dart:convert';
 import 'graafikuKoostamine.dart';
@@ -101,7 +102,7 @@ class _DeviceSettingsPageState extends State<DeviceSettingsPage> {
             ),
           ),
           Expanded(
-            child: _LulitusGraafik(),
+            child: _LulitusGraafik(value: value),
           ),
           Container(
             width: MediaQuery.of(context).size.width * 0.9,
@@ -128,7 +129,8 @@ class _DeviceSettingsPageState extends State<DeviceSettingsPage> {
 }
 
 class _LulitusGraafik extends StatefulWidget {
-  const _LulitusGraafik({Key? key}) : super(key: key);
+  final String value;
+  const _LulitusGraafik({Key? key, required this.value}) : super(key: key);
 
   @override
   _LulitusGraafikState createState() => _LulitusGraafikState();
@@ -137,7 +139,7 @@ class _LulitusGraafik extends StatefulWidget {
 class _LulitusGraafikState extends State<_LulitusGraafik> {
   late Map<String, dynamic> lulitus;
 
-  Future test() async {
+  Future test(String value) async {
     lulitus = {
       '0000': ['00.00', 0, false],
       '0100': ['01.00', 0, false],
@@ -164,88 +166,156 @@ class _LulitusGraafikState extends State<_LulitusGraafik> {
       '2200': ['22.00', 0, false],
       '2300': ['23.00', 0, false],
     };
-    DateTime now = DateTime.now();
-    int tana = now.weekday - 1;
+    SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    List<String> newList = [];
-    var headers = {
-      'Content-Type': 'application/x-www-form-urlencoded',
-    };
+    []; //Võtab mälust 'users'-i asukohast väärtused
+    var seadmedJSONmap = prefs.getString('seadmed');
 
-    var data = {
-      'channel': '0',
-      'id': '80646f81ad9a',
-      'auth_key':
-          'MTcxYTNjdWlk99F3FBAA1664CCBA1DB1A6FE1A156072DB6AF5A8F1B4A1B0ACB7C82002649DADF1114D97483D4E12',
-    };
+    Map<String, dynamic> storedMap = json.decode(seadmedJSONmap!);
 
-    var url = Uri.parse('https://shelly-64-eu.shelly.cloud/device/settings');
-    var res = await http.post(url, headers: headers, body: data);
-    await Future.delayed(const Duration(seconds: 2));
-    //Kui post läheb läbi siis:
+    String? storedKey = prefs.getString('key');
 
-    final httpPackageJson = json.decode(res.body) as Map<String, dynamic>;
+    String storedKeyString = jsonDecode(storedKey!);
+    var j = 0;
+    var authKey = storedKeyString;
+    for (var i in storedMap.values) {
+      if (storedMap['Seade$j']['Seadme_ID'] == value) {
+        var seadeGen = storedMap['Seade$j']['Seadme_generatsioon'] as int;
 
-    final scheduleRules1 = httpPackageJson['data']['device_settings']['relays']
-        [0]['schedule_rules'];
+        if (seadeGen == 2) {
+          bool k = false;
+          var graafikud = Map<String, dynamic>();
 
-    for (String item in scheduleRules1) {
-      List<String> parts = item.split('-');
-      if (parts[1].length > 1) {
-        for (int i = 0; i < parts[1].length; i++) {
-          //lülituskäsk tehakse iga "-" juures pooleks ja lisatakse eraldi listi
-          String newItem = '${parts[0]}-${parts[1][i]}-${parts[2]}';
-          newList.add(newItem);
-        }
-      } else {
-        newList.add(item);
-      }
-    }
-    List<String> filteredRules = [];
+          await graafikuteSaamine(graafikud, value);
+          var elering = await getElering('täna');
+          setState(() {
+            j = 0;
+            for (var i = 0; i < 24; i++) {
+              String asendus = '$j';
+              print('asenuds');
+              print(j);
 
-    RegExp regExp = RegExp("-$tana-");
+              if (j < 10) {
+                asendus = '0' + asendus + '00';
+              } else {
+                asendus = asendus + '00';
+              }
+              print(asendus);
+              lulitus[asendus][1] = elering[i]['price'];
+              //print(lulitus[asendus][1]);
 
-    for (var rule in newList) {
-      if (regExp.hasMatch(rule)) {
-        filteredRules.add(rule);
-      }
-    }
-    var elering = await getElering('täna');
-    var i = 0;
+              //print(elering[i]['price']);
+              var s = 1;
+              for (var devices in graafikud.values) {
+                var aeg = graafikud['$s']['Timespec'];
+                bool onoff = graafikud['$s']['On/Off'];
 
-    setState(() {
-      print(elering[0]['price']);
+                List<String> parts = aeg.split(' ');
+                var temp = parts[2];
+                var u = int.parse(temp);
+                var ajutine = parts[2] as String;
 
-      i = filteredRules.length;
-      var u = 0;
-
-      bool k = false;
-      for (var j = 0; j < 24; j++) {
-        String asendus = '$j';
-        if (j < 10) {
-          asendus = '0' + asendus + '00';
-        } else {
-          asendus = asendus + '00';
-        }
-        for (u = 0; u < i; u++) {
-          List<String> parts = filteredRules[u].split('-');
-
-          String timeString = parts[0];
-          String formattedTime =
-              timeString.substring(0, 2) + '.' + timeString.substring(2);
-
-          if (formattedTime == lulitus[asendus][0]) {
-            print('oige: $j');
-            if (parts[2] == 'on') {
-              lulitus[asendus][2] = true;
-              k = true;
-              print('sisse');
-            } else {
-              lulitus[asendus][2] = false;
-              k = false;
-              print('välja');
+                if (u < 10) {
+                  ajutine = '0' + ajutine + '.00';
+                } else {
+                  ajutine = ajutine + '.00';
+                }
+                if (lulitus[asendus][0] == ajutine) {
+                  lulitus[asendus][2] = onoff;
+                  k = onoff;
+                }
+                print('siin');
+                print(lulitus[asendus][1]);
+                lulitus[asendus][2] = k;
+                if (s < graafikud.length) {
+                  s++;
+                }
+              }
+              if (j != 23) {
+                j++;
+              }
             }
-          } /*else {
+            print(lulitus);
+          });
+        }
+        if (seadeGen == 1) {
+          DateTime now = DateTime.now();
+          int tana = now.weekday - 1;
+
+          List<String> newList = [];
+          var headers = {
+            'Content-Type': 'application/x-www-form-urlencoded',
+          };
+
+          var data = {
+            'channel': '0',
+            'id': value,
+            'auth_key': authKey,
+          };
+
+          var url =
+              Uri.parse('https://shelly-64-eu.shelly.cloud/device/settings');
+          var res = await http.post(url, headers: headers, body: data);
+          await Future.delayed(const Duration(seconds: 2));
+          //Kui post läheb läbi siis:
+
+          final httpPackageJson = json.decode(res.body) as Map<String, dynamic>;
+
+          final scheduleRules1 = httpPackageJson['data']['device_settings']
+              ['relays'][0]['schedule_rules'];
+
+          for (String item in scheduleRules1) {
+            List<String> parts = item.split('-');
+            if (parts[1].length > 1) {
+              for (int i = 0; i < parts[1].length; i++) {
+                //lülituskäsk tehakse iga "-" juures pooleks ja lisatakse eraldi listi
+                String newItem = '${parts[0]}-${parts[1][i]}-${parts[2]}';
+                newList.add(newItem);
+              }
+            } else {
+              newList.add(item);
+            }
+          }
+          List<String> filteredRules = [];
+
+          RegExp regExp = RegExp("-$tana-");
+
+          for (var rule in newList) {
+            if (regExp.hasMatch(rule)) {
+              filteredRules.add(rule);
+            }
+          }
+          var elering = await getElering('täna');
+          var i = 0;
+
+          setState(() {
+            i = filteredRules.length;
+            var u = 0;
+
+            bool k = false;
+            for (var j = 0; j < 24; j++) {
+              String asendus = '$j';
+              if (j < 10) {
+                asendus = '0' + asendus + '00';
+              } else {
+                asendus = asendus + '00';
+              }
+              for (u = 0; u < i; u++) {
+                List<String> parts = filteredRules[u].split('-');
+
+                String timeString = parts[0];
+                String formattedTime =
+                    timeString.substring(0, 2) + '.' + timeString.substring(2);
+
+                if (formattedTime == lulitus[asendus][0]) {
+                  if (parts[2] == 'on') {
+                    lulitus[asendus][2] = true;
+                    k = true;
+                  } else {
+                    lulitus[asendus][2] = false;
+                    k = false;
+                  }
+                } /*else {
             if (j != 0) {
               var ajutine = j - 1;
 
@@ -259,17 +329,21 @@ class _LulitusGraafikState extends State<_LulitusGraafik> {
               lulitus[asendus][2] = lulitus[asendus1][2];
             }
           }*/
-          //print(lulitus['$j']);
+                //print(lulitus['$j']);
+              }
+              lulitus[asendus][2] = k;
+              lulitus[asendus][1] = elering[j]['price'];
+            }
+          });
         }
-        lulitus[asendus][2] = k;
-        lulitus[asendus][1] = elering[j]['price'];
       }
-    });
+      j++;
+    }
   }
 
   @override
   void initState() {
-    test();
+    test(widget.value);
     super.initState();
   }
 
@@ -336,7 +410,6 @@ class _EGraafikState extends State<EGraafik> {
     var headers = {
       'Authorization': 'Bearer $token',
     };
-    print('siin');
     var data = {
       'id': value,
       'channel': '0',
