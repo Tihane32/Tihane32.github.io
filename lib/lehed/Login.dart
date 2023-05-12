@@ -7,6 +7,7 @@ import 'package:testuus4/lehed/kaksTabelit.dart';
 //import '/SeadmeSeaded.dart';
 import 'package:testuus4/lehed/seadmeSeaded.dart';
 import 'energiaGraafik.dart';
+import 'package:testuus4/funktsioonid/seisukord.dart';
 
 class LoginApp extends StatelessWidget {
   @override
@@ -142,10 +143,13 @@ class _LoginPageState extends State<LoginPage> {
       var seadmed = new Map<String, dynamic>();
       i = 0;
       for (var device in seadmeteMap.values) {
+        print('uus device: $device');
         var seade = new Map<String, dynamic>();
         seade['Seadme_ID'] = device['id'];
         seade['Seadme_nimi'] = device['name'];
+        seade['Seadme_pistik'] = device['name'];
         seade['Seadme_generatsioon'] = device['gen'];
+        print(seade['Seadme_generatsioon']);
         seadmed['Seade$i'] = seade;
         i++;
       }
@@ -158,6 +162,7 @@ class _LoginPageState extends State<LoginPage> {
       await prefs.setString('seadmed', seadmedMap);
       String keyMap = json.encode(keyVastusJSON['data']['key']);
       await prefs.setString('key', keyMap);
+      print(seadmedMap);
     }
 
     /* Näide kuidas võtta mälust seadmete map
@@ -181,6 +186,7 @@ class _LoginPageState extends State<LoginPage> {
       print(storedKeyString);
     }
     */
+    seisukord();
   }
 
   @override

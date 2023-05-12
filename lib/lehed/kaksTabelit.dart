@@ -7,6 +7,7 @@ import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'seadmeSeaded.dart';
 import 'package:testuus4/funktsioonid/seisukord.dart';
+import 'SeadmeSeadedManuaalsed.dart';
 
 class MinuSeadmed extends StatelessWidget {
   @override
@@ -30,7 +31,7 @@ class _SeadmeTabelState extends State<SeadmeTabel> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color.fromARGB(255, 155, 216, 220), //Taustavärv
+      backgroundColor: Color.fromARGB(255, 147, 247, 131), //Taustavärv
       appBar: AppBar(
         backgroundColor: Colors.red[600],
         title: const Text('Shelly pistik'),
@@ -173,7 +174,10 @@ class ManuaalsedSeadmed extends StatelessWidget {
                     onTap(e.value);
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => HinnaGraafik()),
+                      MaterialPageRoute(
+                          builder: (context) => SeadmeSeadedManuaalsed(
+                                value: e.value[0],
+                              )),
                     );
                   }
                 },
@@ -272,7 +276,8 @@ class _KontoSeadmedState extends State<KontoSeadmed> {
                               IgnorePointer(
                                 ignoring:
                                     e.value[3] != "on" && e.value[3] != "off",
-                                child: TextButton( //Saab nuppu värvi muuta
+                                child: TextButton(
+                                  //Saab nuppu värvi muuta
                                   style: TextButton.styleFrom(
                                     backgroundColor: e.value[3] == "Offline"
                                         ? Colors.blue[0]
@@ -287,7 +292,8 @@ class _KontoSeadmedState extends State<KontoSeadmed> {
                                       ),
                                     );
                                   },
-                                  child: Text( //Saab nuppude texti värvi muuta
+                                  child: Text(
+                                    //Saab nuppude texti värvi muuta
                                     e.value[3],
                                     style: TextStyle(
                                       color: e.value[3] == "on"

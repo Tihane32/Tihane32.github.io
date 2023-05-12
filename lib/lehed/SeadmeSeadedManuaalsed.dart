@@ -9,9 +9,10 @@ import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:testuus4/funktsioonid/Elering.dart';
 import 'seadmedKontoltNim.dart';
 
-class SeadmeSeaded extends StatelessWidget {
+class SeadmeSeadedManuaalsed extends StatelessWidget {
   final String value;
-  const SeadmeSeaded({Key? key, required this.value}) : super(key: key);
+  const SeadmeSeadedManuaalsed({Key? key, required this.value})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -119,8 +120,10 @@ class _DeviceSettingsPageState extends State<DeviceSettingsPage> {
             ),
           ),
           Expanded(
-            child: EGraafik(value: value),
-          ),
+            child: Container(
+              color: Colors.amber,
+            ),
+          )
         ],
       ),
     );
@@ -299,114 +302,4 @@ class _LulitusGraafikState extends State<_LulitusGraafik> {
       ),
     );
   }
-}
-
-class EGraafik extends StatefulWidget {
-  final String value;
-
-  EGraafik({required this.value});
-  @override
-  _EGraafikState createState() => _EGraafikState();
-}
-
-class _EGraafikState extends State<EGraafik> {
-  List<_ChartData> chartData = [];
-
-  Future<void> fetchData(value) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? ajutineKasutajanimi = prefs.getString('Kasutajanimi');
-    String? sha1Hash = prefs.getString('Kasutajaparool');
-
-    var headers1 = {
-      'Content-Type': 'application/x-www-form-urlencoded',
-    };
-
-    var kasutajaAndmed = {
-      'email': ajutineKasutajanimi,
-      'password': sha1Hash,
-      'var': '2',
-    };
-    var sisselogimiseUrl = Uri.parse('https://api.shelly.cloud/auth/login');
-    var sisselogimiseVastus = await http.post(sisselogimiseUrl,
-        headers: headers1, body: kasutajaAndmed);
-    var vastusJSON =
-        json.decode(sisselogimiseVastus.body) as Map<String, dynamic>;
-    var token = vastusJSON['data']['token'];
-    //Todo peab lisama beareri saamise
-    var headers = {
-      'Authorization': 'Bearer $token',
-    };
-    print('siin');
-    var data = {
-      'id': value,
-      'channel': '0',
-      'date_range': 'custom',
-      'date_from': '2023-04-01 00:00:00',
-      'date_to': '2023-04-30 23:59:59',
-    };
-
-    var url = Uri.parse(
-        'https://shelly-64-eu.shelly.cloud/statistics/relay/consumption');
-    var res = await http.post(url, headers: headers, body: data);
-    if (res.statusCode != 200)
-      throw Exception('http.post error: statusCode= ${res.statusCode}');
-    final jsonData = json.decode(res.body);
-    final historyData = jsonData['data']['history'] as List<dynamic>;
-
-    chartData = historyData
-        .map((history) => _ChartData(DateTime.parse(history['datetime']),
-            history['consumption'].toDouble()))
-        .toList();
-  }
-
-  late TooltipBehavior _tooltipBehavior;
-  @override
-  void initState() {
-    _tooltipBehavior = TooltipBehavior(enable: true, header: 'Tarbitud:');
-    super.initState();
-    fetchData(widget.value);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 10),
-      child: FutureBuilder<void>(
-        future: fetchData(widget.value),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
-            return Center(
-              child: SfCartesianChart(
-                primaryXAxis: DateTimeAxis(title: AxisTitle(text: 'Kuupäev')),
-                primaryYAxis: NumericAxis(
-                  title: AxisTitle(text: 'Tarbimine'),
-                  labelFormat: '{value} Wh',
-                  labelRotation: 45,
-                ),
-                tooltipBehavior: _tooltipBehavior,
-                series: <ChartSeries<_ChartData, DateTime>>[
-                  SplineSeries<_ChartData, DateTime>(
-                    splineType: SplineType.monotonic,
-                    dataSource: chartData,
-                    xValueMapper: (_ChartData data, _) => data.date,
-                    yValueMapper: (_ChartData data, _) => data.consumption,
-                    enableTooltip: true,
-                  ),
-                ],
-              ),
-            );
-          } else {
-            return Center(child: CircularProgressIndicator());
-          }
-        },
-      ),
-    );
-  }
-}
-
-class _ChartData {
-  _ChartData(this.date, this.consumption);
-
-  final DateTime date;
-  final double consumption;
 }
