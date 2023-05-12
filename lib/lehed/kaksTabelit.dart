@@ -64,11 +64,26 @@ class _SeadmeTabelState extends State<SeadmeTabel> {
               print('Tapped row with data: $rowData');
             }),
           ),
-          const DecoratedBox(
-            decoration: const BoxDecoration(color: Colors.cyan),
-            child: Text(
-              'Manuaalselt lisatud Seadmed:',
-              style: TextStyle(fontSize: 20),
+          Center(
+            child: Row(
+              children: [
+                IconButton(
+                  icon: const Icon(Icons.add),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => LoginApp()),
+                    );
+                  },
+                ),
+                const DecoratedBox(
+                  decoration: const BoxDecoration(color: Colors.cyan),
+                  child: Text(
+                    'Manuaalselt lisatud Seadmed:',
+                    style: TextStyle(fontSize: 20),
+                  ),
+                ),
+              ],
             ),
           ),
           Expanded(
