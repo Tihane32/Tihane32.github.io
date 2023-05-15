@@ -68,7 +68,7 @@ class _HinnaGraafikState extends State<HinnaGraafik> {
 
     //Siit algab esimese seadme lülitusgraafiku otsimine
 
-    SharedPreferences prefs = await SharedPreferences.getInstance();
+    /*SharedPreferences prefs = await SharedPreferences.getInstance();
 
     List<String> users = prefs.getStringList('users') ??
         []; //Kutsub mälust "users" kohal olevad väärtused
@@ -196,6 +196,7 @@ class _HinnaGraafikState extends State<HinnaGraafik> {
         kiri = onoff; // on/off väärtused lähevad Hinnagraafiku lehele.
       });
     }
+  }*/
   }
 
   //Hinnagraafiku lehe ülesehitus
@@ -233,20 +234,7 @@ class _HinnaGraafikState extends State<HinnaGraafik> {
                     ],
                   ),
                 ),
-                DataColumn(
-                  label: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.only(top: 9),
-                        child: Text(
-                          'On/Off',
-                          style: TextStyle(fontSize: 17),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+                
                 DataColumn(
                   label: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -287,10 +275,7 @@ class _HinnaGraafikState extends State<HinnaGraafik> {
                     "$timestamp1:00",
                     style: TextStyle(fontSize: 17),
                   )),
-                  DataCell(Text(
-                    '$asendus',
-                    style: TextStyle(fontSize: 17),
-                  )),
+                  
                   DataCell(Text(
                     '$value',
                     style: TextStyle(fontSize: 17),

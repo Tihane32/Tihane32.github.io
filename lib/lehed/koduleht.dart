@@ -11,6 +11,8 @@ import 'Login.dart';
 import 'kaksTabelit.dart';
 import 'graafikuValimine.dart';
 import 'hinnaGraafik.dart';
+import 'dart:io';
+import 'package:flutter/widgets.dart';
 
 class KoduLeht extends StatefulWidget {
   const KoduLeht({Key? key}) : super(key: key);
@@ -116,127 +118,75 @@ class _KoduLehtState extends State<KoduLeht> {
         backgroundColor: Colors.red[600],
         title: const Text('Shelly pistik'),
       ),
-      body: Container(
-        alignment: Alignment.center,
-        decoration: BoxDecoration(
-            image: DecorationImage(
-          image: NetworkImage(
-              'https://st.depositphotos.com/1015682/1464/i/600/depositphotos_14649595-stock-photo-wind-turbines-with-distant-mountains.jpg'),
-          fit: BoxFit.fill,
-        )),
-        child: Center(
-          child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-            const Text(
-              'Hetkel hind (€/MWh):',
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
-            ),
-            isLoading
-                ? CircularProgressIndicator()
-                : Text(
-                    '$hetkeHind',
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-                  ),
-            const Text(
-              'Sisselülitatud tundide arv:',
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
-            ),
-            Text(
-              '$onTunnidSisestatud',
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-            ),
-            ButtonBar(
-              alignment: MainAxisAlignment.center,
-              children: <Widget>[
-                ElevatedButton(
-                  onPressed: _tundEemalda,
-                  child: const Icon(Icons.remove),
+      body: Column(
+        children: [
+          Expanded(
+            child: Container(
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage('assets/tuulik.jpg'),
+                  alignment: Alignment.bottomCenter
                 ),
-                ElevatedButton(
-                  onPressed: () {
-                    //Võtab soovitud tundide arvu ja saadab selle TundideValimineTana lehele
-
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => TundideValimineTana(
-                              soovitudTunnid: onTunnidSisestatud, value: '',)),
-                    );
-                  },
-                  child: const Icon(Icons.check_circle_outline_rounded),
+              ),
+              child: Center(
+                child: Column(
+                  
+                  children: [
+                    const Text(
+                      'Hetkel hind (€/MWh):',
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
+                    ),
+                    isLoading
+                        ? CircularProgressIndicator()
+                        : Text(
+                            '$hetkeHind',
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 20),
+                          ),
+                   
+                  ],
                 ),
-                ElevatedButton(
-                  onPressed: _tundLisa,
-                  child: const Icon(Icons.add),
-                ),
-              ],
+              ),
             ),
-            Text(
-              'Shelly töörežiim:',
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                setState(
-                  () {
-                    if (onoffNupp == 'Shelly OFF') {
-                      onoffNupp = 'Shelly ON';
-
-                      onoff(
-                          "on"); //Kui on "on", siis kutsub esile funktsiooni onoff, mis lülitab seadme sisse
-                    } else if (onoffNupp == 'Shelly ON') {
-                      onoffNupp = 'Shelly OFF';
-
-                      onoff(
-                          "off"); //Kui on "off", siis kutsub esile funktsiooni onoff, mis lülitab seadme välja
-                    }
-                  },
-                );
-              },
-              child: Text(onoffNupp),
-            ),
-          ]),
-        ),
+          ),
+        ],
       ),
       bottomNavigationBar: BottomNavigationBar(
-          backgroundColor: Colors.red[600],
-          items: const <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
-              label: 'Teie seade',
-              icon: Icon(Icons.electrical_services_rounded),
-            ),
-            BottomNavigationBarItem(
-              label: 'Kodu',
-              icon: Icon(Icons.home),
-            ),
-            BottomNavigationBarItem(
-              label: 'Hinnagraafik',
-              icon: Icon(Icons.table_rows_outlined),
-            ),
-          ],
-          currentIndex: koduindex,
-          onTap: (int kodu) {
-            setState(() {
-              koduindex = kodu;
+        backgroundColor: Colors.red[600],
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            label: 'Teie seade',
+            icon: Icon(Icons.electrical_services_rounded),
+          ),
+          BottomNavigationBarItem(
+            label: 'Kodu',
+            icon: Icon(Icons.home),
+          ),
+          BottomNavigationBarItem(
+            label: 'Hinnagraafik',
+            icon: Icon(Icons.table_rows_outlined),
+          ),
+        ],
+        currentIndex: koduindex,
+        onTap: (int kodu) {
+          setState(() {
+            koduindex = kodu;
 
-              if (koduindex == 2) {
-                Navigator.push(
-                  //Kui vajutatakse Hinnagraafiku ikooni peale, siis viiakse Hinnagraafiku lehele
-
-                  context,
-
-                  MaterialPageRoute(builder: (context) => HinnaGraafik()),
-                );
-              } else if (koduindex == 0) {
-                Navigator.push(
-                  //Kui vajutatakse Teie seade ikooni peale, siis viiakse Seadmetelisamine lehele
-
-                  context,
-
-                  MaterialPageRoute(builder: (context) => MinuSeadmed()),
-                );
-              }
-            });
-          }),
+            if (koduindex == 2) {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => HinnaGraafik()),
+              );
+            } else if (koduindex == 0) {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => MinuSeadmed()),
+              );
+            }
+          });
+        },
+      ),
     );
   }
 }

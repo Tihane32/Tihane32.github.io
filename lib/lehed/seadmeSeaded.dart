@@ -18,9 +18,10 @@ class SeadmeSeaded extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Device Settings',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
+      //theme: ThemeData(
+        //primarySwatch: Colors.blue,
+      //),
+      theme: ThemeData.dark(),
       home: DeviceSettingsPage(value: value),
     );
   }

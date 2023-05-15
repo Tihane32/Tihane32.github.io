@@ -13,6 +13,7 @@ class MinuSeadmed extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      theme: ThemeData.dark(),
       home: SeadmeTabel(),
     );
   }
@@ -31,7 +32,7 @@ class _SeadmeTabelState extends State<SeadmeTabel> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color.fromARGB(255, 189, 216, 225), //Taustavärv
+      //backgroundColor: Color.fromARGB(255, 189, 216, 225), //Taustavärv
       appBar: AppBar(
         backgroundColor: Colors.red[600],
         title: const Text('Shelly pistik'),

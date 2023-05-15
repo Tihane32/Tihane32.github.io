@@ -9,7 +9,11 @@ import 'lehed/koduleht.dart';
 //Maini käivitamine, home on koduleht.
 
 void main() {
-  runApp(const MaterialApp(
+  runApp(MaterialApp(
+    theme: ThemeData(
+      brightness: Brightness.dark
+      
+    ),
     home: KoduLeht(), //Alustab appi kodulehest
   ));
 }
