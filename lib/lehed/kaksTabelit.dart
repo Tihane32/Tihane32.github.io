@@ -13,7 +13,6 @@ class MinuSeadmed extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      theme: ThemeData.dark(),
       home: SeadmeTabel(),
     );
   }
@@ -51,12 +50,17 @@ class _SeadmeTabelState extends State<SeadmeTabel> {
           ),
         ],
       ),
+
       body: Column(
         children: [
-          const DecoratedBox(
-            decoration: const BoxDecoration(color: Colors.amber),
+          DecoratedBox(
+            decoration: BoxDecoration(
+              color: Colors.amber,
+              borderRadius: BorderRadius.circular(20.0),
+              border: Border.all(style: BorderStyle.solid, width: 1.0),
+            ),
             child: Text(
-              'Kontolt lisatud Seadmed:',
+              ' Kontolt lisatud Seadmed: ',
               style: TextStyle(fontSize: 20),
             ),
           ),

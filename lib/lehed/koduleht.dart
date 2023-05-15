@@ -114,49 +114,79 @@ class _KoduLehtState extends State<KoduLeht> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color.fromARGB(255, 206, 238, 249),
       appBar: AppBar(
-        backgroundColor: Colors.red[600],
+        backgroundColor: Color.fromARGB(255, 115, 162, 195),
         title: const Text('Shelly pistik'),
       ),
-      body: Column(
-        children: [
-          Expanded(
-            child: Container(
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage('assets/tuulik.jpg'),
-                  alignment: Alignment.bottomCenter
-                ),
-              ),
-              child: Center(
-                child: Column(
-                  
-                  children: [
-                    const Text(
-                      'Hetkel hind (€/MWh):',
-                      style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
-                    ),
-                    isLoading
-                        ? CircularProgressIndicator()
-                        : Text(
-                            '$hetkeHind',
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 20),
+      body: Container(
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('assets/tuulik2.jpg'),
+            alignment: Alignment.bottomCenter,
+          ),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Center(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Align(
+                    alignment: Alignment.centerLeft,
+                    child: Container(
+                      decoration: BoxDecoration(
+                          color: Color.fromARGB(255, 223, 202, 139),
+                          borderRadius: BorderRadius.circular(7.0),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey
+                                  .withOpacity(1), // Set the shadow color
+                              spreadRadius: 2, // Set the spread radius
+                              blurRadius: 5, // Set the blur radius
+                              offset: Offset(0, 3), // Set the offset)]),
+                            )
+                          ]),
+                      width: 225,
+                      child: RichText(
+                        text: TextSpan(
+                          style: TextStyle(
+                            fontSize: 17,
+                            color: Colors.black,
                           ),
-                   
-                  ],
-                ),
-              ),
+                          children: [
+                            TextSpan(
+                              text: ' Hetkel hind (€/MWh): ',
+                              style: TextStyle(
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                            TextSpan(
+                              text: hetkeHind,
+                              style: TextStyle(
+                                fontWeight: FontWeight.w500,
+                                fontSize: 17,
+                                color: isLoading ? Colors.grey : Colors.black,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ))
+              ],
             ),
           ),
-        ],
+        ),
       ),
       bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: Colors.red[600],
+        backgroundColor: Color.fromARGB(255, 115, 162, 195),
+        fixedColor: Color.fromARGB(255, 149, 215, 151),
+        unselectedItemColor: Colors.black,
+        selectedIconTheme: IconThemeData(size: 30),
+        unselectedIconTheme: IconThemeData(size: 22),
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-            label: 'Teie seade',
+            label: 'Seadmed',
             icon: Icon(Icons.electrical_services_rounded),
           ),
           BottomNavigationBarItem(

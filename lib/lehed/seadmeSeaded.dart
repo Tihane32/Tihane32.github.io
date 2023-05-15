@@ -19,9 +19,9 @@ class SeadmeSeaded extends StatelessWidget {
     return MaterialApp(
       title: 'Device Settings',
       //theme: ThemeData(
-        //primarySwatch: Colors.blue,
+      //primarySwatch: Colors.blue,
       //),
-      theme: ThemeData.dark(),
+      //theme: ThemeData.dark(),
       home: DeviceSettingsPage(value: value),
     );
   }
@@ -97,7 +97,7 @@ class _DeviceSettingsPageState extends State<DeviceSettingsPage> {
               ),
               child: Center(
                   child: Text(
-                'Lülitus graafik:',
+                'Lülitusgraafik:',
                 style: TextStyle(fontSize: 20, color: Colors.white),
               )),
             ),
@@ -202,10 +202,8 @@ class _LulitusGraafikState extends State<_LulitusGraafik> {
                 asendus = asendus + '00';
               }
               print(asendus);
-              
-              
-                lulitus[asendus][1] = elering[i]['price'];
-              
+
+              lulitus[asendus][1] = elering[i]['price'];
 
               //print(lulitus[asendus][1]);
 
@@ -457,7 +455,6 @@ class _EGraafikState extends State<EGraafik> {
               child: SfCartesianChart(
                 primaryXAxis: DateTimeAxis(title: AxisTitle(text: 'Kuupäev')),
                 primaryYAxis: NumericAxis(
-                  title: AxisTitle(text: 'Tarbimine'),
                   labelFormat: '{value} Wh',
                   labelRotation: 45,
                 ),

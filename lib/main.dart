@@ -10,10 +10,7 @@ import 'lehed/koduleht.dart';
 
 void main() {
   runApp(MaterialApp(
-    theme: ThemeData(
-      brightness: Brightness.dark
-      
-    ),
+    theme: ThemeData(brightness: Brightness.light),
     home: KoduLeht(), //Alustab appi kodulehest
   ));
 }
