@@ -366,7 +366,7 @@ class _LulitusGraafikState extends State<_LulitusGraafik> {
               yValueMapper: (data, _) => data[1],
               dataLabelMapper: (data, _) => data[1].toString() + '€/MWh',
               pointColorMapper: (data, _) =>
-                  data[2] ? Colors.green : Colors.red,
+                  data[2] ? Colors.green : Color.fromARGB(255, 164, 159, 159),
               dataLabelSettings: DataLabelSettings(
                 isVisible: true,
                 labelAlignment: ChartDataLabelAlignment.middle,
