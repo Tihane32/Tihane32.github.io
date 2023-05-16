@@ -75,6 +75,11 @@ flutter:
   assets:
     - assets/tuulik.jpg
     - assets/tuulik2.jpg
+    - assets/tuulik3.jpg
+    - assets/tuulik4.jpg
+    - assets/tuulik5.jpg
+    - assets/tuulik6.jpg
+    - assets/tuulik7.jpg
     
 
   # An image asset can refer to one or more resolution-specific "variants", see

@@ -115,7 +115,7 @@ class _KoduLehtState extends State<KoduLeht> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color.fromARGB(255, 206, 238, 249),
+      backgroundColor: Color.fromARGB(255, 208, 236, 239),
       appBar: AppBar(
         backgroundColor: Color.fromARGB(255, 115, 162, 195),
         title: Text('Shelly app',
@@ -126,7 +126,7 @@ class _KoduLehtState extends State<KoduLeht> {
       body: Container(
         decoration: const BoxDecoration(
           image: DecorationImage(
-            image: AssetImage('assets/tuulik3.jpg'),
+            image: AssetImage('assets/tuulik7.jpg'),
             alignment: Alignment.bottomCenter,
           ),
         ),
@@ -187,7 +187,7 @@ class _KoduLehtState extends State<KoduLeht> {
       ),
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: Color.fromARGB(255, 115, 162, 195),
-        fixedColor: Color.fromARGB(255, 77, 245, 170),
+        fixedColor: Color.fromARGB(255, 157, 214, 171),
         unselectedItemColor: Colors.black,
         selectedIconTheme: IconThemeData(size: 30),
         unselectedIconTheme: IconThemeData(size: 22),
