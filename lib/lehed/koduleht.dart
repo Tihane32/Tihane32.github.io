@@ -118,17 +118,15 @@ class _KoduLehtState extends State<KoduLeht> {
       backgroundColor: Color.fromARGB(255, 206, 238, 249),
       appBar: AppBar(
         backgroundColor: Color.fromARGB(255, 115, 162, 195),
-        title: Text(
-          'Shelly app',
-          style: GoogleFonts.openSans
-          (textStyle: TextStyle(fontSize: 25),)
-          
-        ),
+        title: Text('Shelly app',
+            style: GoogleFonts.openSans(
+              textStyle: TextStyle(fontSize: 25),
+            )),
       ),
       body: Container(
         decoration: const BoxDecoration(
           image: DecorationImage(
-            image: AssetImage('assets/tuulik2.jpg'),
+            image: AssetImage('assets/tuulik3.jpg'),
             alignment: Alignment.bottomCenter,
           ),
         ),
@@ -162,20 +160,22 @@ class _KoduLehtState extends State<KoduLeht> {
                           ),
                           children: [
                             TextSpan(
-                              text: ' Hetkel hind (€/MWh): ',
-                              style: GoogleFonts.openSans(textStyle:TextStyle(
-                                fontWeight: FontWeight.w500,
-                              ), )
-                              
-                            ),
+                                text: ' Hetkel hind (€/MWh): ',
+                                style: GoogleFonts.openSans(
+                                  textStyle: TextStyle(
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                )),
                             TextSpan(
-                              text: hetkeHind,
-                              style: GoogleFonts.openSans(textStyle:TextStyle(
-                                fontWeight: FontWeight.w500,
-                                fontSize: 17,
-                                color: isLoading ? Colors.grey : Colors.black,
-                              ),)
-                            ),
+                                text: hetkeHind,
+                                style: GoogleFonts.openSans(
+                                  textStyle: TextStyle(
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 17,
+                                    color:
+                                        isLoading ? Colors.grey : Colors.black,
+                                  ),
+                                )),
                           ],
                         ),
                       ),
@@ -191,7 +191,6 @@ class _KoduLehtState extends State<KoduLeht> {
         unselectedItemColor: Colors.black,
         selectedIconTheme: IconThemeData(size: 30),
         unselectedIconTheme: IconThemeData(size: 22),
-        
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             label: 'Seadmed',
@@ -225,11 +224,11 @@ class _KoduLehtState extends State<KoduLeht> {
           });
         },
         selectedLabelStyle: TextStyle(
-    fontFamily: GoogleFonts.openSans().fontFamily,
-  ),
-  unselectedLabelStyle: TextStyle(
-    fontFamily: GoogleFonts.openSans().fontFamily,
-  ),
+          fontFamily: GoogleFonts.openSans().fontFamily,
+        ),
+        unselectedLabelStyle: TextStyle(
+          fontFamily: GoogleFonts.openSans().fontFamily,
+        ),
       ),
     );
   }
