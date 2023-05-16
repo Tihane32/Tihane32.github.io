@@ -30,79 +30,88 @@ int koduindex = 0;
 class _SeadmeTabelState extends State<SeadmeTabel> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      //backgroundColor: Color.fromARGB(255, 189, 216, 225), //Taustavärv
-      appBar: AppBar(
-        backgroundColor: Colors.red[600],
-        title: const Text('Shelly pistik'),
-        actions: [
-          TextButton(
-            style: TextButton.styleFrom(
-              textStyle: const TextStyle(fontSize: 20),
-            ),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => LoginApp()),
-              );
-            },
-            child: const Text('Log in'),
-          ),
-        ],
-      ),
-
-      body: Column(
-        children: [
-          DecoratedBox(
-            decoration: BoxDecoration(
-              color: Colors.amber,
-              borderRadius: BorderRadius.circular(20.0),
-              border: Border.all(style: BorderStyle.solid, width: 1.0),
-            ),
-            child: Text(
-              ' Kontolt lisatud Seadmed: ',
-              style: TextStyle(fontSize: 20),
-            ),
-          ),
-          Expanded(
-            child: KontoSeadmed(onTap1: (rowData) {
-              print('Tapped row with data: $rowData');
-            }),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              IconButton(
-                icon: const Icon(Icons.add),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => LoginApp()),
-                  );
-                },
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
+      child: Scaffold(
+        //backgroundColor: Color.fromARGB(255, 189, 216, 225), //Taustavärv
+        appBar: AppBar(
+          backgroundColor: Color.fromARGB(255, 115, 162, 195),
+          title: const Text('Shelly pistik'),
+          actions: [
+            TextButton(
+              style: TextButton.styleFrom(
+                textStyle: const TextStyle(fontSize: 20),
               ),
-              const DecoratedBox(
-                decoration: const BoxDecoration(color: Colors.cyan),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => LoginApp()),
+                );
+              },
+              child: const Text('Log in'),
+            ),
+          ],
+        ),
+    
+        body: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
+              child: DecoratedBox(
+                decoration: BoxDecoration(
+                  color: Color.fromARGB(255, 235, 206, 120),
+                  borderRadius: BorderRadius.circular(20.0),
+                  border: Border.all(style: BorderStyle.solid, width: 1.0),
+                ),
                 child: Text(
-                  'Manuaalselt lisatud Seadmed:',
+                  '  Kontolt lisatud Seadmed:  ',
                   style: TextStyle(fontSize: 20),
                 ),
               ),
-            ],
-          ),
-          Expanded(
-            child: ManuaalsedSeadmed(onTap: (rowData) {
-              print('Tapped row with data: $rowData');
-            }),
-          ),
-        ],
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-          backgroundColor: Colors.red[600],
+            ),
+            Expanded(
+              child: KontoSeadmed(onTap1: (rowData) {
+                print('Tapped row with data: $rowData');
+              }),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                IconButton(
+                  icon: const Icon(Icons.add),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => LoginApp()),
+                    );
+                  },
+                ),
+                const DecoratedBox(
+                  decoration: const BoxDecoration(color: Colors.cyan),
+                  child: Text(
+                    'Manuaalselt lisatud Seadmed:',
+                    style: TextStyle(fontSize: 20),
+                  ),
+                ),
+              ],
+            ),
+            Expanded(
+              child: ManuaalsedSeadmed(onTap: (rowData) {
+                print('Tapped row with data: $rowData');
+              }),
+            ),
+          ],
+        ),
+        bottomNavigationBar: BottomNavigationBar(
+             backgroundColor: Color.fromARGB(255, 115, 162, 195),
+          fixedColor: Color.fromARGB(255, 77, 245, 170),
+          unselectedItemColor: Colors.black,
+          selectedIconTheme: IconThemeData(size: 30),
+          unselectedIconTheme: IconThemeData(size: 22),
           items: const <BottomNavigationBarItem>[
             BottomNavigationBarItem(
-              label: 'Teie seade',
+              label: 'Seadmed',
               icon: Icon(Icons.electrical_services_rounded),
             ),
             BottomNavigationBarItem(
@@ -114,30 +123,31 @@ class _SeadmeTabelState extends State<SeadmeTabel> {
               icon: Icon(Icons.table_rows_outlined),
             ),
           ],
-          currentIndex: koduindex,
-          onTap: (int kodu) {
-            setState(() {
-              koduindex = kodu;
-
-              if (koduindex == 2) {
-                Navigator.push(
-                  //Kui vajutatakse Hinnagraafiku ikooni peale, siis viiakse Hinnagraafiku lehele
-
-                  context,
-
-                  MaterialPageRoute(builder: (context) => HinnaGraafik()),
-                );
-              } else if (koduindex == 1) {
-                Navigator.push(
-                  //Kui vajutatakse Teie seade ikooni peale, siis viiakse Seadmetelisamine lehele
-
-                  context,
-
-                  MaterialPageRoute(builder: (context) => const KoduLeht()),
-                );
-              }
-            });
-          }),
+            currentIndex: koduindex,
+            onTap: (int kodu) {
+              setState(() {
+                koduindex = kodu;
+    
+                if (koduindex == 2) {
+                  Navigator.push(
+                    //Kui vajutatakse Hinnagraafiku ikooni peale, siis viiakse Hinnagraafiku lehele
+    
+                    context,
+    
+                    MaterialPageRoute(builder: (context) => HinnaGraafik()),
+                  );
+                } else if (koduindex == 1) {
+                  Navigator.push(
+                    //Kui vajutatakse Teie seade ikooni peale, siis viiakse Seadmetelisamine lehele
+    
+                    context,
+    
+                    MaterialPageRoute(builder: (context) => const KoduLeht()),
+                  );
+                }
+              });
+            }),
+      ),
     );
   }
 }
@@ -254,98 +264,106 @@ class _KontoSeadmedState extends State<KontoSeadmed> {
     });
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return SingleChildScrollView(
-        child: isLoading
-            ? Center(
-                child: CircularProgressIndicator(),
-              )
-            : Center(
-                child: DataTable(
-                  showCheckboxColumn: false,
-                  columns: const <DataColumn>[
-                    // Remove the DataColumn with the 'ID' label
-                    DataColumn(
-                      label: Text(
-                        'Nimi',
-                        style: TextStyle(fontStyle: FontStyle.italic),
-                      ),
-                    ),
-                    DataColumn(
-                      label: Text(
-                        'Pistik',
-                        style: TextStyle(fontStyle: FontStyle.italic),
-                      ),
-                    ),
-                    DataColumn(
-                      label: Text(
-                        'Olek',
-                        style: TextStyle(fontStyle: FontStyle.italic),
-                      ),
-                    ),
-                  ],
-                  rows: minuSeadmedK.entries
-                      .map(
-                        (e) => DataRow(
-                          cells: [
-                            // Remove the DataCell with the hidden ID text
-                            DataCell(Text(e.value[1])),
-                            DataCell(Text(e.value[2])),
-                            DataCell(
-                              IgnorePointer(
-                                ignoring:
-                                    e.value[3] != "on" && e.value[3] != "off",
-                                child: TextButton(
-                                  //Saab nuppu värvi muuta
-                                  style: TextButton.styleFrom(
-                                    backgroundColor: e.value[3] == "Offline"
-                                        ? Colors.blue[0]
-                                        : Colors.blue[100],
-                                  ),
-                                  onPressed: () {
-                                    lulitamine(e.value[0]);
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => MinuSeadmed(),
-                                      ),
-                                    );
-                                  },
-                                  child: Text(
-                                    //Saab nuppude texti värvi muuta
-                                    e.value[3],
-                                    style: TextStyle(
-                                      color: e.value[3] == "on"
-                                          ? Color.fromARGB(255, 38, 152, 41)
-                                          : e.value[3] == "off"
-                                              ? Colors.red
-                                              : Colors.grey,
-                                    ),
-                                  ),
-                                ),
-                              ),
+ Widget build(BuildContext context) {
+  return SingleChildScrollView(
+    child: isLoading
+        ? Center(
+            child: CircularProgressIndicator(),
+          )
+        : Center(
+            child: DataTable(
+              showCheckboxColumn: false,
+              columns: const <DataColumn>[
+                DataColumn(
+                  label: Text(
+                    'Nimi',
+                    style: TextStyle(fontStyle: FontStyle.italic),
+                  ),
+                ),
+                DataColumn(
+                  label: Text(
+                    'Pistik',
+                    style: TextStyle(fontStyle: FontStyle.italic),
+                  ),
+                ),
+                DataColumn(
+                  label: Text(
+                    'Olek',
+                    style: TextStyle(fontStyle: FontStyle.italic),
+                  ),
+                ),
+              ],
+              rows: minuSeadmedK.entries.map(
+                (e) => DataRow(
+                  cells: [
+                    DataCell(Text(e.value[1])),
+                    DataCell(Text(e.value[2])),
+                    DataCell(
+                      IgnorePointer(
+                        ignoring: e.value[3] != "on" && e.value[3] != "off",
+                        child: Container(
+                          decoration: e.value[3] != "Offline"?
+                          BoxDecoration(
+                            //border: Border.all(width: 2, color: Colors.black)
+                            //boxShadow: [
+                              //BoxShadow(
+                                //color: Colors.grey.withOpacity(1),
+                                //spreadRadius: -2,
+                                //blurRadius: 0,
+                                //offset: Offset(0, 3),
+                                //blurStyle: BlurStyle.solid // changes position of shadow
+                              //),
+                            //],
+                          ) : null,
+                          child: TextButton(
+                            style: TextButton.styleFrom(
+                              backgroundColor: e.value[3] == "Offline"
+                                  ? Colors.blue[0]
+                                  : Colors.blue[100],
                             ),
-                          ],
-                          onSelectChanged: (isSelected) {
-                            if (isSelected != null && isSelected) {
-                              onTap(e.value);
+                            onPressed: () {
+                              lulitamine(e.value[0]);
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => SeadmeSeaded(
-                                    value: e.value[0],
-                                  ),
+                                  builder: (context) => MinuSeadmed(),
                                 ),
                               );
-                            }
-                          },
+                            },
+                            child: Text(
+                              e.value[3],
+                              style: TextStyle(
+                                color: e.value[3] == "on"
+                                    ? Color.fromARGB(255, 38, 152, 41)
+                                    : e.value[3] == "off"
+                                        ? Colors.red
+                                        : Colors.grey,
+                              ),
+                            ),
+                          ),
                         ),
-                      )
-                      .toList(),
+                      ),
+                    ),
+                  ],
+                  onSelectChanged: (isSelected) {
+                    if (isSelected != null && isSelected) {
+                      onTap(e.value);
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => SeadmeSeaded(
+                            value: e.value[0],
+                          ),
+                        ),
+                      );
+                    }
+                  },
                 ),
-              ));
-  }
+              ).toList(),
+            ),
+          ),
+  );
+}
 
   void onTap(List<String> value) {}
 }

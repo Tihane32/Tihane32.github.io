@@ -44,6 +44,7 @@ dependencies:
   shared_preferences: ^2.0.18
   crypto: ^3.0.2
   syncfusion_flutter_charts: ^21.1.41
+  google_fonts: ^4.0.4
 
 
 dev_dependencies:

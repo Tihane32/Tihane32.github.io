@@ -13,6 +13,7 @@ import 'graafikuValimine.dart';
 import 'hinnaGraafik.dart';
 import 'dart:io';
 import 'package:flutter/widgets.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class KoduLeht extends StatefulWidget {
   const KoduLeht({Key? key}) : super(key: key);
@@ -117,7 +118,12 @@ class _KoduLehtState extends State<KoduLeht> {
       backgroundColor: Color.fromARGB(255, 206, 238, 249),
       appBar: AppBar(
         backgroundColor: Color.fromARGB(255, 115, 162, 195),
-        title: const Text('Shelly pistik'),
+        title: Text(
+          'Shelly app',
+          style: GoogleFonts.openSans
+          (textStyle: TextStyle(fontSize: 25),)
+          
+        ),
       ),
       body: Container(
         decoration: const BoxDecoration(
@@ -127,7 +133,7 @@ class _KoduLehtState extends State<KoduLeht> {
           ),
         ),
         child: Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.fromLTRB(8, 12, 8, 8),
           child: Center(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -136,7 +142,7 @@ class _KoduLehtState extends State<KoduLeht> {
                     alignment: Alignment.centerLeft,
                     child: Container(
                       decoration: BoxDecoration(
-                          color: Color.fromARGB(255, 223, 202, 139),
+                          color: Color.fromARGB(255, 235, 206, 120),
                           borderRadius: BorderRadius.circular(7.0),
                           boxShadow: [
                             BoxShadow(
@@ -157,17 +163,18 @@ class _KoduLehtState extends State<KoduLeht> {
                           children: [
                             TextSpan(
                               text: ' Hetkel hind (€/MWh): ',
-                              style: TextStyle(
+                              style: GoogleFonts.openSans(textStyle:TextStyle(
                                 fontWeight: FontWeight.w500,
-                              ),
+                              ), )
+                              
                             ),
                             TextSpan(
                               text: hetkeHind,
-                              style: TextStyle(
+                              style: GoogleFonts.openSans(textStyle:TextStyle(
                                 fontWeight: FontWeight.w500,
                                 fontSize: 17,
                                 color: isLoading ? Colors.grey : Colors.black,
-                              ),
+                              ),)
                             ),
                           ],
                         ),
@@ -180,10 +187,11 @@ class _KoduLehtState extends State<KoduLeht> {
       ),
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: Color.fromARGB(255, 115, 162, 195),
-        fixedColor: Color.fromARGB(255, 149, 215, 151),
+        fixedColor: Color.fromARGB(255, 77, 245, 170),
         unselectedItemColor: Colors.black,
         selectedIconTheme: IconThemeData(size: 30),
         unselectedIconTheme: IconThemeData(size: 22),
+        
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             label: 'Seadmed',
@@ -216,6 +224,12 @@ class _KoduLehtState extends State<KoduLeht> {
             }
           });
         },
+        selectedLabelStyle: TextStyle(
+    fontFamily: GoogleFonts.openSans().fontFamily,
+  ),
+  unselectedLabelStyle: TextStyle(
+    fontFamily: GoogleFonts.openSans().fontFamily,
+  ),
       ),
     );
   }
