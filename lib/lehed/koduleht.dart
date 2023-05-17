@@ -131,27 +131,29 @@ class _KoduLehtState extends State<KoduLeht> {
           ),
         ),
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(8, 12, 8, 8),
+          padding: const EdgeInsets.fromLTRB(8, 22, 8, 8),
           child: Center(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Align(
                     alignment: Alignment.centerLeft,
-                    child: Container(
+                    child: Container( alignment: Alignment.centerLeft,
                       decoration: BoxDecoration(
-                          color: Color.fromARGB(255, 235, 206, 120),
-                          borderRadius: BorderRadius.circular(7.0),
+                          color: Color.fromARGB(255, 237, 202, 146),
+                          borderRadius: BorderRadius.circular(14.0),
+                          border: Border.all(color: Color.fromARGB(30, 0, 0, 0), width: 1),
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.grey
-                                  .withOpacity(1), // Set the shadow color
+                              color: Colors.black
+                                  .withOpacity(0.2), // Set the shadow color
                               spreadRadius: 2, // Set the spread radius
                               blurRadius: 5, // Set the blur radius
-                              offset: Offset(0, 3), // Set the offset)]),
+                              offset: Offset(3, 3), // Set the offset)]),
                             )
                           ]),
-                      width: 225,
+                      width: 250,
+                      height: 30,
                       child: RichText(
                         text: TextSpan(
                           style: TextStyle(
@@ -160,14 +162,14 @@ class _KoduLehtState extends State<KoduLeht> {
                           ),
                           children: [
                             TextSpan(
-                                text: ' Hetkel hind (€/MWh): ',
+                                text: '  Hetkel hind: ',
                                 style: GoogleFonts.openSans(
                                   textStyle: TextStyle(
                                     fontWeight: FontWeight.w500,
                                   ),
                                 )),
                             TextSpan(
-                                text: hetkeHind,
+                                text: '$hetkeHind €/MWh',
                                 style: GoogleFonts.openSans(
                                   textStyle: TextStyle(
                                     fontWeight: FontWeight.w500,

@@ -52,7 +52,7 @@ class _SeadmeTabelState extends State<SeadmeTabel> {
             ),
           ],
         ),
-    
+
         body: Column(
           children: [
             Padding(
@@ -104,44 +104,44 @@ class _SeadmeTabelState extends State<SeadmeTabel> {
           ],
         ),
         bottomNavigationBar: BottomNavigationBar(
-             backgroundColor: Color.fromARGB(255, 115, 162, 195),
-          fixedColor: Color.fromARGB(255, 77, 245, 170),
-          unselectedItemColor: Colors.black,
-          selectedIconTheme: IconThemeData(size: 30),
-          unselectedIconTheme: IconThemeData(size: 22),
-          items: const <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
-              label: 'Seadmed',
-              icon: Icon(Icons.electrical_services_rounded),
-            ),
-            BottomNavigationBarItem(
-              label: 'Kodu',
-              icon: Icon(Icons.home),
-            ),
-            BottomNavigationBarItem(
-              label: 'Hinnagraafik',
-              icon: Icon(Icons.table_rows_outlined),
-            ),
-          ],
+            backgroundColor: Color.fromARGB(255, 115, 162, 195),
+            fixedColor: Color.fromARGB(255, 77, 245, 170),
+            unselectedItemColor: Colors.black,
+            selectedIconTheme: IconThemeData(size: 30),
+            unselectedIconTheme: IconThemeData(size: 22),
+            items: const <BottomNavigationBarItem>[
+              BottomNavigationBarItem(
+                label: 'Seadmed',
+                icon: Icon(Icons.electrical_services_rounded),
+              ),
+              BottomNavigationBarItem(
+                label: 'Kodu',
+                icon: Icon(Icons.home),
+              ),
+              BottomNavigationBarItem(
+                label: 'Hinnagraafik',
+                icon: Icon(Icons.table_rows_outlined),
+              ),
+            ],
             currentIndex: koduindex,
             onTap: (int kodu) {
               setState(() {
                 koduindex = kodu;
-    
+
                 if (koduindex == 2) {
                   Navigator.push(
                     //Kui vajutatakse Hinnagraafiku ikooni peale, siis viiakse Hinnagraafiku lehele
-    
+
                     context,
-    
+
                     MaterialPageRoute(builder: (context) => HinnaGraafik()),
                   );
                 } else if (koduindex == 1) {
                   Navigator.push(
                     //Kui vajutatakse Teie seade ikooni peale, siis viiakse Seadmetelisamine lehele
-    
+
                     context,
-    
+
                     MaterialPageRoute(builder: (context) => const KoduLeht()),
                   );
                 }
@@ -264,106 +264,110 @@ class _KontoSeadmedState extends State<KontoSeadmed> {
     });
   }
 
- Widget build(BuildContext context) {
-  return SingleChildScrollView(
-    child: isLoading
-        ? Center(
-            child: CircularProgressIndicator(),
-          )
-        : Center(
-            child: DataTable(
-              showCheckboxColumn: false,
-              columns: const <DataColumn>[
-                DataColumn(
-                  label: Text(
-                    'Nimi',
-                    style: TextStyle(fontStyle: FontStyle.italic),
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      child: isLoading
+          ? Center(
+              child: CircularProgressIndicator(),
+            )
+          : Center(
+              child: DataTable(
+                showCheckboxColumn: false,
+                columns: const <DataColumn>[
+                  DataColumn(
+                    label: Text(
+                      'Nimi',
+                      style: TextStyle(fontStyle: FontStyle.italic),
+                    ),
                   ),
-                ),
-                DataColumn(
-                  label: Text(
-                    'Pistik',
-                    style: TextStyle(fontStyle: FontStyle.italic),
+                  DataColumn(
+                    label: Text(
+                      'Pistik',
+                      style: TextStyle(fontStyle: FontStyle.italic),
+                    ),
                   ),
-                ),
-                DataColumn(
-                  label: Text(
-                    'Olek',
-                    style: TextStyle(fontStyle: FontStyle.italic),
+                  DataColumn(
+                    label: Text(
+                      'Olek',
+                      style: TextStyle(fontStyle: FontStyle.italic),
+                    ),
                   ),
-                ),
-              ],
-              rows: minuSeadmedK.entries.map(
-                (e) => DataRow(
-                  cells: [
-                    DataCell(Text(e.value[1])),
-                    DataCell(Text(e.value[2])),
-                    DataCell(
-                      IgnorePointer(
-                        ignoring: e.value[3] != "on" && e.value[3] != "off",
-                        child: Container(
-                          decoration: e.value[3] != "Offline"?
-                          BoxDecoration(
-                            //border: Border.all(width: 2, color: Colors.black)
-                            //boxShadow: [
-                              //BoxShadow(
-                                //color: Colors.grey.withOpacity(1),
-                                //spreadRadius: -2,
-                                //blurRadius: 0,
-                                //offset: Offset(0, 3),
-                                //blurStyle: BlurStyle.solid // changes position of shadow
-                              //),
-                            //],
-                          ) : null,
-                          child: TextButton(
-                            style: TextButton.styleFrom(
-                              backgroundColor: e.value[3] == "Offline"
-                                  ? Colors.blue[0]
-                                  : Colors.blue[100],
-                            ),
-                            onPressed: () {
-                              lulitamine(e.value[0]);
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => MinuSeadmed(),
+                ],
+                rows: minuSeadmedK.entries
+                    .map(
+                      (e) => DataRow(
+                        cells: [
+                          DataCell(Text(e.value[1])),
+                          DataCell(Text(e.value[2])),
+                          DataCell(
+                            IgnorePointer(
+                              ignoring:
+                                  e.value[3] != "on" && e.value[3] != "off",
+                              child: Container(
+                                decoration: e.value[3] != "Offline"
+                                    ? BoxDecoration(
+                                        //border: Border.all(width: 2, color: Colors.black)
+                                        //boxShadow: [
+                                        //BoxShadow(
+                                        //color: Colors.grey.withOpacity(1),
+                                        //spreadRadius: -2,
+                                        //blurRadius: 0,
+                                        //offset: Offset(0, 3),
+                                        //blurStyle: BlurStyle.solid // changes position of shadow
+                                        //),
+                                        //],
+                                        )
+                                    : null,
+                                child: TextButton(
+                                  style: TextButton.styleFrom(
+                                    backgroundColor: e.value[3] == "Offline"
+                                        ? Colors.blue[0]
+                                        : Colors.blue[100],
+                                  ),
+                                  onPressed: () {
+                                    lulitamine(e.value[0]);
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => MinuSeadmed(),
+                                      ),
+                                    );
+                                  },
+                                  child: Text(
+                                    e.value[3],
+                                    style: TextStyle(
+                                      color: e.value[3] == "on"
+                                          ? Color.fromARGB(255, 38, 152, 41)
+                                          : e.value[3] == "off"
+                                              ? Colors.red
+                                              : Colors.grey,
+                                    ),
+                                  ),
                                 ),
-                              );
-                            },
-                            child: Text(
-                              e.value[3],
-                              style: TextStyle(
-                                color: e.value[3] == "on"
-                                    ? Color.fromARGB(255, 38, 152, 41)
-                                    : e.value[3] == "off"
-                                        ? Colors.red
-                                        : Colors.grey,
                               ),
                             ),
                           ),
-                        ),
+                        ],
+                        onSelectChanged: (isSelected) {
+                          if (isSelected != null && isSelected) {
+                            onTap(e.value);
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => SeadmeSeaded(
+                                  value: e.value[0],
+                                ),
+                              ),
+                            );
+                          }
+                        },
                       ),
-                    ),
-                  ],
-                  onSelectChanged: (isSelected) {
-                    if (isSelected != null && isSelected) {
-                      onTap(e.value);
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => SeadmeSeaded(
-                            value: e.value[0],
-                          ),
-                        ),
-                      );
-                    }
-                  },
-                ),
-              ).toList(),
+                    )
+                    .toList(),
+              ),
             ),
-          ),
-  );
-}
+    );
+  }
 
   void onTap(List<String> value) {}
 }
