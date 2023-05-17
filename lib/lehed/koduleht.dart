@@ -14,6 +14,8 @@ import 'hinnaGraafik.dart';
 import 'dart:io';
 import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:testuus4/funktsioonid/hetketarbimine.dart';
+import 'package:testuus4/funktsioonid/tarbimine.dart';
 
 class KoduLeht extends StatefulWidget {
   const KoduLeht({Key? key}) : super(key: key);
@@ -31,6 +33,10 @@ class _KoduLehtState extends State<KoduLeht> {
 
   var hetkeHind = '0';
 
+  var hetkevoismus = '0';
+
+  var ajatarbimine = '0';
+
   bool isLoading = false;
 
 //Lehe avamisel toob hetke hinna ja tundide arvu
@@ -39,48 +45,11 @@ class _KoduLehtState extends State<KoduLeht> {
   void initState() {
     super.initState();
     _getCurrentPrice();
-    _tooTund();
   }
 
 //Toob tunnid mälust
 
-  Future<void> _tooTund() async {
-    final prefs = await SharedPreferences.getInstance();
-
-    setState(() {
-      onTunnidSisestatud = (prefs.getInt('counter') ?? 0);
-    });
-  }
-
   //Lisab tundide arvule ühe juurde
-
-  Future<void> _tundLisa() async {
-    final prefs = await SharedPreferences.getInstance();
-
-    setState(() {
-      if (onTunnidSisestatud < 24) {
-        onTunnidSisestatud = (prefs.getInt('counter') ?? 0) +
-            1; //Pluss märgile vajutades lisab tundide arvule ühe juurde
-
-        prefs.setInt('counter', onTunnidSisestatud);
-      }
-    });
-  }
-
-  //Eemaldab tundide arvust ühe
-
-  Future<void> _tundEemalda() async {
-    final prefs = await SharedPreferences.getInstance();
-
-    setState(() {
-      if (onTunnidSisestatud > 0) {
-        onTunnidSisestatud = (prefs.getInt('counter') ?? 0) -
-            1; //Miinus märgile vajutades vähendab tundide arvu ühe võrra
-
-        prefs.setInt('counter', onTunnidSisestatud);
-      }
-    });
-  }
 
   //Võtab Eleringi API-st hetke hinna
 
@@ -89,10 +58,11 @@ class _KoduLehtState extends State<KoduLeht> {
       isLoading =
           true; //Enne hinna saamist kuvab ekraanile laadimis animatsiooni
     });
-
+    final hetkeW = await voimus();
     final data =
         await getCurrentPrice(); //Kutsub esile CurrentPrice funktsiooni
-
+    final test = await tarbimine();
+    print(test);
     //Võtab data Mapist 'price' väärtuse
 
     var ajutine = data.entries.toList();
@@ -100,9 +70,17 @@ class _KoduLehtState extends State<KoduLeht> {
     var ajutine1 = ajutine[1].value;
 
     double price = ajutine1[0]['price'];
+    print('price: $price');
+    price = price / 1000.0;
 
+    num n = num.parse(price.toStringAsFixed(2));
+    price = n as double;
+    print('price: $price');
     setState(() {
-      hetkeHind = price.toString(); //Salvestab pricei hetke hinnaks
+      hetkeHind = price.toString();
+      //Salvestab pricei hetke hinnaks
+      hetkevoismus = hetkeW.toString();
+      ajatarbimine = test.toString();
     });
 
     setState(() {
@@ -118,10 +96,12 @@ class _KoduLehtState extends State<KoduLeht> {
       backgroundColor: Color.fromARGB(255, 208, 236, 239),
       appBar: AppBar(
         backgroundColor: Color.fromARGB(255, 115, 162, 195),
-        title: Text('Shelly app',
-            style: GoogleFonts.openSans(
-              textStyle: TextStyle(fontSize: 25),
-            )),
+        title: Text(
+          'Shelly app',
+          style: GoogleFonts.openSans(
+            textStyle: TextStyle(fontSize: 25),
+          ),
+        ),
       ),
       body: Container(
         decoration: const BoxDecoration(
@@ -137,51 +117,165 @@ class _KoduLehtState extends State<KoduLeht> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Align(
+                  alignment: Alignment.centerLeft,
+                  child: Container(
                     alignment: Alignment.centerLeft,
-                    child: Container( alignment: Alignment.centerLeft,
-                      decoration: BoxDecoration(
-                          color: Color.fromARGB(255, 237, 202, 146),
-                          borderRadius: BorderRadius.circular(14.0),
-                          border: Border.all(color: Color.fromARGB(30, 0, 0, 0), width: 1),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black
-                                  .withOpacity(0.2), // Set the shadow color
-                              spreadRadius: 2, // Set the spread radius
-                              blurRadius: 5, // Set the blur radius
-                              offset: Offset(3, 3), // Set the offset)]),
-                            )
-                          ]),
-                      width: 250,
-                      height: 30,
-                      child: RichText(
-                        text: TextSpan(
-                          style: TextStyle(
-                            fontSize: 17,
-                            color: Colors.black,
-                          ),
-                          children: [
-                            TextSpan(
-                                text: '  Hetkel hind: ',
-                                style: GoogleFonts.openSans(
-                                  textStyle: TextStyle(
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                )),
-                            TextSpan(
-                                text: '$hetkeHind €/MWh',
-                                style: GoogleFonts.openSans(
-                                  textStyle: TextStyle(
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 17,
-                                    color:
-                                        isLoading ? Colors.grey : Colors.black,
-                                  ),
-                                )),
-                          ],
-                        ),
+                    decoration: BoxDecoration(
+                      color: Color.fromARGB(255, 237, 202, 146),
+                      borderRadius: BorderRadius.circular(14.0),
+                      border: Border.all(
+                        color: Color.fromARGB(30, 0, 0, 0),
+                        width: 1,
                       ),
-                    ))
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.2),
+                          spreadRadius: 2,
+                          blurRadius: 5,
+                          offset: Offset(3, 3),
+                        ),
+                      ],
+                    ),
+                    width: 250,
+                    height: 30,
+                    child: RichText(
+                      text: TextSpan(
+                        style: TextStyle(
+                          fontSize: 17,
+                          color: Colors.black,
+                        ),
+                        children: [
+                          TextSpan(
+                            text: '  Hetkel hind: ',
+                            style: GoogleFonts.openSans(
+                              textStyle: TextStyle(
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ),
+                          TextSpan(
+                            text: '$hetkeHind €/kWh',
+                            style: GoogleFonts.openSans(
+                              textStyle: TextStyle(
+                                fontWeight: FontWeight.w500,
+                                fontSize: 17,
+                                color: isLoading ? Colors.grey : Colors.black,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                    height: 10), // Add some spacing between the two widgets
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Container(
+                    alignment: Alignment.centerLeft,
+                    decoration: BoxDecoration(
+                      color: Color.fromARGB(255, 237, 202, 146),
+                      borderRadius: BorderRadius.circular(14.0),
+                      border: Border.all(
+                        color: Color.fromARGB(30, 0, 0, 0),
+                        width: 1,
+                      ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.2),
+                          spreadRadius: 2,
+                          blurRadius: 5,
+                          offset: Offset(3, 3),
+                        ),
+                      ],
+                    ),
+                    width: 250,
+                    height: 30,
+                    child: RichText(
+                      text: TextSpan(
+                        style: TextStyle(
+                          fontSize: 17,
+                          color: Colors.black,
+                        ),
+                        children: [
+                          TextSpan(
+                            text: '  Hetkel tarbimine: ',
+                            style: GoogleFonts.openSans(
+                              textStyle: TextStyle(
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ),
+                          TextSpan(
+                            text: '$hetkevoismus W',
+                            style: GoogleFonts.openSans(
+                              textStyle: TextStyle(
+                                fontWeight: FontWeight.w500,
+                                fontSize: 17,
+                                color: isLoading ? Colors.grey : Colors.black,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                    height: 10), // Add some spacing between the two widgets
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Container(
+                    alignment: Alignment.centerLeft,
+                    decoration: BoxDecoration(
+                      color: Color.fromARGB(255, 237, 202, 146),
+                      borderRadius: BorderRadius.circular(14.0),
+                      border: Border.all(
+                        color: Color.fromARGB(30, 0, 0, 0),
+                        width: 1,
+                      ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.2),
+                          spreadRadius: 2,
+                          blurRadius: 5,
+                          offset: Offset(3, 3),
+                        ),
+                      ],
+                    ),
+                    width: 250,
+                    height: 30,
+                    child: RichText(
+                      text: TextSpan(
+                        style: TextStyle(
+                          fontSize: 17,
+                          color: Colors.black,
+                        ),
+                        children: [
+                          TextSpan(
+                            text: '  Kuu tarbimine: ',
+                            style: GoogleFonts.openSans(
+                              textStyle: TextStyle(
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ),
+                          TextSpan(
+                            text: '$ajatarbimine kWh',
+                            style: GoogleFonts.openSans(
+                              textStyle: TextStyle(
+                                fontWeight: FontWeight.w500,
+                                fontSize: 17,
+                                color: isLoading ? Colors.grey : Colors.black,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
               ],
             ),
           ),
@@ -231,7 +325,6 @@ class _KoduLehtState extends State<KoduLeht> {
         unselectedLabelStyle: TextStyle(
           fontFamily: GoogleFonts.openSans().fontFamily,
         ),
-        
       ),
     );
   }
