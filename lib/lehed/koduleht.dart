@@ -190,9 +190,9 @@ class _KoduLehtState extends State<KoduLeht> {
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: Color.fromARGB(255, 115, 162, 195),
         fixedColor: Color.fromARGB(255, 157, 214, 171),
-        unselectedItemColor: Colors.black,
+        unselectedItemColor: Colors.white,
         selectedIconTheme: IconThemeData(size: 30),
-        unselectedIconTheme: IconThemeData(size: 22),
+        unselectedIconTheme: IconThemeData(size: 26),
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             label: 'Seadmed',
@@ -231,6 +231,7 @@ class _KoduLehtState extends State<KoduLeht> {
         unselectedLabelStyle: TextStyle(
           fontFamily: GoogleFonts.openSans().fontFamily,
         ),
+        
       ),
     );
   }

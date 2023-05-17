@@ -78,7 +78,7 @@ class _SeadmeTabelState extends State<SeadmeTabel> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                IconButton(
+                /*IconButton(
                   icon: const Icon(Icons.add),
                   onPressed: () {
                     Navigator.push(
@@ -86,21 +86,21 @@ class _SeadmeTabelState extends State<SeadmeTabel> {
                       MaterialPageRoute(builder: (context) => LoginApp()),
                     );
                   },
-                ),
-                const DecoratedBox(
+                ),*/
+                /*const DecoratedBox(
                   decoration: const BoxDecoration(color: Colors.cyan),
                   child: Text(
                     'Manuaalselt lisatud Seadmed:',
                     style: TextStyle(fontSize: 20),
                   ),
-                ),
+                ),*/
               ],
             ),
-            Expanded(
+            /*Expanded(
               child: ManuaalsedSeadmed(onTap: (rowData) {
                 print('Tapped row with data: $rowData');
               }),
-            ),
+            ),*/
           ],
         ),
         bottomNavigationBar: BottomNavigationBar(
@@ -151,7 +151,7 @@ class _SeadmeTabelState extends State<SeadmeTabel> {
     );
   }
 }
-
+/*
 class ManuaalsedSeadmed extends StatelessWidget {
   ManuaalsedSeadmed({Key? key, required this.onTap}) : super(key: key);
 
@@ -218,7 +218,7 @@ class ManuaalsedSeadmed extends StatelessWidget {
     );
   }
 }
-
+*/
 class KontoSeadmed extends StatefulWidget {
   KontoSeadmed({Key? key, required this.onTap1}) : super(key: key);
 
