@@ -249,4 +249,3 @@ keskmineHindMapVaartustamine(var hindAVG, Map<int, dynamic> keskHind) {
   print('+++++++++++++');
   return keskHind;
 }
-
