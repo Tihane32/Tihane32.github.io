@@ -428,7 +428,7 @@ class _EGraafikState extends State<EGraafik> {
       throw Exception('http.post error: statusCode= ${res.statusCode}');
     final jsonData = json.decode(res.body);
     final historyData = jsonData['data']['history'] as List<dynamic>;
-
+    print(historyData);
     chartData = historyData
         .map((history) => _ChartData(DateTime.parse(history['datetime']),
             history['consumption'].toDouble()))
