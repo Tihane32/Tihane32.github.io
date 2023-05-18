@@ -16,6 +16,7 @@ import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:testuus4/funktsioonid/hetketarbimine.dart';
 import 'package:testuus4/funktsioonid/tarbimine.dart';
+import 'package:testuus4/funktsioonid/maksumus.dart';
 
 class KoduLeht extends StatefulWidget {
   const KoduLeht({Key? key}) : super(key: key);
@@ -37,6 +38,7 @@ class _KoduLehtState extends State<KoduLeht> {
 
   var ajatarbimine = '0';
 
+  var kulu = '0';
   bool isLoading = false;
 
 //Lehe avamisel toob hetke hinna ja tundide arvu
@@ -63,6 +65,7 @@ class _KoduLehtState extends State<KoduLeht> {
         await getCurrentPrice(); //Kutsub esile CurrentPrice funktsiooni
     final test = await tarbimine();
     print(test);
+    final temp = await maksumus();
     //Võtab data Mapist 'price' väärtuse
 
     var ajutine = data.entries.toList();
@@ -81,6 +84,7 @@ class _KoduLehtState extends State<KoduLeht> {
       //Salvestab pricei hetke hinnaks
       hetkevoismus = hetkeW.toString();
       ajatarbimine = test.toString();
+      kulu = temp.toString();
     });
 
     setState(() {
@@ -111,7 +115,7 @@ class _KoduLehtState extends State<KoduLeht> {
           ),
         ),
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(8, 22, 8, 8),
+          padding: const EdgeInsets.fromLTRB(8, 10, 8, 8),
           child: Center(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -137,11 +141,11 @@ class _KoduLehtState extends State<KoduLeht> {
                       ],
                     ),
                     width: 250,
-                    height: 30,
+                    height: 35,
                     child: RichText(
                       text: TextSpan(
                         style: TextStyle(
-                          fontSize: 17,
+                          fontSize: 18,
                           color: Colors.black,
                         ),
                         children: [
@@ -158,7 +162,7 @@ class _KoduLehtState extends State<KoduLeht> {
                             style: GoogleFonts.openSans(
                               textStyle: TextStyle(
                                 fontWeight: FontWeight.w500,
-                                fontSize: 17,
+                                fontSize: 20,
                                 color: isLoading ? Colors.grey : Colors.black,
                               ),
                             ),
@@ -190,12 +194,12 @@ class _KoduLehtState extends State<KoduLeht> {
                         ),
                       ],
                     ),
-                    width: 250,
-                    height: 30,
+                    width: 300,
+                    height: 35,
                     child: RichText(
                       text: TextSpan(
                         style: TextStyle(
-                          fontSize: 17,
+                          fontSize: 18,
                           color: Colors.black,
                         ),
                         children: [
@@ -212,7 +216,7 @@ class _KoduLehtState extends State<KoduLeht> {
                             style: GoogleFonts.openSans(
                               textStyle: TextStyle(
                                 fontWeight: FontWeight.w500,
-                                fontSize: 17,
+                                fontSize: 20,
                                 color: isLoading ? Colors.grey : Colors.black,
                               ),
                             ),
@@ -245,11 +249,11 @@ class _KoduLehtState extends State<KoduLeht> {
                       ],
                     ),
                     width: 250,
-                    height: 30,
+                    height: 35,
                     child: RichText(
                       text: TextSpan(
                         style: TextStyle(
-                          fontSize: 17,
+                          fontSize: 18,
                           color: Colors.black,
                         ),
                         children: [
@@ -266,7 +270,7 @@ class _KoduLehtState extends State<KoduLeht> {
                             style: GoogleFonts.openSans(
                               textStyle: TextStyle(
                                 fontWeight: FontWeight.w500,
-                                fontSize: 17,
+                                fontSize: 20,
                                 color: isLoading ? Colors.grey : Colors.black,
                               ),
                             ),
@@ -276,6 +280,111 @@ class _KoduLehtState extends State<KoduLeht> {
                     ),
                   ),
                 ),
+                SizedBox(
+                    height: 10), // Add some spacing between the two widgets
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Container(
+                    alignment: Alignment.centerLeft,
+                    decoration: BoxDecoration(
+                      color: Color.fromARGB(255, 237, 202, 146),
+                      borderRadius: BorderRadius.circular(14.0),
+                      border: Border.all(
+                        color: Color.fromARGB(30, 0, 0, 0),
+                        width: 1,
+                      ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.2),
+                          spreadRadius: 2,
+                          blurRadius: 5,
+                          offset: Offset(3, 3),
+                        ),
+                      ],
+                    ),
+                    width: 300,
+                    height: 35,
+                    child: RichText(
+                      text: TextSpan(
+                        style: TextStyle(
+                          fontSize: 18,
+                          color: Colors.black,
+                        ),
+                        children: [
+                          TextSpan(
+                            text: '  Kuu maksumus: ',
+                            style: GoogleFonts.openSans(
+                              textStyle: TextStyle(
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ),
+                          TextSpan(
+                            text: '$kulu €',
+                            style: GoogleFonts.openSans(
+                              textStyle: TextStyle(
+                                fontWeight: FontWeight.w500,
+                                fontSize: 20,
+                                color: isLoading ? Colors.grey : Colors.black,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(height: 10),
+                GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => HinnaGraafik()),
+                      );
+                    },
+                    child: // Add some spacing between the two widgets
+                        Align(
+                      alignment: Alignment.centerLeft,
+                      child: Container(
+                        alignment: Alignment.centerLeft,
+                        decoration: BoxDecoration(
+                          color: Color.fromARGB(255, 157, 214, 171),
+                          borderRadius: BorderRadius.circular(14.0),
+                          border: Border.all(
+                            color: Color.fromARGB(200, 0, 0, 0),
+                            width: 2,
+                          ),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.5),
+                              spreadRadius: 2,
+                              blurRadius: 5,
+                              offset: Offset(3, 3),
+                            ),
+                          ],
+                        ),
+                        width: 240,
+                        height: 35,
+                        child: Row(
+                          children: [
+                            
+                            Text(
+                              '  Graafiku koostamine ',
+                              style: GoogleFonts.openSans(
+                                textStyle: TextStyle(
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 18,
+                                ),
+                              ),
+                            ),Icon(
+                              Icons.calendar_month,
+                              color: Colors.black,
+                            ),
+                            SizedBox(width: 5),
+                          ],
+                        ),
+                      ),
+                    )),
               ],
             ),
           ),
