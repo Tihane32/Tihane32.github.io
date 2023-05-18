@@ -5,7 +5,7 @@ TalTech
 //Kit test
 import 'package:flutter/material.dart';
 import 'lehed/koduleht.dart';
-
+import 'dart:async';
 //Maini käivitamine, home on koduleht.
 
 void main() {
