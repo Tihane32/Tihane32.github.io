@@ -8,6 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'seadmeSeaded.dart';
 import 'package:testuus4/funktsioonid/seisukord.dart';
 import 'SeadmeSeadedManuaalsed.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class MinuSeadmed extends StatelessWidget {
   @override
@@ -31,24 +32,62 @@ class _SeadmeTabelState extends State<SeadmeTabel> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
-      child: Scaffold(
+      padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+      child: Scaffold(backgroundColor: Color.fromARGB(255, 208, 236, 239),
         //backgroundColor: Color.fromARGB(255, 189, 216, 225), //Taustavärv
         appBar: AppBar(
           backgroundColor: Color.fromARGB(255, 115, 162, 195),
-          title: const Text('Shelly pistik'),
+          title: Text(
+            'Seadmed',
+            style: GoogleFonts.openSans(
+              textStyle: TextStyle(fontSize: 25),
+            ),
+          ),
           actions: [
-            TextButton(
-              style: TextButton.styleFrom(
-                textStyle: const TextStyle(fontSize: 20),
+            Container(
+              height: 20,
+              decoration: BoxDecoration(
+                  color: Color.fromARGB(100, 157, 214, 171),
+                  shape: BoxShape.rectangle,
+                  border: Border.all(
+                    color: Color.fromARGB(155, 0, 0, 0),
+                    width: 1,
+                  ),
+                  borderRadius: BorderRadius.circular(30.0)),
+              child: TextButton(
+                style: TextButton.styleFrom(
+                  textStyle: const TextStyle(fontSize: 20),
+                ),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => LoginApp()),
+                  );
+                },
+                child: Row(
+                  children: [
+                    RichText(
+                      text: TextSpan(
+                        style: TextStyle(
+                          fontSize: 18,
+                          color: Colors.black,
+                        ),
+                        children: [
+                          TextSpan(
+                            text: 'Login',
+                            style: GoogleFonts.openSans(),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Icon(
+                      Icons.login,
+                      color: Colors.black,
+                    ),
+                    SizedBox(width: 5),
+                  ],
+                ),
               ),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => LoginApp()),
-                );
-              },
-              child: const Text('Log in'),
             ),
           ],
         ),
@@ -56,18 +95,7 @@ class _SeadmeTabelState extends State<SeadmeTabel> {
         body: Column(
           children: [
             Padding(
-              padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
-              child: DecoratedBox(
-                decoration: BoxDecoration(
-                  color: Color.fromARGB(255, 235, 206, 120),
-                  borderRadius: BorderRadius.circular(20.0),
-                  border: Border.all(style: BorderStyle.solid, width: 1.0),
-                ),
-                child: Text(
-                  '  Kontolt lisatud Seadmed:  ',
-                  style: TextStyle(fontSize: 20),
-                ),
-              ),
+              padding: const EdgeInsets.fromLTRB(0, 12, 0, 0),
             ),
             Expanded(
               child: KontoSeadmed(onTap1: (rowData) {
@@ -104,53 +132,61 @@ class _SeadmeTabelState extends State<SeadmeTabel> {
           ],
         ),
         bottomNavigationBar: BottomNavigationBar(
-            backgroundColor: Color.fromARGB(255, 115, 162, 195),
-            fixedColor: Color.fromARGB(255, 77, 245, 170),
-            unselectedItemColor: Colors.black,
-            selectedIconTheme: IconThemeData(size: 30),
-            unselectedIconTheme: IconThemeData(size: 22),
-            items: const <BottomNavigationBarItem>[
-              BottomNavigationBarItem(
-                label: 'Seadmed',
-                icon: Icon(Icons.electrical_services_rounded),
-              ),
-              BottomNavigationBarItem(
-                label: 'Kodu',
-                icon: Icon(Icons.home),
-              ),
-              BottomNavigationBarItem(
-                label: 'Hinnagraafik',
-                icon: Icon(Icons.table_rows_outlined),
-              ),
-            ],
-            currentIndex: koduindex,
-            onTap: (int kodu) {
-              setState(() {
-                koduindex = kodu;
+          backgroundColor: Color.fromARGB(255, 115, 162, 195),
+          fixedColor: Color.fromARGB(255, 157, 214, 171),
+          unselectedItemColor: Colors.white,
+          selectedIconTheme: IconThemeData(size: 30),
+          unselectedIconTheme: IconThemeData(size: 26),
+          items: const <BottomNavigationBarItem>[
+            BottomNavigationBarItem(
+              label: 'Seadmed',
+              icon: Icon(Icons.electrical_services_rounded),
+            ),
+            BottomNavigationBarItem(
+              label: 'Kodu',
+              icon: Icon(Icons.home),
+            ),
+            BottomNavigationBarItem(
+              label: 'Hinnagraafik',
+              icon: Icon(Icons.table_rows_outlined),
+            ),
+          ],
+          currentIndex: koduindex,
+          onTap: (int kodu) {
+            setState(() {
+              koduindex = kodu;
 
-                if (koduindex == 2) {
-                  Navigator.push(
-                    //Kui vajutatakse Hinnagraafiku ikooni peale, siis viiakse Hinnagraafiku lehele
+              if (koduindex == 2) {
+                Navigator.push(
+                  //Kui vajutatakse Hinnagraafiku ikooni peale, siis viiakse Hinnagraafiku lehele
 
-                    context,
+                  context,
 
-                    MaterialPageRoute(builder: (context) => HinnaGraafik()),
-                  );
-                } else if (koduindex == 1) {
-                  Navigator.push(
-                    //Kui vajutatakse Teie seade ikooni peale, siis viiakse Seadmetelisamine lehele
+                  MaterialPageRoute(builder: (context) => HinnaGraafik()),
+                );
+              } else if (koduindex == 1) {
+                Navigator.push(
+                  //Kui vajutatakse Teie seade ikooni peale, siis viiakse Seadmetelisamine lehele
 
-                    context,
+                  context,
 
-                    MaterialPageRoute(builder: (context) => const KoduLeht()),
-                  );
-                }
-              });
-            }),
+                  MaterialPageRoute(builder: (context) => const KoduLeht()),
+                );
+              }
+            });
+          },
+          selectedLabelStyle: TextStyle(
+            fontFamily: GoogleFonts.openSans().fontFamily,
+          ),
+          unselectedLabelStyle: TextStyle(
+            fontFamily: GoogleFonts.openSans().fontFamily,
+          ),
+        ),
       ),
     );
   }
 }
+
 /*
 class ManuaalsedSeadmed extends StatelessWidget {
   ManuaalsedSeadmed({Key? key, required this.onTap}) : super(key: key);
@@ -273,23 +309,86 @@ class _KontoSeadmedState extends State<KontoSeadmed> {
           : Center(
               child: DataTable(
                 showCheckboxColumn: false,
-                columns: const <DataColumn>[
+                columns: <DataColumn>[
                   DataColumn(
-                    label: Text(
-                      'Nimi',
-                      style: TextStyle(fontStyle: FontStyle.italic),
+                    label: Container(
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        color: Color.fromARGB(255, 226, 116, 73),
+                        borderRadius: BorderRadius.circular(14.0),
+                        border: Border.all(
+                          color: Color.fromARGB(30, 0, 0, 0),
+                          width: 1,
+                        ),
+                      ),
+                      width: 75,
+                      height: 35,
+                      // Set the background color
+                      // Adjust padding as needed
+                      child: Text(
+                        'Nimi',
+                        style: GoogleFonts.openSans(
+                              textStyle: TextStyle(
+                                fontWeight: FontWeight.w500,
+                                fontSize: 18,
+                                color: Colors.white
+                              ),
+                            ),
+                      ),
                     ),
                   ),
                   DataColumn(
-                    label: Text(
-                      'Pistik',
-                      style: TextStyle(fontStyle: FontStyle.italic),
+                    label: Container(
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        color: Color.fromARGB(255, 226, 116, 73),
+                        borderRadius: BorderRadius.circular(14.0),
+                        border: Border.all(
+                          color: Color.fromARGB(30, 0, 0, 0),
+                          width: 1,
+                        ),
+                      ),
+                      width: 75,
+                      height: 35,
+                      // Set the background color
+                      // Adjust padding as needed
+                      child: Text(
+                        'Mudel',
+                        style: GoogleFonts.openSans(
+                              textStyle: TextStyle(
+                                fontWeight: FontWeight.w500,
+                                fontSize: 18,
+                                color: Colors.white
+                              ),
+                            ),
+                      ),
                     ),
                   ),
                   DataColumn(
-                    label: Text(
-                      'Olek',
-                      style: TextStyle(fontStyle: FontStyle.italic),
+                    label: Container(
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        color: Color.fromARGB(255, 226, 116, 73),
+                        borderRadius: BorderRadius.circular(14.0),
+                        border: Border.all(
+                          color: Color.fromARGB(30, 0, 0, 0),
+                          width: 1,
+                        ),
+                      ),
+                      width: 75,
+                      height: 35,
+                      // Set the background color
+                      // Adjust padding as needed
+                      child: Text(
+                        'Olek',
+                        style: GoogleFonts.openSans(
+                              textStyle: TextStyle(
+                                fontWeight: FontWeight.w500,
+                                fontSize: 18,
+                                color: Colors.white
+                              ),
+                            ),
+                      ),
                     ),
                   ),
                 ],
