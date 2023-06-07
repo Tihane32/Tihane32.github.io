@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:testuus4/lehed/energiaGraafik.dart';
 import 'dart:convert';
 import 'graafikuKoostamine.dart';
 import 'package:testuus4/lehed/kaksTabelit.dart';
