@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:testuus4/funktsioonid/Elering.dart';
+import 'package:testuus4/lehed/hindJoonise.dart';
 import '../funktsioonid/CurrentPrice.dart';
 import 'Graafik.dart';
 import 'OnOff.dart';
@@ -65,7 +66,8 @@ class _KoduLehtState extends State<KoduLeht> {
         await getCurrentPrice(); //Kutsub esile CurrentPrice funktsiooni
     final test = await tarbimine();
     print(test);
-    final temp = await maksumus();
+    isLoading = false;
+    
     //Võtab data Mapist 'price' väärtuse
 
     var ajutine = data.entries.toList();
@@ -76,7 +78,7 @@ class _KoduLehtState extends State<KoduLeht> {
     print('price: $price');
     price = price / 1000.0;
 
-    num n = num.parse(price.toStringAsFixed(2));
+    num n = num.parse(price.toStringAsFixed(4));
     price = n as double;
     print('price: $price');
     setState(() {
@@ -84,11 +86,12 @@ class _KoduLehtState extends State<KoduLeht> {
       //Salvestab pricei hetke hinnaks
       hetkevoismus = hetkeW.toString();
       ajatarbimine = test.toString();
-      kulu = temp.toString();
+      
     });
-
+final temp = await maksumus();
     setState(() {
-      isLoading = false; //Pärast hinna saamist laadimis animatsioon lõppeb
+       
+       kulu = temp.toString();//Pärast hinna saamist laadimis animatsioon lõppeb
     });
   }
 
@@ -140,7 +143,7 @@ class _KoduLehtState extends State<KoduLeht> {
                         ),
                       ],
                     ),
-                    width: 250,
+                    width: 260,
                     height: 35,
                     child: RichText(
                       text: TextSpan(
@@ -248,7 +251,7 @@ class _KoduLehtState extends State<KoduLeht> {
                         ),
                       ],
                     ),
-                    width: 250,
+                    width: 260,
                     height: 35,
                     child: RichText(
                       text: TextSpan(
@@ -363,7 +366,7 @@ class _KoduLehtState extends State<KoduLeht> {
                             ),
                           ],
                         ),
-                        width: 240,
+                        width: 260,
                         height: 35,
                         child: Row(
                           children: [
@@ -418,7 +421,7 @@ class _KoduLehtState extends State<KoduLeht> {
             if (koduindex == 2) {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => HinnaGraafik()),
+                MaterialPageRoute(builder: (context) => NordHinnad()),
               );
             } else if (koduindex == 0) {
               Navigator.push(
