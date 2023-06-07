@@ -209,6 +209,7 @@ class _LulitusGraafikState extends State<_LulitusGraafik> {
 
               //print(elering[i]['price']);
               var s = 1;
+              // ignore: unused_local_variable
               for (var devices in graafikud.values) {
                 var aeg = graafikud['$s']['Timespec'];
                 bool onoff = graafikud['$s']['On/Off'];
