@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:testuus4/funktsioonid/KeskmineHind.dart';
 import '../funktsioonid/CurrentPrice.dart';
 import 'kaksTabelit.dart';
 import 'hinnaGraafik.dart';
@@ -45,6 +46,7 @@ class _KoduLehtState extends State<KoduLeht> {
   //Võtab Eleringi API-st hetke hinna
 
   Future<void> _getCurrentPrice() async {
+    getKeskmineHind(); //testimiseks 
     setState(() {
       isLoading =
           true; //Enne hinna saamist kuvab ekraanile laadimis animatsiooni

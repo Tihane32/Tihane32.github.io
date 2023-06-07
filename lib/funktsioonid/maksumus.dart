@@ -36,8 +36,11 @@ Future maksumus() async {
   var k = 0;
   var seadmedJSONmap = prefs.getString('seadmed');
   //print(seadmedJSONmap);
-
-  Map<String, dynamic> storedMap = json.decode(seadmedJSONmap!);
+ if(seadmedJSONmap==null){
+    return 0;
+  }
+  Map<String, dynamic> storedMap = json.decode(seadmedJSONmap);
+ 
   var i = 0;
 
   var u = 0;
