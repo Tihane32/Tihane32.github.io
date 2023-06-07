@@ -1,16 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:testuus4/funktsioonid/Elering.dart';
-import '../funktsioonid/CurrentPrice.dart';
-import 'Graafik.dart';
-import 'OnOff.dart';
 import 'Login.dart';
-import 'kaksTabelit.dart';
-import 'graafikuValimine.dart';
-import 'hinnaGraafik.dart';
 
 class SeadmeNimi extends StatefulWidget {
   final String value;
@@ -34,9 +25,9 @@ class _SeadmeNimiState extends State<SeadmeNimi> {
   Future<void> _loadPreferences(String value) async {
     prefs = await SharedPreferences.getInstance();
     String? storedJsonMap = prefs.getString('seadmed');
-    print(value);
     Map<String, dynamic> storedMap = json.decode(storedJsonMap!);
     var j = 0;
+    // ignore: unused_local_variable
     for (var i in storedMap.values) {
       if (storedMap['Seade$j']['Seadme_ID'] == value) {
         await prefs.setString('KohaNumber', '$j');
@@ -55,13 +46,11 @@ class _SeadmeNimiState extends State<SeadmeNimi> {
     String? storedJsonMap = prefs.getString('seadmed');
     String? koht = prefs.getString('KohaNumber');
     Map<String, dynamic> storedMap = json.decode(storedJsonMap!);
-    print('map $storedMap');
 
     var seade = storedMap['Seade$koht'];
     seade['Seadme_nimi'] = name;
     storedMap['Seade$koht'] = seade;
     await prefs.setString('seadmed', json.encode(storedMap));
-    print(storedMap);
   }
 
   @override
