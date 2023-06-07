@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:testuus4/funktsioonid/Elering.dart';
+import 'package:testuus4/lehed/hindJoonise.dart';
 import '../funktsioonid/CurrentPrice.dart';
 import 'Graafik.dart';
 import 'OnOff.dart';
@@ -367,7 +368,6 @@ class _KoduLehtState extends State<KoduLeht> {
                         height: 35,
                         child: Row(
                           children: [
-                            
                             Text(
                               '  Graafiku koostamine ',
                               style: GoogleFonts.openSans(
@@ -376,7 +376,8 @@ class _KoduLehtState extends State<KoduLeht> {
                                   fontSize: 18,
                                 ),
                               ),
-                            ),Icon(
+                            ),
+                            Icon(
                               Icons.calendar_month,
                               color: Colors.black,
                             ),
@@ -418,7 +419,7 @@ class _KoduLehtState extends State<KoduLeht> {
             if (koduindex == 2) {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => HinnaGraafik()),
+                MaterialPageRoute(builder: (context) => NordHinnad()),
               );
             } else if (koduindex == 0) {
               Navigator.push(
