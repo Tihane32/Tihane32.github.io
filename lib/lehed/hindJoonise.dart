@@ -14,17 +14,7 @@ import 'package:syncfusion_flutter_charts/charts.dart';
 
 
 
-void main() {
 
-  runApp(MaterialApp(
-
-    theme: ThemeData(brightness: Brightness.light),
-
-    home: NordHinnad(), //Alustab appi kodulehest
-
-  ));
-
-}
 
 
 
