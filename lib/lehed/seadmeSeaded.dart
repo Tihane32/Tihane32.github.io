@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:testuus4/funktsioonid/graafikGen2.dart';
-import 'package:testuus4/lehed/energiaGraafik.dart';
 import 'dart:convert';
 import 'graafikuKoostamine.dart';
 import 'package:testuus4/lehed/kaksTabelit.dart';
@@ -179,6 +178,7 @@ class _LulitusGraafikState extends State<_LulitusGraafik> {
     String storedKeyString = jsonDecode(storedKey!);
     var j = 0;
     var authKey = storedKeyString;
+    // ignore: unused_local_variable
     for (var i in storedMap.values) {
       if (storedMap['Seade$j']['Seadme_ID'] == value) {
         var seadeGen = storedMap['Seade$j']['Seadme_generatsioon'] as int;
@@ -209,6 +209,7 @@ class _LulitusGraafikState extends State<_LulitusGraafik> {
 
               //print(elering[i]['price']);
               var s = 1;
+              // ignore: unused_local_variable
               for (var devices in graafikud.values) {
                 var aeg = graafikud['$s']['Timespec'];
                 bool onoff = graafikud['$s']['On/Off'];
