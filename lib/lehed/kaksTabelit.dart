@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:testuus4/funktsioonid/lulitamine.dart';
+import 'package:testuus4/lehed/hindJoonise.dart';
 import 'hinnaGraafik.dart';
 import 'Login.dart';
 import 'koduleht.dart';
@@ -9,11 +10,12 @@ import 'seadmeSeaded.dart';
 import 'package:testuus4/funktsioonid/seisukord.dart';
 import 'SeadmeSeadedManuaalsed.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter/cupertino.dart';
 
 class MinuSeadmed extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       home: SeadmeTabel(),
     );
   }
@@ -33,26 +35,35 @@ class _SeadmeTabelState extends State<SeadmeTabel> {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-      child: Scaffold(backgroundColor: Color.fromARGB(255, 208, 236, 239),
+      child: Scaffold(
+        backgroundColor: const Color.fromARGB(255, 208, 236, 239),
         //backgroundColor: Color.fromARGB(255, 189, 216, 225), //Taustavärv
         appBar: AppBar(
-          backgroundColor: Color.fromARGB(255, 115, 162, 195),
+          backgroundColor: const Color.fromARGB(255, 115, 162, 195),
           title: Text(
             'Seadmed',
             style: GoogleFonts.openSans(
-              textStyle: TextStyle(fontSize: 25),
+              textStyle: const TextStyle(fontSize: 25),
             ),
           ),
           actions: [
             Container(
               height: 20,
               decoration: BoxDecoration(
-                  color: Color.fromARGB(100, 157, 214, 171),
+                  color: const Color.fromARGB(100, 157, 214, 171),
                   shape: BoxShape.rectangle,
                   border: Border.all(
-                    color: Color.fromARGB(155, 0, 0, 0),
+                    color: const Color.fromARGB(155, 0, 0, 0),
                     width: 1,
                   ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.2),
+                      spreadRadius: 2,
+                      blurRadius: 5,
+                      offset: const Offset(0, 0),
+                    ),
+                  ],
                   borderRadius: BorderRadius.circular(30.0)),
               child: TextButton(
                 style: TextButton.styleFrom(
@@ -68,7 +79,7 @@ class _SeadmeTabelState extends State<SeadmeTabel> {
                   children: [
                     RichText(
                       text: TextSpan(
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 18,
                           color: Colors.black,
                         ),
@@ -80,11 +91,11 @@ class _SeadmeTabelState extends State<SeadmeTabel> {
                         ],
                       ),
                     ),
-                    Icon(
+                    const Icon(
                       Icons.login,
                       color: Colors.black,
                     ),
-                    SizedBox(width: 5),
+                    const SizedBox(width: 5),
                   ],
                 ),
               ),
@@ -94,8 +105,8 @@ class _SeadmeTabelState extends State<SeadmeTabel> {
 
         body: Column(
           children: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(0, 12, 0, 0),
+            const Padding(
+              padding: EdgeInsets.fromLTRB(0, 8, 0, 0),
             ),
             Expanded(
               child: KontoSeadmed(onTap1: (rowData) {
@@ -132,11 +143,11 @@ class _SeadmeTabelState extends State<SeadmeTabel> {
           ],
         ),
         bottomNavigationBar: BottomNavigationBar(
-          backgroundColor: Color.fromARGB(255, 115, 162, 195),
-          fixedColor: Color.fromARGB(255, 157, 214, 171),
+          backgroundColor: const Color.fromARGB(255, 115, 162, 195),
+          fixedColor: const Color.fromARGB(255, 157, 214, 171),
           unselectedItemColor: Colors.white,
-          selectedIconTheme: IconThemeData(size: 30),
-          unselectedIconTheme: IconThemeData(size: 26),
+          selectedIconTheme: const IconThemeData(size: 30),
+          unselectedIconTheme: const IconThemeData(size: 26),
           items: const <BottomNavigationBarItem>[
             BottomNavigationBarItem(
               label: 'Seadmed',
@@ -162,7 +173,7 @@ class _SeadmeTabelState extends State<SeadmeTabel> {
 
                   context,
 
-                  MaterialPageRoute(builder: (context) => HinnaGraafik()),
+                  MaterialPageRoute(builder: (context) => NordHinnad()),
                 );
               } else if (koduindex == 1) {
                 Navigator.push(
@@ -303,166 +314,266 @@ class _KontoSeadmedState extends State<KontoSeadmed> {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: isLoading
-          ? Center(
-              child: CircularProgressIndicator(),
+          ? const Center(
+              child: Padding(
+                padding: EdgeInsets.fromLTRB(0, 50, 0, 0),
+                child: CircularProgressIndicator(),
+              ),
             )
           : Center(
-              child: DataTable(
-                showCheckboxColumn: false,
-                columns: <DataColumn>[
-                  DataColumn(
-                    label: Container(
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        color: Color.fromARGB(255, 226, 116, 73),
-                        borderRadius: BorderRadius.circular(14.0),
-                        border: Border.all(
-                          color: Color.fromARGB(30, 0, 0, 0),
-                          width: 1,
-                        ),
-                      ),
-                      width: 75,
-                      height: 35,
-                      // Set the background color
-                      // Adjust padding as needed
-                      child: Text(
-                        'Nimi',
-                        style: GoogleFonts.openSans(
-                              textStyle: TextStyle(
-                                fontWeight: FontWeight.w500,
-                                fontSize: 18,
-                                color: Colors.white
+              child: Theme(
+                data: Theme.of(context).copyWith(
+                  dividerColor:
+                      Colors.black, // Set your desired divider color here
+                ),
+                child: Container(
+                  width: MediaQuery.of(context)
+                      .size
+                      .width, // Take full available width
+                  child: DataTable(
+                    columnSpacing: 10,
+                    //columnSpacing: (MediaQuery.of(context).size.width)/3 ,
+                    dividerThickness: 1.0,
+                    showCheckboxColumn: false,
+                    columns: <DataColumn>[
+                      DataColumn(
+                        label: Expanded(
+                          flex: 1,
+                          child: Container(
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                              color: const Color.fromARGB(255, 226, 116, 73),
+                              borderRadius: BorderRadius.circular(14.0),
+                              border: Border.all(
+                                color: const Color.fromARGB(30, 0, 0, 0),
+                                width: 1,
                               ),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withOpacity(0.2),
+                                  spreadRadius: 2,
+                                  blurRadius: 5,
+                                  offset: const Offset(3, 3),
+                                ),
+                              ],
                             ),
-                      ),
-                    ),
-                  ),
-                  DataColumn(
-                    label: Container(
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        color: Color.fromARGB(255, 226, 116, 73),
-                        borderRadius: BorderRadius.circular(14.0),
-                        border: Border.all(
-                          color: Color.fromARGB(30, 0, 0, 0),
-                          width: 1,
-                        ),
-                      ),
-                      width: 75,
-                      height: 35,
-                      // Set the background color
-                      // Adjust padding as needed
-                      child: Text(
-                        'Mudel',
-                        style: GoogleFonts.openSans(
-                              textStyle: TextStyle(
-                                fontWeight: FontWeight.w500,
-                                fontSize: 18,
-                                color: Colors.white
-                              ),
-                            ),
-                      ),
-                    ),
-                  ),
-                  DataColumn(
-                    label: Container(
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        color: Color.fromARGB(255, 226, 116, 73),
-                        borderRadius: BorderRadius.circular(14.0),
-                        border: Border.all(
-                          color: Color.fromARGB(30, 0, 0, 0),
-                          width: 1,
-                        ),
-                      ),
-                      width: 75,
-                      height: 35,
-                      // Set the background color
-                      // Adjust padding as needed
-                      child: Text(
-                        'Olek',
-                        style: GoogleFonts.openSans(
-                              textStyle: TextStyle(
-                                fontWeight: FontWeight.w500,
-                                fontSize: 18,
-                                color: Colors.white
-                              ),
-                            ),
-                      ),
-                    ),
-                  ),
-                ],
-                rows: minuSeadmedK.entries
-                    .map(
-                      (e) => DataRow(
-                        cells: [
-                          DataCell(Text(e.value[1])),
-                          DataCell(Text(e.value[2])),
-                          DataCell(
-                            IgnorePointer(
-                              ignoring:
-                                  e.value[3] != "on" && e.value[3] != "off",
-                              child: Container(
-                                decoration: e.value[3] != "Offline"
-                                    ? BoxDecoration(
-                                        //border: Border.all(width: 2, color: Colors.black)
-                                        //boxShadow: [
-                                        //BoxShadow(
-                                        //color: Colors.grey.withOpacity(1),
-                                        //spreadRadius: -2,
-                                        //blurRadius: 0,
-                                        //offset: Offset(0, 3),
-                                        //blurStyle: BlurStyle.solid // changes position of shadow
-                                        //),
-                                        //],
-                                        )
-                                    : null,
-                                child: TextButton(
-                                  style: TextButton.styleFrom(
-                                    backgroundColor: e.value[3] == "Offline"
-                                        ? Colors.blue[0]
-                                        : Colors.blue[100],
-                                  ),
-                                  onPressed: () {
-                                    lulitamine(e.value[0]);
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => MinuSeadmed(),
-                                      ),
-                                    );
-                                  },
-                                  child: Text(
-                                    e.value[3],
-                                    style: TextStyle(
-                                      color: e.value[3] == "on"
-                                          ? Color.fromARGB(255, 38, 152, 41)
-                                          : e.value[3] == "off"
-                                              ? Colors.red
-                                              : Colors.grey,
-                                    ),
-                                  ),
+                            height: 25,
+                            child: Text(
+                              'Nimi',
+                              style: GoogleFonts.openSans(
+                                textStyle: const TextStyle(
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 14,
+                                  color: Colors.white,
                                 ),
                               ),
                             ),
                           ),
-                        ],
-                        onSelectChanged: (isSelected) {
-                          if (isSelected != null && isSelected) {
-                            onTap(e.value);
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => SeadmeSeaded(
-                                  value: e.value[0],
+                        ),
+                      ),
+                      /*DataColumn(
+                        label: Expanded(
+                          flex: 1,
+                          child: Container(
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                              color: const Color.fromARGB(255, 226, 116, 73),
+                              borderRadius: BorderRadius.circular(14.0),
+                              border: Border.all(
+                                color: const Color.fromARGB(30, 0, 0, 0),
+                                width: 1,
+                              ),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withOpacity(0.2),
+                                  spreadRadius: 2,
+                                  blurRadius: 5,
+                                  offset: const Offset(3, 3),
+                                ),
+                              ],
+                            ),
+                            height: 25,
+                            child: Text(
+                              'Mudel',
+                              style: GoogleFonts.openSans(
+                                textStyle: const TextStyle(
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 14,
+                                  color: Colors.white,
                                 ),
                               ),
-                            );
-                          }
-                        },
+                            ),
+                          ),
+                        ),
+                      ),*/
+                      DataColumn(
+                        label: Expanded(
+                          flex: 1,
+                          child: Container(
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                              color: const Color.fromARGB(255, 226, 116, 73),
+                              borderRadius: BorderRadius.circular(14.0),
+                              border: Border.all(
+                                color: const Color.fromARGB(30, 0, 0, 0),
+                                width: 1,
+                              ),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withOpacity(0.2),
+                                  spreadRadius: 2,
+                                  blurRadius: 5,
+                                  offset: const Offset(3, 3),
+                                ),
+                              ],
+                            ),
+                            height: 25,
+                            child: Text(
+                              'Olek',
+                              style: GoogleFonts.openSans(
+                                textStyle: const TextStyle(
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 14,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
                       ),
-                    )
-                    .toList(),
+                    ],
+                    rows: minuSeadmedK.entries
+                        .map(
+                          (e) => DataRow(
+                            cells: [
+                              DataCell(
+                                Container(
+                                  child: Container(
+                                    alignment: Alignment.centerLeft,
+                                    height: 35,
+                                    width: 100,
+                                    decoration: BoxDecoration(
+                                      color: const Color.fromARGB(
+                                          255, 237, 202, 146),
+                                      borderRadius: BorderRadius.circular(14.0),
+                                      border: Border.all(
+                                        color:
+                                            const Color.fromARGB(30, 0, 0, 0),
+                                        width: 1,
+                                      ),
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.black.withOpacity(0.2),
+                                          spreadRadius: 2,
+                                          blurRadius: 5,
+                                          offset: const Offset(3, 3),
+                                        ),
+                                      ],
+                                    ),
+                                    child: Text(
+                                      ' ${e.value[1]} ',
+                                      style: GoogleFonts.openSans(
+                                        textStyle: const TextStyle(
+                                          fontSize: 13,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              /*DataCell(
+                                Container(
+                                  child: Container(
+                                    alignment: Alignment.centerLeft,
+                                    height: 35,
+                                    width: 115,
+                                    decoration: BoxDecoration(
+                                      color: const Color.fromARGB(
+                                          255, 237, 202, 146),
+                                      borderRadius: BorderRadius.circular(14.0),
+                                      border: Border.all(
+                                        color:
+                                            const Color.fromARGB(30, 0, 0, 0),
+                                        width: 1,
+                                      ),
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.black.withOpacity(0.2),
+                                          spreadRadius: 2,
+                                          blurRadius: 5,
+                                          offset: const Offset(3, 3),
+                                        ),
+                                      ],
+                                    ),
+                                    child: Container(
+                                      child: Text(
+                                        ' ${e.value[2]} ',
+                                        style: GoogleFonts.openSans(
+                                          textStyle: const TextStyle(
+                                            fontSize: 13,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),*/
+                              DataCell(
+                                IgnorePointer(
+                                  ignoring:
+                                      e.value[3] != "on" && e.value[3] != "off",
+                                  child: Container(
+                                    alignment: Alignment.center,
+                                    child: Visibility(
+                                      visible: e.value[3] != "Offline",
+                                      child: CupertinoSwitch(
+                                        value: e.value[3] == "on",
+                                        onChanged: (newValue) {
+                                          lulitamine(e.value[0]);
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  MinuSeadmed(),
+                                            ),
+                                          );
+                                        },
+                                        activeColor: const Color.fromARGB(
+                                            255, 53, 166, 81),
+                                        trackColor: const Color.fromARGB(
+                                            255, 164, 156, 155),
+                                      ),
+                                      replacement: const Text(
+                                        'Offline',
+                                        style: TextStyle(
+                                          fontSize: 13,
+                                          color: Color.fromARGB(
+                                              255, 124, 121, 121),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                            onSelectChanged: (isSelected) {
+                              if (isSelected != null && isSelected) {
+                                onTap(e.value);
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => SeadmeSeaded(
+                                      value: e.value[0],
+                                    ),
+                                  ),
+                                );
+                              }
+                            },
+                          ),
+                        )
+                        .toList(),
+                  ),
+                ),
               ),
             ),
     );
