@@ -9,15 +9,11 @@ Future tarbimine() async {
   []; //Võtab mälust 'users'-i asukohast väärtused
   var seadmedJSONmap = prefs.getString('seadmed');
   //print(seadmedJSONmap);
+ if(seadmedJSONmap == null) {
+    return 0;
+  }
+  Map<String, dynamic> storedMap = json.decode(seadmedJSONmap);
 
-  Map<String, dynamic> storedMap = json.decode(seadmedJSONmap!);
-
-  String? storedKey = prefs.getString('key');
-
-  String storedKeyString = jsonDecode(storedKey!);
-
-  var authKey = storedKeyString;
-  var i = 0;
 
   var j = 0;
   var tarbimine = 0.0;
