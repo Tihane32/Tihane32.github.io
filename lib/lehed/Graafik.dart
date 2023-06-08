@@ -38,7 +38,7 @@ class Graafik extends StatelessWidget {
     }
     int nadalapaev = homnenadalapaev.weekday - 1;
 
-    //TODO: peab mälust võtmise asja ümber tegema
+  
 
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
@@ -68,9 +68,7 @@ class Graafik extends StatelessWidget {
         print('Gen on: $seadeGen');
         if (seadeGen == 1) {
           await Future.delayed(const Duration(seconds: 2));
-          //
-          //TODO: Siia if gen2 et läheks graafikGen2 faili. Peab selected ja valitudPaev edasi passima
-          //
+          
           //gen2GraafikuLoomine(selected, valitudPaev);
 
           //List<String> seadeID = users[i].split(

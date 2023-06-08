@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:testuus4/funktsioonid/KeskmineHind.dart';
-import '../funktsioonid/CurrentPrice.dart';
 import 'kaksTabelit.dart';
 import 'hinnaGraafik.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -8,6 +7,7 @@ import 'package:testuus4/funktsioonid/hetketarbimine.dart';
 import 'package:testuus4/funktsioonid/tarbimine.dart';
 import 'package:testuus4/funktsioonid/maksumus.dart';
 import 'hindJoonise.dart';
+import '../funktsioonid/hetke_hind.dart';
 
 class KoduLeht extends StatefulWidget {
   const KoduLeht({Key? key}) : super(key: key);
@@ -47,7 +47,7 @@ class _KoduLehtState extends State<KoduLeht> {
   //Võtab Eleringi API-st hetke hinna
 
   Future<void> _getCurrentPrice() async {
-    getKeskmineHind(); //testimiseks 
+    getKeskmineHind(); //testimiseks
     setState(() {
       isLoading =
           true; //Enne hinna saamist kuvab ekraanile laadimis animatsiooni
@@ -55,10 +55,12 @@ class _KoduLehtState extends State<KoduLeht> {
     final hetkeW = await voimus();
     final data =
         await getCurrentPrice(); //Kutsub esile CurrentPrice funktsiooni
+    
+    //TODO: Lisada käibemaks ja võrguteenustasud
     final test = await tarbimine();
     print(test);
     isLoading = false;
-    
+
     //Võtab data Mapist 'price' väärtuse
 
     var ajutine = data.entries.toList();
@@ -77,12 +79,10 @@ class _KoduLehtState extends State<KoduLeht> {
       //Salvestab pricei hetke hinnaks
       hetkevoismus = hetkeW.toString();
       ajatarbimine = test.toString();
-      
     });
-final temp = await maksumus();
+    final temp = await maksumus();
     setState(() {
-       
-       kulu = temp.toString();//Pärast hinna saamist laadimis animatsioon lõppeb
+      kulu = temp.toString(); //Pärast hinna saamist laadimis animatsioon lõppeb
     });
   }
 
@@ -361,7 +361,6 @@ final temp = await maksumus();
                         height: 35,
                         child: Row(
                           children: [
-                            
                             Text(
                               '  Graafiku koostamine ',
                               style: GoogleFonts.openSans(
@@ -370,7 +369,8 @@ final temp = await maksumus();
                                   fontSize: 18,
                                 ),
                               ),
-                            ),Icon(
+                            ),
+                            Icon(
                               Icons.calendar_month,
                               color: Colors.black,
                             ),
