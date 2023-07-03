@@ -9,8 +9,10 @@ Future voimus() async {
   []; //Võtab mälust 'users'-i asukohast väärtused
   var seadmedJSONmap = prefs.getString('seadmed');
   //print(seadmedJSONmap);
-
-  Map<String, dynamic> storedMap = json.decode(seadmedJSONmap!);
+  if(seadmedJSONmap == null) {
+    return 0;
+  }
+  var storedMap = json.decode(seadmedJSONmap);
 
   String? storedKey = prefs.getString('key');
 

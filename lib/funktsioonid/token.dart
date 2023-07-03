@@ -6,7 +6,9 @@ Future<String> getToken() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   String? ajutineKasutajanimi = prefs.getString('Kasutajanimi');
   String? sha1Hash = prefs.getString('Kasutajaparool');
-
+  if(ajutineKasutajanimi == null){
+    return 'null';
+  }
   var headers1 = {
     'Content-Type': 'application/x-www-form-urlencoded',
   };
