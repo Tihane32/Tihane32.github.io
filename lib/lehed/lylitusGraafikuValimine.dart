@@ -160,7 +160,7 @@ class _TulpDiagrammState extends State<TulpDiagramm> {
           ],
         ),
 
-        body: SingleChildScrollView(
+        body: GestureDetector(
           child: Column(
             children: [
               Align(
@@ -228,12 +228,6 @@ class _TulpDiagrammState extends State<TulpDiagramm> {
                     height: double.infinity,
                     child: SfCartesianChart(
                       onDataLabelTapped: (DataLabelTapDetails args) {
-                        setState(() {
-                          selectedRowIndex =
-                              args.pointIndex; // Update the selected row index
-                          _sendRowIndexToAnotherFile(
-                              selectedRowIndex); // Call a function to send the row index to another file
-                        });
                         print(args.seriesIndex);
                       },
                       primaryXAxis: CategoryAxis(
@@ -241,7 +235,7 @@ class _TulpDiagrammState extends State<TulpDiagramm> {
                         labelRotation: 270,
                       ),
                       primaryYAxis: NumericAxis(
-                        isVisible: true,
+                        isVisible: false,
                         labelRotation: 270,
                         title: AxisTitle(text: ' €/kWh'),
                       ),
@@ -332,10 +326,6 @@ class _TulpDiagrammState extends State<TulpDiagramm> {
   }
 }
 
-void _sendRowIndexToAnotherFile(int selectedRowIndex) {
-  print(selectedRowIndex);
-}
-
 keskmineHindArvutaus(Map<int, dynamic> lulitus) {
   double summa = 0;
 
@@ -384,5 +374,3 @@ LulitusMap2Vaartustamine(
   print('**************************');
   return lulitus2;
 }
-
-OnOffValimine() {}
