@@ -107,6 +107,7 @@ class _LoginPageState extends State<LoginPage> {
       Map<String, dynamic> seadmed = json.decode(storedJsonMap);
 
       var j = 0;
+
       for (var device in seadmeteMap.values) {
         var seade = new Map<String, dynamic>();
         seade['Seadme_ID'] = device['id'];
@@ -114,14 +115,22 @@ class _LoginPageState extends State<LoginPage> {
         print(seade['Seadme_ID']);
         print(seadmed['Seade$i']['Seadme_ID']);
         print('lõpp');
-        for (String Seade in seadmed.keys) {
+        for (var test = seadmed.keys.length; j < test;j++) {
+          print('pikkus');
+          print(seadmed['Seade$i']['Seadme_ID']);
+          print(seadmed['Seade$j']['Seadme_ID']);
+          print('pikkus');
+
+          print(j);
+          print(seadmed);
+
           if (seade['Seadme_ID'] == seadmed['Seade$j']['Seadme_ID']) {
-            j++;
             print('break');
+            j++;
             break;
           }
           print('no break $j');
-          j++;
+
           seade['Seadme_nimi'] = device['name'];
           seade['Seadme_pistik'] = device['name'];
           seade['Seadme_generatsioon'] = device['gen'];
