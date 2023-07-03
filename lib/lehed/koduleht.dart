@@ -1,15 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:testuus4/funktsioonid/KeskmineHind.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
-import 'package:intl/intl.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:testuus4/funktsioonid/Elering.dart';
-import 'package:testuus4/lehed/hindJoonise.dart';
-import '../funktsioonid/CurrentPrice.dart';
-import 'Graafik.dart';
-import 'OnOff.dart';
-import 'Login.dart';
 import 'kaksTabelit.dart';
 import 'graafikuValimine.dart';
 import 'hinnaGraafik.dart';
@@ -20,6 +10,7 @@ import 'package:testuus4/funktsioonid/hetketarbimine.dart';
 import 'package:testuus4/funktsioonid/tarbimine.dart';
 import 'package:testuus4/funktsioonid/maksumus.dart';
 import 'hindJoonise.dart';
+import '../funktsioonid/hetke_hind.dart';
 
 class KoduLeht extends StatefulWidget {
   const KoduLeht({Key? key}) : super(key: key);
@@ -67,6 +58,8 @@ class _KoduLehtState extends State<KoduLeht> {
     final hetkeW = await voimus();
     final data =
         await getCurrentPrice(); //Kutsub esile CurrentPrice funktsiooni
+
+    //TODO: Lisada käibemaks ja võrguteenustasud
     final test = await tarbimine();
     print(test);
     isLoading = false;

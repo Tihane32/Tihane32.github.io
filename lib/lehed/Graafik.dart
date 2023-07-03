@@ -38,8 +38,6 @@ class Graafik extends StatelessWidget {
     }
     int nadalapaev = homnenadalapaev.weekday - 1;
 
-    //TODO: peab mälust võtmise asja ümber tegema
-
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
     []; //Võtab mälust 'users'-i asukohast väärtused
@@ -68,9 +66,7 @@ class Graafik extends StatelessWidget {
         print('Gen on: $seadeGen');
         if (seadeGen == 1) {
           await Future.delayed(const Duration(seconds: 2));
-          //
-          //TODO: Siia if gen2 et läheks graafikGen2 faili. Peab selected ja valitudPaev edasi passima
-          //
+
           //gen2GraafikuLoomine(selected, valitudPaev);
 
           //List<String> seadeID = users[i].split(
@@ -189,7 +185,10 @@ class Graafik extends StatelessWidget {
           //Seda tehakse sellepärast, et shellyl on piiratud arv graafikuid, mis ta saab salvestada.
           if (k == 1) {
             List<String> myList = graafik.split(',');
-
+            List<dynamic> dynamicList = graafik.split(',');
+            print("dynamic: $dynamicList");
+            prefs.setString('dynamicList$value',graafik);
+            print(graafik);
             List<String> filteredList = myList
                 .where(
                     (string) => int.parse(string.substring(0, 2)) >= tundtana)
@@ -197,6 +196,7 @@ class Graafik extends StatelessWidget {
 
             graafik = filteredList.join(',');
           }
+          print(graafik);
           await Future.delayed(const Duration(seconds: 2));
           var headers1 = {
             'Content-Type': 'application/x-www-form-urlencoded',

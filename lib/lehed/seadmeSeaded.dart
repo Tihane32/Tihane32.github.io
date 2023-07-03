@@ -265,9 +265,15 @@ class _LulitusGraafikState extends State<_LulitusGraafik> {
 
           final httpPackageJson = json.decode(res.body) as Map<String, dynamic>;
 
-          final scheduleRules1 = httpPackageJson['data']['device_settings']
+          var scheduleRules1 = httpPackageJson['data']['device_settings']
               ['relays'][0]['schedule_rules'];
-
+          print(scheduleRules1);
+          var ajutine = prefs.getString('dynamicList$value');
+          print('dynamicList$value');
+          print('asjutine $ajutine');
+          if (ajutine != null) {
+            scheduleRules1 = ajutine.split(',');
+          }
           for (String item in scheduleRules1) {
             List<String> parts = item.split('-');
             if (parts[1].length > 1) {

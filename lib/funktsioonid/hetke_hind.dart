@@ -1,7 +1,4 @@
-/*
-Trevor Uuna, Jaakob Lambot 27.03.2023
-TalTech
-*/
+
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
