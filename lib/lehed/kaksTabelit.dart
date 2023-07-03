@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:testuus4/funktsioonid/lulitamine.dart';
 import 'package:testuus4/lehed/hindJoonise.dart';
-import 'hinnaGraafik.dart';
 import 'Login.dart';
 import 'koduleht.dart';
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'seadmeSeaded.dart';
 import 'package:testuus4/funktsioonid/seisukord.dart';
-import 'SeadmeSeadedManuaalsed.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:testuus4/main.dart';
+import 'kasutajaSeaded.dart';
+import 'rakenduseSeaded.dart';
+import 'AbiLeht.dart';
 
 class MinuSeadmed extends StatelessWidget {
   @override
@@ -39,70 +41,154 @@ class _SeadmeTabelState extends State<SeadmeTabel> {
         backgroundColor: const Color.fromARGB(255, 208, 236, 239),
         //backgroundColor: Color.fromARGB(255, 189, 216, 225), //Taustavärv
         appBar: AppBar(
-          backgroundColor: const Color.fromARGB(255, 115, 162, 195),
-          title: Text(
-            'Seadmed',
-            style: GoogleFonts.openSans(
-              textStyle: const TextStyle(fontSize: 25),
-            ),
+        backgroundColor: appbar,
+        title: Text(
+          'Shelly App',
+          style: GoogleFonts.roboto(
+            textStyle: const TextStyle(fontSize: 25),
           ),
-          actions: [
-            Container(
-              height: 20,
-              decoration: BoxDecoration(
-                  color: const Color.fromARGB(100, 157, 214, 171),
-                  shape: BoxShape.rectangle,
-                  border: Border.all(
-                    color: const Color.fromARGB(155, 0, 0, 0),
-                    width: 1,
-                  ),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.2),
-                      spreadRadius: 2,
-                      blurRadius: 5,
-                      offset: const Offset(0, 0),
-                    ),
-                  ],
-                  borderRadius: BorderRadius.circular(30.0)),
-              child: TextButton(
-                style: TextButton.styleFrom(
-                  textStyle: const TextStyle(fontSize: 20),
-                ),
+        ),
+        actions: [
+          Builder(
+            builder: (BuildContext context) {
+              return IconButton(
+                padding: EdgeInsets.only(right: 20),
+                icon: Icon(Icons.menu,size: 30,),
                 onPressed: () {
-                  Navigator.push(
+                  Scaffold.of(context).openEndDrawer();
+                },
+              );
+            },
+          ),
+        ],
+      ),
+      endDrawer: Drawer(
+        width: MediaQuery.of(context).size.width * 0.65,
+        child: Container(
+          color: const Color.fromARGB(
+              255, 115, 162, 195), // Set the desired background color
+          child: ListView(
+            padding: EdgeInsets.zero,
+            children: [
+              // Drawer items...
+              ListTile(),
+              ListTile(
+                leading: Icon(Icons.login, size: 32,),
+                title: RichText(
+                  text: TextSpan(
+                    text: 'Shelly Login',
+                    style: GoogleFonts.roboto(
+                      textStyle: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w500,
+                        color: Color.fromARGB(255, 255, 255, 255),
+                      ),
+                    ),
+                  ),
+                ),
+                onTap: () {
+                  // Navigate to the home page
+                  Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(builder: (context) => LoginApp()),
                   );
                 },
-                child: Row(
-                  children: [
-                    RichText(
-                      text: TextSpan(
-                        style: const TextStyle(
-                          fontSize: 18,
-                          color: Colors.black,
-                        ),
-                        children: [
-                          TextSpan(
-                            text: 'Login',
-                            style: GoogleFonts.openSans(),
-                          ),
-                        ],
+              ),
+              ListTile(
+                leading: Icon(Icons.add_circle_outline_outlined, size: 32,),
+                title: RichText(
+                  text: TextSpan(
+                    text: 'Lisa seade',
+                    style: GoogleFonts.roboto(
+                      textStyle: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w500,
+                        color: Color.fromARGB(255, 255, 255, 255),
                       ),
                     ),
-                    const Icon(
-                      Icons.login,
-                      color: Colors.black,
-                    ),
-                    const SizedBox(width: 5),
-                  ],
+                  ),
                 ),
+                onTap: () {
+                  // Navigate to the home page
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => LoginApp()),
+                  );
+                },
               ),
-            ),
-          ],
+              ListTile(
+                leading: Icon(Icons.manage_accounts, size: 32,),
+                title: RichText(
+                  text: TextSpan(
+                    text: 'Kasutaja seaded',
+                    style: GoogleFonts.roboto(
+                      textStyle: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w500,
+                        color: Color.fromARGB(255, 255, 255, 255),
+                      ),
+                    ),
+                  ),
+                ),
+                onTap: () {
+                  // Navigate to the home page
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => KasutajaSeaded()),
+                  );
+                },
+              ),
+              ListTile(
+                leading: Icon(Icons.phonelink_setup, size: 32),
+                title: RichText(
+                  text: TextSpan(
+                    text: 'Rakenduse seaded',
+                    style: GoogleFonts.roboto(
+                      textStyle: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w500,
+                        color: Color.fromARGB(255, 255, 255, 255),
+                      ),
+                    ),
+                  ),
+                ),
+                onTap: () {
+                  // Navigate to the home page
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => RakenduseSeaded()),
+                  );
+                },
+              ),
+              ListTile(
+                leading: Icon(
+                  Icons.help_outline_outlined,
+                  size: 32, // Adjust the size as needed
+                ),
+                title: RichText(
+                  text: TextSpan(
+                    text: 'Abi',
+                    style: GoogleFonts.roboto(
+                      textStyle: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w500,
+                        color: Color.fromARGB(255, 255, 255, 255),
+                      ),
+                    ),
+                  ),
+                ),
+                onTap: () {
+                  // Navigate to the home page
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => AbiLeht()),
+                  );
+                },
+              ),
+            ],
+          ),
         ),
-
+      ),
         body: Column(
           children: [
             const Padding(
@@ -286,6 +372,7 @@ class _KontoSeadmedState extends State<KontoSeadmed> {
     minuSeadmedK.clear();
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? storedJsonMap = prefs.getString('seadmed');
+    print(storedJsonMap);
     if (storedJsonMap != null) {
       Map<String, dynamic> storedMap = json.decode(storedJsonMap);
       await Future.delayed(const Duration(seconds: 3));
