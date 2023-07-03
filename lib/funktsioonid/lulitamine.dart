@@ -16,7 +16,6 @@ void lulitamine(String seade) async {
 
   Map<String, dynamic> storedMap = json.decode(storedJsonMap!);
 
-  
   prefs = await SharedPreferences.getInstance();
 
   var j = 0;
@@ -34,6 +33,7 @@ void lulitamine(String seade) async {
       print(storedMap['Seade$j']);
       print('uus olek: $olek');
       await prefs.setString('seadmed', json.encode(storedMap));
+      print(storedMap);
       String? storedKey = prefs.getString('key');
 
       String storedKeyString = jsonDecode(storedKey!);
@@ -54,10 +54,8 @@ void lulitamine(String seade) async {
           Uri.parse('https://shelly-64-eu.shelly.cloud/device/relay/control');
       var res = await http.post(url, headers: headers, body: data);
       print(res.body);
-      
     }
 
     j++;
   }
-  
 }
