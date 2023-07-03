@@ -5,11 +5,12 @@ TalTech
 //Kit test
 import 'package:flutter/material.dart';
 import 'lehed/koduleht.dart';
+import 'lehed/kaksTabelit.dart';
 //Maini käivitamine, home on koduleht.
   
 void main() {
   runApp(MaterialApp(
     theme: ThemeData(brightness: Brightness.light),
-    home: const KoduLeht(), //Alustab appi kodulehest
+    home: MinuSeadmed(), //Alustab appi kodulehest
   ));
 }
