@@ -124,16 +124,71 @@ class _KoduLehtState extends State<KoduLeht> {
   ],
 ),
     endDrawer: Drawer(
+      width: MediaQuery.of(context).size.width * 0.5,
     child: Container(
       color: const Color.fromARGB(255, 115, 162, 195), // Set the desired background color
       child: ListView(
         padding: EdgeInsets.zero,
         children: [
           // Drawer items...
+           ListTile(
+            
+          
+           
+          ),
+            ListTile(
+            leading: Icon(Icons.home),
+            title: Text('Home'),
+            onTap: () {
+              // Navigate to the home page
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => HinnaGraafik()),
+              );
+            },
+          ),
+          
+          ListTile(
+            leading: Icon(Icons.settings),
+            title: Text('Settings'),
+            onTap: () {
+              // Navigate to the settings page
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => HinnaGraafik()),
+              );
+            },
+          ),
+          ListTile(
+            leading: Icon(Icons.info),
+            title: Text('About'),
+            onTap: () {
+              // Navigate to the about page
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => HinnaGraafik()),
+              );
+            },
+          ),
+          ListTile(
+            leading: Icon(Icons.logout),
+            title: Text('Logout'),
+            onTap: () {
+              // Perform logout logic here
+              // For example, clear user session and navigate to the login page
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => HinnaGraafik()),
+              );
+            },
+          ),
         ],
       ),
     ),
-  ),
+    ),
+      
+    
+  
       body: Container(
         decoration: const BoxDecoration(
             /*image: DecorationImage(
