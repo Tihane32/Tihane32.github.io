@@ -32,6 +32,16 @@ class _KoduLehtState extends State<KoduLeht> {
   var kulu = '0';
   bool isLoading = false;
 
+  double vahe = 20;
+
+  Color boxColor = const Color.fromARGB(255, 143, 209, 238);
+
+  BorderRadius borderRadius = BorderRadius.circular(5.0);
+
+  Border border = Border.all(
+    color: const Color.fromARGB(255, 0, 0, 0),
+    width: 2,
+  );
 //Lehe avamisel toob hetke hinna ja tundide arvu
 
   @override
@@ -55,7 +65,7 @@ class _KoduLehtState extends State<KoduLeht> {
     final hetkeW = await voimus();
     final data =
         await getCurrentPrice(); //Kutsub esile CurrentPrice funktsiooni
-    
+
     //TODO: Lisada käibemaks ja võrguteenustasud
     final test = await tarbimine();
     print(test);
@@ -91,25 +101,48 @@ class _KoduLehtState extends State<KoduLeht> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color.fromARGB(255, 208, 236, 239),
-      appBar: AppBar(
-        backgroundColor: Color.fromARGB(255, 115, 162, 195),
-        title: Text(
-          'Shelly app',
-          style: GoogleFonts.openSans(
-            textStyle: TextStyle(fontSize: 25),
-          ),
-        ),
+      backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+          appBar: AppBar(
+  backgroundColor: const Color.fromARGB(255, 115, 162, 195),
+  title: Text(
+    'Shelly App',
+    style: GoogleFonts.openSans(
+      textStyle: const TextStyle(fontSize: 25),
+    ),
+  ),
+  actions: [
+    Builder(
+      builder: (BuildContext context) {
+        return IconButton(
+          icon: Icon(Icons.menu),
+          onPressed: () {
+            Scaffold.of(context).openEndDrawer();
+          },
+        );
+      },
+    ),
+  ],
+),
+    endDrawer: Drawer(
+    child: Container(
+      color: const Color.fromARGB(255, 115, 162, 195), // Set the desired background color
+      child: ListView(
+        padding: EdgeInsets.zero,
+        children: [
+          // Drawer items...
+        ],
       ),
+    ),
+  ),
       body: Container(
         decoration: const BoxDecoration(
-          image: DecorationImage(
+            /*image: DecorationImage(
             image: AssetImage('assets/tuulik7.jpg'),
             alignment: Alignment.bottomCenter,
-          ),
-        ),
+          ),*/
+            ),
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(8, 10, 8, 8),
+          padding: const EdgeInsets.fromLTRB(12, 20, 8, 8),
           child: Center(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -119,18 +152,15 @@ class _KoduLehtState extends State<KoduLeht> {
                   child: Container(
                     alignment: Alignment.centerLeft,
                     decoration: BoxDecoration(
-                      color: Color.fromARGB(255, 237, 202, 146),
-                      borderRadius: BorderRadius.circular(14.0),
-                      border: Border.all(
-                        color: Color.fromARGB(30, 0, 0, 0),
-                        width: 1,
-                      ),
+                      color: boxColor,
+                      borderRadius: borderRadius,
+                      border: border,
                       boxShadow: [
                         BoxShadow(
                           color: Colors.black.withOpacity(0.2),
                           spreadRadius: 2,
                           blurRadius: 5,
-                          offset: Offset(3, 3),
+                          offset: const Offset(3, 3),
                         ),
                       ],
                     ),
@@ -138,15 +168,15 @@ class _KoduLehtState extends State<KoduLeht> {
                     height: 35,
                     child: RichText(
                       text: TextSpan(
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 18,
                           color: Colors.black,
                         ),
                         children: [
                           TextSpan(
-                            text: '  Hetkel hind: ',
+                            text: '  Hetke hind: ',
                             style: GoogleFonts.openSans(
-                              textStyle: TextStyle(
+                              textStyle: const TextStyle(
                                 fontWeight: FontWeight.w500,
                               ),
                             ),
@@ -167,24 +197,21 @@ class _KoduLehtState extends State<KoduLeht> {
                   ),
                 ),
                 SizedBox(
-                    height: 10), // Add some spacing between the two widgets
+                    height: vahe), // Add some spacing between the two widgets
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Container(
                     alignment: Alignment.centerLeft,
                     decoration: BoxDecoration(
-                      color: Color.fromARGB(255, 237, 202, 146),
-                      borderRadius: BorderRadius.circular(14.0),
-                      border: Border.all(
-                        color: Color.fromARGB(30, 0, 0, 0),
-                        width: 1,
-                      ),
+                      color: boxColor,
+                      borderRadius: borderRadius,
+                      border: border,
                       boxShadow: [
                         BoxShadow(
                           color: Colors.black.withOpacity(0.2),
                           spreadRadius: 2,
                           blurRadius: 5,
-                          offset: Offset(3, 3),
+                          offset: const Offset(3, 3),
                         ),
                       ],
                     ),
@@ -192,15 +219,15 @@ class _KoduLehtState extends State<KoduLeht> {
                     height: 35,
                     child: RichText(
                       text: TextSpan(
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 18,
                           color: Colors.black,
                         ),
                         children: [
                           TextSpan(
-                            text: '  Hetkel tarbimine: ',
+                            text: '  Hetke tarbimine: ',
                             style: GoogleFonts.openSans(
-                              textStyle: TextStyle(
+                              textStyle: const TextStyle(
                                 fontWeight: FontWeight.w500,
                               ),
                             ),
@@ -221,24 +248,21 @@ class _KoduLehtState extends State<KoduLeht> {
                   ),
                 ),
                 SizedBox(
-                    height: 10), // Add some spacing between the two widgets
+                    height: vahe), // Add some spacing between the two widgets
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Container(
                     alignment: Alignment.centerLeft,
                     decoration: BoxDecoration(
-                      color: Color.fromARGB(255, 237, 202, 146),
-                      borderRadius: BorderRadius.circular(14.0),
-                      border: Border.all(
-                        color: Color.fromARGB(30, 0, 0, 0),
-                        width: 1,
-                      ),
+                      color: boxColor,
+                      borderRadius: borderRadius,
+                      border: border,
                       boxShadow: [
                         BoxShadow(
                           color: Colors.black.withOpacity(0.2),
                           spreadRadius: 2,
                           blurRadius: 5,
-                          offset: Offset(3, 3),
+                          offset: const Offset(3, 3),
                         ),
                       ],
                     ),
@@ -246,7 +270,7 @@ class _KoduLehtState extends State<KoduLeht> {
                     height: 35,
                     child: RichText(
                       text: TextSpan(
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 18,
                           color: Colors.black,
                         ),
@@ -254,7 +278,7 @@ class _KoduLehtState extends State<KoduLeht> {
                           TextSpan(
                             text: '  Kuu tarbimine: ',
                             style: GoogleFonts.openSans(
-                              textStyle: TextStyle(
+                              textStyle: const TextStyle(
                                 fontWeight: FontWeight.w500,
                               ),
                             ),
@@ -275,24 +299,21 @@ class _KoduLehtState extends State<KoduLeht> {
                   ),
                 ),
                 SizedBox(
-                    height: 10), // Add some spacing between the two widgets
+                    height: vahe), // Add some spacing between the two widgets
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Container(
                     alignment: Alignment.centerLeft,
                     decoration: BoxDecoration(
-                      color: Color.fromARGB(255, 237, 202, 146),
-                      borderRadius: BorderRadius.circular(14.0),
-                      border: Border.all(
-                        color: Color.fromARGB(30, 0, 0, 0),
-                        width: 1,
-                      ),
+                      color: boxColor,
+                      borderRadius: borderRadius,
+                      border: border,
                       boxShadow: [
                         BoxShadow(
                           color: Colors.black.withOpacity(0.2),
                           spreadRadius: 2,
                           blurRadius: 5,
-                          offset: Offset(3, 3),
+                          offset: const Offset(3, 3),
                         ),
                       ],
                     ),
@@ -300,7 +321,7 @@ class _KoduLehtState extends State<KoduLeht> {
                     height: 35,
                     child: RichText(
                       text: TextSpan(
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 18,
                           color: Colors.black,
                         ),
@@ -308,7 +329,7 @@ class _KoduLehtState extends State<KoduLeht> {
                           TextSpan(
                             text: '  Kuu maksumus: ',
                             style: GoogleFonts.openSans(
-                              textStyle: TextStyle(
+                              textStyle: const TextStyle(
                                 fontWeight: FontWeight.w500,
                               ),
                             ),
@@ -328,7 +349,7 @@ class _KoduLehtState extends State<KoduLeht> {
                     ),
                   ),
                 ),
-                SizedBox(height: 10),
+                SizedBox(height: vahe * 2),
                 GestureDetector(
                     onTap: () {
                       Navigator.push(
@@ -342,39 +363,36 @@ class _KoduLehtState extends State<KoduLeht> {
                       child: Container(
                         alignment: Alignment.centerLeft,
                         decoration: BoxDecoration(
-                          color: Color.fromARGB(255, 157, 214, 171),
-                          borderRadius: BorderRadius.circular(14.0),
-                          border: Border.all(
-                            color: Color.fromARGB(200, 0, 0, 0),
-                            width: 2,
-                          ),
+                          color: const Color.fromARGB(255, 143, 238, 152),
+                          borderRadius: borderRadius,
+                          border: border,
                           boxShadow: [
                             BoxShadow(
                               color: Colors.black.withOpacity(0.5),
                               spreadRadius: 2,
                               blurRadius: 5,
-                              offset: Offset(3, 3),
+                              offset: const Offset(3, 3),
                             ),
                           ],
                         ),
-                        width: 260,
+                        width: 175,
                         height: 35,
                         child: Row(
                           children: [
                             Text(
-                              '  Graafiku koostamine ',
+                              '  Minu pakett ',
                               style: GoogleFonts.openSans(
-                                textStyle: TextStyle(
+                                textStyle: const TextStyle(
                                   fontWeight: FontWeight.w500,
                                   fontSize: 18,
                                 ),
                               ),
                             ),
-                            Icon(
-                              Icons.calendar_month,
+                            const Icon(
+                              Icons.account_circle_rounded,
                               color: Colors.black,
                             ),
-                            SizedBox(width: 5),
+                            const SizedBox(width: 5),
                           ],
                         ),
                       ),
@@ -385,11 +403,11 @@ class _KoduLehtState extends State<KoduLeht> {
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: Color.fromARGB(255, 115, 162, 195),
-        fixedColor: Color.fromARGB(255, 157, 214, 171),
+        backgroundColor: const Color.fromARGB(255, 115, 162, 195),
+        fixedColor: const Color.fromARGB(255, 157, 214, 171),
         unselectedItemColor: Colors.white,
-        selectedIconTheme: IconThemeData(size: 30),
-        unselectedIconTheme: IconThemeData(size: 26),
+        selectedIconTheme: const IconThemeData(size: 30),
+        unselectedIconTheme: const IconThemeData(size: 26),
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             label: 'Seadmed',
@@ -432,3 +450,30 @@ class _KoduLehtState extends State<KoduLeht> {
     );
   }
 }
+/*
+class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
+  final VoidCallback onMenuButtonTap;
+
+  const MyAppBar({required this.onMenuButtonTap});
+
+  @override
+  Widget build(BuildContext context) {
+    return AppBar(
+      backgroundColor: const Color.fromARGB(255, 115, 162, 195),
+      title: Text(
+        'Shelly app',
+        style: GoogleFonts.openSans(
+          textStyle: const TextStyle(fontSize: 25),
+        ),
+      ),
+      actions: [
+        IconButton(
+          icon: Icon(Icons.menu),
+          onPressed: onMenuButtonTap,
+        ),
+      ],
+    );
+  }
+
+  @override
+  Size get preferredSize => Size.fromHeight(kToolbarHeight);*/
