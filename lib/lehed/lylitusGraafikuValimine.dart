@@ -1,15 +1,10 @@
 import 'package:flutter/material.dart';
 
 import 'package:google_fonts/google_fonts.dart';
-
 import 'Login.dart';
-
 import 'koduleht.dart';
-
 import 'dart:math';
-
 import 'package:testuus4/lehed/kaksTabelit.dart';
-
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 void main() {
@@ -227,8 +222,8 @@ class _TulpDiagrammState extends State<TulpDiagramm> {
                     width: double.infinity,
                     height: double.infinity,
                     child: SfCartesianChart(
-                      onDataLabelTapped: (DataLabelTapDetails args) {
-                        print(args.seriesIndex);
+                      onAxisLabelTapped: (args) {
+                        print('$args');
                       },
                       primaryXAxis: CategoryAxis(
                         interval: 1,
@@ -241,6 +236,10 @@ class _TulpDiagrammState extends State<TulpDiagramm> {
                       ),
                       series: <ChartSeries>[
                         ColumnSeries(
+                          onPointTap: (pointInteractionDetails) {
+                            int? rowIndex = pointInteractionDetails.pointIndex;
+                            print('Row Index: $rowIndex');
+                          },
                           dataSource: lulitusMap2.values.toList(),
                           xValueMapper: (data, _) => data[0],
                           yValueMapper: (data, _) => data[1],
