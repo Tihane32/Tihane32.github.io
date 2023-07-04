@@ -14,6 +14,7 @@ import 'hindJoonise.dart';
 import '../funktsioonid/hetke_hind.dart';
 import 'package:testuus4/main.dart';
 import 'minuPakett.dart';
+
 class KoduLeht extends StatefulWidget {
   const KoduLeht({Key? key}) : super(key: key);
 
@@ -36,12 +37,11 @@ class _KoduLehtState extends State<KoduLeht> {
 
   var kulu = '0';
   bool isLoading = false;
- String selectedOption = 'Nädala';
+  String selectedOption = 'Nädala';
   List<String> dropdownOptions = ['Nädala', 'Kuu', 'Aasta'];
   double vahe = 20;
 
   Color boxColor = sinineKast;
-
 
   BorderRadius borderRadius = BorderRadius.circular(5.0);
 
@@ -97,7 +97,7 @@ class _KoduLehtState extends State<KoduLeht> {
       hetkevoismus = hetkeW.toString();
       ajatarbimine = test.toString();
     });
-    final temp = await maksumus();
+    final temp = await maksumus(selectedOption);
     setState(() {
       kulu = temp.toString(); //Pärast hinna saamist laadimis animatsioon lõppeb
     });
@@ -122,7 +122,10 @@ class _KoduLehtState extends State<KoduLeht> {
             builder: (BuildContext context) {
               return IconButton(
                 padding: EdgeInsets.only(right: 20),
-                icon: Icon(Icons.menu,size: 30,),
+                icon: Icon(
+                  Icons.menu,
+                  size: 30,
+                ),
                 onPressed: () {
                   Scaffold.of(context).openEndDrawer();
                 },
@@ -142,7 +145,10 @@ class _KoduLehtState extends State<KoduLeht> {
               // Drawer items...
               ListTile(),
               ListTile(
-                leading: Icon(Icons.login, size: 32,),
+                leading: Icon(
+                  Icons.login,
+                  size: 32,
+                ),
                 title: RichText(
                   text: TextSpan(
                     text: 'Shelly Login',
@@ -164,7 +170,10 @@ class _KoduLehtState extends State<KoduLeht> {
                 },
               ),
               ListTile(
-                leading: Icon(Icons.add_circle_outline_outlined, size: 32,),
+                leading: Icon(
+                  Icons.add_circle_outline_outlined,
+                  size: 32,
+                ),
                 title: RichText(
                   text: TextSpan(
                     text: 'Lisa seade',
@@ -186,13 +195,16 @@ class _KoduLehtState extends State<KoduLeht> {
                 },
               ),
               ListTile(
-                leading: Icon(Icons.manage_accounts, size: 32,),
+                leading: Icon(
+                  Icons.manage_accounts,
+                  size: 32,
+                ),
                 title: RichText(
                   text: TextSpan(
                     text: 'Kasutaja seaded',
                     style: GoogleFonts.roboto(
                       textStyle: const TextStyle(
-                        fontSize: 18,
+                        fontSize: 20,
                         fontWeight: FontWeight.w500,
                         color: Color.fromARGB(255, 255, 255, 255),
                       ),
@@ -214,7 +226,7 @@ class _KoduLehtState extends State<KoduLeht> {
                     text: 'Rakenduse seaded',
                     style: GoogleFonts.roboto(
                       textStyle: const TextStyle(
-                        fontSize: 18,
+                        fontSize: 20,
                         fontWeight: FontWeight.w500,
                         color: Color.fromARGB(255, 255, 255, 255),
                       ),
@@ -239,7 +251,7 @@ class _KoduLehtState extends State<KoduLeht> {
                     text: 'Abi',
                     style: GoogleFonts.roboto(
                       textStyle: const TextStyle(
-                        fontSize: 18,
+                        fontSize: 20,
                         fontWeight: FontWeight.w500,
                         color: Color.fromARGB(255, 255, 255, 255),
                       ),
@@ -274,7 +286,7 @@ class _KoduLehtState extends State<KoduLeht> {
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Container(
-                    alignment: Alignment.centerLeft,
+                    alignment: Alignment.center,
                     decoration: BoxDecoration(
                       color: boxColor,
                       borderRadius: borderRadius,
@@ -288,12 +300,12 @@ class _KoduLehtState extends State<KoduLeht> {
                         ),
                       ],
                     ),
-                    width: 260,
-                    height: 35,
+                   // width: 350,
+                    height: 45,
                     child: RichText(
                       text: TextSpan(
                         style: const TextStyle(
-                          fontSize: 18,
+                          fontSize: 20,
                           color: Colors.black,
                         ),
                         children: [
@@ -325,7 +337,7 @@ class _KoduLehtState extends State<KoduLeht> {
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Container(
-                    alignment: Alignment.centerLeft,
+                    alignment: Alignment.center,
                     decoration: BoxDecoration(
                       color: boxColor,
                       borderRadius: borderRadius,
@@ -339,12 +351,13 @@ class _KoduLehtState extends State<KoduLeht> {
                         ),
                       ],
                     ),
-                    width: 300,
-                    height: 35,
+                    
+                //width: 350,
+                    height: 45,
                     child: RichText(
                       text: TextSpan(
                         style: const TextStyle(
-                          fontSize: 18,
+                          fontSize: 20,
                           color: Colors.black,
                         ),
                         children: [
@@ -376,7 +389,7 @@ class _KoduLehtState extends State<KoduLeht> {
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Container(
-                    alignment: Alignment.centerLeft,
+                    alignment: Alignment.center,
                     decoration: BoxDecoration(
                       color: boxColor,
                       borderRadius: borderRadius,
@@ -390,17 +403,17 @@ class _KoduLehtState extends State<KoduLeht> {
                         ),
                       ],
                     ),
-                    width: 260,
-                    height: 35,
+                    //width: 350,
+                    height: 45,
                     child: RichText(
                       text: TextSpan(
                         style: const TextStyle(
-                          fontSize: 18,
+                          fontSize: 20,
                           color: Colors.black,
                         ),
                         children: [
                           TextSpan(
-                            text: '  Kuu tarbimine: ',
+                            text: '  Seadmete kuu tarbimine: ',
                             style: GoogleFonts.roboto(
                               textStyle: const TextStyle(
                                 fontWeight: FontWeight.w500,
@@ -426,66 +439,75 @@ class _KoduLehtState extends State<KoduLeht> {
                     height: vahe), // Add some spacing between the two widgets
                 Align(
                   alignment: Alignment.centerLeft,
-            child: Container(
-  alignment: Alignment.centerLeft,
-  decoration: BoxDecoration(
-    color: boxColor,
-    borderRadius: borderRadius,
-    border: border,
-    boxShadow: [
-      BoxShadow(
-        color: Colors.black.withOpacity(0.2),
-        spreadRadius: 2,
-        blurRadius: 5,
-        offset: const Offset(3, 3),
-      ),
-    ],
-  ),
-  width: 300,
-  height: 35,
-  child: Row(
-    children: [
-     
-      DropdownButton<String>(
-        value: selectedOption, // Provide the currently selected value
-        onChanged: (String? newValue) {
-          // Handle dropdown value change
-          setState(() {
-            selectedOption = newValue!;
-            
-          });
-        },
-        items: dropdownOptions.map<DropdownMenuItem<String>>((String value) {
-          // Create a dropdown menu item for each option
-          return DropdownMenuItem<String>(
-            value: value,
-            child: Text(
-              '  '+value + ' maksumus:',
-              style: GoogleFonts.roboto(
-                textStyle: TextStyle(
-                  fontWeight: FontWeight.w500,
-                  fontSize: 18,
-                  color: isLoading ? Colors.grey : Colors.black,
-                ),
-              ),
-            ),
-          );
-        }).toList(),
-      ),
- Text(
-        kulu + " €",
-        style: GoogleFonts.roboto(
-          textStyle: const TextStyle(
-            fontSize: 20,
-            color: Colors.black,
-            fontWeight: FontWeight.w500,
-          ),
-        ),
-      ),
+                  child: Container(
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      color: boxColor,
+                      borderRadius: borderRadius,
+                      border: border,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.2),
+                          spreadRadius: 2,
+                          blurRadius: 5,
+                          offset: const Offset(3, 3),
+                        ),
+                      ],
+                    ),
+                    //width:double.maxFinite ,
+                    height: 45,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        DropdownButton<String>(
+                          icon: const Icon(Icons.expand_circle_down_outlined, color: Color.fromARGB(255, 0, 0, 0)),
+                          value: selectedOption,
+                          onChanged: (String? newValue) async {
+                            // Use an async function
+                            setState(() {
+                              selectedOption = newValue!;
+                              isLoading = true; // Show the loading animation
 
-    ],
-  ),
-),
+                              // Call the async function and wait for the result
+                              maksumus(selectedOption).then((result) {
+                                setState(() {
+                                  kulu = result.toString();
+                                  isLoading =
+                                      false; // Hide the loading animation
+                                });
+                              });
+                            });
+                          },
+                          items: dropdownOptions
+                              .map<DropdownMenuItem<String>>((String value) {
+                            return DropdownMenuItem<String>(
+                              value: value,
+                              child: Text(
+                                '  ' + value + ' maksumus:',
+                                style: GoogleFonts.roboto(
+                                  textStyle: TextStyle(
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 20,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                              ),
+                            );
+                          }).toList(),
+                        ),
+                        Text(
+                          " $kulu €",
+                          style: GoogleFonts.roboto(
+                            textStyle: TextStyle(
+                              fontSize: 20,
+                              color: isLoading ? Colors.grey : Colors.black,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
                 SizedBox(height: vahe * 2),
                 GestureDetector(
@@ -497,7 +519,7 @@ class _KoduLehtState extends State<KoduLeht> {
                     },
                     child: // Add some spacing between the two widgets
                         Align(
-                      alignment: Alignment.centerLeft,
+                      alignment: Alignment.center,
                       child: Container(
                         alignment: Alignment.centerLeft,
                         decoration: BoxDecoration(
@@ -514,7 +536,7 @@ class _KoduLehtState extends State<KoduLeht> {
                           ],
                         ),
                         width: 175,
-                        height: 35,
+                        height: 45,
                         child: Row(
                           children: [
                             Text(
@@ -522,7 +544,7 @@ class _KoduLehtState extends State<KoduLeht> {
                               style: GoogleFonts.roboto(
                                 textStyle: const TextStyle(
                                   fontWeight: FontWeight.w500,
-                                  fontSize: 18,
+                                  fontSize: 20,
                                 ),
                               ),
                             ),
