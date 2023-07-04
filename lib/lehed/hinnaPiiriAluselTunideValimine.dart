@@ -1,40 +1,42 @@
 import 'package:flutter/material.dart';
-
 import 'package:google_fonts/google_fonts.dart';
-import 'Login.dart';
 import 'koduleht.dart';
 import 'dart:math';
 import 'package:testuus4/lehed/kaksTabelit.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
+import 'keskimiseHinnaAluselTundideValimine.dart';
 
-void main() {
-  runApp(LylitusValimisLeht());
-}
-
-class LylitusValimisLeht extends StatelessWidget {
+class LylitusValimisLeht2 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: TulpDiagramm(),
+      home: HinnaPiiriAluselTundideValimine(),
     );
   }
 }
 
-class TulpDiagramm extends StatefulWidget {
-  const TulpDiagramm({Key? key}) : super(key: key);
+class HinnaPiiriAluselTundideValimine extends StatefulWidget {
+  const HinnaPiiriAluselTundideValimine({Key? key}) : super(key: key);
 
   @override
-  _TulpDiagrammState createState() => _TulpDiagrammState();
+  _HinnaPiiriAluselTundideValimineState createState() =>
+      _HinnaPiiriAluselTundideValimineState();
 }
 
-int koduindex = 2;
+int koduindex = 1;
 
-class _TulpDiagrammState extends State<TulpDiagramm> {
+class _HinnaPiiriAluselTundideValimineState
+    extends State<HinnaPiiriAluselTundideValimine> {
   late Map<int, dynamic> lulitusMap;
   int selectedRowIndex = -1;
   late double hindAVG;
+  double hinnaPiir = 50.45;
+  String paevNupp = 'Täna';
+  String selectedPage = 'Hinnapiir';
+  double vahe = 10;
+  int valitudTunnid = 10;
 
-  Map<int, dynamic> keskHind = {
+  Map<int, dynamic> hindPiirMap = {
     0: ['00.00', 0, false],
     1: ['01.00', 0, false],
     2: ['02.00', 0, true],
@@ -121,7 +123,8 @@ class _TulpDiagrammState extends State<TulpDiagramm> {
 
       hindAVG = keskmineHindArvutaus(lulitusMap);
 
-      lulitusMap2 = LulitusMap2Vaartustamine(hindAVG, lulitusMap, lulitusMap2);
+      lulitusMap2 =
+          LulitusMap2Vaartustamine(hinnaPiir, lulitusMap, lulitusMap2);
     });
   }
 
@@ -140,24 +143,165 @@ class _TulpDiagrammState extends State<TulpDiagramm> {
 
         appBar: AppBar(
           backgroundColor: Color.fromARGB(255, 115, 162, 195),
-          title: Text('Hinnagraafik'),
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text('Tunndide valik'),
+              Expanded(
+                  child: Center(
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: Colors.blue,
+                  ),
+                  child: TextButton(
+                    onPressed: () {
+                      setState(() {
+                        paevNupp = paevaMuutmine(paevNupp);
+                      });
+                    },
+                    style: ButtonStyle(
+                      foregroundColor:
+                          MaterialStateProperty.all<Color>(Colors.white),
+                      textStyle: MaterialStateProperty.all<TextStyle>(
+                        TextStyle(fontSize: 20),
+                      ),
+                    ),
+                    child: Text(paevNupp),
+                  ),
+                ),
+              ))
+            ],
+          ),
           actions: [
-            IconButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => LoginApp()),
-                );
-              },
-              icon: const Icon(Icons.person),
-              iconSize: 40,
-            )
+            Center(
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: Colors.blue,
+                ),
+                padding: EdgeInsets.symmetric(horizontal: 10),
+                child: DropdownButton<String>(
+                  value: selectedPage,
+                  onChanged: (String? newValue) {
+                    setState(() {
+                      selectedPage = newValue!;
+                    });
+                    if (selectedPage == 'Keskmine hind') {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => LylitusValimisLeht2()),
+                      );
+                    } else if (selectedPage == 'Minu eelistused') {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => KoduLeht()),
+                      );
+                    }
+                  },
+                  underline: Container(), // or SizedBox.shrink()
+                  items: <String>[
+                    'Keskmine hind',
+                    'Hinnapiir',
+                    'Minu eelistused'
+                  ].map((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(
+                        value,
+                        style: TextStyle(color: Colors.black),
+                      ),
+                    );
+                  }).toList(),
+                ),
+              ),
+            ),
           ],
         ),
-
-        body: GestureDetector(
+        body: SingleChildScrollView(
           child: Column(
             children: [
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Container(
+                  alignment: Alignment.centerLeft,
+                  decoration: BoxDecoration(
+                    color: Color.fromARGB(255, 237, 202, 146),
+                    borderRadius: BorderRadius.circular(14.0),
+                    border: Border.all(
+                      color: Color.fromARGB(30, 0, 0, 0),
+                      width: 1,
+                    ),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.2),
+                        spreadRadius: 2,
+                        blurRadius: 5,
+                        offset: Offset(3, 3),
+                      ),
+                    ],
+                  ),
+                  width: 230,
+                  height: 35,
+                  child: RichText(
+                    text: TextSpan(
+                      style: TextStyle(
+                        fontSize: 18,
+                        color: Colors.black,
+                      ),
+                      children: [
+                        TextSpan(
+                          text: ' Sisesta hinnapiir:  ',
+                          style: GoogleFonts.openSans(
+                            textStyle: TextStyle(
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ),
+                        WidgetSpan(
+                          child: Container(
+                            height: 25,
+                            width: 45,
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color: Colors.grey,
+                                width: 1.0,
+                              ),
+                              borderRadius: BorderRadius.circular(4.0),
+                            ),
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 8.0),
+                              child: TextField(
+                                keyboardType: TextInputType.number,
+                                onChanged: (value) {
+                                  setState(() {
+                                    valitudTunnid = int.tryParse(value) ?? 0;
+                                    print(valitudTunnid);
+                                  });
+                                },
+                                decoration: InputDecoration(
+                                  border: InputBorder.none,
+                                  isDense: true,
+                                ),
+                                style: GoogleFonts.openSans(
+                                  textStyle: TextStyle(
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 20,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(height: vahe),
               Align(
                 alignment: Alignment.centerLeft,
                 child: Container(
@@ -222,9 +366,6 @@ class _TulpDiagrammState extends State<TulpDiagramm> {
                     width: double.infinity,
                     height: double.infinity,
                     child: SfCartesianChart(
-                      onAxisLabelTapped: (args) {
-                        print('$args');
-                      },
                       primaryXAxis: CategoryAxis(
                         interval: 1,
                         labelRotation: 270,
@@ -236,15 +377,20 @@ class _TulpDiagrammState extends State<TulpDiagramm> {
                       ),
                       series: <ChartSeries>[
                         ColumnSeries(
+                          width: 0.9,
                           onPointTap: (pointInteractionDetails) {
                             int? rowIndex = pointInteractionDetails.pointIndex;
                             print('Row Index: $rowIndex');
+                            setState(() {
+                              lulitusMap2 =
+                                  TunniVarviMuutus(rowIndex, lulitusMap2);
+                            });
                           },
                           dataSource: lulitusMap2.values.toList(),
                           xValueMapper: (data, _) => data[0],
                           yValueMapper: (data, _) => data[1],
                           dataLabelMapper: (data, _) =>
-                              (((data[1] + hindAVG) * pow(10.0, 2))
+                              (((data[1] + hinnaPiir) * pow(10.0, 2))
                                           .round()
                                           .toDouble() /
                                       pow(10.0, 2))
@@ -262,7 +408,7 @@ class _TulpDiagrammState extends State<TulpDiagramm> {
                           ),
                         ),
                         SplineSeries(
-                          dataSource: keskHind.values.toList(),
+                          dataSource: hindPiirMap.values.toList(),
                           xValueMapper: (inf, _) => inf[0],
                           yValueMapper: (inf, _) => inf[1],
                           pointColorMapper: (data, _) => Colors.black,
@@ -280,41 +426,32 @@ class _TulpDiagrammState extends State<TulpDiagramm> {
             backgroundColor: Color.fromARGB(255, 115, 162, 195),
             fixedColor: Color.fromARGB(255, 157, 214, 171),
             unselectedItemColor: Colors.white,
-            selectedIconTheme: IconThemeData(size: 30),
-            unselectedIconTheme: IconThemeData(size: 22),
+            selectedIconTheme: IconThemeData(size: 40),
+            unselectedIconTheme: IconThemeData(size: 30),
             items: const <BottomNavigationBarItem>[
               BottomNavigationBarItem(
-                label: 'tagasi',
+                label: 'Tagasi',
                 icon: Icon(Icons.arrow_back),
               ),
               BottomNavigationBarItem(
-                label: 'Kodu',
-                icon: Icon(Icons.home),
-              ),
-              BottomNavigationBarItem(
                 label: 'Kinnita',
-                icon: Icon(Icons.arrow_forward),
+                icon: Icon(Icons.check_circle_outlined),
               ),
             ],
             currentIndex: koduindex,
             onTap: (int kodu) {
               setState(() {
                 koduindex = kodu;
-
                 if (koduindex == 0) {
                   Navigator.push(
                     //Kui vajutatakse Hinnagraafiku ikooni peale, siis viiakse Hinnagraafiku lehele
-
                     context,
-
                     MaterialPageRoute(builder: (context) => MinuSeadmed()),
                   );
                 } else if (koduindex == 1) {
                   Navigator.push(
                     //Kui vajutatakse Teie seade ikooni peale, siis viiakse Seadmetelisamine lehele
-
                     context,
-
                     MaterialPageRoute(builder: (context) => const KoduLeht()),
                   );
                 }
@@ -352,18 +489,25 @@ keskmineHindArvutaus(Map<int, dynamic> lulitus) {
 }
 
 LulitusMap2Vaartustamine(
-    var hindAVG, Map<int, dynamic> lulitus1, Map<int, dynamic> lulitus2) {
-  for (int key in lulitus1.keys) {
+    double hinnaPiir, Map<int, dynamic> lulitus1, Map<int, dynamic> lulitus2) {
+  lulitus2 = lulitus1;
+  for (int key in lulitus2.keys) {
     double secondValue = lulitus1[key][1];
 
-    if (secondValue <= hindAVG) {
-      lulitus2[key][1] = (hindAVG - secondValue) * (-1);
+    if (secondValue <= hinnaPiir) {
+      lulitus2[key][2] = true;
     } else {
-      lulitus2[key][1] = secondValue - hindAVG;
+      lulitus2[key][2] = false;
+    }
+
+    if (secondValue <= hinnaPiir) {
+      lulitus2[key][1] = (hinnaPiir - secondValue) * (-1);
+    } else {
+      lulitus2[key][1] = secondValue - hinnaPiir;
     }
   }
 
-  print('lylitus 2:');
+  print('lylitus 2 hinnapiir:');
   print('**************************');
 
   lulitus2.forEach((key, value) {
@@ -372,4 +516,26 @@ LulitusMap2Vaartustamine(
 
   print('**************************');
   return lulitus2;
+}
+
+TunniVarviMuutus(int? rowIndex, Map<int, dynamic> lulitusMap2) {
+  print('vana');
+  print(lulitusMap2[rowIndex]);
+  if (lulitusMap2[rowIndex][2] == false) {
+    lulitusMap2[rowIndex][2] = true;
+  } else {
+    lulitusMap2[rowIndex][2] = false;
+  }
+  print('uus');
+  print(lulitusMap2[rowIndex]);
+  return lulitusMap2;
+}
+
+paevaMuutmine(String paevNupp) {
+  if (paevNupp == 'Täna') {
+    paevNupp = 'Homme';
+  } else if (paevNupp == 'Homme') {
+    paevNupp = 'Täna';
+  }
+  return paevNupp;
 }
