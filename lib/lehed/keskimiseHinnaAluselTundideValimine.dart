@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'koduleht.dart';
 import 'hinnaPiiriAluselTunideValimine.dart';
@@ -277,15 +278,23 @@ class _KeskmiseHinnaAluselTundideValimineState
                                   const EdgeInsets.symmetric(horizontal: 8.0),
                               child: TextField(
                                 keyboardType: TextInputType.number,
+                                inputFormatters: [
+                                  FilteringTextInputFormatter.digitsOnly,
+                                ],
                                 onChanged: (value) {
                                   setState(() {
-                                    valitudTunnid = int.tryParse(value) ?? 0;
+                                    int parsedValue = int.tryParse(value) ?? 0;
+                                    if (parsedValue > 24) {
+                                      parsedValue = 24;
+                                    }
+                                    valitudTunnid = parsedValue;
                                     print(valitudTunnid);
                                   });
                                 },
                                 decoration: InputDecoration(
                                   border: InputBorder.none,
                                   isDense: true,
+                                  hintText: '12',
                                 ),
                                 style: GoogleFonts.openSans(
                                   textStyle: TextStyle(

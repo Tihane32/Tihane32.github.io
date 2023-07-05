@@ -30,7 +30,7 @@ class _HinnaPiiriAluselTundideValimineState
   late Map<int, dynamic> lulitusMap;
   int selectedRowIndex = -1;
   late double hindAVG;
-  double hinnaPiir = 50.45;
+  double hinnaPiir = 36.87;
   String paevNupp = 'Täna';
   String selectedPage = 'Hinnapiir';
   double vahe = 10;
@@ -66,30 +66,30 @@ class _HinnaPiiriAluselTundideValimineState
   };
 
   Map<int, dynamic> lulitusMap2 = {
-    0: ['00.00', 0, false],
-    1: ['01.00', 0, false],
-    2: ['02.00', 0, true],
-    3: ['03.00', 0, false],
-    4: ['04.00', 0, true],
-    5: ['05.00', 0, true],
-    6: ['06.00', 0, false],
-    7: ['07.00', 0, true],
-    8: ['08.00', 0, false],
-    9: ['09.00', 0, true],
-    10: ['10.00', 0, false],
-    11: ['11.00', 0, true],
-    12: ['12.00', 0, true],
-    13: ['13.00', 0, true],
-    14: ['14.00', 0, true],
-    15: ['15.00', 0, true],
-    16: ['16.00', 0, true],
-    17: ['17.00', 0, true],
-    18: ['18.00', 0, false],
-    19: ['19.00', 0, true],
-    20: ['20.00', 0, false],
-    21: ['21.00', 0, true],
-    22: ['22.00', 0, false],
-    23: ['23.00', 0, false],
+    0: ['00.00', 0, false, 0],
+    1: ['01.00', 0, false, 0],
+    2: ['02.00', 0, true, 0],
+    3: ['03.00', 0, false, 0],
+    4: ['04.00', 0, true, 0],
+    5: ['05.00', 0, true, 0],
+    6: ['06.00', 0, false, 0],
+    7: ['07.00', 0, true, 0],
+    8: ['08.00', 0, false, 0],
+    9: ['09.00', 0, true, 0],
+    10: ['10.00', 0, false, 0],
+    11: ['11.00', 0, true, 0],
+    12: ['12.00', 0, true, 0],
+    13: ['13.00', 0, true, 0],
+    14: ['14.00', 0, true, 0],
+    15: ['15.00', 0, true, 0],
+    16: ['16.00', 0, true, 0],
+    17: ['17.00', 0, true, 0],
+    18: ['18.00', 0, false, 0],
+    19: ['19.00', 0, true, 0],
+    20: ['20.00', 0, false, 0],
+    21: ['21.00', 0, true, 0],
+    22: ['22.00', 0, false, 0],
+    23: ['23.00', 0, false, 0],
   };
 
   Future norm() async {
@@ -191,7 +191,7 @@ class _HinnaPiiriAluselTundideValimineState
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => LylitusValimisLeht2()),
+                            builder: (context) => LylitusValimisLeht1()),
                       );
                     } else if (selectedPage == 'Minu eelistused') {
                       Navigator.push(
@@ -242,7 +242,7 @@ class _HinnaPiiriAluselTundideValimineState
                       ),
                     ],
                   ),
-                  width: 230,
+                  width: 240,
                   height: 35,
                   child: RichText(
                     text: TextSpan(
@@ -262,7 +262,7 @@ class _HinnaPiiriAluselTundideValimineState
                         WidgetSpan(
                           child: Container(
                             height: 25,
-                            width: 45,
+                            width: 70,
                             decoration: BoxDecoration(
                               border: Border.all(
                                 color: Colors.grey,
@@ -277,13 +277,16 @@ class _HinnaPiiriAluselTundideValimineState
                                 keyboardType: TextInputType.number,
                                 onChanged: (value) {
                                   setState(() {
-                                    valitudTunnid = int.tryParse(value) ?? 0;
-                                    print(valitudTunnid);
+                                    hinnaPiir = double.tryParse(value) ?? 0;
+                                    lulitusMap2 = LulitusMap2Vaartustamine(
+                                        hinnaPiir, lulitusMap, lulitusMap2);
+                                    print(hinnaPiir);
                                   });
                                 },
                                 decoration: InputDecoration(
                                   border: InputBorder.none,
                                   isDense: true,
+                                  hintText: '36.87',
                                 ),
                                 style: GoogleFonts.openSans(
                                   textStyle: TextStyle(
@@ -390,9 +393,7 @@ class _HinnaPiiriAluselTundideValimineState
                           xValueMapper: (data, _) => data[0],
                           yValueMapper: (data, _) => data[1],
                           dataLabelMapper: (data, _) =>
-                              (((data[1] + hinnaPiir) * pow(10.0, 2))
-                                          .round()
-                                          .toDouble() /
+                              ((data[3] * pow(10.0, 2)).round().toDouble() /
                                       pow(10.0, 2))
                                   .toString() +
                               '€/MWh',
@@ -490,9 +491,10 @@ keskmineHindArvutaus(Map<int, dynamic> lulitus) {
 
 LulitusMap2Vaartustamine(
     double hinnaPiir, Map<int, dynamic> lulitus1, Map<int, dynamic> lulitus2) {
-  lulitus2 = lulitus1;
-  for (int key in lulitus2.keys) {
+  for (int key in lulitus1.keys) {
     double secondValue = lulitus1[key][1];
+
+    lulitus2[key][3] = lulitus1[key][1];
 
     if (secondValue <= hinnaPiir) {
       lulitus2[key][2] = true;
