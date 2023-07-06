@@ -119,7 +119,7 @@ class _SeadmeteListState extends State<SeadmeteList> {
                   // Navigate to the home page
                   Navigator.pushReplacement(
                     context,
-                    MaterialPageRoute(builder: (context) => LoginApp()),
+                    MaterialPageRoute(builder: (context) => LoginPage()),
                   );
                 },
               ),
@@ -144,7 +144,7 @@ class _SeadmeteListState extends State<SeadmeteList> {
                   // Navigate to the home page
                   Navigator.pushReplacement(
                     context,
-                    MaterialPageRoute(builder: (context) => LoginApp()),
+                    MaterialPageRoute(builder: (context) => LoginPage()),
                   );
                 },
               ),
