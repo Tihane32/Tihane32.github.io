@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:testuus4/funktsioonid/KeskmineHind.dart';
 import 'package:testuus4/lehed/Login.dart';
 import 'package:testuus4/lehed/abiLeht.dart';
+import 'package:testuus4/lehed/drawer.dart';
 import 'package:testuus4/lehed/kasutajaSeaded.dart';
+import 'package:testuus4/lehed/lisaSeade.dart';
 import 'package:testuus4/lehed/rakenduseSeaded.dart';
 import 'kaksTabelit.dart';
 import 'hinnaGraafik.dart';
@@ -14,6 +16,8 @@ import 'hindJoonise.dart';
 import '../funktsioonid/hetke_hind.dart';
 import 'package:testuus4/main.dart';
 import 'minuPakett.dart';
+import 'package:dropdown_button2/dropdown_button2.dart';
+import 'navigationBar.dart';
 
 class KoduLeht extends StatefulWidget {
   const KoduLeht({Key? key}) : super(key: key);
@@ -40,14 +44,13 @@ class _KoduLehtState extends State<KoduLeht> {
   String selectedOption = 'Nädala';
   List<String> dropdownOptions = ['Nädala', 'Kuu', 'Aasta'];
   double vahe = 20;
-  double sinineKastLaius = double.infinity;
-  double sinineKastKorgus = 45;
+
   Color boxColor = sinineKast;
-  TextStyle font = GoogleFonts.roboto(
+  /*TextStyle font = GoogleFonts.roboto(
       textStyle: const TextStyle(
     fontWeight: FontWeight.w500,
     fontSize: 20,
-  ));
+  ));*/
   TextStyle fontLaadimine() {
     return GoogleFonts.roboto(
       textStyle: TextStyle(
@@ -125,6 +128,7 @@ class _KoduLehtState extends State<KoduLeht> {
     return Scaffold(
         backgroundColor: backround,
         appBar: AppBar(
+          automaticallyImplyLeading: false,
           backgroundColor: appbar,
           title: Text(
             'Shelly App',
@@ -136,8 +140,8 @@ class _KoduLehtState extends State<KoduLeht> {
             Builder(
               builder: (BuildContext context) {
                 return IconButton(
-                  padding: EdgeInsets.only(right: 20),
-                  icon: Icon(
+                  padding: const EdgeInsets.only(right: 20),
+                  icon: const Icon(
                     Icons.menu,
                     size: 30,
                   ),
@@ -149,143 +153,7 @@ class _KoduLehtState extends State<KoduLeht> {
             ),
           ],
         ),
-        endDrawer: Drawer(
-          width: MediaQuery.of(context).size.width * 0.65,
-          child: Container(
-            color: const Color.fromARGB(
-                255, 115, 162, 195), // Set the desired background color
-            child: ListView(
-              padding: EdgeInsets.zero,
-              children: [
-                // Drawer items...
-                ListTile(),
-                ListTile(
-                  leading: Icon(
-                    Icons.login,
-                    size: 32,
-                  ),
-                  title: RichText(
-                    text: TextSpan(
-                      text: 'Shelly Login',
-                      style: GoogleFonts.roboto(
-                        textStyle: const TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w500,
-                          color: Color.fromARGB(255, 255, 255, 255),
-                        ),
-                      ),
-                    ),
-                  ),
-                  onTap: () {
-                    // Navigate to the login page
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => LoginPage()),
-                    );
-                  },
-                ),
-                ListTile(
-                  leading: Icon(
-                    Icons.add_circle_outline_outlined,
-                    size: 32,
-                  ),
-                  title: RichText(
-                    text: TextSpan(
-                      text: 'Lisa seade',
-                      style: GoogleFonts.roboto(
-                        textStyle: const TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w500,
-                          color: Color.fromARGB(255, 255, 255, 255),
-                        ),
-                      ),
-                    ),
-                  ),
-                  onTap: () {
-                    // Navigate to the home page
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(builder: (context) => LoginPage()),
-                    );
-                  },
-                ),
-                ListTile(
-                  leading: Icon(
-                    Icons.manage_accounts,
-                    size: 32,
-                  ),
-                  title: RichText(
-                    text: TextSpan(
-                      text: 'Kasutaja seaded',
-                      style: GoogleFonts.roboto(
-                        textStyle: const TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.w500,
-                          color: Color.fromARGB(255, 255, 255, 255),
-                        ),
-                      ),
-                    ),
-                  ),
-                  onTap: () {
-                    // Navigate to the home page
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(builder: (context) => KasutajaSeaded()),
-                    );
-                  },
-                ),
-                ListTile(
-                  leading: Icon(Icons.phonelink_setup, size: 32),
-                  title: RichText(
-                    text: TextSpan(
-                      text: 'Rakenduse seaded',
-                      style: GoogleFonts.roboto(
-                        textStyle: const TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.w500,
-                          color: Color.fromARGB(255, 255, 255, 255),
-                        ),
-                      ),
-                    ),
-                  ),
-                  onTap: () {
-                    // Navigate to the home page
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => RakenduseSeaded()),
-                    );
-                  },
-                ),
-                ListTile(
-                  leading: Icon(
-                    Icons.help_outline_outlined,
-                    size: 32, // Adjust the size as needed
-                  ),
-                  title: RichText(
-                    text: TextSpan(
-                      text: 'Abi',
-                      style: GoogleFonts.roboto(
-                        textStyle: const TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.w500,
-                          color: Color.fromARGB(255, 255, 255, 255),
-                        ),
-                      ),
-                    ),
-                  ),
-                  onTap: () {
-                    // Navigate to the home page
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(builder: (context) => AbiLeht()),
-                    );
-                  },
-                ),
-              ],
-            ),
-          ),
-        ),
+        endDrawer: drawer(),
         body: Container(
           decoration: const BoxDecoration(
               /*image: DecorationImage(
@@ -437,9 +305,18 @@ class _KoduLehtState extends State<KoduLeht> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           DropdownButton<String>(
+                            underline: Container(
+                              // Replace the default underline
+                              height: 0,
+
+                              color:
+                                  Colors.black, // Customize the underline color
+                            ),
+                            dropdownColor: sinineKast,
+                            borderRadius: borderRadius,
+                            value: selectedOption,
                             icon: const Icon(Icons.expand_circle_down_outlined,
                                 color: Color.fromARGB(255, 0, 0, 0)),
-                            value: selectedOption,
                             onChanged: (String? newValue) async {
                               // Use an async function
                               setState(() {
@@ -518,7 +395,7 @@ class _KoduLehtState extends State<KoduLeht> {
           ),
         ),
         bottomNavigationBar: Container(
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             border: Border(
               top: BorderSide(
                 color: Colors.black,
@@ -527,101 +404,8 @@ class _KoduLehtState extends State<KoduLeht> {
             ),
           ),
           child: SizedBox(
-            height: 70,
-            child: BottomNavigationBar(
-              showSelectedLabels: false,
-              showUnselectedLabels: false,
-              backgroundColor: roheline,
-              fixedColor: Colors.black,
-              unselectedItemColor: Colors.black,
-              //selectedIconTheme: const IconThemeData(size: 35),
-              //unselectedIconTheme: const IconThemeData(size: 35),
-              items: <BottomNavigationBarItem>[
-                BottomNavigationBarItem(
-                  label: '',
-                  icon: Padding(
-                    padding: EdgeInsets.only(bottom: 0.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment
-                          .end, // Adjust the spacing between icons
-                      children: [
-                        Icon(
-                          Icons.person_outlined,
-                          size: 40,
-                        ),
-                        SizedBox(
-                            width: 30), // Adjust the spacing between the icons
-                      ],
-                    ),
-                  ),
-                ),
-                BottomNavigationBarItem(
-                  label: '',
-                  icon: Padding(
-                    padding: EdgeInsets.only(bottom: 0.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment
-                          .center, // Adjust the spacing between icons
-                      children: [
-                        Icon(
-                          Icons.home_outlined,
-                          size: 40,
-                        ),
-                        SizedBox(
-                            width: 0), // Adjust the spacing between the icons
-                      ],
-                    ),
-                  ),
-                ),
-                BottomNavigationBarItem(
-                  label: '',
-                  icon: Padding(
-                    padding: EdgeInsets.only(bottom: 0.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment
-                          .end, // Adjust the spacing between icons
-                      children: [
-                        Transform.rotate(
-                          angle: 90 * 0.0174533, // Convert degrees to radians
-                          child: Icon(
-                            Icons.leaderboard_outlined,
-                            size: 35,
-                          ),
-                        ),
-
-                        SizedBox(
-                            width: 65), // Adjust the spacing between the icons
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-
-              currentIndex: koduindex,
-              onTap: (int kodu) {
-                setState(() {
-                  koduindex = kodu;
-
-                  if (koduindex == 2) {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => NordHinnad()),
-                    );
-                  } else if (koduindex == 0) {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => MinuSeadmed()),
-                    );
-                  }
-                });
-              },
-              selectedLabelStyle: TextStyle(
-                fontFamily: GoogleFonts.roboto().fontFamily,
-              ),
-              unselectedLabelStyle: TextStyle(
-                fontFamily: GoogleFonts.roboto().fontFamily,
-              ),
-            ),
+            height: 72,
+            child: AppNavigationBar(i: 1),
           ),
         ));
   }

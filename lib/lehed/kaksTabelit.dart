@@ -100,20 +100,24 @@ class _SeadmeTabelState extends State<SeadmeTabel> {
                     );
                   },
                 ),
-                ListTile(
-                  leading: Icon(
-                    Icons.add_circle_outline_outlined,
-                    size: 32,
-                  ),
-                  title: RichText(
-                    text: TextSpan(
-                      text: 'Lisa seade',
-                      style: GoogleFonts.roboto(
-                        textStyle: const TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w500,
-                          color: Color.fromARGB(255, 255, 255, 255),
-                        ),
+                onTap: () {
+                  // Navigate to the home page
+                 Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => LoginPage()),
+                    );
+                },
+              ),
+              ListTile(
+                leading: Icon(Icons.add_circle_outline_outlined, size: 32,),
+                title: RichText(
+                  text: TextSpan(
+                    text: 'Lisa seade',
+                    style: GoogleFonts.roboto(
+                      textStyle: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w500,
+                        color: Color.fromARGB(255, 255, 255, 255),
                       ),
                     ),
                   ),
@@ -384,6 +388,7 @@ class _KontoSeadmedState extends State<KontoSeadmed> {
   Future _submitForm() async {
     minuSeadmedK.clear();
     SharedPreferences prefs = await SharedPreferences.getInstance();
+    //await prefs.clear();
     String? storedJsonMap = prefs.getString('seadmed');
     print(storedJsonMap);
     if (storedJsonMap != null) {
