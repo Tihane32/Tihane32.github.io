@@ -1,20 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:testuus4/funktsioonid/KeskmineHind.dart';
+
 import 'package:testuus4/lehed/Login.dart';
 import 'package:testuus4/lehed/abiLeht.dart';
 import 'package:testuus4/lehed/kasutajaSeaded.dart';
-import 'package:testuus4/lehed/koduleht.dart';
+
 import 'package:testuus4/lehed/rakenduseSeaded.dart';
 import 'kaksTabelit.dart';
-import 'hinnaGraafik.dart';
+
 import 'package:google_fonts/google_fonts.dart';
-import 'package:testuus4/funktsioonid/hetketarbimine.dart';
-import 'package:testuus4/funktsioonid/tarbimine.dart';
-import 'package:testuus4/funktsioonid/maksumus.dart';
+
 import 'hindJoonise.dart';
-import '../funktsioonid/hetke_hind.dart';
+
 import 'package:testuus4/main.dart';
-import 'minuPakett.dart';
 
 void main() {
   runApp(SeadmeteListPage());
@@ -43,13 +40,12 @@ class _SeadmeteListState extends State<SeadmeteList> {
 
   final Map<String, String> pictureMap = {
     'Keldri boiler': 'assets/boiler1.jpg',
-    'Picture 2': 'assets/images/picture2.jpg',
-    'Picture 3': 'assets/images/picture3.jpg',
-    'Picture 4': 'assets/images/picture4.jpg',
-    'Picture 5': 'assets/images/picture5.jpg',
-    'Picture 6': 'assets/images/picture6.jpg',
-    'Picture 7': 'assets/images/picture7.jpg',
-    'Picture 8': 'assets/images/picture8.jpg',
+    'Veranda lamp kase': 'assets/verandaLamp1.png',
+    'veranda lamp porgand': 'assets/verandaLamp1.png',
+    'Keldri pump': 'assets/pump1.jpg',
+    'Garaazi pump': 'assets/pump1.jpg',
+    'Main boiler': 'assets/boiler1.jpg',
+    'Sauna boiler': 'assets/boiler1.jpg',
   };
   Set<String> selectedPictures = Set<String>();
 
@@ -232,10 +228,35 @@ class _SeadmeteListState extends State<SeadmeteList> {
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
         ),
-        itemCount: pictureMap.length,
+        itemCount: pictureMap.length + 1,
         itemBuilder: (context, index) {
-          final pictureName = pictureMap.keys.elementAt(index);
-          final pictureAsset = pictureMap.values.elementAt(index);
+          if (index == 0) {
+            return GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => AbiLeht(),
+                  ),
+                );
+              },
+              child: Container(
+                width: double.infinity,
+                height: double.infinity,
+                color: Colors.grey[300],
+                child: Center(
+                  child: Icon(
+                    Icons.add,
+                    size: 48,
+                    color: Colors.black,
+                  ),
+                ),
+              ),
+            );
+          }
+
+          final pictureName = pictureMap.keys.elementAt(index - 1);
+          final pictureAsset = pictureMap.values.elementAt(index - 1);
           final isSelected = selectedPictures.contains(pictureName);
           return GestureDetector(
             onTap: () {
