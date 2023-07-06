@@ -88,10 +88,10 @@ class _SeadmeTabelState extends State<SeadmeTabel> {
                 ),
                 onTap: () {
                   // Navigate to the home page
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (context) => LoginPage()),
-                  );
+                 Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => LoginPage()),
+                    );
                 },
               ),
               ListTile(
@@ -371,6 +371,7 @@ class _KontoSeadmedState extends State<KontoSeadmed> {
   Future _submitForm() async {
     minuSeadmedK.clear();
     SharedPreferences prefs = await SharedPreferences.getInstance();
+    //await prefs.clear();
     String? storedJsonMap = prefs.getString('seadmed');
     print(storedJsonMap);
     if (storedJsonMap != null) {
