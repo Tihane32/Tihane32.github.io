@@ -6,22 +6,11 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:testuus4/lehed/kaksTabelit.dart';
 //import '/SeadmeSeaded.dart';
 import 'package:testuus4/lehed/seadmeSeaded.dart';
+import 'package:testuus4/main.dart';
 import 'energiaGraafik.dart';
 import 'package:testuus4/funktsioonid/seisukord.dart';
+import 'package:testuus4/lehed/koduleht.dart';
 
-class LoginApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Login',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-      ),
-      home: LoginPage(),
-    );
-  }
-}
 
 class LoginPage extends StatefulWidget {
   @override
@@ -204,8 +193,15 @@ class _LoginPageState extends State<LoginPage> {
         key: _scaffoldMessengerKey,
         child: Scaffold(
           appBar: AppBar(
-            title: Text('Login'),
+          title: Text('Login'),
+          backgroundColor: appbar,
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back),
+            onPressed: () {
+              Navigator.pop(context);
+            },
           ),
+        ),
           body: Padding(
             padding: const EdgeInsets.all(16.0),
             child: Form(

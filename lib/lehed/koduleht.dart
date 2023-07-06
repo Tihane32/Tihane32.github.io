@@ -177,10 +177,10 @@ class _KoduLehtState extends State<KoduLeht> {
                     ),
                   ),
                   onTap: () {
-                    // Navigate to the home page
-                    Navigator.pushReplacement(
+                    // Navigate to the login page
+                    Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => LoginApp()),
+                      MaterialPageRoute(builder: (context) => LoginPage()),
                     );
                   },
                 ),
@@ -205,7 +205,7 @@ class _KoduLehtState extends State<KoduLeht> {
                     // Navigate to the home page
                     Navigator.pushReplacement(
                       context,
-                      MaterialPageRoute(builder: (context) => LoginApp()),
+                      MaterialPageRoute(builder: (context) => LoginPage()),
                     );
                   },
                 ),

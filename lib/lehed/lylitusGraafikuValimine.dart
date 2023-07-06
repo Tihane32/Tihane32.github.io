@@ -151,7 +151,7 @@ class _TulpDiagrammState extends State<TulpDiagramm> {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => LoginApp()),
+                  MaterialPageRoute(builder: (context) => LoginPage()),
                 );
               },
               icon: const Icon(Icons.person),
