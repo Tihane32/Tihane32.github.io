@@ -11,7 +11,7 @@ import 'lehed/kaksTabelit.dart';
    Color sinineKast= const Color.fromARGB(255, 143, 209, 238);
    Color backround= const Color.fromARGB(255, 255, 255, 255);
    Color appbar =const Color.fromARGB(255, 115, 162, 195);
-   Color roheline =const Color.fromARGB(255, 143, 238, 152);
+   Color roheline =Color.fromARGB(255, 109, 217, 119);
 void main() {
  
   runApp(MaterialApp(

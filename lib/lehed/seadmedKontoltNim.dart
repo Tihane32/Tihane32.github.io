@@ -67,7 +67,7 @@ class _SeadmeNimiState extends State<SeadmeNimi> {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => LoginApp()),
+                MaterialPageRoute(builder: (context) => LoginPage()),
               );
             },
             child: const Text('Log in'),

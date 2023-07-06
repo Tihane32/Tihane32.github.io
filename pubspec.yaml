@@ -80,6 +80,11 @@ flutter:
     - assets/tuulik5.jpg
     - assets/tuulik8.jpg
     - assets/tuulik7.jpg
+    - assets/boiler1.jpg
+    - assets/pump1.jpg
+    - assets/verandaLamp1.png
+    
+    
     
 
   # An image asset can refer to one or more resolution-specific "variants", see

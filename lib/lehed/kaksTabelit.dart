@@ -90,7 +90,7 @@ class _SeadmeTabelState extends State<SeadmeTabel> {
                   // Navigate to the home page
                   Navigator.pushReplacement(
                     context,
-                    MaterialPageRoute(builder: (context) => LoginApp()),
+                    MaterialPageRoute(builder: (context) => LoginPage()),
                   );
                 },
               ),
@@ -112,7 +112,7 @@ class _SeadmeTabelState extends State<SeadmeTabel> {
                   // Navigate to the home page
                   Navigator.pushReplacement(
                     context,
-                    MaterialPageRoute(builder: (context) => LoginApp()),
+                    MaterialPageRoute(builder: (context) => LoginPage()),
                   );
                 },
               ),
