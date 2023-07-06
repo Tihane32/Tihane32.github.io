@@ -268,7 +268,7 @@ class _SeadmeteListState extends State<SeadmeteList> {
               decoration: BoxDecoration(
                 border: Border.all(
                   color: isSelected ? Colors.green : Colors.red,
-                  width: 4,
+                  width: 6,
                 ),
               ),
               child: Stack(
