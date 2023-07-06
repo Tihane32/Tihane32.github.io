@@ -346,6 +346,7 @@ class _LulitusGraafikState extends State<_LulitusGraafik> {
             }
           });
         }
+        break;
       }
       j++;
     }

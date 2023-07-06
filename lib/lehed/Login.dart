@@ -6,22 +6,11 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:testuus4/lehed/kaksTabelit.dart';
 //import '/SeadmeSeaded.dart';
 import 'package:testuus4/lehed/seadmeSeaded.dart';
+import 'package:testuus4/main.dart';
 import 'energiaGraafik.dart';
 import 'package:testuus4/funktsioonid/seisukord.dart';
+import 'package:testuus4/lehed/koduleht.dart';
 
-class LoginApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Login',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-      ),
-      home: LoginPage(),
-    );
-  }
-}
 
 class LoginPage extends StatefulWidget {
   @override
@@ -107,6 +96,7 @@ class _LoginPageState extends State<LoginPage> {
       Map<String, dynamic> seadmed = json.decode(storedJsonMap);
 
       var j = 0;
+
       for (var device in seadmeteMap.values) {
         var seade = new Map<String, dynamic>();
         seade['Seadme_ID'] = device['id'];
@@ -114,14 +104,22 @@ class _LoginPageState extends State<LoginPage> {
         print(seade['Seadme_ID']);
         print(seadmed['Seade$i']['Seadme_ID']);
         print('lõpp');
-        for (String Seade in seadmed.keys) {
+        for (var test = seadmed.keys.length; j < test;j++) {
+          print('pikkus');
+          print(seadmed['Seade$i']['Seadme_ID']);
+          print(seadmed['Seade$j']['Seadme_ID']);
+          print('pikkus');
+
+          print(j);
+          print(seadmed);
+
           if (seade['Seadme_ID'] == seadmed['Seade$j']['Seadme_ID']) {
-            j++;
             print('break');
+            j++;
             break;
           }
           print('no break $j');
-          j++;
+
           seade['Seadme_nimi'] = device['name'];
           seade['Seadme_pistik'] = device['name'];
           seade['Seadme_generatsioon'] = device['gen'];
@@ -195,8 +193,15 @@ class _LoginPageState extends State<LoginPage> {
         key: _scaffoldMessengerKey,
         child: Scaffold(
           appBar: AppBar(
-            title: Text('Login'),
+          title: Text('Login'),
+          backgroundColor: appbar,
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back),
+            onPressed: () {
+              Navigator.pop(context);
+            },
           ),
+        ),
           body: Padding(
             padding: const EdgeInsets.all(16.0),
             child: Form(

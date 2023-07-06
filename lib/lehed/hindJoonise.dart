@@ -226,7 +226,7 @@ class _TulpDiagrammState extends State<TulpDiagramm> {
 
                   context,
 
-                  MaterialPageRoute(builder: (context) => LoginApp()),
+                  MaterialPageRoute(builder: (context) => LoginPage()),
 
                 );
 
