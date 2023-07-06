@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-
 class AbiLeht extends StatefulWidget {
   @override
   _AbiLehtState createState() => _AbiLehtState();

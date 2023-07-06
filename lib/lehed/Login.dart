@@ -10,7 +10,7 @@ import 'package:testuus4/main.dart';
 import 'energiaGraafik.dart';
 import 'package:testuus4/funktsioonid/seisukord.dart';
 import 'package:testuus4/lehed/koduleht.dart';
-
+import 'package:google_fonts/google_fonts.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -45,7 +45,7 @@ class _LoginPageState extends State<LoginPage> {
       _scaffoldMessengerKey.currentState?.showSnackBar(
         SnackBar(
           backgroundColor: Colors.green,
-          content: Text('Login successful'),
+          content: Text('Sisselogimine õnnestus'),
           duration: Duration(seconds: 3),
         ),
       );
@@ -64,7 +64,7 @@ class _LoginPageState extends State<LoginPage> {
       _scaffoldMessengerKey.currentState?.showSnackBar(
         SnackBar(
           backgroundColor: Colors.red,
-          content: Text('Login unsuccessful'),
+          content: Text('Sisselogimine ebaõnnestus'),
           duration: Duration(seconds: 5),
         ),
       );
@@ -104,7 +104,7 @@ class _LoginPageState extends State<LoginPage> {
         print(seade['Seadme_ID']);
         print(seadmed['Seade$i']['Seadme_ID']);
         print('lõpp');
-        for (var test = seadmed.keys.length; j < test;j++) {
+        for (var test = seadmed.keys.length; j < test; j++) {
           print('pikkus');
           print(seadmed['Seade$i']['Seadme_ID']);
           print(seadmed['Seade$j']['Seadme_ID']);
@@ -193,15 +193,18 @@ class _LoginPageState extends State<LoginPage> {
         key: _scaffoldMessengerKey,
         child: Scaffold(
           appBar: AppBar(
-          title: Text('Login'),
-          backgroundColor: appbar,
-          leading: IconButton(
-            icon: Icon(Icons.arrow_back),
-            onPressed: () {
-              Navigator.pop(context);
-            },
+            title: Text('Login',
+            style: GoogleFonts.roboto(
+              textStyle: const TextStyle(fontSize: 25),
+            ),),
+            backgroundColor: appbar,
+            leading: IconButton(
+              icon: Icon(Icons.arrow_back),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
           ),
-        ),
           body: Padding(
             padding: const EdgeInsets.all(16.0),
             child: Form(
@@ -210,34 +213,53 @@ class _LoginPageState extends State<LoginPage> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   TextFormField(
+                    style: font,
                     controller: kasutajanimi,
-                    decoration: InputDecoration(labelText: 'Username'),
+                    decoration: InputDecoration(labelText: 'Shelly kasutajanimi'),
                     validator: (value) {
                       if (value!.trim().isEmpty) {
-                        return 'Username is required';
+                        return 'Kasutajanime on vaja!';
                       }
                       return null;
                     },
                   ),
                   TextFormField(
+                    style: font,
                     controller: parool,
-                    decoration: InputDecoration(labelText: 'Password'),
+                    decoration: InputDecoration(labelText: 'Shelly salasõna'),
                     obscureText: true,
                     validator: (value) {
                       if (value!.trim().isEmpty) {
-                        return 'Password is required';
+                        return 'Salasõna on vaja!';
                       }
                       return null;
                     },
                   ),
-                  SizedBox(height: 16.0),
-                  ElevatedButton(
-                    onPressed: () {
-                      if (_formKey.currentState!.validate()) {
-                        _submitForm();
-                      }
-                    },
-                    child: Text('Login'),
+                  SizedBox(height: 20.0),
+                  Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(5.0),
+                      border: Border.all(
+    color: const Color.fromARGB(255, 0, 0, 0),
+    width: 2,
+  )
+                    ),
+                    width: sinineKastLaius,
+                    height: sinineKastKorgus,
+                    
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                         backgroundColor: roheline,
+                         
+                         
+                          ),
+                      onPressed: () {
+                        if (_formKey.currentState!.validate()) {
+                          _submitForm();
+                        }
+                      },
+                      child: Text('Login', style: font),
+                    ),
                   ),
                 ],
               ),
