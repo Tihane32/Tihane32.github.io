@@ -41,154 +41,167 @@ class _SeadmeTabelState extends State<SeadmeTabel> {
         backgroundColor: const Color.fromARGB(255, 208, 236, 239),
         //backgroundColor: Color.fromARGB(255, 189, 216, 225), //Taustavärv
         appBar: AppBar(
-        backgroundColor: appbar,
-        title: Text(
-          'Shelly App',
-          style: GoogleFonts.roboto(
-            textStyle: const TextStyle(fontSize: 25),
+          backgroundColor: appbar,
+          title: Text(
+            'Shelly App',
+            style: GoogleFonts.roboto(
+              textStyle: const TextStyle(fontSize: 25),
+            ),
+          ),
+          actions: [
+            Builder(
+              builder: (BuildContext context) {
+                return IconButton(
+                  padding: EdgeInsets.only(right: 20),
+                  icon: Icon(
+                    Icons.menu,
+                    size: 30,
+                  ),
+                  onPressed: () {
+                    Scaffold.of(context).openEndDrawer();
+                  },
+                );
+              },
+            ),
+          ],
+        ),
+        endDrawer: Drawer(
+          width: MediaQuery.of(context).size.width * 0.65,
+          child: Container(
+            color: const Color.fromARGB(
+                255, 115, 162, 195), // Set the desired background color
+            child: ListView(
+              padding: EdgeInsets.zero,
+              children: [
+                // Drawer items...
+                ListTile(),
+                ListTile(
+                  leading: Icon(
+                    Icons.login,
+                    size: 32,
+                  ),
+                  title: RichText(
+                    text: TextSpan(
+                      text: 'Shelly Login',
+                      style: GoogleFonts.roboto(
+                        textStyle: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w500,
+                          color: Color.fromARGB(255, 255, 255, 255),
+                        ),
+                      ),
+                    ),
+                  ),
+                  onTap: () {
+                    // Navigate to the home page
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(builder: (context) => LoginPage()),
+                    );
+                  },
+                ),
+                ListTile(
+                  leading: Icon(
+                    Icons.add_circle_outline_outlined,
+                    size: 32,
+                  ),
+                  title: RichText(
+                    text: TextSpan(
+                      text: 'Lisa seade',
+                      style: GoogleFonts.roboto(
+                        textStyle: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w500,
+                          color: Color.fromARGB(255, 255, 255, 255),
+                        ),
+                      ),
+                    ),
+                  ),
+                  onTap: () {
+                    // Navigate to the home page
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(builder: (context) => LoginPage()),
+                    );
+                  },
+                ),
+                ListTile(
+                  leading: Icon(
+                    Icons.manage_accounts,
+                    size: 32,
+                  ),
+                  title: RichText(
+                    text: TextSpan(
+                      text: 'Kasutaja seaded',
+                      style: GoogleFonts.roboto(
+                        textStyle: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w500,
+                          color: Color.fromARGB(255, 255, 255, 255),
+                        ),
+                      ),
+                    ),
+                  ),
+                  onTap: () {
+                    // Navigate to the home page
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(builder: (context) => KasutajaSeaded()),
+                    );
+                  },
+                ),
+                ListTile(
+                  leading: Icon(Icons.phonelink_setup, size: 32),
+                  title: RichText(
+                    text: TextSpan(
+                      text: 'Rakenduse seaded',
+                      style: GoogleFonts.roboto(
+                        textStyle: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w500,
+                          color: Color.fromARGB(255, 255, 255, 255),
+                        ),
+                      ),
+                    ),
+                  ),
+                  onTap: () {
+                    // Navigate to the home page
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => RakenduseSeaded()),
+                    );
+                  },
+                ),
+                ListTile(
+                  leading: Icon(
+                    Icons.help_outline_outlined,
+                    size: 32, // Adjust the size as needed
+                  ),
+                  title: RichText(
+                    text: TextSpan(
+                      text: 'Abi',
+                      style: GoogleFonts.roboto(
+                        textStyle: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w500,
+                          color: Color.fromARGB(255, 255, 255, 255),
+                        ),
+                      ),
+                    ),
+                  ),
+                  onTap: () {
+                    // Navigate to the home page
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(builder: (context) => AbiLeht()),
+                    );
+                  },
+                ),
+              ],
+            ),
           ),
         ),
-        actions: [
-          Builder(
-            builder: (BuildContext context) {
-              return IconButton(
-                padding: EdgeInsets.only(right: 20),
-                icon: Icon(Icons.menu,size: 30,),
-                onPressed: () {
-                  Scaffold.of(context).openEndDrawer();
-                },
-              );
-            },
-          ),
-        ],
-      ),
-      endDrawer: Drawer(
-        width: MediaQuery.of(context).size.width * 0.65,
-        child: Container(
-          color: const Color.fromARGB(
-              255, 115, 162, 195), // Set the desired background color
-          child: ListView(
-            padding: EdgeInsets.zero,
-            children: [
-              // Drawer items...
-              ListTile(),
-              ListTile(
-                leading: Icon(Icons.login, size: 32,),
-                title: RichText(
-                  text: TextSpan(
-                    text: 'Shelly Login',
-                    style: GoogleFonts.roboto(
-                      textStyle: const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w500,
-                        color: Color.fromARGB(255, 255, 255, 255),
-                      ),
-                    ),
-                  ),
-                ),
-                onTap: () {
-                  // Navigate to the home page
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (context) => LoginPage()),
-                  );
-                },
-              ),
-              ListTile(
-                leading: Icon(Icons.add_circle_outline_outlined, size: 32,),
-                title: RichText(
-                  text: TextSpan(
-                    text: 'Lisa seade',
-                    style: GoogleFonts.roboto(
-                      textStyle: const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w500,
-                        color: Color.fromARGB(255, 255, 255, 255),
-                      ),
-                    ),
-                  ),
-                ),
-                onTap: () {
-                  // Navigate to the home page
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (context) => LoginPage()),
-                  );
-                },
-              ),
-              ListTile(
-                leading: Icon(Icons.manage_accounts, size: 32,),
-                title: RichText(
-                  text: TextSpan(
-                    text: 'Kasutaja seaded',
-                    style: GoogleFonts.roboto(
-                      textStyle: const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w500,
-                        color: Color.fromARGB(255, 255, 255, 255),
-                      ),
-                    ),
-                  ),
-                ),
-                onTap: () {
-                  // Navigate to the home page
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (context) => KasutajaSeaded()),
-                  );
-                },
-              ),
-              ListTile(
-                leading: Icon(Icons.phonelink_setup, size: 32),
-                title: RichText(
-                  text: TextSpan(
-                    text: 'Rakenduse seaded',
-                    style: GoogleFonts.roboto(
-                      textStyle: const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w500,
-                        color: Color.fromARGB(255, 255, 255, 255),
-                      ),
-                    ),
-                  ),
-                ),
-                onTap: () {
-                  // Navigate to the home page
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (context) => RakenduseSeaded()),
-                  );
-                },
-              ),
-              ListTile(
-                leading: Icon(
-                  Icons.help_outline_outlined,
-                  size: 32, // Adjust the size as needed
-                ),
-                title: RichText(
-                  text: TextSpan(
-                    text: 'Abi',
-                    style: GoogleFonts.roboto(
-                      textStyle: const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w500,
-                        color: Color.fromARGB(255, 255, 255, 255),
-                      ),
-                    ),
-                  ),
-                ),
-                onTap: () {
-                  // Navigate to the home page
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (context) => AbiLeht()),
-                  );
-                },
-              ),
-            ],
-          ),
-        ),
-      ),
         body: Column(
           children: [
             const Padding(
