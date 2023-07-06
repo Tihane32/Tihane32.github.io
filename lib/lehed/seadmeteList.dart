@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:testuus4/lehed/Login.dart';
+import 'package:testuus4/lehed/SeadmeGraafikLeht.dart';
 import 'package:testuus4/lehed/abiLeht.dart';
 import 'package:testuus4/lehed/kasutajaSeaded.dart';
 
@@ -260,7 +261,14 @@ class _SeadmeteListState extends State<SeadmeteList> {
           final isSelected = selectedPictures.contains(pictureName);
           return GestureDetector(
             onTap: () {
-              toggleSelection(pictureName);
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => SeadmeGraafikuLeht(
+                    seadmeNimi: pictureMap.keys.elementAt(index - 1),
+                  ),
+                ),
+              );
             },
             child: Container(
               width: double.infinity,
@@ -268,7 +276,7 @@ class _SeadmeteListState extends State<SeadmeteList> {
               decoration: BoxDecoration(
                 border: Border.all(
                   color: isSelected ? Colors.green : Colors.red,
-                  width: 6,
+                  width: 8,
                 ),
               ),
               child: Stack(
@@ -284,11 +292,31 @@ class _SeadmeteListState extends State<SeadmeteList> {
                     ),
                   ),
                   Positioned(
+                    top: 8,
+                    right: 8,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.blue.withOpacity(0.6),
+                        shape: BoxShape.circle,
+                      ),
+                      child: IconButton(
+                        iconSize: 60,
+                        icon: Icon(Icons.power_settings_new),
+                        color: Colors.white,
+                        onPressed: () {
+                          toggleSelection(pictureName);
+                          // Handle the IconButton click
+                          print('Power clicked for $pictureName');
+                        },
+                      ),
+                    ),
+                  ),
+                  Positioned(
                     bottom: 0,
                     left: 0,
                     right: 0,
                     child: Container(
-                      color: Colors.blue.withOpacity(0.8),
+                      color: Colors.blue.withOpacity(0.6),
                       padding: EdgeInsets.symmetric(vertical: 8),
                       child: Center(
                         child: Text(
