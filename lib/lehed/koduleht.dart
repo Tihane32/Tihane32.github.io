@@ -16,7 +16,7 @@ import 'hindJoonise.dart';
 import '../funktsioonid/hetke_hind.dart';
 import 'package:testuus4/main.dart';
 import 'minuPakett.dart';
-import 'package:dropdown_button2/dropdown_button2.dart';
+
 import 'navigationBar.dart';
 
 class KoduLeht extends StatefulWidget {
