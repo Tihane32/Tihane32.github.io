@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:testuus4/lehed/Login.dart';
 import 'package:testuus4/lehed/SeadmeGraafikLeht.dart';
 import 'package:testuus4/lehed/abiLeht.dart';
+import 'package:testuus4/lehed/drawer.dart';
 import 'package:testuus4/lehed/kasutajaSeaded.dart';
 
 import 'package:testuus4/lehed/rakenduseSeaded.dart';
@@ -11,12 +12,10 @@ import 'kaksTabelit.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'hindJoonise.dart';
-
+import 'navigationBar.dart';
 import 'package:testuus4/main.dart';
 
-void main() {
-  runApp(SeadmeteListPage());
-}
+
 
 class SeadmeteListPage extends StatelessWidget {
   @override
@@ -89,142 +88,7 @@ class _SeadmeteListState extends State<SeadmeteList> {
           ),
         ],
       ),
-      endDrawer: Drawer(
-        width: MediaQuery.of(context).size.width * 0.65,
-        child: Container(
-          color: const Color.fromARGB(
-              255, 115, 162, 195), // Set the desired background color
-          child: ListView(
-            padding: EdgeInsets.zero,
-            children: [
-              // Drawer items...
-              ListTile(),
-              ListTile(
-                leading: Icon(
-                  Icons.login,
-                  size: 32,
-                ),
-                title: RichText(
-                  text: TextSpan(
-                    text: 'Shelly Login',
-                    style: GoogleFonts.roboto(
-                      textStyle: const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w500,
-                        color: Color.fromARGB(255, 255, 255, 255),
-                      ),
-                    ),
-                  ),
-                ),
-                onTap: () {
-                  // Navigate to the home page
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (context) => LoginPage()),
-                  );
-                },
-              ),
-              ListTile(
-                leading: Icon(
-                  Icons.add_circle_outline_outlined,
-                  size: 32,
-                ),
-                title: RichText(
-                  text: TextSpan(
-                    text: 'Lisa seade',
-                    style: GoogleFonts.roboto(
-                      textStyle: const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w500,
-                        color: Color.fromARGB(255, 255, 255, 255),
-                      ),
-                    ),
-                  ),
-                ),
-                onTap: () {
-                  // Navigate to the home page
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (context) => LoginPage()),
-                  );
-                },
-              ),
-              ListTile(
-                leading: Icon(
-                  Icons.manage_accounts,
-                  size: 32,
-                ),
-                title: RichText(
-                  text: TextSpan(
-                    text: 'Kasutaja seaded',
-                    style: GoogleFonts.roboto(
-                      textStyle: const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w500,
-                        color: Color.fromARGB(255, 255, 255, 255),
-                      ),
-                    ),
-                  ),
-                ),
-                onTap: () {
-                  // Navigate to the home page
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (context) => KasutajaSeaded()),
-                  );
-                },
-              ),
-              ListTile(
-                leading: Icon(Icons.phonelink_setup, size: 32),
-                title: RichText(
-                  text: TextSpan(
-                    text: 'Rakenduse seaded',
-                    style: GoogleFonts.roboto(
-                      textStyle: const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w500,
-                        color: Color.fromARGB(255, 255, 255, 255),
-                      ),
-                    ),
-                  ),
-                ),
-                onTap: () {
-                  // Navigate to the home page
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (context) => RakenduseSeaded()),
-                  );
-                },
-              ),
-              ListTile(
-                leading: Icon(
-                  Icons.help_outline_outlined,
-                  size: 32, // Adjust the size as needed
-                ),
-                title: RichText(
-                  text: TextSpan(
-                    text: 'Abi',
-                    style: GoogleFonts.roboto(
-                      textStyle: const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w500,
-                        color: Color.fromARGB(255, 255, 255, 255),
-                      ),
-                    ),
-                  ),
-                ),
-                onTap: () {
-                  // Navigate to the home page
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (context) => AbiLeht()),
-                  );
-                },
-              ),
-            ],
-          ),
-        ),
-      ),
+      endDrawer: drawer(),
       body: GridView.builder(
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
@@ -336,51 +200,19 @@ class _SeadmeteListState extends State<SeadmeteList> {
           );
         },
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: const Color.fromARGB(255, 115, 162, 195),
-        fixedColor: roheline,
-        unselectedItemColor: Colors.white,
-        selectedIconTheme: const IconThemeData(size: 30),
-        unselectedIconTheme: const IconThemeData(size: 26),
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            label: 'Seadmed',
-            icon: Icon(Icons.electrical_services_rounded),
+      bottomNavigationBar: Container(
+          decoration: const BoxDecoration(
+            border: Border(
+              top: BorderSide(
+                color: Colors.black,
+                width: 2.0,
+              ),
+            ),
           ),
-          BottomNavigationBarItem(
-            label: 'Kodu',
-            icon: Icon(Icons.home),
+          child: SizedBox(
+            height: 72,
+            child: AppNavigationBar(i: 0),
           ),
-          BottomNavigationBarItem(
-            label: 'Hinnagraafik',
-            icon: Icon(Icons.table_rows_outlined),
-          ),
-        ],
-        currentIndex: koduindex,
-        onTap: (int kodu) {
-          setState(() {
-            koduindex = kodu;
-
-            if (koduindex == 2) {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => NordHinnad()),
-              );
-            } else if (koduindex == 0) {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => MinuSeadmed()),
-              );
-            }
-          });
-        },
-        selectedLabelStyle: TextStyle(
-          fontFamily: GoogleFonts.roboto().fontFamily,
-        ),
-        unselectedLabelStyle: TextStyle(
-          fontFamily: GoogleFonts.roboto().fontFamily,
-        ),
-      ),
-    );
+        ));
   }
 }

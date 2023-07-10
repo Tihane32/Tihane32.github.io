@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:testuus4/lehed/koduleht.dart';
+import 'package:testuus4/lehed/seadmeteList.dart';
 import 'package:testuus4/main.dart';
 import 'kaksTabelit.dart';
 import 'hindJoonise.dart';
@@ -67,7 +68,7 @@ class AppNavigationBar extends StatelessWidget {
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => MinuSeadmed()),
+                MaterialPageRoute(builder: (context) => SeadmeteList()),
               );
             },
             child: Padding(
