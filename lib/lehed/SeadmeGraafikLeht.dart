@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:testuus4/lehed/AbiLeht.dart';
+import 'package:testuus4/lehed/SeadmeTarbimisLeht.dart';
 import 'seadmeteList.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -195,12 +197,13 @@ class _SeadmeGraafikuLehtState extends State<SeadmeGraafikuLeht> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => LylitusValimisLeht2()),
+                            builder: (context) =>
+                                SeadmeTarbimineLeht(seadmeNimi: seadmeNimi)),
                       );
                     } else if (selectedPage == 'Üldinfo') {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => KoduLeht()),
+                        MaterialPageRoute(builder: (context) => AbiLeht()),
                       );
                     }
                   },
