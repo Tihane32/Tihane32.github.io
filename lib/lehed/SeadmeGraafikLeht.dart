@@ -30,6 +30,44 @@ class _SeadmeGraafikuLehtState extends State<SeadmeGraafikuLeht> {
   String selectedPage = 'Lülitus graafik';
   double vahe = 10;
 
+  final Map<String, List<String>> SeadmeteMap = {
+    'Keldri boiler': [
+      'assets/boiler1.jpg',
+      'description 1',
+      'on',
+    ],
+    'Veranda lamp kase': [
+      'assets/verandaLamp1.png',
+      'description 2',
+      'ofline',
+    ],
+    'veranda lamp porgand': [
+      'assets/verandaLamp1.png',
+      'description 3',
+      'on',
+    ],
+    'Keldri pump': [
+      'assets/pump1.jpg',
+      'description 4',
+      'on',
+    ],
+    'Garaazi pump': [
+      'assets/pump1.jpg',
+      'description 5',
+      'offline',
+    ],
+    'Main boiler': [
+      'assets/boiler1.jpg',
+      'description 6',
+      'on',
+    ],
+    'Sauna boiler': [
+      'assets/boiler1.jpg',
+      'description 7',
+      'off',
+    ],
+  };
+
   Map<int, dynamic> keskHind = {
     0: ['0', 0, 'Keskmine Hind'],
     1: ['0.0', 0, ''],
@@ -211,23 +249,33 @@ class _SeadmeGraafikuLehtState extends State<SeadmeGraafikuLeht> {
                   ),
                   width: 200,
                   height: 35,
-                  child: RichText(
-                    text: TextSpan(
-                      style: TextStyle(
-                        fontSize: 18,
-                        color: Colors.black,
+                  child: Row(
+                    children: [
+                      IconButton(
+                        onPressed: () {
+                          // Add your onPressed logic here
+                        },
+                        icon: Icon(Icons.add), // Replace with your desired icon
                       ),
-                      children: [
-                        TextSpan(
-                          text: '  Seadme olek:  ',
-                          style: GoogleFonts.openSans(
-                            textStyle: TextStyle(
-                              fontWeight: FontWeight.w500,
-                            ),
+                      RichText(
+                        text: TextSpan(
+                          style: TextStyle(
+                            fontSize: 18,
+                            color: Colors.black,
                           ),
+                          children: [
+                            TextSpan(
+                              text: '  Seadme olek:  ',
+                              style: GoogleFonts.openSans(
+                                textStyle: TextStyle(
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ),
               ),
