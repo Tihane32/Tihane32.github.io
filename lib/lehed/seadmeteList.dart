@@ -15,8 +15,6 @@ import 'hindJoonise.dart';
 import 'navigationBar.dart';
 import 'package:testuus4/main.dart';
 
-
-
 class SeadmeteListPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -62,145 +60,145 @@ class _SeadmeteListState extends State<SeadmeteList> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: backround,
-      appBar: AppBar(
-        backgroundColor: appbar,
-        title: Text(
-          'Shelly App',
-          style: GoogleFonts.roboto(
-            textStyle: const TextStyle(fontSize: 25),
+        backgroundColor: backround,
+        appBar: AppBar(
+          backgroundColor: appbar,
+          title: Text(
+            'Shelly App',
+            style: GoogleFonts.roboto(
+              textStyle: const TextStyle(fontSize: 25),
+            ),
           ),
+          actions: [
+            Builder(
+              builder: (BuildContext context) {
+                return IconButton(
+                  padding: EdgeInsets.only(right: 20),
+                  icon: Icon(
+                    Icons.menu,
+                    size: 30,
+                  ),
+                  onPressed: () {
+                    Scaffold.of(context).openEndDrawer();
+                  },
+                );
+              },
+            ),
+          ],
         ),
-        actions: [
-          Builder(
-            builder: (BuildContext context) {
-              return IconButton(
-                padding: EdgeInsets.only(right: 20),
-                icon: Icon(
-                  Icons.menu,
-                  size: 30,
-                ),
-                onPressed: () {
-                  Scaffold.of(context).openEndDrawer();
+        endDrawer: drawer(),
+        body: GridView.builder(
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+          ),
+          itemCount: pictureMap.length + 1,
+          itemBuilder: (context, index) {
+            if (index == 0) {
+              return GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => AbiLeht(),
+                    ),
+                  );
                 },
+                child: Container(
+                  width: double.infinity,
+                  height: double.infinity,
+                  color: Colors.grey[300],
+                  child: Center(
+                    child: Icon(
+                      Icons.add,
+                      size: 48,
+                      color: Colors.black,
+                    ),
+                  ),
+                ),
               );
-            },
-          ),
-        ],
-      ),
-      endDrawer: drawer(),
-      body: GridView.builder(
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-        ),
-        itemCount: pictureMap.length + 1,
-        itemBuilder: (context, index) {
-          if (index == 0) {
+            }
+
+            final pictureName = pictureMap.keys.elementAt(index - 1);
+            final pictureAsset = pictureMap.values.elementAt(index - 1);
+            final isSelected = selectedPictures.contains(pictureName);
             return GestureDetector(
               onTap: () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => AbiLeht(),
+                    builder: (context) => SeadmeGraafikuLeht(
+                      seadmeNimi: pictureMap.keys.elementAt(index - 1),
+                    ),
                   ),
                 );
               },
               child: Container(
                 width: double.infinity,
                 height: double.infinity,
-                color: Colors.grey[300],
-                child: Center(
-                  child: Icon(
-                    Icons.add,
-                    size: 48,
-                    color: Colors.black,
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    color: isSelected ? Colors.green : Colors.red,
+                    width: 8,
                   ),
                 ),
-              ),
-            );
-          }
-
-          final pictureName = pictureMap.keys.elementAt(index - 1);
-          final pictureAsset = pictureMap.values.elementAt(index - 1);
-          final isSelected = selectedPictures.contains(pictureName);
-          return GestureDetector(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => SeadmeGraafikuLeht(
-                    seadmeNimi: pictureMap.keys.elementAt(index - 1),
-                  ),
-                ),
-              );
-            },
-            child: Container(
-              width: double.infinity,
-              height: double.infinity,
-              decoration: BoxDecoration(
-                border: Border.all(
-                  color: isSelected ? Colors.green : Colors.red,
-                  width: 8,
-                ),
-              ),
-              child: Stack(
-                children: [
-                  AspectRatio(
-                    aspectRatio: 1,
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(8),
-                      child: Image.asset(
-                        pictureAsset,
-                        fit: BoxFit.cover,
+                child: Stack(
+                  children: [
+                    AspectRatio(
+                      aspectRatio: 1,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(8),
+                        child: Image.asset(
+                          pictureAsset,
+                          fit: BoxFit.cover,
+                        ),
                       ),
                     ),
-                  ),
-                  Positioned(
-                    top: 8,
-                    right: 8,
-                    child: Container(
-                      decoration: BoxDecoration(
+                    Positioned(
+                      top: 8,
+                      right: 8,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.blue.withOpacity(0.6),
+                          shape: BoxShape.circle,
+                        ),
+                        child: IconButton(
+                          iconSize: 60,
+                          icon: Icon(Icons.power_settings_new),
+                          color: Colors.white,
+                          onPressed: () {
+                            toggleSelection(pictureName);
+                            // Handle the IconButton click
+                            print('Power clicked for $pictureName');
+                          },
+                        ),
+                      ),
+                    ),
+                    Positioned(
+                      bottom: 0,
+                      left: 0,
+                      right: 0,
+                      child: Container(
                         color: Colors.blue.withOpacity(0.6),
-                        shape: BoxShape.circle,
-                      ),
-                      child: IconButton(
-                        iconSize: 60,
-                        icon: Icon(Icons.power_settings_new),
-                        color: Colors.white,
-                        onPressed: () {
-                          toggleSelection(pictureName);
-                          // Handle the IconButton click
-                          print('Power clicked for $pictureName');
-                        },
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    bottom: 0,
-                    left: 0,
-                    right: 0,
-                    child: Container(
-                      color: Colors.blue.withOpacity(0.6),
-                      padding: EdgeInsets.symmetric(vertical: 8),
-                      child: Center(
-                        child: Text(
-                          pictureName,
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
+                        padding: EdgeInsets.symmetric(vertical: 8),
+                        child: Center(
+                          child: Text(
+                            pictureName,
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-          );
-        },
-      ),
-      bottomNavigationBar: Container(
+            );
+          },
+        ),
+        bottomNavigationBar: Container(
           decoration: const BoxDecoration(
             border: Border(
               top: BorderSide(
