@@ -36,14 +36,42 @@ class _SeadmeteListState extends State<SeadmeteList> {
 
   int koduindex = 1;
 
-  final Map<String, String> pictureMap = {
-    'Keldri boiler': 'assets/boiler1.jpg',
-    'Veranda lamp kase': 'assets/verandaLamp1.png',
-    'veranda lamp porgand': 'assets/verandaLamp1.png',
-    'Keldri pump': 'assets/pump1.jpg',
-    'Garaazi pump': 'assets/pump1.jpg',
-    'Main boiler': 'assets/boiler1.jpg',
-    'Sauna boiler': 'assets/boiler1.jpg',
+  Map<String, List<String>> SeadmeteMap = {
+    'Keldri boiler': [
+      'assets/boiler1.jpg',
+      '123456',
+      'off',
+    ],
+    'Veranda lamp': [
+      'assets/verandaLamp1.png',
+      '123456',
+      'offline',
+    ],
+    'veranda lamp': [
+      'assets/verandaLamp1.png',
+      '123456',
+      'on',
+    ],
+    'Keldri pump': [
+      'assets/pump1.jpg',
+      '123456',
+      'on',
+    ],
+    'Garaazi pump': [
+      'assets/pump1.jpg',
+      '123456',
+      'offline',
+    ],
+    'Main boiler': [
+      'assets/boiler1.jpg',
+      '123456',
+      'on',
+    ],
+    'Sauna boiler': [
+      'assets/boiler1.jpg',
+      '123456',
+      'off',
+    ],
   };
   Set<String> selectedPictures = Set<String>();
 
@@ -91,7 +119,7 @@ class _SeadmeteListState extends State<SeadmeteList> {
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2,
           ),
-          itemCount: pictureMap.length + 1,
+          itemCount: SeadmeteMap.length + 1,
           itemBuilder: (context, index) {
             if (index == 0) {
               return GestureDetector(
@@ -118,16 +146,16 @@ class _SeadmeteListState extends State<SeadmeteList> {
               );
             }
 
-            final pictureName = pictureMap.keys.elementAt(index - 1);
-            final pictureAsset = pictureMap.values.elementAt(index - 1);
-            final isSelected = selectedPictures.contains(pictureName);
+            final seade = SeadmeteMap.keys.elementAt(index - 1);
+            final pilt = SaaSeadmePilt(SeadmeteMap, seade);
+            final staatus = SaaSeadmeolek(SeadmeteMap, seade);
             return GestureDetector(
               onTap: () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
                     builder: (context) => SeadmeGraafikuLeht(
-                      seadmeNimi: pictureMap.keys.elementAt(index - 1),
+                      seadmeNimi: SeadmeteMap.keys.elementAt(index - 1),
                     ),
                   ),
                 );
@@ -137,7 +165,11 @@ class _SeadmeteListState extends State<SeadmeteList> {
                 height: double.infinity,
                 decoration: BoxDecoration(
                   border: Border.all(
-                    color: isSelected ? Colors.green : Colors.red,
+                    color: staatus == 'on'
+                        ? Colors.green
+                        : staatus == 'off'
+                            ? Colors.red
+                            : Colors.grey,
                     width: 8,
                   ),
                 ),
@@ -146,9 +178,8 @@ class _SeadmeteListState extends State<SeadmeteList> {
                     AspectRatio(
                       aspectRatio: 1,
                       child: ClipRRect(
-                        borderRadius: BorderRadius.circular(8),
                         child: Image.asset(
-                          pictureAsset,
+                          pilt,
                           fit: BoxFit.cover,
                         ),
                       ),
@@ -166,10 +197,24 @@ class _SeadmeteListState extends State<SeadmeteList> {
                           icon: Icon(Icons.power_settings_new),
                           color: Colors.white,
                           onPressed: () {
-                            toggleSelection(pictureName);
-                            // Handle the IconButton click
-                            print('Power clicked for $pictureName');
+                            setState(() {
+                              SeadmeteMap = muudaSeadmeOlek(SeadmeteMap, seade);
+                            });
                           },
+                        ),
+                      ),
+                    ),
+                    Positioned(
+                      top: 8,
+                      left: 8,
+                      child: Visibility(
+                        visible: staatus == 'offline',
+                        child: Container(
+                          child: Icon(
+                            Icons.wifi_off_outlined,
+                            size: 60,
+                            color: Colors.amber,
+                          ),
                         ),
                       ),
                     ),
@@ -182,7 +227,7 @@ class _SeadmeteListState extends State<SeadmeteList> {
                         padding: EdgeInsets.symmetric(vertical: 8),
                         child: Center(
                           child: Text(
-                            pictureName,
+                            seade,
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 18,
@@ -213,4 +258,39 @@ class _SeadmeteListState extends State<SeadmeteList> {
           ),
         ));
   }
+}
+
+SaaSeadmePilt(Map<String, List<String>> SeadmeteMap, SeadmeNimi) {
+  List<String>? deviceInfo = SeadmeteMap[SeadmeNimi];
+  if (deviceInfo != null) {
+    String pilt = deviceInfo[0];
+    return pilt;
+  }
+  return null; // Device key not found in the map
+}
+
+SaaSeadmeolek(Map<String, List<String>> SeadmeteMap, SeadmeNimi) {
+  List<String>? deviceInfo = SeadmeteMap[SeadmeNimi];
+  if (deviceInfo != null) {
+    String olek = deviceInfo[2];
+    return olek;
+  }
+  return null; // Device key not found in the map
+}
+
+muudaSeadmeOlek(Map<String, List<String>> SeadmeteMap, SeadmeNimi) {
+  List<String>? deviceInfo = SeadmeteMap[SeadmeNimi];
+  if (deviceInfo != null) {
+    String status = deviceInfo[2];
+
+    if (status == 'on') {
+      deviceInfo[2] = 'off';
+      SeadmeteMap[SeadmeNimi] = deviceInfo;
+    } else if (status == 'off') {
+      deviceInfo[2] = 'on';
+      SeadmeteMap[SeadmeNimi] = deviceInfo;
+    }
+    return SeadmeteMap;
+  }
+  return SeadmeteMap; // Device key not found in the map
 }

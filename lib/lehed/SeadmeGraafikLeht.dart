@@ -30,40 +30,40 @@ class _SeadmeGraafikuLehtState extends State<SeadmeGraafikuLeht> {
   String selectedPage = 'Lülitus graafik';
   double vahe = 10;
 
-  final Map<String, List<String>> SeadmeteMap = {
+  Map<String, List<String>> SeadmeteMap = {
     'Keldri boiler': [
       'assets/boiler1.jpg',
-      'description 1',
-      'on',
+      '123456',
+      'off',
     ],
-    'Veranda lamp kase': [
+    'Veranda lamp': [
       'assets/verandaLamp1.png',
-      'description 2',
-      'ofline',
+      '123456',
+      'offline',
     ],
-    'veranda lamp porgand': [
+    'veranda lamp': [
       'assets/verandaLamp1.png',
-      'description 3',
+      '123456',
       'on',
     ],
     'Keldri pump': [
       'assets/pump1.jpg',
-      'description 4',
+      '123456',
       'on',
     ],
     'Garaazi pump': [
       'assets/pump1.jpg',
-      'description 5',
+      '123456',
       'offline',
     ],
     'Main boiler': [
       'assets/boiler1.jpg',
-      'description 6',
+      '123456',
       'on',
     ],
     'Sauna boiler': [
       'assets/boiler1.jpg',
-      'description 7',
+      '123456',
       'off',
     ],
   };
@@ -227,57 +227,81 @@ class _SeadmeGraafikuLehtState extends State<SeadmeGraafikuLeht> {
           child: Column(
             children: [
               SizedBox(height: vahe),
-              Align(
-                alignment: Alignment.centerLeft,
-                child: Container(
-                  alignment: Alignment.centerLeft,
-                  decoration: BoxDecoration(
-                    color: Color.fromARGB(255, 237, 202, 146),
-                    borderRadius: BorderRadius.circular(14.0),
-                    border: Border.all(
-                      color: Color.fromARGB(30, 0, 0, 0),
-                      width: 1,
-                    ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.2),
-                        spreadRadius: 2,
-                        blurRadius: 5,
-                        offset: Offset(3, 3),
-                      ),
-                    ],
-                  ),
-                  width: 200,
-                  height: 35,
-                  child: Row(
-                    children: [
-                      IconButton(
-                        onPressed: () {
-                          // Add your onPressed logic here
-                        },
-                        icon: Icon(Icons.add), // Replace with your desired icon
-                      ),
-                      RichText(
-                        text: TextSpan(
-                          style: TextStyle(
-                            fontSize: 18,
-                            color: Colors.black,
-                          ),
-                          children: [
-                            TextSpan(
-                              text: '  Seadme olek:  ',
-                              style: GoogleFonts.openSans(
-                                textStyle: TextStyle(
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                            ),
-                          ],
+              Row(
+                children: [
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Container(
+                      alignment: Alignment.centerLeft,
+                      decoration: BoxDecoration(
+                        color: Color.fromARGB(255, 237, 202, 146),
+                        borderRadius: BorderRadius.circular(14.0),
+                        border: Border.all(
+                          color: Color.fromARGB(30, 0, 0, 0),
+                          width: 1,
                         ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.2),
+                            spreadRadius: 2,
+                            blurRadius: 5,
+                            offset: Offset(3, 3),
+                          ),
+                        ],
                       ),
-                    ],
+                      width: 150,
+                      height: 35,
+                      child: Row(
+                        children: [
+                          RichText(
+                            text: TextSpan(
+                              style: TextStyle(
+                                fontSize: 18,
+                                color: Colors.black,
+                              ),
+                              children: [
+                                TextSpan(
+                                  text: '  Seadme olek:  ',
+                                  style: GoogleFonts.openSans(
+                                    textStyle: TextStyle(
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
-                ),
+                  Container(
+                    decoration: BoxDecoration(
+                      color: Colors.blue.withOpacity(0.6),
+                      shape: BoxShape.circle,
+                    ),
+                    child: IconButton(
+                        iconSize: 40,
+                        onPressed: () {
+                          setState(() {
+                            SeadmeteMap =
+                                muudaSeadmeOlek(SeadmeteMap, seadmeNimi);
+                          });
+                        },
+                        icon:
+                            loeSeadmeOlek(SeadmeteMap, seadmeNimi) == 'offline'
+                                ? Icon(Icons.wifi_off_outlined)
+                                : loeSeadmeOlek(SeadmeteMap, seadmeNimi) == 'on'
+                                    ? Icon(
+                                        Icons.power_settings_new_rounded,
+                                        color: Color.fromARGB(255, 77, 152, 81),
+                                      )
+                                    : Icon(
+                                        Icons.power_settings_new_rounded,
+                                        color: Colors.red,
+                                      )),
+                  ),
+                ],
               ),
               SizedBox(height: vahe),
               Align(
@@ -517,4 +541,30 @@ paevaMuutmine(String paevNupp) {
     paevNupp = 'Täna';
   }
   return paevNupp;
+}
+
+loeSeadmeOlek(Map<String, List<String>> SeadmeteMap, SeadmeNimi) {
+  List<String>? deviceInfo = SeadmeteMap[SeadmeNimi];
+  if (deviceInfo != null) {
+    String status = deviceInfo[2];
+    return status;
+  }
+  return null; // Device key not found in the map
+}
+
+muudaSeadmeOlek(Map<String, List<String>> SeadmeteMap, SeadmeNimi) {
+  List<String>? deviceInfo = SeadmeteMap[SeadmeNimi];
+  if (deviceInfo != null) {
+    String status = deviceInfo[2];
+
+    if (status == 'on') {
+      deviceInfo[2] = 'off';
+      SeadmeteMap[SeadmeNimi] = deviceInfo;
+    } else if (status == 'off') {
+      deviceInfo[2] = 'on';
+      SeadmeteMap[SeadmeNimi] = deviceInfo;
+    }
+    return SeadmeteMap;
+  }
+  return SeadmeteMap; // Device key not found in the map
 }
