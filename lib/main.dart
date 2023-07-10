@@ -8,6 +8,7 @@ import 'lehed/koduleht.dart';
 import 'lehed/kaksTabelit.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'lehed/seadmeteList.dart';
 //Maini käivitamine, home on koduleht.
 
    Color sinineKast= const Color.fromARGB(255, 143, 209, 238);
@@ -26,6 +27,6 @@ void main() {
  
   runApp(MaterialApp(
     theme: ThemeData(brightness: Brightness.light),
-    home: MinuSeadmed(), //Alustab appi kodulehest
+    home: SeadmeteList(), //Alustab appi kodulehest
   ));
 }
