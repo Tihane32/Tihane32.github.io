@@ -23,6 +23,11 @@ import 'lehed/seadmeteList.dart';
   ));
   double sinineKastLaius = double.infinity;
   double sinineKastKorgus = 45;
+  BorderRadius borderRadius = BorderRadius.circular(5.0);
+   Border border = Border.all(
+    color: const Color.fromARGB(255, 0, 0, 0),
+    width: 2,
+  );
 void main() {
  
   runApp(MaterialApp(

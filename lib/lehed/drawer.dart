@@ -80,10 +80,10 @@ class drawer extends StatelessWidget {
               ),
               title: RichText(
                 text: TextSpan(
-                  text: 'Kasutaja seaded',
+                  text: 'Seaded',
                   style: GoogleFonts.roboto(
                     textStyle: const TextStyle(
-                      fontSize: 20,
+                      fontSize: 18,
                       fontWeight: FontWeight.w500,
                       color: Color.fromARGB(255, 255, 255, 255),
                     ),
@@ -92,34 +92,13 @@ class drawer extends StatelessWidget {
               ),
               onTap: () {
                 // Navigate to the home page
-                Navigator.pushReplacement(
+                Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => KasutajaSeaded()),
                 );
               },
             ),
-            ListTile(
-              leading: const Icon(Icons.phonelink_setup, size: 32),
-              title: RichText(
-                text: TextSpan(
-                  text: 'Rakenduse seaded',
-                  style: GoogleFonts.roboto(
-                    textStyle: const TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.w500,
-                      color: Color.fromARGB(255, 255, 255, 255),
-                    ),
-                  ),
-                ),
-              ),
-              onTap: () {
-                // Navigate to the home page
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (context) => RakenduseSeaded()),
-                );
-              },
-            ),
+            
             ListTile(
               leading: const Icon(
                 Icons.help_outline_outlined,
@@ -130,7 +109,7 @@ class drawer extends StatelessWidget {
                   text: 'Abi',
                   style: GoogleFonts.roboto(
                     textStyle: const TextStyle(
-                      fontSize: 20,
+                      fontSize: 18,
                       fontWeight: FontWeight.w500,
                       color: Color.fromARGB(255, 255, 255, 255),
                     ),
@@ -139,7 +118,7 @@ class drawer extends StatelessWidget {
               ),
               onTap: () {
                 // Navigate to the home page
-                Navigator.pushReplacement(
+                Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => AbiLeht()),
                 );
