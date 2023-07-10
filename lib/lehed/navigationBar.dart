@@ -19,7 +19,7 @@ class AppNavigationBar extends StatelessWidget {
       backgroundColor: roheline,
       fixedColor: Colors.black,
       unselectedItemColor: Colors.black,
-      selectedIconTheme: const IconThemeData(color: Colors.blue),
+      selectedIconTheme: const IconThemeData(color: Color.fromARGB(255, 0, 0, 0)),
       unselectedIconTheme: const IconThemeData(color: Colors.black),
       items: <BottomNavigationBarItem>[
         BottomNavigationBarItem(
@@ -48,6 +48,7 @@ class AppNavigationBar extends StatelessWidget {
                        child: Icon(
                     Icons.person_outlined,
                     size: 40,
+                    color: Colors.blue,
                   ),
                     )else Icon(
                     Icons.person_outlined,
@@ -85,6 +86,7 @@ class AppNavigationBar extends StatelessWidget {
                        child: Icon(
                     Icons.home_outlined,
                     size: 40,
+                    color: Colors.blue
                   ),
                     )else Icon(
                     Icons.home_outlined,
@@ -126,6 +128,7 @@ class AppNavigationBar extends StatelessWidget {
                        child: Icon(
                     Icons.leaderboard_outlined,
                     size: 35,
+                    color: Colors.blue
                   ),
                     )else Icon(
                     Icons.leaderboard_outlined,

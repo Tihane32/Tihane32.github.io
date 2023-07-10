@@ -13,6 +13,8 @@ import 'package:testuus4/main.dart';
 import 'kasutajaSeaded.dart';
 import 'rakenduseSeaded.dart';
 import 'AbiLeht.dart';
+import 'drawer.dart';
+import 'navigationBar.dart';
 
 class MinuSeadmed extends StatelessWidget {
   @override
@@ -65,147 +67,7 @@ class _SeadmeTabelState extends State<SeadmeTabel> {
             ),
           ],
         ),
-        endDrawer: Drawer(
-          width: MediaQuery.of(context).size.width * 0.65,
-          child: Container(
-            color: const Color.fromARGB(
-                255, 115, 162, 195), // Set the desired background color
-            child: ListView(
-              padding: EdgeInsets.zero,
-              children: [
-                // Drawer items...
-                ListTile(),
-                ListTile(
-                  leading: Icon(
-                    Icons.login,
-                    size: 32,
-                  ),
-                  title: RichText(
-                    text: TextSpan(
-                      text: 'Shelly Login',
-                      style: GoogleFonts.roboto(
-                        textStyle: const TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w500,
-                          color: Color.fromARGB(255, 255, 255, 255),
-                        ),
-                      ),
-                    ),
-                  ),
-                  onTap: () {
-                    // Navigate to the home page
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(builder: (context) => LoginPage()),
-                    );
-                  },
-                ),
-                onTap: () {
-                  // Navigate to the home page
-                 Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => LoginPage()),
-                    );
-                },
-              ),
-              ListTile(
-                leading: Icon(Icons.add_circle_outline_outlined, size: 32,),
-                title: RichText(
-                  text: TextSpan(
-                    text: 'Lisa seade',
-                    style: GoogleFonts.roboto(
-                      textStyle: const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w500,
-                        color: Color.fromARGB(255, 255, 255, 255),
-                      ),
-                    ),
-                  ),
-                  onTap: () {
-                    // Navigate to the home page
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(builder: (context) => LoginPage()),
-                    );
-                  },
-                ),
-                ListTile(
-                  leading: Icon(
-                    Icons.manage_accounts,
-                    size: 32,
-                  ),
-                  title: RichText(
-                    text: TextSpan(
-                      text: 'Kasutaja seaded',
-                      style: GoogleFonts.roboto(
-                        textStyle: const TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w500,
-                          color: Color.fromARGB(255, 255, 255, 255),
-                        ),
-                      ),
-                    ),
-                  ),
-                  onTap: () {
-                    // Navigate to the home page
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(builder: (context) => KasutajaSeaded()),
-                    );
-                  },
-                ),
-                ListTile(
-                  leading: Icon(Icons.phonelink_setup, size: 32),
-                  title: RichText(
-                    text: TextSpan(
-                      text: 'Rakenduse seaded',
-                      style: GoogleFonts.roboto(
-                        textStyle: const TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w500,
-                          color: Color.fromARGB(255, 255, 255, 255),
-                        ),
-                      ),
-                    ),
-                  ),
-                  onTap: () {
-                    // Navigate to the home page
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => RakenduseSeaded()),
-                    );
-                  },
-                ),
-                ListTile(
-                  leading: Icon(
-                    Icons.help_outline_outlined,
-                    size: 32, // Adjust the size as needed
-                  ),
-                  title: RichText(
-                    text: TextSpan(
-                      text: 'Abi',
-                      style: GoogleFonts.roboto(
-                        textStyle: const TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w500,
-                          color: Color.fromARGB(255, 255, 255, 255),
-                        ),
-                      ),
-                    ),
-                  ),
-                  onTap: () {
-                    // Navigate to the home page
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(builder: (context) => AbiLeht()),
-                    );
-                  },
-                ),
-              ],
-            ),
-          ),
-        ),
+        endDrawer: drawer(),
         body: Column(
           children: [
             const Padding(
@@ -245,57 +107,20 @@ class _SeadmeTabelState extends State<SeadmeTabel> {
             ),*/
           ],
         ),
-        bottomNavigationBar: BottomNavigationBar(
-          backgroundColor: const Color.fromARGB(255, 115, 162, 195),
-          fixedColor: const Color.fromARGB(255, 157, 214, 171),
-          unselectedItemColor: Colors.white,
-          selectedIconTheme: const IconThemeData(size: 30),
-          unselectedIconTheme: const IconThemeData(size: 26),
-          items: const <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
-              label: 'Seadmed',
-              icon: Icon(Icons.electrical_services_rounded),
+        bottomNavigationBar: Container(
+          decoration: const BoxDecoration(
+            border: Border(
+              top: BorderSide(
+                color: Colors.black,
+                width: 2.0,
+              ),
             ),
-            BottomNavigationBarItem(
-              label: 'Kodu',
-              icon: Icon(Icons.home),
-            ),
-            BottomNavigationBarItem(
-              label: 'Hinnagraafik',
-              icon: Icon(Icons.table_rows_outlined),
-            ),
-          ],
-          currentIndex: koduindex,
-          onTap: (int kodu) {
-            setState(() {
-              koduindex = kodu;
-
-              if (koduindex == 2) {
-                Navigator.push(
-                  //Kui vajutatakse Hinnagraafiku ikooni peale, siis viiakse Hinnagraafiku lehele
-
-                  context,
-
-                  MaterialPageRoute(builder: (context) => NordHinnad()),
-                );
-              } else if (koduindex == 1) {
-                Navigator.push(
-                  //Kui vajutatakse Teie seade ikooni peale, siis viiakse Seadmetelisamine lehele
-
-                  context,
-
-                  MaterialPageRoute(builder: (context) => const KoduLeht()),
-                );
-              }
-            });
-          },
-          selectedLabelStyle: TextStyle(
-            fontFamily: GoogleFonts.openSans().fontFamily,
           ),
-          unselectedLabelStyle: TextStyle(
-            fontFamily: GoogleFonts.openSans().fontFamily,
+          child: SizedBox(
+            height: 72,
+            child: AppNavigationBar(i: 0),
           ),
-        ),
+        )
       ),
     );
   }
