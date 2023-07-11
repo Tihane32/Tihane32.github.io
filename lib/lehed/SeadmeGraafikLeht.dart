@@ -160,30 +160,7 @@ class _SeadmeGraafikuLehtState extends State<SeadmeGraafikuLeht> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(seadmeNimi),
-              Expanded(
-                  child: Center(
-                child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: Colors.blue,
-                  ),
-                  child: TextButton(
-                    onPressed: () {
-                      setState(() {
-                        paevNupp = paevaMuutmine(paevNupp);
-                      });
-                    },
-                    style: ButtonStyle(
-                      foregroundColor:
-                          MaterialStateProperty.all<Color>(Colors.white),
-                      textStyle: MaterialStateProperty.all<TextStyle>(
-                        TextStyle(fontSize: 20),
-                      ),
-                    ),
-                    child: Text(paevNupp),
-                  ),
-                ),
-              ))
+              Spacer(),
             ],
           ),
           actions: [
@@ -236,6 +213,65 @@ class _SeadmeGraafikuLehtState extends State<SeadmeGraafikuLeht> {
         body: SingleChildScrollView(
           child: Column(
             children: [
+              SizedBox(height: vahe),
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Container(
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    color: boxColor,
+                    borderRadius: borderRadius,
+                    border: border,
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.2),
+                        spreadRadius: 2,
+                        blurRadius: 5,
+                        offset: const Offset(3, 3),
+                      ),
+                    ],
+                  ),
+                  width: sinineKastLaius,
+                  height: sinineKastKorgus,
+                  child: Row(
+                    children: [
+                      RichText(
+                        text: TextSpan(
+                          style: const TextStyle(
+                            fontSize: 20,
+                            color: Colors.black,
+                          ),
+                          children: [
+                            TextSpan(text: '  Kuvatav päev: ', style: font),
+                          ],
+                        ),
+                      ),
+                      SizedBox(width: 8),
+                      Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          color: Colors.blue,
+                        ),
+                        child: TextButton(
+                          onPressed: () {
+                            setState(() {
+                              paevNupp = paevaMuutmine(paevNupp);
+                            });
+                          },
+                          style: ButtonStyle(
+                            foregroundColor:
+                                MaterialStateProperty.all<Color>(Colors.white),
+                            textStyle: MaterialStateProperty.all<TextStyle>(
+                              TextStyle(fontSize: 20),
+                            ),
+                          ),
+                          child: Text(paevNupp),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
               SizedBox(height: vahe),
               Align(
                 alignment: Alignment.centerLeft,
