@@ -61,12 +61,6 @@ class _KoduLehtState extends State<KoduLeht> {
     );
   }
 
-  BorderRadius borderRadius = BorderRadius.circular(5.0);
-
-  Border border = Border.all(
-    color: const Color.fromARGB(255, 0, 0, 0),
-    width: 2,
-  );
 //Lehe avamisel toob hetke hinna ja tundide arvu
 
   @override
@@ -105,9 +99,10 @@ class _KoduLehtState extends State<KoduLeht> {
     double price = ajutine1[0]['price'];
     print('price: $price');
     price = price / 1000.0;
-
+    price = price * 1.2;
     num n = num.parse(price.toStringAsFixed(4));
     price = n as double;
+
     print('price: $price');
     setState(() {
       hetkeHind = price.toString();
@@ -193,7 +188,7 @@ class _KoduLehtState extends State<KoduLeht> {
                             color: Colors.black,
                           ),
                           children: [
-                            TextSpan(text: '  Hetke hind: ', style: font),
+                            TextSpan(text: 'Hetke hind: ', style: font),
                             TextSpan(
                                 text: '$hetkeHind €/kWh',
                                 style: fontLaadimine()),

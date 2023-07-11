@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:testuus4/lehed/AbiLeht.dart';
+import 'package:testuus4/lehed/SeadmeTarbimisLeht.dart';
 import 'seadmeteList.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -8,6 +10,7 @@ import 'hinnaPiiriAluselTunideValimine.dart';
 import 'dart:math';
 import 'package:testuus4/lehed/kaksTabelit.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
+import 'package:testuus4/main.dart';
 
 class SeadmeGraafikuLeht extends StatefulWidget {
   const SeadmeGraafikuLeht({Key? key, required this.seadmeNimi})
@@ -29,6 +32,50 @@ class _SeadmeGraafikuLehtState extends State<SeadmeGraafikuLeht> {
   String paevNupp = 'Täna';
   String selectedPage = 'Lülitus graafik';
   double vahe = 10;
+  Color boxColor = sinineKast;
+  BorderRadius borderRadius = BorderRadius.circular(5.0);
+  Border border = Border.all(
+    color: const Color.fromARGB(255, 0, 0, 0),
+    width: 2,
+  );
+
+  Map<String, List<String>> SeadmeteMap = {
+    'Keldri boiler': [
+      'assets/boiler1.jpg',
+      '123456',
+      'off',
+    ],
+    'Veranda lamp': [
+      'assets/verandaLamp1.png',
+      '123456',
+      'offline',
+    ],
+    'veranda lamp': [
+      'assets/verandaLamp1.png',
+      '123456',
+      'on',
+    ],
+    'Keldri pump': [
+      'assets/pump1.jpg',
+      '123456',
+      'on',
+    ],
+    'Garaazi pump': [
+      'assets/pump1.jpg',
+      '123456',
+      'offline',
+    ],
+    'Main boiler': [
+      'assets/boiler1.jpg',
+      '123456',
+      'on',
+    ],
+    'Sauna boiler': [
+      'assets/boiler1.jpg',
+      '123456',
+      'off',
+    ],
+  };
 
   Map<int, dynamic> keskHind = {
     0: ['0', 0, 'Keskmine Hind'],
@@ -157,12 +204,13 @@ class _SeadmeGraafikuLehtState extends State<SeadmeGraafikuLeht> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => LylitusValimisLeht2()),
+                            builder: (context) =>
+                                SeadmeTarbimineLeht(seadmeNimi: seadmeNimi)),
                       );
                     } else if (selectedPage == 'Üldinfo') {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => KoduLeht()),
+                        MaterialPageRoute(builder: (context) => AbiLeht()),
                       );
                     }
                   },
@@ -192,42 +240,68 @@ class _SeadmeGraafikuLehtState extends State<SeadmeGraafikuLeht> {
               Align(
                 alignment: Alignment.centerLeft,
                 child: Container(
-                  alignment: Alignment.centerLeft,
+                  alignment: Alignment.center,
                   decoration: BoxDecoration(
-                    color: Color.fromARGB(255, 237, 202, 146),
-                    borderRadius: BorderRadius.circular(14.0),
-                    border: Border.all(
-                      color: Color.fromARGB(30, 0, 0, 0),
-                      width: 1,
-                    ),
+                    color: boxColor,
+                    borderRadius: borderRadius,
+                    border: border,
                     boxShadow: [
                       BoxShadow(
                         color: Colors.black.withOpacity(0.2),
                         spreadRadius: 2,
                         blurRadius: 5,
-                        offset: Offset(3, 3),
+                        offset: const Offset(3, 3),
                       ),
                     ],
                   ),
-                  width: 200,
-                  height: 35,
-                  child: RichText(
-                    text: TextSpan(
-                      style: TextStyle(
-                        fontSize: 18,
-                        color: Colors.black,
-                      ),
-                      children: [
-                        TextSpan(
-                          text: '  Seadme olek:  ',
-                          style: GoogleFonts.openSans(
-                            textStyle: TextStyle(
-                              fontWeight: FontWeight.w500,
-                            ),
+                  width: sinineKastLaius,
+                  height: sinineKastKorgus + 20,
+                  child: Row(
+                    children: [
+                      RichText(
+                        text: TextSpan(
+                          style: const TextStyle(
+                            fontSize: 20,
+                            color: Colors.black,
                           ),
+                          children: [
+                            TextSpan(
+                                text: '  Seadme staatus:    ', style: font),
+                            TextSpan(
+                              text: SeadmeteMap[seadmeNimi]![2],
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
+                      ),
+                      Spacer(),
+                      Container(
+                        decoration: BoxDecoration(
+                          color: Colors.blue.withOpacity(0.6),
+                          shape: BoxShape.circle,
+                        ),
+                        child: IconButton(
+                          iconSize: 40,
+                          onPressed: () {
+                            setState(() {
+                              SeadmeteMap =
+                                  muudaSeadmeOlek(SeadmeteMap, seadmeNimi);
+                            });
+                          },
+                          icon: loeSeadmeOlek(SeadmeteMap, seadmeNimi) ==
+                                  'offline'
+                              ? Icon(Icons.wifi_off_outlined)
+                              : loeSeadmeOlek(SeadmeteMap, seadmeNimi) == 'on'
+                                  ? Icon(
+                                      Icons.power_settings_new_rounded,
+                                      color: Color.fromARGB(255, 77, 152, 81),
+                                    )
+                                  : Icon(
+                                      Icons.power_settings_new_rounded,
+                                      color: Colors.red,
+                                    ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ),
@@ -235,40 +309,30 @@ class _SeadmeGraafikuLehtState extends State<SeadmeGraafikuLeht> {
               Align(
                 alignment: Alignment.centerLeft,
                 child: Container(
-                  alignment: Alignment.centerLeft,
+                  alignment: Alignment.center,
                   decoration: BoxDecoration(
-                    color: Color.fromARGB(255, 237, 202, 146),
-                    borderRadius: BorderRadius.circular(14.0),
-                    border: Border.all(
-                      color: Color.fromARGB(30, 0, 0, 0),
-                      width: 1,
-                    ),
+                    color: boxColor,
+                    borderRadius: borderRadius,
+                    border: border,
                     boxShadow: [
                       BoxShadow(
                         color: Colors.black.withOpacity(0.2),
                         spreadRadius: 2,
                         blurRadius: 5,
-                        offset: Offset(3, 3),
+                        offset: const Offset(3, 3),
                       ),
                     ],
                   ),
-                  width: 300,
-                  height: 35,
+                  width: sinineKastLaius,
+                  height: sinineKastKorgus,
                   child: RichText(
                     text: TextSpan(
-                      style: TextStyle(
-                        fontSize: 18,
+                      style: const TextStyle(
+                        fontSize: 20,
                         color: Colors.black,
                       ),
                       children: [
-                        TextSpan(
-                          text: '  keskmine Hind: ',
-                          style: GoogleFonts.openSans(
-                            textStyle: TextStyle(
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ),
+                        TextSpan(text: '  Päeva keskmine: ', style: font),
                         TextSpan(
                           text: ((hindAVG * pow(10.0, 2)).round().toDouble() /
                                       pow(10.0, 2))
@@ -282,6 +346,39 @@ class _SeadmeGraafikuLehtState extends State<SeadmeGraafikuLeht> {
                             ),
                           ),
                         ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(height: vahe), // A
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Container(
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    color: boxColor,
+                    borderRadius: borderRadius,
+                    border: border,
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.2),
+                        spreadRadius: 2,
+                        blurRadius: 5,
+                        offset: const Offset(3, 3),
+                      ),
+                    ],
+                  ),
+                  width: sinineKastLaius,
+                  height: sinineKastKorgus,
+                  child: RichText(
+                    text: TextSpan(
+                      style: const TextStyle(
+                        fontSize: 20,
+                        color: Colors.black,
+                      ),
+                      children: [
+                        TextSpan(text: '  Lülitus Graafik ', style: font),
                       ],
                     ),
                   ),
@@ -469,4 +566,30 @@ paevaMuutmine(String paevNupp) {
     paevNupp = 'Täna';
   }
   return paevNupp;
+}
+
+loeSeadmeOlek(Map<String, List<String>> SeadmeteMap, SeadmeNimi) {
+  List<String>? deviceInfo = SeadmeteMap[SeadmeNimi];
+  if (deviceInfo != null) {
+    String status = deviceInfo[2];
+    return status;
+  }
+  return null; // Device key not found in the map
+}
+
+muudaSeadmeOlek(Map<String, List<String>> SeadmeteMap, SeadmeNimi) {
+  List<String>? deviceInfo = SeadmeteMap[SeadmeNimi];
+  if (deviceInfo != null) {
+    String status = deviceInfo[2];
+
+    if (status == 'on') {
+      deviceInfo[2] = 'off';
+      SeadmeteMap[SeadmeNimi] = deviceInfo;
+    } else if (status == 'off') {
+      deviceInfo[2] = 'on';
+      SeadmeteMap[SeadmeNimi] = deviceInfo;
+    }
+    return SeadmeteMap;
+  }
+  return SeadmeteMap; // Device key not found in the map
 }

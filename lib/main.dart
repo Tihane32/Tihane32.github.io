@@ -8,6 +8,7 @@ import 'lehed/koduleht.dart';
 import 'lehed/kaksTabelit.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'lehed/seadmeteList.dart';
 //Maini käivitamine, home on koduleht.
 
    Color sinineKast= const Color.fromARGB(255, 143, 209, 238);
@@ -22,10 +23,15 @@ import 'package:shared_preferences/shared_preferences.dart';
   ));
   double sinineKastLaius = double.infinity;
   double sinineKastKorgus = 45;
+  BorderRadius borderRadius = BorderRadius.circular(5.0);
+   Border border = Border.all(
+    color: const Color.fromARGB(255, 0, 0, 0),
+    width: 2,
+  );
 void main() {
  
   runApp(MaterialApp(
     theme: ThemeData(brightness: Brightness.light),
-    home: MinuSeadmed(), //Alustab appi kodulehest
+    home: SeadmeteList(), //Alustab appi kodulehest
   ));
 }

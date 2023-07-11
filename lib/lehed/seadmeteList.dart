@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:testuus4/lehed/Login.dart';
 import 'package:testuus4/lehed/SeadmeGraafikLeht.dart';
 import 'package:testuus4/lehed/abiLeht.dart';
+import 'package:testuus4/lehed/drawer.dart';
 import 'package:testuus4/lehed/kasutajaSeaded.dart';
 
 import 'package:testuus4/lehed/rakenduseSeaded.dart';
@@ -11,12 +12,8 @@ import 'kaksTabelit.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'hindJoonise.dart';
-
+import 'navigationBar.dart';
 import 'package:testuus4/main.dart';
-
-void main() {
-  runApp(SeadmeteListPage());
-}
 
 class SeadmeteListPage extends StatelessWidget {
   @override
@@ -39,14 +36,42 @@ class _SeadmeteListState extends State<SeadmeteList> {
 
   int koduindex = 1;
 
-  final Map<String, String> pictureMap = {
-    'Keldri boiler': 'assets/boiler1.jpg',
-    'Veranda lamp kase': 'assets/verandaLamp1.png',
-    'veranda lamp porgand': 'assets/verandaLamp1.png',
-    'Keldri pump': 'assets/pump1.jpg',
-    'Garaazi pump': 'assets/pump1.jpg',
-    'Main boiler': 'assets/boiler1.jpg',
-    'Sauna boiler': 'assets/boiler1.jpg',
+  Map<String, List<String>> SeadmeteMap = {
+    'Keldri boiler': [
+      'assets/boiler1.jpg',
+      '123456',
+      'off',
+    ],
+    'Veranda lamp': [
+      'assets/verandaLamp1.png',
+      '123456',
+      'offline',
+    ],
+    'veranda lamp': [
+      'assets/verandaLamp1.png',
+      '123456',
+      'on',
+    ],
+    'Keldri pump': [
+      'assets/pump1.jpg',
+      '123456',
+      'on',
+    ],
+    'Garaazi pump': [
+      'assets/pump1.jpg',
+      '123456',
+      'offline',
+    ],
+    'Main boiler': [
+      'assets/boiler1.jpg',
+      '123456',
+      'on',
+    ],
+    'Sauna boiler': [
+      'assets/boiler1.jpg',
+      '123456',
+      'off',
+    ],
   };
   Set<String> selectedPictures = Set<String>();
 
@@ -63,324 +88,209 @@ class _SeadmeteListState extends State<SeadmeteList> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: backround,
-      appBar: AppBar(
-        backgroundColor: appbar,
-        title: Text(
-          'Shelly App',
-          style: GoogleFonts.roboto(
-            textStyle: const TextStyle(fontSize: 25),
+        backgroundColor: backround,
+        appBar: AppBar(
+          backgroundColor: appbar,
+          title: Text(
+            'Shelly App',
+            style: GoogleFonts.roboto(
+              textStyle: const TextStyle(fontSize: 25),
+            ),
           ),
+          actions: [
+            Builder(
+              builder: (BuildContext context) {
+                return IconButton(
+                  padding: EdgeInsets.only(right: 20),
+                  icon: Icon(
+                    Icons.menu,
+                    size: 30,
+                  ),
+                  onPressed: () {
+                    Scaffold.of(context).openEndDrawer();
+                  },
+                );
+              },
+            ),
+          ],
         ),
-        actions: [
-          Builder(
-            builder: (BuildContext context) {
-              return IconButton(
-                padding: EdgeInsets.only(right: 20),
-                icon: Icon(
-                  Icons.menu,
-                  size: 30,
-                ),
-                onPressed: () {
-                  Scaffold.of(context).openEndDrawer();
+        endDrawer: drawer(),
+        body: GridView.builder(
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+          ),
+          itemCount: SeadmeteMap.length + 1,
+          itemBuilder: (context, index) {
+            if (index == 0) {
+              return GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => AbiLeht(),
+                    ),
+                  );
                 },
+                child: Container(
+                  width: double.infinity,
+                  height: double.infinity,
+                  color: Colors.grey[300],
+                  child: Center(
+                    child: Icon(
+                      Icons.add,
+                      size: 48,
+                      color: Colors.black,
+                    ),
+                  ),
+                ),
               );
-            },
-          ),
-        ],
-      ),
-      endDrawer: Drawer(
-        width: MediaQuery.of(context).size.width * 0.65,
-        child: Container(
-          color: const Color.fromARGB(
-              255, 115, 162, 195), // Set the desired background color
-          child: ListView(
-            padding: EdgeInsets.zero,
-            children: [
-              // Drawer items...
-              ListTile(),
-              ListTile(
-                leading: Icon(
-                  Icons.login,
-                  size: 32,
-                ),
-                title: RichText(
-                  text: TextSpan(
-                    text: 'Shelly Login',
-                    style: GoogleFonts.roboto(
-                      textStyle: const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w500,
-                        color: Color.fromARGB(255, 255, 255, 255),
-                      ),
-                    ),
-                  ),
-                ),
-                onTap: () {
-                  // Navigate to the home page
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (context) => LoginPage()),
-                  );
-                },
-              ),
-              ListTile(
-                leading: Icon(
-                  Icons.add_circle_outline_outlined,
-                  size: 32,
-                ),
-                title: RichText(
-                  text: TextSpan(
-                    text: 'Lisa seade',
-                    style: GoogleFonts.roboto(
-                      textStyle: const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w500,
-                        color: Color.fromARGB(255, 255, 255, 255),
-                      ),
-                    ),
-                  ),
-                ),
-                onTap: () {
-                  // Navigate to the home page
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (context) => LoginPage()),
-                  );
-                },
-              ),
-              ListTile(
-                leading: Icon(
-                  Icons.manage_accounts,
-                  size: 32,
-                ),
-                title: RichText(
-                  text: TextSpan(
-                    text: 'Kasutaja seaded',
-                    style: GoogleFonts.roboto(
-                      textStyle: const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w500,
-                        color: Color.fromARGB(255, 255, 255, 255),
-                      ),
-                    ),
-                  ),
-                ),
-                onTap: () {
-                  // Navigate to the home page
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (context) => KasutajaSeaded()),
-                  );
-                },
-              ),
-              ListTile(
-                leading: Icon(Icons.phonelink_setup, size: 32),
-                title: RichText(
-                  text: TextSpan(
-                    text: 'Rakenduse seaded',
-                    style: GoogleFonts.roboto(
-                      textStyle: const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w500,
-                        color: Color.fromARGB(255, 255, 255, 255),
-                      ),
-                    ),
-                  ),
-                ),
-                onTap: () {
-                  // Navigate to the home page
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (context) => RakenduseSeaded()),
-                  );
-                },
-              ),
-              ListTile(
-                leading: Icon(
-                  Icons.help_outline_outlined,
-                  size: 32, // Adjust the size as needed
-                ),
-                title: RichText(
-                  text: TextSpan(
-                    text: 'Abi',
-                    style: GoogleFonts.roboto(
-                      textStyle: const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w500,
-                        color: Color.fromARGB(255, 255, 255, 255),
-                      ),
-                    ),
-                  ),
-                ),
-                onTap: () {
-                  // Navigate to the home page
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (context) => AbiLeht()),
-                  );
-                },
-              ),
-            ],
-          ),
-        ),
-      ),
-      body: GridView.builder(
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-        ),
-        itemCount: pictureMap.length + 1,
-        itemBuilder: (context, index) {
-          if (index == 0) {
+            }
+
+            final seade = SeadmeteMap.keys.elementAt(index - 1);
+            final pilt = SaaSeadmePilt(SeadmeteMap, seade);
+            final staatus = SaaSeadmeolek(SeadmeteMap, seade);
             return GestureDetector(
               onTap: () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => AbiLeht(),
+                    builder: (context) => SeadmeGraafikuLeht(
+                      seadmeNimi: SeadmeteMap.keys.elementAt(index - 1),
+                    ),
                   ),
                 );
               },
               child: Container(
                 width: double.infinity,
                 height: double.infinity,
-                color: Colors.grey[300],
-                child: Center(
-                  child: Icon(
-                    Icons.add,
-                    size: 48,
-                    color: Colors.black,
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    color: staatus == 'on'
+                        ? Colors.green
+                        : staatus == 'off'
+                            ? Colors.red
+                            : Colors.grey,
+                    width: 8,
                   ),
                 ),
-              ),
-            );
-          }
-
-          final pictureName = pictureMap.keys.elementAt(index - 1);
-          final pictureAsset = pictureMap.values.elementAt(index - 1);
-          final isSelected = selectedPictures.contains(pictureName);
-          return GestureDetector(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => SeadmeGraafikuLeht(
-                    seadmeNimi: pictureMap.keys.elementAt(index - 1),
-                  ),
-                ),
-              );
-            },
-            child: Container(
-              width: double.infinity,
-              height: double.infinity,
-              decoration: BoxDecoration(
-                border: Border.all(
-                  color: isSelected ? Colors.green : Colors.red,
-                  width: 8,
-                ),
-              ),
-              child: Stack(
-                children: [
-                  AspectRatio(
-                    aspectRatio: 1,
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(8),
-                      child: Image.asset(
-                        pictureAsset,
-                        fit: BoxFit.cover,
+                child: Stack(
+                  children: [
+                    AspectRatio(
+                      aspectRatio: 1,
+                      child: ClipRRect(
+                        child: Image.asset(
+                          pilt,
+                          fit: BoxFit.cover,
+                        ),
                       ),
                     ),
-                  ),
-                  Positioned(
-                    top: 8,
-                    right: 8,
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: Colors.blue.withOpacity(0.6),
-                        shape: BoxShape.circle,
-                      ),
-                      child: IconButton(
-                        iconSize: 60,
-                        icon: Icon(Icons.power_settings_new),
-                        color: Colors.white,
-                        onPressed: () {
-                          toggleSelection(pictureName);
-                          // Handle the IconButton click
-                          print('Power clicked for $pictureName');
-                        },
+                    Positioned(
+                      top: 8,
+                      right: 8,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.blue.withOpacity(0.6),
+                          shape: BoxShape.circle,
+                        ),
+                        child: IconButton(
+                          iconSize: 60,
+                          icon: Icon(Icons.power_settings_new),
+                          color: Colors.white,
+                          onPressed: () {
+                            setState(() {
+                              SeadmeteMap = muudaSeadmeOlek(SeadmeteMap, seade);
+                            });
+                          },
+                        ),
                       ),
                     ),
-                  ),
-                  Positioned(
-                    bottom: 0,
-                    left: 0,
-                    right: 0,
-                    child: Container(
-                      color: Colors.blue.withOpacity(0.6),
-                      padding: EdgeInsets.symmetric(vertical: 8),
-                      child: Center(
-                        child: Text(
-                          pictureName,
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
+                    Positioned(
+                      top: 8,
+                      left: 8,
+                      child: Visibility(
+                        visible: staatus == 'offline',
+                        child: Container(
+                          child: Icon(
+                            Icons.wifi_off_outlined,
+                            size: 60,
+                            color: Colors.amber,
                           ),
                         ),
                       ),
                     ),
-                  ),
-                ],
+                    Positioned(
+                      bottom: 0,
+                      left: 0,
+                      right: 0,
+                      child: Container(
+                        color: Colors.blue.withOpacity(0.6),
+                        padding: EdgeInsets.symmetric(vertical: 8),
+                        child: Center(
+                          child: Text(
+                            seade,
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
+        ),
+        bottomNavigationBar: Container(
+          decoration: const BoxDecoration(
+            border: Border(
+              top: BorderSide(
+                color: Colors.black,
+                width: 2.0,
               ),
             ),
-          );
-        },
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: const Color.fromARGB(255, 115, 162, 195),
-        fixedColor: roheline,
-        unselectedItemColor: Colors.white,
-        selectedIconTheme: const IconThemeData(size: 30),
-        unselectedIconTheme: const IconThemeData(size: 26),
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            label: 'Seadmed',
-            icon: Icon(Icons.electrical_services_rounded),
           ),
-          BottomNavigationBarItem(
-            label: 'Kodu',
-            icon: Icon(Icons.home),
+          child: SizedBox(
+            height: 72,
+            child: AppNavigationBar(i: 0),
           ),
-          BottomNavigationBarItem(
-            label: 'Hinnagraafik',
-            icon: Icon(Icons.table_rows_outlined),
-          ),
-        ],
-        currentIndex: koduindex,
-        onTap: (int kodu) {
-          setState(() {
-            koduindex = kodu;
-
-            if (koduindex == 2) {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => NordHinnad()),
-              );
-            } else if (koduindex == 0) {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => MinuSeadmed()),
-              );
-            }
-          });
-        },
-        selectedLabelStyle: TextStyle(
-          fontFamily: GoogleFonts.roboto().fontFamily,
-        ),
-        unselectedLabelStyle: TextStyle(
-          fontFamily: GoogleFonts.roboto().fontFamily,
-        ),
-      ),
-    );
+        ));
   }
+}
+
+SaaSeadmePilt(Map<String, List<String>> SeadmeteMap, SeadmeNimi) {
+  List<String>? deviceInfo = SeadmeteMap[SeadmeNimi];
+  if (deviceInfo != null) {
+    String pilt = deviceInfo[0];
+    return pilt;
+  }
+  return null; // Device key not found in the map
+}
+
+SaaSeadmeolek(Map<String, List<String>> SeadmeteMap, SeadmeNimi) {
+  List<String>? deviceInfo = SeadmeteMap[SeadmeNimi];
+  if (deviceInfo != null) {
+    String olek = deviceInfo[2];
+    return olek;
+  }
+  return null; // Device key not found in the map
+}
+
+muudaSeadmeOlek(Map<String, List<String>> SeadmeteMap, SeadmeNimi) {
+  List<String>? deviceInfo = SeadmeteMap[SeadmeNimi];
+  if (deviceInfo != null) {
+    String status = deviceInfo[2];
+
+    if (status == 'on') {
+      deviceInfo[2] = 'off';
+      SeadmeteMap[SeadmeNimi] = deviceInfo;
+    } else if (status == 'off') {
+      deviceInfo[2] = 'on';
+      SeadmeteMap[SeadmeNimi] = deviceInfo;
+    }
+    return SeadmeteMap;
+  }
+  return SeadmeteMap; // Device key not found in the map
 }
