@@ -14,6 +14,8 @@ import 'package:testuus4/lehed/koduleht.dart';
 import '../funktsioonid/hetke_hind.dart';
 import 'package:testuus4/main.dart';
 
+import 'SeadmeYldInfo.dart';
+
 class SeadmeTarbimineLeht extends StatefulWidget {
   const SeadmeTarbimineLeht({Key? key, required this.seadmeNimi})
       : super(key: key);
@@ -236,7 +238,9 @@ class _SeadmeTarbimineLehtState extends State<SeadmeTarbimineLeht> {
                     } else if (selectedPage == 'Üldinfo') {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => KoduLeht()),
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                SeadmeYldinfoLeht(seadmeNimi: seadmeNimi)),
                       );
                     }
                   },
