@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:testuus4/lehed/koduleht.dart';
 import 'package:testuus4/main.dart';
 import 'package:flutter/material.dart';
 import 'package:testuus4/funktsioonid/KeskmineHind.dart';
@@ -77,7 +78,7 @@ class _KasutajaSeadedState extends State<KasutajaSeaded> {
                       onTap: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => MinuPakett()),
+                          MaterialPageRoute(builder: (context) => AbiLeht()),
                         );
                       },
                       child: // Add some spacing between the two widgets
@@ -264,7 +265,7 @@ class _KasutajaSeadedState extends State<KasutajaSeaded> {
                     onTap: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => MinuPakett()),
+                          MaterialPageRoute(builder: (context) => KoduLeht()),
                         );
                     },
                     child: Align(

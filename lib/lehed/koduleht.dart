@@ -99,10 +99,10 @@ class _KoduLehtState extends State<KoduLeht> {
     double price = ajutine1[0]['price'];
     print('price: $price');
     price = price / 1000.0;
-
+    price = price * 1.2;
     num n = num.parse(price.toStringAsFixed(4));
     price = n as double;
-    price = price * 1.2;
+
     print('price: $price');
     setState(() {
       hetkeHind = price.toString();
