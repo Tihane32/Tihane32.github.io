@@ -18,7 +18,7 @@ import 'lehed/seadmeteList.dart';
    TextStyle font = GoogleFonts.roboto(
       textStyle: const TextStyle(
     fontWeight: FontWeight.w500,
-    fontSize: 20,
+    fontSize: 18,
     color: Colors.black
   ));
   double sinineKastLaius = double.infinity;
