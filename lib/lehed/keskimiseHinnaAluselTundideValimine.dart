@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
+import '../main.dart';
+import 'AbiLeht.dart';
 import 'koduleht.dart';
 import 'hinnaPiiriAluselTunideValimine.dart';
 import 'dart:math';
@@ -39,6 +41,7 @@ class _KeskmiseHinnaAluselTundideValimineState
   String selectedPage = 'Keskmine hind';
   double vahe = 10;
   int valitudTunnid = 10;
+  Color boxColor = sinineKast;
 
   Map<int, dynamic> keskHind = {
     0: ['00.00', 0, false],
@@ -150,30 +153,6 @@ class _KeskmiseHinnaAluselTundideValimineState
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text('Tunndide valik'),
-              Expanded(
-                  child: Center(
-                child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: Colors.blue,
-                  ),
-                  child: TextButton(
-                    onPressed: () {
-                      setState(() {
-                        paevNupp = paevaMuutmine(paevNupp);
-                      });
-                    },
-                    style: ButtonStyle(
-                      foregroundColor:
-                          MaterialStateProperty.all<Color>(Colors.white),
-                      textStyle: MaterialStateProperty.all<TextStyle>(
-                        TextStyle(fontSize: 20),
-                      ),
-                    ),
-                    child: Text(paevNupp),
-                  ),
-                ),
-              ))
             ],
           ),
           actions: [
@@ -199,7 +178,12 @@ class _KeskmiseHinnaAluselTundideValimineState
                     } else if (selectedPage == 'Minu eelistused') {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => KoduLeht()),
+                        MaterialPageRoute(builder: (context) => AbiLeht()),
+                      );
+                    } else if (selectedPage == 'Kopeeri graafik') {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => AbiLeht()),
                       );
                     }
                   },
@@ -207,7 +191,8 @@ class _KeskmiseHinnaAluselTundideValimineState
                   items: <String>[
                     'Keskmine hind',
                     'Hinnapiir',
-                    'Minu eelistused'
+                    'Minu eelistused',
+                    'Kopeeri graafik'
                   ].map((String value) {
                     return DropdownMenuItem<String>(
                       value: value,
@@ -225,28 +210,117 @@ class _KeskmiseHinnaAluselTundideValimineState
         body: SingleChildScrollView(
           child: Column(
             children: [
+              SizedBox(height: vahe),
               Align(
                 alignment: Alignment.centerLeft,
                 child: Container(
-                  alignment: Alignment.centerLeft,
+                  alignment: Alignment.center,
                   decoration: BoxDecoration(
-                    color: Color.fromARGB(255, 237, 202, 146),
-                    borderRadius: BorderRadius.circular(14.0),
-                    border: Border.all(
-                      color: Color.fromARGB(30, 0, 0, 0),
-                      width: 1,
-                    ),
+                    color: boxColor,
+                    borderRadius: borderRadius,
+                    border: border,
                     boxShadow: [
                       BoxShadow(
                         color: Colors.black.withOpacity(0.2),
                         spreadRadius: 2,
                         blurRadius: 5,
-                        offset: Offset(3, 3),
+                        offset: const Offset(3, 3),
                       ),
                     ],
                   ),
-                  width: 200,
-                  height: 35,
+                  width: sinineKastLaius,
+                  height: sinineKastKorgus,
+                  child: Row(
+                    children: [
+                      RichText(
+                        text: TextSpan(
+                          style: const TextStyle(
+                            fontSize: 20,
+                            color: Colors.black,
+                          ),
+                          children: [
+                            TextSpan(text: '  Kuvatav päev: ', style: font),
+                          ],
+                        ),
+                      ),
+                      SizedBox(width: 20),
+                      Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          color: paevNupp == 'Täna'
+                              ? Colors.blue
+                              : Color.fromARGB(0, 171, 161, 161),
+                          border: paevNupp == 'Homme'
+                              ? Border.all(color: Colors.blue, width: 2)
+                              : null,
+                        ),
+                        child: TextButton(
+                          onPressed: () {
+                            setState(() {
+                              paevNupp = paevaMuutmine(paevNupp);
+                            });
+                          },
+                          style: ButtonStyle(
+                            foregroundColor:
+                                MaterialStateProperty.all<Color>(Colors.white),
+                            textStyle: MaterialStateProperty.all<TextStyle>(
+                              TextStyle(fontSize: 20),
+                            ),
+                          ),
+                          child: Text('Täna'),
+                        ),
+                      ),
+                      SizedBox(width: 40),
+                      Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          color: paevNupp == 'Homme'
+                              ? Colors.blue
+                              : Color.fromARGB(0, 171, 161, 161),
+                          border: paevNupp == 'Täna'
+                              ? Border.all(color: Colors.blue, width: 2)
+                              : null,
+                        ),
+                        child: TextButton(
+                          onPressed: () {
+                            setState(() {
+                              paevNupp = paevaMuutmine(paevNupp);
+                            });
+                          },
+                          style: ButtonStyle(
+                            foregroundColor:
+                                MaterialStateProperty.all<Color>(Colors.white),
+                            textStyle: MaterialStateProperty.all<TextStyle>(
+                              TextStyle(fontSize: 20),
+                            ),
+                          ),
+                          child: Text('Homme'),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              SizedBox(height: vahe),
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Container(
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    color: boxColor,
+                    borderRadius: borderRadius,
+                    border: border,
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.2),
+                        spreadRadius: 2,
+                        blurRadius: 5,
+                        offset: const Offset(3, 3),
+                      ),
+                    ],
+                  ),
+                  width: sinineKastLaius,
+                  height: sinineKastKorgus,
                   child: RichText(
                     text: TextSpan(
                       style: TextStyle(
@@ -316,40 +390,30 @@ class _KeskmiseHinnaAluselTundideValimineState
               Align(
                 alignment: Alignment.centerLeft,
                 child: Container(
-                  alignment: Alignment.centerLeft,
+                  alignment: Alignment.center,
                   decoration: BoxDecoration(
-                    color: Color.fromARGB(255, 237, 202, 146),
-                    borderRadius: BorderRadius.circular(14.0),
-                    border: Border.all(
-                      color: Color.fromARGB(30, 0, 0, 0),
-                      width: 1,
-                    ),
+                    color: boxColor,
+                    borderRadius: borderRadius,
+                    border: border,
                     boxShadow: [
                       BoxShadow(
                         color: Colors.black.withOpacity(0.2),
                         spreadRadius: 2,
                         blurRadius: 5,
-                        offset: Offset(3, 3),
+                        offset: const Offset(3, 3),
                       ),
                     ],
                   ),
-                  width: 300,
-                  height: 35,
+                  width: sinineKastLaius,
+                  height: sinineKastKorgus,
                   child: RichText(
                     text: TextSpan(
-                      style: TextStyle(
-                        fontSize: 18,
+                      style: const TextStyle(
+                        fontSize: 20,
                         color: Colors.black,
                       ),
                       children: [
-                        TextSpan(
-                          text: '  keskmine Hind: ',
-                          style: GoogleFonts.openSans(
-                            textStyle: TextStyle(
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ),
+                        TextSpan(text: '  Päeva keskmine: ', style: font),
                         TextSpan(
                           text: ((hindAVG * pow(10.0, 2)).round().toDouble() /
                                       pow(10.0, 2))
@@ -368,6 +432,7 @@ class _KeskmiseHinnaAluselTundideValimineState
                   ),
                 ),
               ),
+              SizedBox(height: vahe),
               Container(
                 height: MediaQuery.of(context).size.height * 0.791,
                 child: Center(

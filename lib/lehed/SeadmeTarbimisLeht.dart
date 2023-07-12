@@ -188,30 +188,7 @@ class _SeadmeTarbimineLehtState extends State<SeadmeTarbimineLeht> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(seadmeNimi),
-              Expanded(
-                  child: Center(
-                child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: Colors.blue,
-                  ),
-                  child: TextButton(
-                    onPressed: () {
-                      setState(() {
-                        paevNupp = paevaMuutmine(paevNupp);
-                      });
-                    },
-                    style: ButtonStyle(
-                      foregroundColor:
-                          MaterialStateProperty.all<Color>(Colors.white),
-                      textStyle: MaterialStateProperty.all<TextStyle>(
-                        TextStyle(fontSize: 20),
-                      ),
-                    ),
-                    child: Text(paevNupp),
-                  ),
-                ),
-              ))
+              Spacer(),
             ],
           ),
           actions: [
@@ -228,12 +205,12 @@ class _SeadmeTarbimineLehtState extends State<SeadmeTarbimineLeht> {
                     setState(() {
                       selectedPage = newValue!;
                     });
-                    if (selectedPage == 'Lülitus graafik') {
+                    if (selectedPage == 'Tarbimis graafik') {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
                             builder: (context) =>
-                                SeadmeGraafikuLeht(seadmeNimi: seadmeNimi)),
+                                SeadmeTarbimineLeht(seadmeNimi: seadmeNimi)),
                       );
                     } else if (selectedPage == 'Üldinfo') {
                       Navigator.push(
