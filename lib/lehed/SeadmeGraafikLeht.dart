@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:testuus4/lehed/AbiLeht.dart';
 import 'package:testuus4/lehed/SeadmeTarbimisLeht.dart';
+import 'SeadmeYldInfo.dart';
 import 'seadmeteList.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -44,36 +45,43 @@ class _SeadmeGraafikuLehtState extends State<SeadmeGraafikuLeht> {
       'assets/boiler1.jpg',
       '123456',
       'off',
+      'Shelly plug S',
     ],
     'Veranda lamp': [
       'assets/verandaLamp1.png',
       '123456',
       'offline',
+      'Shelly plug S',
     ],
     'veranda lamp': [
       'assets/verandaLamp1.png',
       '123456',
       'on',
+      'Shelly plug S',
     ],
     'Keldri pump': [
       'assets/pump1.jpg',
       '123456',
       'on',
+      'Shelly plug S',
     ],
     'Garaazi pump': [
       'assets/pump1.jpg',
       '123456',
       'offline',
+      'Shelly plug S',
     ],
     'Main boiler': [
       'assets/boiler1.jpg',
       '123456',
       'on',
+      'Shelly plug S',
     ],
     'Sauna boiler': [
       'assets/boiler1.jpg',
       '123456',
       'off',
+      'Shelly plug S',
     ],
   };
 
@@ -160,30 +168,7 @@ class _SeadmeGraafikuLehtState extends State<SeadmeGraafikuLeht> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(seadmeNimi),
-              Expanded(
-                  child: Center(
-                child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: Colors.blue,
-                  ),
-                  child: TextButton(
-                    onPressed: () {
-                      setState(() {
-                        paevNupp = paevaMuutmine(paevNupp);
-                      });
-                    },
-                    style: ButtonStyle(
-                      foregroundColor:
-                          MaterialStateProperty.all<Color>(Colors.white),
-                      textStyle: MaterialStateProperty.all<TextStyle>(
-                        TextStyle(fontSize: 20),
-                      ),
-                    ),
-                    child: Text(paevNupp),
-                  ),
-                ),
-              ))
+              Spacer(),
             ],
           ),
           actions: [
@@ -210,7 +195,9 @@ class _SeadmeGraafikuLehtState extends State<SeadmeGraafikuLeht> {
                     } else if (selectedPage == 'Üldinfo') {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => AbiLeht()),
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                SeadmeYldinfoLeht(seadmeNimi: seadmeNimi)),
                       );
                     }
                   },
@@ -305,6 +292,99 @@ class _SeadmeGraafikuLehtState extends State<SeadmeGraafikuLeht> {
                   ),
                 ),
               ),
+              SizedBox(height: vahe),
+
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Container(
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    color: boxColor,
+                    borderRadius: borderRadius,
+                    border: border,
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.2),
+                        spreadRadius: 2,
+                        blurRadius: 5,
+                        offset: const Offset(3, 3),
+                      ),
+                    ],
+                  ),
+                  width: sinineKastLaius,
+                  height: sinineKastKorgus,
+                  child: Row(
+                    children: [
+                      RichText(
+                        text: TextSpan(
+                          style: const TextStyle(
+                            fontSize: 20,
+                            color: Colors.black,
+                          ),
+                          children: [
+                            TextSpan(text: '  Kuvatav päev: ', style: font),
+                          ],
+                        ),
+                      ),
+                      SizedBox(width: 20),
+                      Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          color: paevNupp == 'Täna'
+                              ? Colors.blue
+                              : Color.fromARGB(0, 171, 161, 161),
+                          border: paevNupp == 'Homme'
+                              ? Border.all(color: Colors.blue, width: 2)
+                              : null,
+                        ),
+                        child: TextButton(
+                          onPressed: () {
+                            setState(() {
+                              paevNupp = paevaMuutmine(paevNupp);
+                            });
+                          },
+                          style: ButtonStyle(
+                            foregroundColor:
+                                MaterialStateProperty.all<Color>(Colors.white),
+                            textStyle: MaterialStateProperty.all<TextStyle>(
+                              TextStyle(fontSize: 20),
+                            ),
+                          ),
+                          child: Text('Täna'),
+                        ),
+                      ),
+                      SizedBox(width: 40),
+                      Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          color: paevNupp == 'Homme'
+                              ? Colors.blue
+                              : Color.fromARGB(0, 171, 161, 161),
+                          border: paevNupp == 'Täna'
+                              ? Border.all(color: Colors.blue, width: 2)
+                              : null,
+                        ),
+                        child: TextButton(
+                          onPressed: () {
+                            setState(() {
+                              paevNupp = paevaMuutmine(paevNupp);
+                            });
+                          },
+                          style: ButtonStyle(
+                            foregroundColor:
+                                MaterialStateProperty.all<Color>(Colors.white),
+                            textStyle: MaterialStateProperty.all<TextStyle>(
+                              TextStyle(fontSize: 20),
+                            ),
+                          ),
+                          child: Text('Homme'),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+
               SizedBox(height: vahe),
               Align(
                 alignment: Alignment.centerLeft,

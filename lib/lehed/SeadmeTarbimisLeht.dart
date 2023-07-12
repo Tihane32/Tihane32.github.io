@@ -7,13 +7,14 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:testuus4/funktsioonid/KeskmineHind.dart';
-import 'package:testuus4/lehed/abiLeht.dart';
 import 'package:testuus4/funktsioonid/hetketarbimine.dart';
 import 'package:testuus4/funktsioonid/tarbimine.dart';
 import 'package:testuus4/funktsioonid/maksumus.dart';
 import 'package:testuus4/lehed/koduleht.dart';
 import '../funktsioonid/hetke_hind.dart';
 import 'package:testuus4/main.dart';
+
+import 'SeadmeYldInfo.dart';
 
 class SeadmeTarbimineLeht extends StatefulWidget {
   const SeadmeTarbimineLeht({Key? key, required this.seadmeNimi})
@@ -130,36 +131,43 @@ class _SeadmeTarbimineLehtState extends State<SeadmeTarbimineLeht> {
       'assets/boiler1.jpg',
       '123456',
       'off',
+      'Shelly plug S',
     ],
     'Veranda lamp': [
       'assets/verandaLamp1.png',
       '123456',
       'offline',
+      'Shelly plug S',
     ],
     'veranda lamp': [
       'assets/verandaLamp1.png',
       '123456',
       'on',
+      'Shelly plug S',
     ],
     'Keldri pump': [
       'assets/pump1.jpg',
       '123456',
       'on',
+      'Shelly plug S',
     ],
     'Garaazi pump': [
       'assets/pump1.jpg',
       '123456',
       'offline',
+      'Shelly plug S',
     ],
     'Main boiler': [
       'assets/boiler1.jpg',
       '123456',
       'on',
+      'Shelly plug S',
     ],
     'Sauna boiler': [
       'assets/boiler1.jpg',
       '123456',
       'off',
+      'Shelly plug S',
     ],
   };
 
@@ -230,7 +238,9 @@ class _SeadmeTarbimineLehtState extends State<SeadmeTarbimineLeht> {
                     } else if (selectedPage == 'Üldinfo') {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => KoduLeht()),
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                SeadmeYldinfoLeht(seadmeNimi: seadmeNimi)),
                       );
                     }
                   },

@@ -41,36 +41,43 @@ class _SeadmeteListState extends State<SeadmeteList> {
       'assets/boiler1.jpg',
       '123456',
       'off',
+      'Shelly plug S',
     ],
     'Veranda lamp': [
       'assets/verandaLamp1.png',
       '123456',
       'offline',
+      'Shelly plug S',
     ],
     'veranda lamp': [
       'assets/verandaLamp1.png',
       '123456',
       'on',
+      'Shelly plug S',
     ],
     'Keldri pump': [
       'assets/pump1.jpg',
       '123456',
       'on',
+      'Shelly plug S',
     ],
     'Garaazi pump': [
       'assets/pump1.jpg',
       '123456',
       'offline',
+      'Shelly plug S',
     ],
     'Main boiler': [
       'assets/boiler1.jpg',
       '123456',
       'on',
+      'Shelly plug S',
     ],
     'Sauna boiler': [
       'assets/boiler1.jpg',
       '123456',
       'off',
+      'Shelly plug S',
     ],
   };
   Set<String> selectedPictures = Set<String>();

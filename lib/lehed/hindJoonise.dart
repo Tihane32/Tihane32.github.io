@@ -12,6 +12,8 @@ import 'package:testuus4/lehed/kaksTabelit.dart';
 
 import 'package:syncfusion_flutter_charts/charts.dart';
 
+import 'package:testuus4/main.dart';
+
 class NordHinnad extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -34,6 +36,8 @@ class _TulpDiagrammState extends State<TulpDiagramm> {
   late Map<int, dynamic> lulitus;
 
   late double hindAVG;
+  double vahe = 10;
+  Color boxColor = sinineKast;
 
   Map<int, dynamic> keskHind = {
     0: ['0', 0, ''],
@@ -121,9 +125,7 @@ class _TulpDiagrammState extends State<TulpDiagramm> {
               onPressed: () {
                 Navigator.push(
                   context,
-
                   MaterialPageRoute(builder: (context) => LoginPage()),
-
                 );
               },
               icon: const Icon(Icons.person),
@@ -135,45 +137,39 @@ class _TulpDiagrammState extends State<TulpDiagramm> {
         body: SingleChildScrollView(
           child: Column(
             children: [
+              SizedBox(height: vahe),
               Align(
                 alignment: Alignment.centerLeft,
                 child: Container(
-                  alignment: Alignment.centerLeft,
+                  alignment: Alignment.center,
                   decoration: BoxDecoration(
-                    color: Color.fromARGB(255, 237, 202, 146),
-                    borderRadius: BorderRadius.circular(14.0),
-                    border: Border.all(
-                      color: Color.fromARGB(30, 0, 0, 0),
-                      width: 1,
-                    ),
+                    color: boxColor,
+                    borderRadius: borderRadius,
+                    border: border,
                     boxShadow: [
                       BoxShadow(
                         color: Colors.black.withOpacity(0.2),
                         spreadRadius: 2,
                         blurRadius: 5,
-                        offset: Offset(3, 3),
+                        offset: const Offset(3, 3),
                       ),
                     ],
                   ),
-                  width: 300,
-                  height: 35,
+                  width: sinineKastLaius,
+                  height: sinineKastKorgus,
                   child: RichText(
                     text: TextSpan(
-                      style: TextStyle(
-                        fontSize: 18,
+                      style: const TextStyle(
+                        fontSize: 20,
                         color: Colors.black,
                       ),
                       children: [
+                        TextSpan(text: '  Päeva keskmine: ', style: font),
                         TextSpan(
-                          text: '  keskmine Hind: ',
-                          style: GoogleFonts.openSans(
-                            textStyle: TextStyle(
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ),
-                        TextSpan(
-                          text: '$hindAVG €/MWh',
+                          text: ((hindAVG * pow(10.0, 2)).round().toDouble() /
+                                      pow(10.0, 2))
+                                  .toString() +
+                              '€/MWh',
                           style: GoogleFonts.openSans(
                             textStyle: TextStyle(
                               fontWeight: FontWeight.w500,
