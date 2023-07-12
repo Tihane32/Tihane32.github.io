@@ -21,6 +21,12 @@ import 'lehed/seadmeteList.dart';
     fontSize: 18,
     color: Colors.black
   ));
+  TextStyle fontVaike = GoogleFonts.roboto(
+      textStyle: const TextStyle(
+    fontWeight: FontWeight.w500,
+    fontSize: 14,
+    color: Colors.black
+  ));
   double sinineKastLaius = double.infinity;
   double sinineKastKorgus = 45;
   BorderRadius borderRadius = BorderRadius.circular(5.0);

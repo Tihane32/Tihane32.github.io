@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:testuus4/lehed/Login.dart';
 import 'package:testuus4/lehed/abiLeht.dart';
+import 'package:testuus4/lehed/hindJoonise.dart';
 import 'package:testuus4/lehed/kasutajaSeaded.dart';
 import 'package:testuus4/lehed/lisaSeade.dart';
 import 'package:testuus4/lehed/rakenduseSeaded.dart';
@@ -98,7 +99,34 @@ class drawer extends StatelessWidget {
                 );
               },
             ),
-            
+            ListTile(
+              leading: Transform.rotate(
+                angle: 90 * 0.0174533,
+                child: const Icon(
+                  Icons.leaderboard_outlined,
+                  size: 32, // Adjust the size as needed
+                ),
+              ),
+              title: RichText(
+                text: TextSpan(
+                  text: 'Hinnagraafik',
+                  style: GoogleFonts.roboto(
+                    textStyle: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w500,
+                      color: Color.fromARGB(255, 255, 255, 255),
+                    ),
+                  ),
+                ),
+              ),
+              onTap: () {
+                // Navigate to the home page
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => TulpDiagramm()),
+                );
+              },
+            ),
             ListTile(
               leading: const Icon(
                 Icons.help_outline_outlined,
