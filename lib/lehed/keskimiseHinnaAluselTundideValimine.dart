@@ -281,7 +281,7 @@ class _KeskmiseHinnaAluselTundideValimineState
                                 inputFormatters: [
                                   FilteringTextInputFormatter.digitsOnly,
                                 ],
-                                onChanged: (value) {
+                                onSubmitted: (value) {
                                   setState(() {
                                     int parsedValue = int.tryParse(value) ?? 0;
                                     if (parsedValue > 24) {
