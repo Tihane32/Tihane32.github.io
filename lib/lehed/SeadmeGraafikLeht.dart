@@ -293,7 +293,6 @@ class _SeadmeGraafikuLehtState extends State<SeadmeGraafikuLeht> {
                 ),
               ),
               SizedBox(height: vahe),
-
               Align(
                 alignment: Alignment.centerLeft,
                 child: Container(
@@ -384,7 +383,6 @@ class _SeadmeGraafikuLehtState extends State<SeadmeGraafikuLeht> {
                   ),
                 ),
               ),
-
               SizedBox(height: vahe),
               Align(
                 alignment: Alignment.centerLeft,

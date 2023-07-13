@@ -1,19 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:testuus4/lehed/AbiLeht.dart';
-import 'package:testuus4/lehed/SeadmeGraafikLeht.dart';
-import 'package:syncfusion_flutter_charts/charts.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'dart:convert';
-import 'package:http/http.dart' as http;
-import 'package:testuus4/funktsioonid/KeskmineHind.dart';
-import 'package:testuus4/funktsioonid/hetketarbimine.dart';
-import 'package:testuus4/funktsioonid/tarbimine.dart';
-import 'package:testuus4/funktsioonid/maksumus.dart';
-import 'package:testuus4/lehed/koduleht.dart';
-import '../funktsioonid/hetke_hind.dart';
+import 'package:testuus4/lehed/seadmedKontoltNim.dart';
 import 'package:testuus4/main.dart';
-
 import 'SeadmeTarbimisLeht.dart';
 
 class SeadmeYldinfoLeht extends StatefulWidget {
@@ -273,6 +262,124 @@ class _SeadmeYldinfoLehtState extends State<SeadmeYldinfoLeht> {
                 ),
                 width: sinineKastLaius,
                 height: sinineKastKorgus,
+                child: Row(
+                  children: [
+                    RichText(
+                      text: TextSpan(
+                        style: const TextStyle(
+                          fontSize: 20,
+                          color: Colors.black,
+                        ),
+                        children: [
+                          TextSpan(text: '  Seadme nimi: ', style: font),
+                          TextSpan(text: seadmeNimi, style: fontLaadimine()),
+                        ],
+                      ),
+                    ),
+                    Spacer(),
+                    Container(
+                      decoration: BoxDecoration(
+                        color: Colors.blue.withOpacity(0.6),
+                        shape: BoxShape.circle,
+                      ),
+                      child: IconButton(
+                        iconSize: 20,
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => SeadmeNimi(
+                                      value: '',
+                                    )),
+                          );
+                        },
+                        icon: Icon(
+                          Icons.edit,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            SizedBox(height: vahe),
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Container(
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  color: boxColor,
+                  borderRadius: borderRadius,
+                  border: border,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.2),
+                      spreadRadius: 2,
+                      blurRadius: 5,
+                      offset: const Offset(3, 3),
+                    ),
+                  ],
+                ),
+                width: sinineKastLaius,
+                height: sinineKastKorgus,
+                child: Row(
+                  children: [
+                    RichText(
+                      text: TextSpan(
+                        style: const TextStyle(
+                          fontSize: 20,
+                          color: Colors.black,
+                        ),
+                        children: [
+                          TextSpan(text: '  Seadme pilt: ', style: font),
+                        ],
+                      ),
+                    ),
+                    Spacer(),
+                    Container(
+                      decoration: BoxDecoration(
+                        color: Colors.blue.withOpacity(0.6),
+                        shape: BoxShape.circle,
+                      ),
+                      child: IconButton(
+                        iconSize: 20,
+                        onPressed: () {
+                          setState(() {
+                            SeadmeteMap =
+                                muudaSeadmeOlek(SeadmeteMap, seadmeNimi);
+                          });
+                        },
+                        icon: Icon(
+                          Icons.camera_alt_outlined,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            SizedBox(height: vahe),
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Container(
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  color: boxColor,
+                  borderRadius: borderRadius,
+                  border: border,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.2),
+                      spreadRadius: 2,
+                      blurRadius: 5,
+                      offset: const Offset(3, 3),
+                    ),
+                  ],
+                ),
+                width: sinineKastLaius,
+                height: sinineKastKorgus,
                 child: RichText(
                   text: TextSpan(
                     style: const TextStyle(
@@ -289,6 +396,7 @@ class _SeadmeYldinfoLehtState extends State<SeadmeYldinfoLeht> {
                 ),
               ),
             ),
+
             SizedBox(height: vahe), // Add some spacing between the two widgets
             Align(
               alignment: Alignment.centerLeft,
