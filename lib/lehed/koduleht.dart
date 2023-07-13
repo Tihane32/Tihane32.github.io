@@ -1,18 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:testuus4/funktsioonid/KeskmineHind.dart';
-import 'package:testuus4/lehed/Login.dart';
-import 'package:testuus4/lehed/abiLeht.dart';
 import 'package:testuus4/lehed/drawer.dart';
-import 'package:testuus4/lehed/kasutajaSeaded.dart';
-import 'package:testuus4/lehed/lisaSeade.dart';
-import 'package:testuus4/lehed/rakenduseSeaded.dart';
-import 'kaksTabelit.dart';
-import 'hinnaGraafik.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:testuus4/funktsioonid/hetketarbimine.dart';
 import 'package:testuus4/funktsioonid/tarbimine.dart';
 import 'package:testuus4/funktsioonid/maksumus.dart';
-import 'hindJoonise.dart';
 import '../funktsioonid/hetke_hind.dart';
 import 'package:testuus4/main.dart';
 import 'minuPakett.dart';
@@ -183,10 +175,7 @@ class _KoduLehtState extends State<KoduLeht> {
                       height: sinineKastKorgus,
                       child: RichText(
                         text: TextSpan(
-                          style: const TextStyle(
-                            fontSize: 20,
-                            color: Colors.black,
-                          ),
+                          style: font,
                           children: [
                             TextSpan(text: 'Hetke hind: ', style: font),
                             TextSpan(

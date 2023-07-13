@@ -11,17 +11,9 @@ import 'dart:math';
 import 'package:testuus4/lehed/kaksTabelit.dart';
 
 import 'package:syncfusion_flutter_charts/charts.dart';
-
+import 'navigationBar.dart';
 import 'package:testuus4/main.dart';
-
-class NordHinnad extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: TulpDiagramm(),
-    );
-  }
-}
+import 'drawer.dart';
 
 class TulpDiagramm extends StatefulWidget {
   const TulpDiagramm({Key? key}) : super(key: key);
@@ -71,30 +63,30 @@ class _TulpDiagrammState extends State<TulpDiagramm> {
   Future norm() async {
     setState(() {
       lulitus = {
-        0: ['00.00', 62, false],
-        1: ['01.00', 34, false],
-        2: ['02.00', 0.5, true],
-        3: ['03.00', 56, false],
-        4: ['04.00', 45, true],
-        5: ['05.00', 44, true],
-        6: ['06.00', 3, false],
-        7: ['07.00', 3, true],
-        8: ['08.00', 56, false],
-        9: ['09.00', 44, true],
-        10: ['10.00', 4, false],
-        11: ['11.00', 4, true],
-        12: ['12.00', 4, true],
+        0: ['00.00', 62.2, false],
+        1: ['01.00', 34.1, false],
+        2: ['02.00', 100.0, true],
+        3: ['03.00', 56.3, false],
+        4: ['04.00', 45.5, true],
+        5: ['05.00', 44.5, true],
+        6: ['06.00', 3.6, false],
+        7: ['07.00', 3.8, true],
+        8: ['08.00', 56.9, false],
+        9: ['09.00', 44.6, true],
+        10: ['10.00', 4.6, false],
+        11: ['11.00', 4.8, true],
+        12: ['12.00', 4.1, true],
         13: ['13.00', 22.55, true],
         14: ['14.00', 40.567, true],
         15: ['15.00', 44.4, true],
-        16: ['16.00', 80, true],
-        17: ['17.00', 121, true],
+        16: ['16.00', 80.4, true],
+        17: ['17.00', 121.2, true],
         18: ['18.00', 100.2, false],
-        19: ['19.00', 0, true],
-        20: ['20.00', 22, false],
+        19: ['19.00', 0.0, true],
+        20: ['20.00', 22.1, false],
         21: ['21.00', 13.5, true],
-        22: ['22.00', 24, false],
-        23: ['23.00', 44, false],
+        22: ['22.00', 24.4, false],
+        23: ['23.00', 44.1, false],
       };
 
       hindAVG = keskmineHindArvutaus(lulitus);
@@ -112,190 +104,296 @@ class _TulpDiagrammState extends State<TulpDiagramm> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
-      child: Scaffold(
-        backgroundColor: Color.fromARGB(255, 189, 216, 225), //TaustavÃ¤rv
-
+    return Scaffold(
+        backgroundColor: Color.fromARGB(255, 255, 255, 255),
         appBar: AppBar(
-          backgroundColor: Color.fromARGB(255, 115, 162, 195),
-          title: Text('Hinnagraafik'),
+          automaticallyImplyLeading: false,
+          backgroundColor: appbar,
+          title: Text(
+            'Shelly App',
+            style: GoogleFonts.roboto(
+              textStyle: const TextStyle(fontSize: 25),
+            ),
+          ),
           actions: [
-            IconButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => LoginPage()),
+            Builder(
+              builder: (BuildContext context) {
+                return IconButton(
+                  padding: const EdgeInsets.only(right: 20),
+                  icon: const Icon(
+                    Icons.menu,
+                    size: 30,
+                  ),
+                  onPressed: () {
+                    Scaffold.of(context).openEndDrawer();
+                  },
                 );
               },
-              icon: const Icon(Icons.person),
-              iconSize: 40,
-            )
+            ),
           ],
         ),
-
+        endDrawer: drawer(),
         body: SingleChildScrollView(
-          child: Column(
-            children: [
-              SizedBox(height: vahe),
-              Align(
-                alignment: Alignment.centerLeft,
-                child: Container(
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    color: boxColor,
-                    borderRadius: borderRadius,
-                    border: border,
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.2),
-                        spreadRadius: 2,
-                        blurRadius: 5,
-                        offset: const Offset(3, 3),
+          child: Center(
+            child: Column(
+              children: [
+                SizedBox(height: vahe),
+                Center(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Align(
+                        alignment: Alignment.center,
+                        child: Container(
+                          alignment: Alignment.center,
+                          //width: 200,
+                          child: Center(
+                            child: Column(
+                              children: [
+                                Align(
+                                  child: Container(
+                                    alignment: Alignment.center,
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                    ),
+                                    //width: sinineKastLaius,
+                                    //height: sinineKastKorgus,
+                                    child: RichText(
+                                      text: TextSpan(
+                                        style: fontVaike,
+                                        children: [
+                                          TextSpan(
+                                              text: 'Päeva keskmine:',
+                                              style: fontVaike),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Align(
+                                  child: Container(
+                                    alignment: Alignment.center,
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                    ),
+                                    //width: sinineKastLaius,
+                                    //height: sinineKastKorgus,
+                                    child: RichText(
+                                      text: TextSpan(
+                                        style: fontVaike,
+                                        children: [
+                                          TextSpan(
+                                              text: '$hindAVG ', style: font),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                      Align(
+                        alignment: Alignment.center,
+                        child: Container(
+                          //width: 200,
+                          child: Column(
+                            children: [
+                              Align(
+                                child: Container(
+                                  alignment: Alignment.center,
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                  ),
+                                  //width: sinineKastLaius,
+                                  //height: sinineKastKorgus,
+                                  child: RichText(
+                                    text: TextSpan(
+                                      style: fontVaike,
+                                      children: [
+                                        TextSpan(
+                                            text: 'Päeva miinimum:',
+                                            style: fontVaike),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Align(
+                                child: Container(
+                                  alignment: Alignment.center,
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                  ),
+                                  //width: sinineKastLaius,
+                                  //height: sinineKastKorgus,
+                                  child: RichText(
+                                    text: TextSpan(
+                                      style: fontVaike,
+                                      children: [
+                                        TextSpan(
+                                            text: '$hindAVG ', style: font),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                      ),
+                      Align(
+                        alignment: Alignment.center,
+                        child: Container(
+                          //width: 200,
+                          child: Column(
+                            children: [
+                              Align(
+                                child: Container(
+                                  alignment: Alignment.center,
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                  ),
+                                  //width: sinineKastLaius,
+                                  //height: sinineKastKorgus,
+                                  child: RichText(
+                                    text: TextSpan(
+                                      style: fontVaike,
+                                      children: [
+                                        TextSpan(
+                                            text: 'Päeva maksimum:',
+                                            style: fontVaike),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Align(
+                                child: Container(
+                                  alignment: Alignment.center,
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                  ),
+                                  //width: sinineKastLaius,
+                                  //height: sinineKastKorgus,
+                                  child: RichText(
+                                    text: TextSpan(
+                                      style: fontVaike,
+                                      children: [
+                                        TextSpan(
+                                            text: '$hindAVG ', style: font),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
                       ),
                     ],
                   ),
-                  width: sinineKastLaius,
-                  height: sinineKastKorgus,
-                  child: RichText(
-                    text: TextSpan(
-                      style: const TextStyle(
-                        fontSize: 20,
-                        color: Colors.black,
-                      ),
-                      children: [
-                        TextSpan(text: '  Päeva keskmine: ', style: font),
-                        TextSpan(
-                          text: ((hindAVG * pow(10.0, 2)).round().toDouble() /
-                                      pow(10.0, 2))
-                                  .toString() +
-                              '€/MWh',
-                          style: GoogleFonts.openSans(
-                            textStyle: TextStyle(
-                              fontWeight: FontWeight.w500,
-                              fontSize: 20,
-                              color: Colors.black,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
                 ),
-              ),
-              Container(
-                height: MediaQuery.of(context).size.height * 0.791,
-                child: Center(
-                    child: RotatedBox(
-                  quarterTurns: 1,
-                  child: Container(
-                    width: double.infinity,
-                    height: double.infinity,
-                    child: SfCartesianChart(
-                      primaryXAxis: CategoryAxis(
-                        interval: 1,
-                        labelRotation: 270,
-                        visibleMinimum: 0,
-                        maximum: 23.5,
-                      ),
-                      primaryYAxis: NumericAxis(
-                        isVisible: false,
-                        labelRotation: 270,
-                        title: AxisTitle(text: '€/MWh'),
-                      ),
-                      series: <ChartSeries>[
-                        ColumnSeries(
-                          dataSource: lulitus.values.toList(),
-                          xValueMapper: (data, _) => data[0],
-                          yValueMapper: (data, _) => data[1],
-                          dataLabelMapper: (data, _) =>
-                              data[1].toString() + '€/MWh',
-                          pointColorMapper: (data, _) => Colors.green,
-                          dataLabelSettings: DataLabelSettings(
-                            isVisible: true,
-                            labelAlignment: ChartDataLabelAlignment.bottom,
-                            textStyle:
-                                TextStyle(fontSize: 15, color: Colors.black),
-                            angle: 270,
-                          ),
+                SizedBox(height: vahe * 2),
+                Container(
+                  height: MediaQuery.of(context).size.height * 0.791,
+                  child: Center(
+                      child: RotatedBox(
+                    quarterTurns: 1,
+                    child: Container(
+                      width: double.infinity,
+                      height: double.infinity,
+                      child: SfCartesianChart(
+                        primaryXAxis: CategoryAxis(
+                          majorGridLines: const MajorGridLines(width: 0),
+                          interval: 1,
+                          labelRotation: 270,
+                          visibleMinimum: 0,
+                          maximum: 23.5,
                         ),
-                        SplineSeries(
-                          dataSource: keskHind.values.toList(),
-                          xValueMapper: (inf, _) => inf[0],
-                          yValueMapper: (inf, _) => inf[1],
-                          dataLabelMapper: (inf, _) => inf[2],
-                          dataLabelSettings: DataLabelSettings(
-                            offset: Offset(-5, 0),
-                            isVisible: true,
-                            labelAlignment: ChartDataLabelAlignment.outer,
-                            textStyle: TextStyle(
-                                fontSize: 15,
-                                color: Color.fromARGB(255, 231, 17, 17)),
-                            angle: 270,
-                            alignment: ChartAlignment.far,
-                          ),
-                          trendlines: <Trendline>[
-                            Trendline(
-                              color: Color.fromARGB(255, 231, 17, 17),
-                              width: 0.5,
+                        primaryYAxis: NumericAxis(
+                          axisLine: AxisLine(width: 0),
+                          isVisible: true,
+                          labelRotation: 270,
+                          title: AxisTitle(
+                              text: 'EUR/MWh',
+                              textStyle: fontVaike,
+                              alignment: ChartAlignment.center),
+                          labelStyle: TextStyle(fontSize: 0),
+                        ),
+                        series: <ChartSeries>[
+                          ColumnSeries(
+                            onPointTap: (pointInteractionDetails) {
+                              int? rowIndex =
+                                  pointInteractionDetails.pointIndex;
+                              showDialog(
+                                  context: context,
+                                  builder: (context) => AlertDialog(
+                                        title: Text(
+                                            "Kell $rowIndex töötavad seadmed: main boiler, veranda lamp"),
+                                      ));
+                            },
+                            borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(10),
+                                topRight: Radius.circular(10)),
+                            dataSource: lulitus.values.toList(),
+                            xValueMapper: (data, _) => data[0],
+                            yValueMapper: (data, _) => data[1],
+                            dataLabelMapper: (data, _) => data[1].toString(),
+                            pointColorMapper: (data, _) => Colors.green,
+                            dataLabelSettings: DataLabelSettings(
+                              isVisible: true,
+                              labelAlignment: ChartDataLabelAlignment.bottom,
+                              textStyle: fontVaike,
+                              angle: 270,
                             ),
-                          ],
-                        ),
-                      ],
+                          ),
+                          SplineSeries(
+                            dataSource: keskHind.values.toList(),
+                            xValueMapper: (inf, _) => inf[0],
+                            yValueMapper: (inf, _) => inf[1],
+                            dataLabelMapper: (inf, _) => inf[2],
+                            dataLabelSettings: DataLabelSettings(
+                              offset: Offset(-5, 0),
+                              isVisible: true,
+                              labelAlignment: ChartDataLabelAlignment.middle,
+                              textStyle: TextStyle(
+                                  fontSize: 15,
+                                  color: Color.fromARGB(255, 231, 17, 17)),
+                              angle: 270,
+                              alignment: ChartAlignment.center,
+                            ),
+                            trendlines: <Trendline>[
+                              Trendline(
+                                color: Color.fromARGB(255, 231, 17, 17),
+                                width: 0.5,
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                )),
-              ),
-            ],
+                  )),
+                ),
+              ],
+            ),
           ),
         ),
-
-        bottomNavigationBar: BottomNavigationBar(
-            backgroundColor: Color.fromARGB(255, 115, 162, 195),
-            fixedColor: Color.fromARGB(255, 157, 214, 171),
-            unselectedItemColor: Colors.white,
-            selectedIconTheme: IconThemeData(size: 30),
-            unselectedIconTheme: IconThemeData(size: 22),
-            items: const <BottomNavigationBarItem>[
-              BottomNavigationBarItem(
-                label: 'Seadmed',
-                icon: Icon(Icons.electrical_services_rounded),
+        bottomNavigationBar: Container(
+          decoration: const BoxDecoration(
+            border: Border(
+              top: BorderSide(
+                color: Colors.black,
+                width: 2.0,
               ),
-              BottomNavigationBarItem(
-                label: 'Kodu',
-                icon: Icon(Icons.home),
-              ),
-              BottomNavigationBarItem(
-                label: 'Hinnagraafik',
-                icon: Icon(Icons.table_rows_outlined),
-              ),
-            ],
-            currentIndex: koduindex,
-            onTap: (int kodu) {
-              setState(() {
-                koduindex = kodu;
-
-                if (koduindex == 0) {
-                  Navigator.push(
-                    //Kui vajutatakse Hinnagraafiku ikooni peale, siis viiakse Hinnagraafiku lehele
-
-                    context,
-
-                    MaterialPageRoute(builder: (context) => MinuSeadmed()),
-                  );
-                } else if (koduindex == 1) {
-                  Navigator.push(
-                    //Kui vajutatakse Teie seade ikooni peale, siis viiakse Seadmetelisamine lehele
-
-                    context,
-
-                    MaterialPageRoute(builder: (context) => const KoduLeht()),
-                  );
-                }
-              });
-            }),
-      ),
-    );
+            ),
+          ),
+          child: SizedBox(
+            height: 72,
+            child: AppNavigationBar(i: 3),
+          ),
+        ));
   }
 }
 
