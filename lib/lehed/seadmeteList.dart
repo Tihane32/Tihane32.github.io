@@ -98,6 +98,7 @@ class _SeadmeteListState extends State<SeadmeteList> {
     return Scaffold(
         backgroundColor: backround,
         appBar: AppBar(
+          automaticallyImplyLeading: false,
           backgroundColor: appbar,
           title: Text(
             'Shelly App',
@@ -261,7 +262,7 @@ class _SeadmeteListState extends State<SeadmeteList> {
             ),
           ),
           child: SizedBox(
-            height: 72,
+            height: navBarHeight,
             child: AppNavigationBar(i: 0),
           ),
         ));

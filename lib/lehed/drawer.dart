@@ -15,7 +15,7 @@ class drawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Drawer(
-      width: MediaQuery.of(context).size.width * 0.65,
+      width: MediaQuery.of(context).size.width * 0.55,
       child: Container(
         color: const Color.fromARGB(
             255, 115, 162, 195), // Set the desired background color
@@ -101,15 +101,15 @@ class drawer extends StatelessWidget {
             ),
             ListTile(
               leading: Transform.rotate(
-                angle: 90 * 0.0174533,
+                angle: 0 * 0.0174533,
                 child: const Icon(
-                  Icons.leaderboard_outlined,
+                  Icons.bar_chart_rounded,
                   size: 32, // Adjust the size as needed
                 ),
               ),
               title: RichText(
                 text: TextSpan(
-                  text: 'Hinnagraafik',
+                  text: 'Elektri börsihind',
                   style: GoogleFonts.roboto(
                     textStyle: const TextStyle(
                       fontSize: 18,

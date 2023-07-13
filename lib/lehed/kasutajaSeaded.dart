@@ -38,7 +38,7 @@ class _KasutajaSeadedState extends State<KasutajaSeaded> {
         appBar: AppBar(
           backgroundColor: appbar,
           title: Text(
-            'Shelly App',
+            'Seaded',
             style: GoogleFonts.roboto(
               textStyle: const TextStyle(fontSize: 25),
             ),
@@ -361,7 +361,7 @@ class _KasutajaSeadedState extends State<KasutajaSeaded> {
             ),
           ),
           child: SizedBox(
-            height: 72,
+            height: navBarHeight,
             child: AppNavigationBar(i: 3),
           ),
         ));

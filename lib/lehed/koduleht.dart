@@ -388,7 +388,7 @@ class _KoduLehtState extends State<KoduLeht> {
             ),
           ),
           child: SizedBox(
-            height: 72,
+            height: navBarHeight,
             child: AppNavigationBar(i: 1),
           ),
         ));

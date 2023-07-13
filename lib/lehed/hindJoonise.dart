@@ -23,6 +23,12 @@ class TulpDiagramm extends StatefulWidget {
 }
 
 int koduindex = 2;
+Color valge = Colors.white;
+Color green = Colors.green;
+Color tana = valge;
+Color homme = green;
+TextStyle tanaFont = font;
+TextStyle hommeFont = fontValge;
 
 class _TulpDiagrammState extends State<TulpDiagramm> {
   late Map<int, dynamic> lulitus;
@@ -107,10 +113,10 @@ class _TulpDiagrammState extends State<TulpDiagramm> {
     return Scaffold(
         backgroundColor: Color.fromARGB(255, 255, 255, 255),
         appBar: AppBar(
-          automaticallyImplyLeading: false,
+          
           backgroundColor: appbar,
           title: Text(
-            'Shelly App',
+            'Elektri börsihind',
             style: GoogleFonts.roboto(
               textStyle: const TextStyle(fontSize: 25),
             ),
@@ -137,6 +143,88 @@ class _TulpDiagrammState extends State<TulpDiagramm> {
           child: Center(
             child: Column(
               children: [
+                SizedBox(height: vahe),
+                Center(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Center(
+                          child: GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            if (tana == valge) {
+                              tana = green;
+                              tanaFont = fontValge;
+                              homme = valge;
+                              hommeFont = font;
+                            } else {
+                              tana = valge;
+                              tanaFont = font;
+                              homme = green;
+                              hommeFont = fontValge;
+                            }
+                          });
+                        },
+                        child: Container(
+                          width: 100,
+                          height: 30,
+                          decoration: BoxDecoration(
+                              color: tana,
+                              borderRadius: BorderRadius.circular(20.0),
+                              border: Border.all(
+                                color: Colors.green,
+                                width: 3,
+                              )),
+                          child: Center(
+                              child: RichText(
+                            text: TextSpan(
+                              text: 'Täna',
+                              style: tanaFont,
+                            ),
+                            textAlign: TextAlign.center,
+                          )),
+                        ),
+                      )),
+                      Center(
+                          child: GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            if (homme == valge) {
+                              homme = green;
+                              hommeFont = fontValge;
+                              tana = valge;
+                              tanaFont = font;
+                            } else {
+                              homme = valge;
+                              hommeFont = font;
+                              tana = green;
+                              tanaFont = fontValge;
+                            }
+                          });
+                        },
+                        child: Container(
+                          width: 100,
+                          height: 30,
+                          decoration: BoxDecoration(
+                              color: homme,
+                              borderRadius: BorderRadius.circular(20.0),
+                              border: Border.all(
+                                color: Colors.green,
+                                width: 3,
+                              )),
+                          child: Center(
+                              child: RichText(
+                            text: TextSpan(
+                              text: 'Homme',
+                              style: hommeFont,
+                            ),
+                            textAlign: TextAlign.center,
+                          )),
+                        ),
+                      ))
+                    ],
+                  ),
+                ),
                 SizedBox(height: vahe),
                 Center(
                   child: Row(
@@ -184,6 +272,26 @@ class _TulpDiagrammState extends State<TulpDiagramm> {
                                         children: [
                                           TextSpan(
                                               text: '$hindAVG ', style: font),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Align(
+                                  child: Container(
+                                    alignment: Alignment.center,
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                    ),
+                                    //width: sinineKastLaius,
+                                    //height: sinineKastKorgus,
+                                    child: RichText(
+                                      text: TextSpan(
+                                        style: fontVaike,
+                                        children: [
+                                          TextSpan(
+                                              text: 'EUR/MWh ',
+                                              style: fontVaike),
                                         ],
                                       ),
                                     ),
@@ -238,6 +346,25 @@ class _TulpDiagrammState extends State<TulpDiagramm> {
                                     ),
                                   ),
                                 ),
+                              ),
+                              Align(
+                                child: Container(
+                                  alignment: Alignment.center,
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                  ),
+                                  //width: sinineKastLaius,
+                                  //height: sinineKastKorgus,
+                                  child: RichText(
+                                    text: TextSpan(
+                                      style: fontVaike,
+                                      children: [
+                                        TextSpan(
+                                            text: 'EUR/MWh ', style: fontVaike),
+                                      ],
+                                    ),
+                                  ),
+                                ),
                               )
                             ],
                           ),
@@ -283,6 +410,25 @@ class _TulpDiagrammState extends State<TulpDiagramm> {
                                       children: [
                                         TextSpan(
                                             text: '$hindAVG ', style: font),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Align(
+                                child: Container(
+                                  alignment: Alignment.center,
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                  ),
+                                  //width: sinineKastLaius,
+                                  //height: sinineKastKorgus,
+                                  child: RichText(
+                                    text: TextSpan(
+                                      style: fontVaike,
+                                      children: [
+                                        TextSpan(
+                                            text: 'EUR/MWh ', style: fontVaike),
                                       ],
                                     ),
                                   ),
@@ -390,7 +536,7 @@ class _TulpDiagrammState extends State<TulpDiagramm> {
             ),
           ),
           child: SizedBox(
-            height: 72,
+            height: navBarHeight,
             child: AppNavigationBar(i: 3),
           ),
         ));
@@ -414,8 +560,6 @@ keskmineHindArvutaus(Map<int, dynamic> lulitus) {
 
   AVG = summa / hindNr;
 
-  print('Keskmine hind: $AVG');
-
   if (hindNr > 0) {
     return ((AVG * mod).round().toDouble() / mod);
   } else {
@@ -438,8 +582,6 @@ keskmineHindMapVaartustamine(
       madalaimTund = tund;
     }
   }
-
-  print('+++++++++++++');
 
   keskHind[0] = [kell + '.00', hindAVG, 'Keskmine hind'];
 
@@ -465,11 +607,7 @@ keskmineHindMapVaartustamine(
 
   keskHind[25] = [kell + '.00', hindAVG, ''];
 
-  keskHind.forEach((key, value) {
-    print('$key: $value');
-  });
-
-  print('+++++++++++++');
+  keskHind.forEach((key, value) {});
 
   return keskHind;
 }

@@ -86,7 +86,7 @@ class _MinuPakettState extends State<MinuPakett> {
         appBar: AppBar(
           backgroundColor: appbar,
           title: Text(
-            'Shelly App',
+            'Minu pakett',
             style: GoogleFonts.roboto(
               textStyle: const TextStyle(fontSize: 25),
             ),
@@ -1077,7 +1077,7 @@ class _MinuPakettState extends State<MinuPakett> {
             ),
           ),
           child: SizedBox(
-            height: 72,
+            height: navBarHeight,
             child: AppNavigationBar(i: 3),
           ),
         ));
