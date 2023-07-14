@@ -30,9 +30,10 @@ Color homme = green;
 TextStyle tanaFont = font;
 TextStyle hommeFont = fontValge;
 int? tappedIndex;
+
 class _TulpDiagrammState extends State<TulpDiagramm> {
   late Map<int, dynamic> lulitus;
-
+  late double temp;
   late double hindAVG;
   double vahe = 10;
   Color boxColor = sinineKast;
@@ -81,13 +82,13 @@ class _TulpDiagrammState extends State<TulpDiagramm> {
         9: ['09.00', 44.6, true],
         10: ['10.00', 4.6, false],
         11: ['11.00', 4.8, true],
-        12: ['12.00', 4.1, true],
+        12: ['12.00', 5.1, true],
         13: ['13.00', 22.55, true],
         14: ['14.00', 40.567, true],
         15: ['15.00', 44.4, true],
         16: ['16.00', 80.4, true],
         17: ['17.00', 121.2, true],
-        18: ['18.00', 100.2, false],
+        18: ['18.00', 40.2, false],
         19: ['19.00', 0.0, true],
         20: ['20.00', 22.1, false],
         21: ['21.00', 13.5, true],
@@ -96,7 +97,7 @@ class _TulpDiagrammState extends State<TulpDiagramm> {
       };
 
       hindAVG = keskmineHindArvutaus(lulitus);
-
+      temp = hindAVG / 5;
       keskHind = keskmineHindMapVaartustamine(hindAVG, keskHind, lulitus);
     });
   }
@@ -113,7 +114,6 @@ class _TulpDiagrammState extends State<TulpDiagramm> {
     return Scaffold(
         backgroundColor: Color.fromARGB(255, 255, 255, 255),
         appBar: AppBar(
-          
           backgroundColor: appbar,
           title: Text(
             'Elektri börsihind',
@@ -455,10 +455,11 @@ class _TulpDiagrammState extends State<TulpDiagramm> {
                           majorGridLines: const MajorGridLines(width: 0),
                           interval: 1,
                           labelRotation: 270,
-                          visibleMinimum: 0,
+                          visibleMinimum: -0.35,
                           maximum: 23.5,
                         ),
                         primaryYAxis: NumericAxis(
+                          anchorRangeToVisiblePoints: true,
                           axisLine: AxisLine(width: 0),
                           isVisible: true,
                           labelRotation: 270,
@@ -469,36 +470,46 @@ class _TulpDiagrammState extends State<TulpDiagramm> {
                           labelStyle: TextStyle(fontSize: 0),
                         ),
                         series: <ChartSeries>[
+                          
                           ColumnSeries(
+                            
+                            
                             onPointTap: (pointInteractionDetails) {
-                    int rowIndex = pointInteractionDetails.pointIndex!;
-                    setState(() {
-                      tappedIndex = rowIndex;
-                    });
-                    showDialog(
-                      context: context,
-                      builder: (context) => AlertDialog(
-                        title: Text(
-                          "Kell $rowIndex töötavad seadmed: main boiler, veranda lamp",
-                        ),
-                      ),
-                    ).then((value) {
-                      // Dialog dismissed
-                      setState(() {
-                        tappedIndex = null; // Reset tappedIndex to null
-                      });
-                    });
-                  },
+                              int rowIndex =
+                                  pointInteractionDetails.pointIndex!;
+                              setState(() {
+                                tappedIndex = rowIndex;
+                              });
+                              showDialog(
+                                context: context,
+                                builder: (context) => AlertDialog(
+                                  title: Text(
+                                    "Kell $rowIndex töötavad seadmed: main boiler, veranda lamp",
+                                  ),
+                                ),
+                              ).then((value) {
+                                // Dialog dismissed
+                                setState(() {
+                                  tappedIndex =
+                                      null; // Reset tappedIndex to null
+                                });
+                              });
+                            },
                             borderRadius: BorderRadius.only(
                                 topLeft: Radius.circular(10),
                                 topRight: Radius.circular(10)),
                             dataSource: lulitus.values.toList(),
                             xValueMapper: (data, _) => data[0],
-                            yValueMapper: (data, _) => data[1],
+                            yValueMapper: (data, _) {
+                              final yValue = data[1];
+                              return yValue < temp ? temp : yValue;
+                            },
                             dataLabelMapper: (data, _) => data[1].toString(),
-                             pointColorMapper: (data, index) {
-                    return tappedIndex == index ? Colors.blue : Colors.green;
-                  },
+                            pointColorMapper: (data, index) {
+                              return tappedIndex == index
+                                  ? Colors.blue
+                                  : Colors.green;
+                            },
                             dataLabelSettings: DataLabelSettings(
                               isVisible: true,
                               labelAlignment: ChartDataLabelAlignment.bottom,
@@ -506,13 +517,15 @@ class _TulpDiagrammState extends State<TulpDiagramm> {
                               angle: 270,
                             ),
                           ),
-                          SplineSeries(
+                         
+                          LineSeries(
                             dataSource: keskHind.values.toList(),
                             xValueMapper: (inf, _) => inf[0],
                             yValueMapper: (inf, _) => inf[1],
                             dataLabelMapper: (inf, _) => inf[2],
+                            color: Colors.red,
                             dataLabelSettings: DataLabelSettings(
-                              offset: Offset(-5, 0),
+                              offset: Offset(-15, 0),
                               isVisible: true,
                               labelAlignment: ChartDataLabelAlignment.middle,
                               textStyle: TextStyle(
@@ -521,12 +534,6 @@ class _TulpDiagrammState extends State<TulpDiagramm> {
                               angle: 270,
                               alignment: ChartAlignment.center,
                             ),
-                            trendlines: <Trendline>[
-                              Trendline(
-                                color: Color.fromARGB(255, 231, 17, 17),
-                                width: 0.5,
-                              ),
-                            ],
                           ),
                         ],
                       ),
