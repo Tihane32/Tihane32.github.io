@@ -29,7 +29,7 @@ Color tana = valge;
 Color homme = green;
 TextStyle tanaFont = font;
 TextStyle hommeFont = fontValge;
-
+int? tappedIndex;
 class _TulpDiagrammState extends State<TulpDiagramm> {
   late Map<int, dynamic> lulitus;
 
@@ -471,15 +471,24 @@ class _TulpDiagrammState extends State<TulpDiagramm> {
                         series: <ChartSeries>[
                           ColumnSeries(
                             onPointTap: (pointInteractionDetails) {
-                              int? rowIndex =
-                                  pointInteractionDetails.pointIndex;
-                              showDialog(
-                                  context: context,
-                                  builder: (context) => AlertDialog(
-                                        title: Text(
-                                            "Kell $rowIndex töötavad seadmed: main boiler, veranda lamp"),
-                                      ));
-                            },
+                    int rowIndex = pointInteractionDetails.pointIndex!;
+                    setState(() {
+                      tappedIndex = rowIndex;
+                    });
+                    showDialog(
+                      context: context,
+                      builder: (context) => AlertDialog(
+                        title: Text(
+                          "Kell $rowIndex töötavad seadmed: main boiler, veranda lamp",
+                        ),
+                      ),
+                    ).then((value) {
+                      // Dialog dismissed
+                      setState(() {
+                        tappedIndex = null; // Reset tappedIndex to null
+                      });
+                    });
+                  },
                             borderRadius: BorderRadius.only(
                                 topLeft: Radius.circular(10),
                                 topRight: Radius.circular(10)),
@@ -487,7 +496,9 @@ class _TulpDiagrammState extends State<TulpDiagramm> {
                             xValueMapper: (data, _) => data[0],
                             yValueMapper: (data, _) => data[1],
                             dataLabelMapper: (data, _) => data[1].toString(),
-                            pointColorMapper: (data, _) => Colors.green,
+                             pointColorMapper: (data, index) {
+                    return tappedIndex == index ? Colors.blue : Colors.green;
+                  },
                             dataLabelSettings: DataLabelSettings(
                               isVisible: true,
                               labelAlignment: ChartDataLabelAlignment.bottom,
