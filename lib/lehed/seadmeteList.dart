@@ -169,84 +169,93 @@ class _SeadmeteListState extends State<SeadmeteList> {
                   ),
                 );
               },
-              child: Container(
-                width: double.infinity,
-                height: double.infinity,
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    color: staatus == 'on'
-                        ? Colors.green
-                        : staatus == 'off'
-                            ? Colors.red
-                            : Colors.grey,
-                    width: 8,
+              child: Padding(
+                padding: const EdgeInsets.all(1),
+                child: Container(
+                  decoration: BoxDecoration(
+                    border: border,
+                    
                   ),
-                ),
-                child: Stack(
-                  children: [
-                    AspectRatio(
-                      aspectRatio: 1,
-                      child: ClipRRect(
-                        child: Image.asset(
-                          pilt,
-                          fit: BoxFit.cover,
-                        ),
+                  child: Container(
+                    width: double.infinity,
+                    height: double.infinity,
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        color: staatus == 'on'
+                            ? Colors.green
+                            : staatus == 'off'
+                                ? Colors.red
+                                : Colors.grey,
+                        width: 8,
                       ),
                     ),
-                    Positioned(
-                      top: 8,
-                      right: 8,
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: Colors.blue.withOpacity(0.6),
-                          shape: BoxShape.circle,
-                        ),
-                        child: IconButton(
-                          iconSize: 60,
-                          icon: Icon(Icons.power_settings_new),
-                          color: Colors.white,
-                          onPressed: () {
-                            setState(() {
-                              SeadmeteMap = muudaSeadmeOlek(SeadmeteMap, seade);
-                            });
-                          },
-                        ),
-                      ),
-                    ),
-                    Positioned(
-                      top: 8,
-                      left: 8,
-                      child: Visibility(
-                        visible: staatus == 'offline',
-                        child: Container(
-                          child: Icon(
-                            Icons.wifi_off_outlined,
-                            size: 60,
-                            color: Colors.amber,
-                          ),
-                        ),
-                      ),
-                    ),
-                    Positioned(
-                      bottom: 0,
-                      left: 0,
-                      right: 0,
-                      child: Container(
-                        color: Colors.blue.withOpacity(0.6),
-                        padding: EdgeInsets.symmetric(vertical: 8),
-                        child: Center(
-                          child: Text(
-                            seade,
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
+                    child: Stack(
+                      children: [
+                        AspectRatio(
+                          aspectRatio: 1,
+                          child: ClipRRect(
+                            child: Image.asset(
+                              pilt,
+                              fit: BoxFit.cover,
                             ),
                           ),
                         ),
-                      ),
+                        Positioned(
+                          top: 8,
+                          right: 8,
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: Colors.blue.withOpacity(0.6),
+                              shape: BoxShape.circle,
+                            ),
+                            child: IconButton(
+                              iconSize: 60,
+                              icon: Icon(Icons.power_settings_new),
+                              color: Colors.white,
+                              onPressed: () {
+                                setState(() {
+                                  SeadmeteMap = muudaSeadmeOlek(SeadmeteMap, seade);
+                                });
+                              },
+                            ),
+                          ),
+                        ),
+                        Positioned(
+                          top: 8,
+                          left: 8,
+                          child: Visibility(
+                            visible: staatus == 'offline',
+                            child: Container(
+                              child: Icon(
+                                Icons.wifi_off_outlined,
+                                size: 60,
+                                color: Colors.amber,
+                              ),
+                            ),
+                          ),
+                        ),
+                        Positioned(
+                          bottom: 0,
+                          left: 0,
+                          right: 0,
+                          child: Container(
+                            color: Colors.blue.withOpacity(0.6),
+                            padding: EdgeInsets.symmetric(vertical: 8),
+                            child: Center(
+                              child: Text(
+                                seade,
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                  ],
+                  ),
                 ),
               ),
             );
