@@ -252,8 +252,7 @@ class _SeadmeGraafikuLehtState extends State<SeadmeGraafikuLeht> {
                             color: Colors.black,
                           ),
                           children: [
-                            TextSpan(
-                                text: '  Seadme staatus:    ', style: font),
+                            TextSpan(text: '  Seadme olek:    ', style: font),
                             TextSpan(
                               text: SeadmeteMap[seadmeNimi]![2],
                             ),

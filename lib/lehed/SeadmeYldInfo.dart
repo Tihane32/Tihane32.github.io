@@ -18,15 +18,15 @@ class SeadmeYldinfoLeht extends StatefulWidget {
 
 class _SeadmeYldinfoLehtState extends State<SeadmeYldinfoLeht> {
   _SeadmeYldinfoLehtState({Key? key, required this.seadmeNimi});
-  final String seadmeNimi;
+  String seadmeNimi;
+
   late Map<int, dynamic> lulitusMap;
   int selectedRowIndex = -1;
   late double hindAVG;
   String paevNupp = 'Täna';
   String selectedPage = 'Üldinfo';
-
   String onoffNupp = 'Shelly ON';
-
+  String uusNimi = '';
   var hetkeHind = '0';
 
   var hetkevoismus = '0';
@@ -203,7 +203,7 @@ class _SeadmeYldinfoLehtState extends State<SeadmeYldinfoLeht> {
                           color: Colors.black,
                         ),
                         children: [
-                          TextSpan(text: '  Seadme staatus:    ', style: font),
+                          TextSpan(text: '  Seadme olek:    ', style: font),
                           TextSpan(
                             text: SeadmeteMap[seadmeNimi]![2],
                           ),
@@ -262,44 +262,53 @@ class _SeadmeYldinfoLehtState extends State<SeadmeYldinfoLeht> {
                 ),
                 width: sinineKastLaius,
                 height: sinineKastKorgus,
-                child: Row(
-                  children: [
-                    RichText(
-                      text: TextSpan(
-                        style: const TextStyle(
-                          fontSize: 20,
-                          color: Colors.black,
-                        ),
-                        children: [
-                          TextSpan(text: '  Seadme nimi: ', style: font),
-                          TextSpan(text: seadmeNimi, style: fontLaadimine()),
-                        ],
-                      ),
+                child: RichText(
+                  text: TextSpan(
+                    style: TextStyle(
+                      fontSize: 18,
+                      color: Colors.black,
                     ),
-                    Spacer(),
-                    Container(
-                      decoration: BoxDecoration(
-                        color: Colors.blue.withOpacity(0.6),
-                        shape: BoxShape.circle,
-                      ),
-                      child: IconButton(
-                        iconSize: 20,
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => SeadmeNimi(
-                                      value: '',
-                                    )),
-                          );
-                        },
-                        icon: Icon(
-                          Icons.edit,
-                          color: Colors.white,
+                    children: [
+                      TextSpan(
+                        text: '  Seadme nimi:  ',
+                        style: GoogleFonts.openSans(
+                          textStyle: TextStyle(
+                            fontWeight: FontWeight.w500,
+                          ),
                         ),
                       ),
-                    ),
-                  ],
+                      WidgetSpan(
+                        child: Container(
+                          height: 25,
+                          width: 200,
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                              color: Color.fromARGB(255, 4, 0, 0),
+                              width: 1.0,
+                            ),
+                            borderRadius: BorderRadius.circular(4.0),
+                          ),
+                          child: Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 8.0),
+                            child: TextField(
+                              onSubmitted: (value) {
+                                setState(() {
+                                  uusNimi = value;
+                                  SeadmeteMap = nimeMuutmine(
+                                      seadmeNimi, SeadmeteMap, uusNimi);
+                                  seadmeNimi = uusNimi;
+                                });
+                              },
+                              decoration: InputDecoration(
+                                labelText: '$seadmeNimi',
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -464,4 +473,13 @@ muudaSeadmeOlek(Map<String, List<String>> SeadmeteMap, SeadmeNimi) {
     return SeadmeteMap;
   }
   return SeadmeteMap; // Device key not found in the map
+}
+
+nimeMuutmine(
+    String seadmeNimi, Map<String, List<String>> seadmeteMap, String uusNimi) {
+  List<String>? info = seadmeteMap[seadmeNimi];
+  Map<String, List<String>> newSeadmeteMap = Map.from(seadmeteMap);
+  newSeadmeteMap[uusNimi] = info!;
+  newSeadmeteMap.remove(seadmeNimi);
+  return newSeadmeteMap;
 }
