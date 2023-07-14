@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:google_fonts/google_fonts.dart';
+import 'package:testuus4/funktsioonid/Elering.dart';
 
 import 'Login.dart';
 
@@ -33,8 +34,8 @@ int? tappedIndex;
 
 class _TulpDiagrammState extends State<TulpDiagramm> {
   late Map<int, dynamic> lulitus;
-  late double temp;
-  late double hindAVG;
+  late double temp = 0;
+  late double hindAVG = 0;
   double vahe = 10;
   Color boxColor = sinineKast;
 
@@ -68,38 +69,45 @@ class _TulpDiagrammState extends State<TulpDiagramm> {
   };
 
   Future norm() async {
+    lulitus = {
+      0: ['00.00', 62.2, false],
+      1: ['01.00', 34.1, false],
+      2: ['02.00', 100.0, true],
+      3: ['03.00', 56.3, false],
+      4: ['04.00', 45.5, true],
+      5: ['05.00', 44.5, true],
+      6: ['06.00', 3.6, false],
+      7: ['07.00', 3.8, true],
+      8: ['08.00', 56.9, false],
+      9: ['09.00', 44.6, true],
+      10: ['10.00', 4.6, false],
+      11: ['11.00', 4.8, true],
+      12: ['12.00', 5.1, true],
+      13: ['13.00', 22.55, true],
+      14: ['14.00', 40.567, true],
+      15: ['15.00', 44.4, true],
+      16: ['16.00', 80.4, true],
+      17: ['17.00', 121.2, true],
+      18: ['18.00', 40.2, false],
+      19: ['19.00', 0.0, true],
+      20: ['20.00', 22.1, false],
+      21: ['21.00', 13.5, true],
+      22: ['22.00', 24.4, false],
+      23: ['23.00', 44.1, false],
+    };
+    var data = await getElering('tana');
+    for (var i = 0; i < 24; i++) {
+      lulitus[i][1] = data[i]['price'];
+    }
     setState(() {
-      lulitus = {
-        0: ['00.00', 62.2, false],
-        1: ['01.00', 34.1, false],
-        2: ['02.00', 100.0, true],
-        3: ['03.00', 56.3, false],
-        4: ['04.00', 45.5, true],
-        5: ['05.00', 44.5, true],
-        6: ['06.00', 3.6, false],
-        7: ['07.00', 3.8, true],
-        8: ['08.00', 56.9, false],
-        9: ['09.00', 44.6, true],
-        10: ['10.00', 4.6, false],
-        11: ['11.00', 4.8, true],
-        12: ['12.00', 5.1, true],
-        13: ['13.00', 22.55, true],
-        14: ['14.00', 40.567, true],
-        15: ['15.00', 44.4, true],
-        16: ['16.00', 80.4, true],
-        17: ['17.00', 121.2, true],
-        18: ['18.00', 40.2, false],
-        19: ['19.00', 0.0, true],
-        20: ['20.00', 22.1, false],
-        21: ['21.00', 13.5, true],
-        22: ['22.00', 24.4, false],
-        23: ['23.00', 44.1, false],
-      };
-
+      lulitus = lulitus;
+      print(lulitus);
       hindAVG = keskmineHindArvutaus(lulitus);
       temp = hindAVG / 5;
       keskHind = keskmineHindMapVaartustamine(hindAVG, keskHind, lulitus);
     });
+
+    print(data);
   }
 
   @override
@@ -470,10 +478,7 @@ class _TulpDiagrammState extends State<TulpDiagramm> {
                           labelStyle: TextStyle(fontSize: 0),
                         ),
                         series: <ChartSeries>[
-                          
                           ColumnSeries(
-                            
-                            
                             onPointTap: (pointInteractionDetails) {
                               int rowIndex =
                                   pointInteractionDetails.pointIndex!;
@@ -517,7 +522,6 @@ class _TulpDiagrammState extends State<TulpDiagramm> {
                               angle: 270,
                             ),
                           ),
-                         
                           LineSeries(
                             dataSource: keskHind.values.toList(),
                             xValueMapper: (inf, _) => inf[0],
@@ -525,7 +529,7 @@ class _TulpDiagrammState extends State<TulpDiagramm> {
                             dataLabelMapper: (inf, _) => inf[2],
                             color: Colors.red,
                             dataLabelSettings: DataLabelSettings(
-                              offset: Offset(-15, 0),
+                              offset: Offset(-17, 0),
                               isVisible: true,
                               labelAlignment: ChartDataLabelAlignment.middle,
                               textStyle: TextStyle(
