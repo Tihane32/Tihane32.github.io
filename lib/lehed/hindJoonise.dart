@@ -32,8 +32,11 @@ TextStyle tanaFont = font;
 TextStyle hommeFont = fontValge;
 int? tappedIndex;
 
+bool hommeNahtav = false;
+
 class _TulpDiagrammState extends State<TulpDiagramm> {
   late Map<int, dynamic> lulitus;
+  late Map<int, dynamic> lulitusHomme;
   late double temp = 0;
   late double hindAVG = 0;
   double vahe = 10;
@@ -69,7 +72,38 @@ class _TulpDiagrammState extends State<TulpDiagramm> {
   };
 
   Future norm() async {
+    DateTime now = new DateTime.now();
+
+    var date = new DateTime(
+        now.year, now.month, now.day, now.hour); // tänase päeva leidmine
+
     lulitus = {
+      0: ['00.00', 62.2, false],
+      1: ['01.00', 34.1, false],
+      2: ['02.00', 100.0, true],
+      3: ['03.00', 56.3, false],
+      4: ['04.00', 45.5, true],
+      5: ['05.00', 44.5, true],
+      6: ['06.00', 3.6, false],
+      7: ['07.00', 3.8, true],
+      8: ['08.00', 56.9, false],
+      9: ['09.00', 44.6, true],
+      10: ['10.00', 4.6, false],
+      11: ['11.00', 4.8, true],
+      12: ['12.00', 5.1, true],
+      13: ['13.00', 22.55, true],
+      14: ['14.00', 40.567, true],
+      15: ['15.00', 44.4, true],
+      16: ['16.00', 80.4, true],
+      17: ['17.00', 121.2, true],
+      18: ['18.00', 40.2, false],
+      19: ['19.00', 0.0, true],
+      20: ['20.00', 22.1, false],
+      21: ['21.00', 13.5, true],
+      22: ['22.00', 24.4, false],
+      23: ['23.00', 44.1, false],
+    };
+    lulitusHomme = {
       0: ['00.00', 62.2, false],
       1: ['01.00', 34.1, false],
       2: ['02.00', 100.0, true],
@@ -99,7 +133,13 @@ class _TulpDiagrammState extends State<TulpDiagramm> {
     for (var i = 0; i < 24; i++) {
       lulitus[i][1] = data[i]['price'];
     }
+
     setState(() {
+      if (date.hour >
+          15) //Kui kell on vähem, kui 15 või on saadetud String 'täna'
+      {
+        hommeNahtav = true;
+      }
       lulitus = lulitus;
       print(lulitus);
       hindAVG = keskmineHindArvutaus(lulitus);
@@ -193,43 +233,45 @@ class _TulpDiagrammState extends State<TulpDiagramm> {
                           )),
                         ),
                       )),
-                      Center(
-                          child: GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            if (homme == valge) {
-                              homme = green;
-                              hommeFont = fontValge;
-                              tana = valge;
-                              tanaFont = font;
-                            } else {
-                              homme = valge;
-                              hommeFont = font;
-                              tana = green;
-                              tanaFont = fontValge;
-                            }
-                          });
-                        },
-                        child: Container(
-                          width: 100,
-                          height: 30,
-                          decoration: BoxDecoration(
-                              color: homme,
-                              borderRadius: BorderRadius.circular(20.0),
-                              border: Border.all(
-                                color: Colors.green,
-                                width: 3,
-                              )),
-                          child: Center(
-                              child: RichText(
-                            text: TextSpan(
-                              text: 'Homme',
-                              style: hommeFont,
-                            ),
-                            textAlign: TextAlign.center,
-                          )),
-                        ),
-                      ))
+                      if (hommeNahtav)
+                        Center(
+                            child: GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              if (homme == valge) {
+                                homme = green;
+                                hommeFont = fontValge;
+                                tana = valge;
+                                tanaFont = font;
+                              } else {
+                                lulitus = lulitusHomme;
+                                homme = valge;
+                                hommeFont = font;
+                                tana = green;
+                                tanaFont = fontValge;
+                              }
+                            });
+                          },
+                          child: Container(
+                            width: 100,
+                            height: 30,
+                            decoration: BoxDecoration(
+                                color: homme,
+                                borderRadius: BorderRadius.circular(20.0),
+                                border: Border.all(
+                                  color: Colors.green,
+                                  width: 3,
+                                )),
+                            child: Center(
+                                child: RichText(
+                              text: TextSpan(
+                                text: 'Homme',
+                                style: hommeFont,
+                              ),
+                              textAlign: TextAlign.center,
+                            )),
+                          ),
+                        ))
                     ],
                   ),
                 ),
