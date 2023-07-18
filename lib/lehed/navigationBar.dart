@@ -126,19 +126,13 @@ class AppNavigationBar extends StatelessWidget {
                               color: Color.fromARGB(81, 80, 129, 164),
                               shape: BoxShape.circle,
                             ),
-                            child: Transform.rotate(
-                              angle: 90 * 0.0174533,
-                              child: Icon(Icons.leaderboard_outlined,
-                                  size: 35, color: Colors.blue),
-                            ),
+                            child: Icon(Icons.addchart_outlined,
+                                size: 35, color: Colors.blue),
                           )
                         else
-                          Transform.rotate(
-                            angle: 90 * 0.0174533,
-                            child: Icon(
-                              Icons.leaderboard_outlined,
-                              size: 35,
-                            ),
+                          Icon(
+                            Icons.addchart_outlined,
+                            size: 35,
                           ),
             
                         // Adjust the spacing between the icons

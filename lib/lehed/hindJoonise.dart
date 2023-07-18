@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 
 import 'package:google_fonts/google_fonts.dart';
 import 'package:testuus4/funktsioonid/Elering.dart';
-
+import 'package:flutter/services.dart';
 import 'Login.dart';
-
+import 'package:vibration/vibration.dart';
 import 'koduleht.dart';
 
 import 'dart:math';
@@ -26,16 +26,17 @@ class TulpDiagramm extends StatefulWidget {
 int koduindex = 2;
 Color valge = Colors.white;
 Color green = Colors.green;
-Color tana = valge;
-Color homme = green;
-TextStyle tanaFont = font;
-TextStyle hommeFont = fontValge;
+Color homme = valge;
+Color tana = green;
+TextStyle hommeFont = font;
+TextStyle tanaFont = fontValge;
 int? tappedIndex;
 
 bool hommeNahtav = false;
 
 class _TulpDiagrammState extends State<TulpDiagramm> {
   late Map<int, dynamic> lulitus;
+  late Map<int, dynamic> lulitusTana;
   late Map<int, dynamic> lulitusHomme;
   late double temp = 0;
   late double hindAVG = 0;
@@ -103,6 +104,7 @@ class _TulpDiagrammState extends State<TulpDiagramm> {
       22: ['22.00', 24.4, false],
       23: ['23.00', 44.1, false],
     };
+    lulitusTana = lulitus;
     lulitusHomme = {
       0: ['00.00', 62.2, false],
       1: ['01.00', 34.1, false],
@@ -131,19 +133,19 @@ class _TulpDiagrammState extends State<TulpDiagramm> {
     };
     var data = await getElering('tana');
     for (var i = 0; i < 24; i++) {
-      lulitus[i][1] = data[i]['price'];
+      lulitusTana[i][1] = data[i]['price'];
     }
 
     setState(() {
-      if (date.hour >
+      if (date.hour <
           15) //Kui kell on vähem, kui 15 või on saadetud String 'täna'
       {
         hommeNahtav = true;
       }
-      lulitus = lulitus;
+      lulitus = lulitusTana;
       print(lulitus);
       hindAVG = keskmineHindArvutaus(lulitus);
-      temp = hindAVG / 5;
+      temp = hindAVG / 4;
       keskHind = keskmineHindMapVaartustamine(hindAVG, keskHind, lulitus);
     });
 
@@ -201,16 +203,21 @@ class _TulpDiagrammState extends State<TulpDiagramm> {
                         onTap: () {
                           setState(() {
                             if (tana == valge) {
+                              lulitus = lulitusTana;
                               tana = green;
                               tanaFont = fontValge;
                               homme = valge;
                               hommeFont = font;
-                            } else {
+
+                              HapticFeedback.vibrate();
+                              
+                            } /*else {
+                              lulitus = lulitusHomme;
                               tana = valge;
                               tanaFont = font;
                               homme = green;
                               hommeFont = fontValge;
-                            }
+                            }*/
                           });
                         },
                         child: Container(
@@ -239,17 +246,19 @@ class _TulpDiagrammState extends State<TulpDiagramm> {
                           onTap: () {
                             setState(() {
                               if (homme == valge) {
+                                lulitus = lulitusHomme;
                                 homme = green;
                                 hommeFont = fontValge;
                                 tana = valge;
                                 tanaFont = font;
-                              } else {
-                                lulitus = lulitusHomme;
+                                HapticFeedback.vibrate();
+                              } /*else {
+                                lulitus = lulitusTana;
                                 homme = valge;
                                 hommeFont = font;
                                 tana = green;
                                 tanaFont = fontValge;
-                              }
+                              }*/
                             });
                           },
                           child: Container(
@@ -257,7 +266,7 @@ class _TulpDiagrammState extends State<TulpDiagramm> {
                             height: 30,
                             decoration: BoxDecoration(
                                 color: homme,
-                                borderRadius: BorderRadius.circular(20.0),
+                                borderRadius: BorderRadius.circular(30.0),
                                 border: Border.all(
                                   color: Colors.green,
                                   width: 3,
@@ -493,13 +502,13 @@ class _TulpDiagrammState extends State<TulpDiagramm> {
                 ),
                 SizedBox(height: vahe * 2),
                 Container(
-                  height: MediaQuery.of(context).size.height * 0.791,
+                  height: MediaQuery.of(context).size.height,
                   child: Center(
                       child: RotatedBox(
                     quarterTurns: 1,
                     child: Container(
-                      width: double.infinity,
-                      height: double.infinity,
+                      //width: double.infinity,
+                      //height: double.infinity,
                       child: SfCartesianChart(
                         primaryXAxis: CategoryAxis(
                           majorGridLines: const MajorGridLines(width: 0),
@@ -521,6 +530,8 @@ class _TulpDiagrammState extends State<TulpDiagramm> {
                         ),
                         series: <ChartSeries>[
                           ColumnSeries(
+                            width: 0.9,
+                            spacing: 0.1,
                             onPointTap: (pointInteractionDetails) {
                               int rowIndex =
                                   pointInteractionDetails.pointIndex!;
@@ -543,8 +554,8 @@ class _TulpDiagrammState extends State<TulpDiagramm> {
                               });
                             },
                             borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(10),
-                                topRight: Radius.circular(10)),
+                                topLeft: Radius.circular(20),
+                                topRight: Radius.circular(20)),
                             dataSource: lulitus.values.toList(),
                             xValueMapper: (data, _) => data[0],
                             yValueMapper: (data, _) {

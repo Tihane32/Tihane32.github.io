@@ -42,6 +42,7 @@ dependencies:
   syncfusion_flutter_charts: ^21.1.41
   google_fonts: ^4.0.4
   dropdown_button2: ^2.1.4
+  vibration: ^1.8.1
 
 
 dev_dependencies:
