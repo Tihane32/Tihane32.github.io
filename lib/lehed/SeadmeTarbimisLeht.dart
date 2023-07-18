@@ -271,7 +271,7 @@ class _SeadmeTarbimineLehtState extends State<SeadmeTarbimineLeht> {
                           color: Colors.black,
                         ),
                         children: [
-                          TextSpan(text: '  Seadme staatus:    ', style: font),
+                          TextSpan(text: '  Seadme olek:    ', style: font),
                           TextSpan(
                             text: SeadmeteMap[seadmeNimi]![2],
                           ),
@@ -372,7 +372,7 @@ class _SeadmeTarbimineLehtState extends State<SeadmeTarbimineLeht> {
                       color: Colors.black,
                     ),
                     children: [
-                      TextSpan(text: 'Seadmete hetke tarbimine: ', style: font),
+                      TextSpan(text: 'Seadme hetke tarbimine: ', style: font),
                       TextSpan(text: '$hetkevoismus W', style: fontLaadimine()),
                     ],
                   ),
@@ -406,7 +406,7 @@ class _SeadmeTarbimineLehtState extends State<SeadmeTarbimineLeht> {
                       color: Colors.black,
                     ),
                     children: [
-                      TextSpan(text: '  Seadmete kuu tarbimine: ', style: font),
+                      TextSpan(text: '  Seadme kuu tarbimine: ', style: font),
                       TextSpan(
                           text: '$ajatarbimine kWh', style: fontLaadimine()),
                     ],

@@ -130,7 +130,7 @@ class _SeadmeteListState extends State<SeadmeteList> {
           ),
           itemCount: SeadmeteMap.length + 1,
           itemBuilder: (context, index) {
-            if (index == 0) {
+            if (index == SeadmeteMap.length) {
               return GestureDetector(
                 onTap: () {
                   Navigator.push(
@@ -155,7 +155,7 @@ class _SeadmeteListState extends State<SeadmeteList> {
               );
             }
 
-            final seade = SeadmeteMap.keys.elementAt(index - 1);
+            final seade = SeadmeteMap.keys.elementAt(index);
             final pilt = SaaSeadmePilt(SeadmeteMap, seade);
             final staatus = SaaSeadmeolek(SeadmeteMap, seade);
             return GestureDetector(
@@ -164,7 +164,7 @@ class _SeadmeteListState extends State<SeadmeteList> {
                   context,
                   MaterialPageRoute(
                     builder: (context) => SeadmeGraafikuLeht(
-                      seadmeNimi: SeadmeteMap.keys.elementAt(index - 1),
+                      seadmeNimi: SeadmeteMap.keys.elementAt(index),
                     ),
                   ),
                 );
@@ -174,7 +174,6 @@ class _SeadmeteListState extends State<SeadmeteList> {
                 child: Container(
                   decoration: BoxDecoration(
                     border: border,
-                    
                   ),
                   child: Container(
                     width: double.infinity,
@@ -214,7 +213,8 @@ class _SeadmeteListState extends State<SeadmeteList> {
                               color: Colors.white,
                               onPressed: () {
                                 setState(() {
-                                  SeadmeteMap = muudaSeadmeOlek(SeadmeteMap, seade);
+                                  SeadmeteMap =
+                                      muudaSeadmeOlek(SeadmeteMap, seade);
                                 });
                               },
                             ),
