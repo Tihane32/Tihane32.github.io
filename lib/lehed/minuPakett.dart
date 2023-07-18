@@ -525,9 +525,7 @@ class _MinuPakettState extends State<MinuPakett> {
                                     ),
                                     keyboardType: TextInputType.number,
                                     onSubmitted: (value) {
-                                      if (value == '67') {
-                                        print('yeeeee');
-                                      }
+                                     
                                       // Handle the value change here
                                     },
                                   ),

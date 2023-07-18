@@ -40,6 +40,8 @@ class _TulpDiagrammState extends State<TulpDiagramm> {
   late Map<int, dynamic> lulitusHomme;
   late double temp = 0;
   late double hindAVG = 0;
+  late double hindMin = 0;
+  late double hindMax = 0;
   double vahe = 10;
   Color boxColor = sinineKast;
 
@@ -135,7 +137,6 @@ class _TulpDiagrammState extends State<TulpDiagramm> {
     for (var i = 0; i < 24; i++) {
       lulitusTana[i][1] = data[i]['price'];
     }
-
     setState(() {
       if (date.hour <
           15) //Kui kell on vähem, kui 15 või on saadetud String 'täna'
@@ -143,6 +144,9 @@ class _TulpDiagrammState extends State<TulpDiagramm> {
         hommeNahtav = true;
       }
       lulitus = lulitusTana;
+
+      hindMax = maxLeidmine(lulitusTana);
+      hindMin = minLeidmine(lulitusTana);
       print(lulitus);
       hindAVG = keskmineHindArvutaus(lulitus);
       temp = hindAVG / 4;
@@ -208,9 +212,10 @@ class _TulpDiagrammState extends State<TulpDiagramm> {
                               tanaFont = fontValge;
                               homme = valge;
                               hommeFont = font;
-
+                              hindMax = maxLeidmine(lulitus);
+                              hindMin = minLeidmine(lulitus);
+                              hindAVG = keskmineHindArvutaus(lulitus);
                               HapticFeedback.vibrate();
-                              
                             } /*else {
                               lulitus = lulitusHomme;
                               tana = valge;
@@ -251,7 +256,11 @@ class _TulpDiagrammState extends State<TulpDiagramm> {
                                 hommeFont = fontValge;
                                 tana = valge;
                                 tanaFont = font;
+                                hindMax = maxLeidmine(lulitus);
+                              hindMin = minLeidmine(lulitus);
+                              hindAVG = keskmineHindArvutaus(lulitus);
                                 HapticFeedback.vibrate();
+
                               } /*else {
                                 lulitus = lulitusTana;
                                 homme = valge;
@@ -330,7 +339,7 @@ class _TulpDiagrammState extends State<TulpDiagramm> {
                                         style: fontVaike,
                                         children: [
                                           TextSpan(
-                                              text: '$hindAVG ', style: font),
+                                              text: '$hindAVG', style: font),
                                         ],
                                       ),
                                     ),
@@ -349,7 +358,7 @@ class _TulpDiagrammState extends State<TulpDiagramm> {
                                         style: fontVaike,
                                         children: [
                                           TextSpan(
-                                              text: 'EUR/MWh ',
+                                              text: 'EUR/MWh',
                                               style: fontVaike),
                                         ],
                                       ),
@@ -376,11 +385,12 @@ class _TulpDiagrammState extends State<TulpDiagramm> {
                                   //width: sinineKastLaius,
                                   //height: sinineKastKorgus,
                                   child: RichText(
+                                    textAlign: TextAlign.center,
                                     text: TextSpan(
                                       style: fontVaike,
                                       children: [
                                         TextSpan(
-                                            text: 'Päeva miinimum:',
+                                            text: '   Päeva miinimum:',
                                             style: fontVaike),
                                       ],
                                     ),
@@ -396,11 +406,12 @@ class _TulpDiagrammState extends State<TulpDiagramm> {
                                   //width: sinineKastLaius,
                                   //height: sinineKastKorgus,
                                   child: RichText(
+                                    textAlign: TextAlign.center,
                                     text: TextSpan(
                                       style: fontVaike,
                                       children: [
                                         TextSpan(
-                                            text: '$hindAVG ', style: font),
+                                            text: '   $hindMin', style: font),
                                       ],
                                     ),
                                   ),
@@ -415,16 +426,18 @@ class _TulpDiagrammState extends State<TulpDiagramm> {
                                   //width: sinineKastLaius,
                                   //height: sinineKastKorgus,
                                   child: RichText(
+                                    textAlign: TextAlign.center,
                                     text: TextSpan(
                                       style: fontVaike,
                                       children: [
                                         TextSpan(
-                                            text: 'EUR/MWh ', style: fontVaike),
+                                            text: '   EUR/MWh',
+                                            style: fontVaike),
                                       ],
                                     ),
                                   ),
                                 ),
-                              )
+                              ),
                             ],
                           ),
                         ),
@@ -467,8 +480,7 @@ class _TulpDiagrammState extends State<TulpDiagramm> {
                                     text: TextSpan(
                                       style: fontVaike,
                                       children: [
-                                        TextSpan(
-                                            text: '$hindAVG ', style: font),
+                                        TextSpan(text: '$hindMax', style: font),
                                       ],
                                     ),
                                   ),
@@ -487,7 +499,7 @@ class _TulpDiagrammState extends State<TulpDiagramm> {
                                       style: fontVaike,
                                       children: [
                                         TextSpan(
-                                            text: 'EUR/MWh ', style: fontVaike),
+                                            text: 'EUR/MWh', style: fontVaike),
                                       ],
                                     ),
                                   ),
@@ -501,6 +513,32 @@ class _TulpDiagrammState extends State<TulpDiagramm> {
                   ),
                 ),
                 SizedBox(height: vahe * 2),
+                Center(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Align(
+                        child: Container(
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                          ),
+                          //width: sinineKastLaius,
+                          //height: sinineKastKorgus,
+                          child: RichText(
+                            textAlign: TextAlign.center,
+                            text: TextSpan(
+                              style: fontVaike,
+                              children: [
+                                TextSpan(text: 'EUR/MWh', style: fontVaike),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
                 Container(
                   height: MediaQuery.of(context).size.height,
                   child: Center(
@@ -522,10 +560,10 @@ class _TulpDiagrammState extends State<TulpDiagramm> {
                           axisLine: AxisLine(width: 0),
                           isVisible: true,
                           labelRotation: 270,
-                          title: AxisTitle(
-                              text: 'EUR/MWh',
+                          /* title: AxisTitle(
+                              //text: 'EUR/MWh',
                               textStyle: fontVaike,
-                              alignment: ChartAlignment.center),
+                              alignment: ChartAlignment.center),*/
                           labelStyle: TextStyle(fontSize: 0),
                         ),
                         series: <ChartSeries>[
@@ -685,4 +723,34 @@ keskmineHindMapVaartustamine(
   keskHind.forEach((key, value) {});
 
   return keskHind;
+}
+
+maxLeidmine(Map<int, dynamic> map) {
+  double highest = 0;
+
+  map.forEach((key, value) {
+    double doubleValue = value[1] as double;
+
+    if (doubleValue > highest) {
+      highest = doubleValue;
+    }
+  });
+
+  print('Highest double: $highest');
+  return highest;
+}
+
+minLeidmine(Map<int, dynamic> map) {
+  double highest = 1000000;
+
+  map.forEach((key, value) {
+    double doubleValue = value[1] as double;
+
+    if (doubleValue < highest) {
+      highest = doubleValue;
+    }
+  });
+
+  print('Lowest double: $highest');
+  return highest;
 }

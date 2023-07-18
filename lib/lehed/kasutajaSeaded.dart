@@ -78,7 +78,7 @@ class _KasutajaSeadedState extends State<KasutajaSeaded> {
                       onTap: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => AbiLeht()),
+                          MaterialPageRoute(builder: (context) => MinuPakett()),
                         );
                       },
                       child: // Add some spacing between the two widgets
