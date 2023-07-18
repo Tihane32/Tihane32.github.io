@@ -184,7 +184,7 @@ class _MinuPakettState extends State<MinuPakett> {
                                       underline: Container(
                                         // Replace the default underline
                                         height: 0,
-        
+
                                         color: Colors
                                             .black, // Customize the underline color
                                       ),
@@ -199,33 +199,39 @@ class _MinuPakettState extends State<MinuPakett> {
                                         setState(() {
                                           selectedOption = newValue!;
                                           // Show the loading animation
-                                          if (selectedOption == 'Võrgupakett 2') {
+                                          if (selectedOption ==
+                                              'Võrgupakett 2') {
                                             edastamine3 = false;
                                             edastamine2 = true;
                                             edastamine1 = false;
                                           }
-                                          if (selectedOption == 'Võrgupakett 1') {
+                                          if (selectedOption ==
+                                              'Võrgupakett 1') {
                                             edastamine3 = false;
                                             edastamine1 = true;
                                             edastamine2 = false;
                                           }
-                                          if (selectedOption == 'Võrgupakett 5') {
+                                          if (selectedOption ==
+                                              'Võrgupakett 5') {
                                             edastamine3 = true;
                                             edastamine2 = true;
                                             edastamine1 = false;
                                           }
-        
-                                          if (selectedOption != 'Võrgupakett:') {
+
+                                          if (selectedOption !=
+                                              'Võrgupakett:') {
                                             edastamineKuu = true;
                                           }
-                                          if (selectedOption == 'Võrgupakett:') {
+                                          if (selectedOption ==
+                                              'Võrgupakett:') {
                                             edastamine3 = false;
                                             edastamine2 = false;
                                             edastamine1 = false;
                                             edastamineKuu = false;
                                           }
                                           // Call the async function and wait for the result
-                                          maksumus(selectedOption).then((result) {
+                                          maksumus(selectedOption)
+                                              .then((result) {
                                             setState(() {
                                               // Hide the loading animation
                                             });
@@ -238,8 +244,8 @@ class _MinuPakettState extends State<MinuPakett> {
                                         return DropdownMenuItem<String>(
                                           value: value,
                                           child: Padding(
-                                            padding:
-                                                const EdgeInsets.only(left: 8.0),
+                                            padding: const EdgeInsets.only(
+                                                left: 8.0),
                                             child: Text(value, style: font),
                                           ),
                                         );
@@ -311,7 +317,7 @@ class _MinuPakettState extends State<MinuPakett> {
                                     underline: Container(
                                       // Replace the default underline
                                       height: 0,
-        
+
                                       color: Colors
                                           .black, // Customize the underline color
                                     ),
@@ -325,7 +331,7 @@ class _MinuPakettState extends State<MinuPakett> {
                                       // Use an async function
                                       setState(() {
                                         selectedOptionElektrimuuja = newValue!;
-        
+
                                         if (selectedOptionElektrimuuja ==
                                             'Alexela') {
                                           selectedOptionElektriPakett =
@@ -342,7 +348,7 @@ class _MinuPakettState extends State<MinuPakett> {
                                               dropdownOptionsElektriPakettAlgne;
                                         }
                                         // Show the loading animation
-        
+
                                         // Call the async function and wait for the result
                                         maksumus(selectedOptionElektrimuuja)
                                             .then((result) {
@@ -430,7 +436,7 @@ class _MinuPakettState extends State<MinuPakett> {
                                         underline: Container(
                                           // Replace the default underline
                                           height: 0,
-        
+
                                           color: Colors
                                               .black, // Customize the underline color
                                         ),
@@ -450,9 +456,10 @@ class _MinuPakettState extends State<MinuPakett> {
                                                 'Pingevaba') {
                                               edastaminePakett = true;
                                             }
-        
+
                                             // Call the async function and wait for the result
-                                            maksumus(selectedOptionElektriPakett)
+                                            maksumus(
+                                                    selectedOptionElektriPakett)
                                                 .then((result) {
                                               setState(() {
                                                 isLoading =
@@ -515,7 +522,7 @@ class _MinuPakettState extends State<MinuPakett> {
                                       const EdgeInsets.fromLTRB(20, 0, 20, 0),
                                   child: TextField(
                                     //textAlignVertical: TextAlignVertical.top,
-        
+
                                     style: font,
                                     controller: textController,
                                     decoration: InputDecoration(
@@ -525,7 +532,6 @@ class _MinuPakettState extends State<MinuPakett> {
                                     ),
                                     keyboardType: TextInputType.number,
                                     onSubmitted: (value) {
-                                     
                                       // Handle the value change here
                                     },
                                   ),
@@ -565,7 +571,8 @@ class _MinuPakettState extends State<MinuPakett> {
                           children: [
                             Expanded(
                                 child: Center(
-                                    child: Text('Elektri edastamine päev tipuaeg',
+                                    child: Text(
+                                        'Elektri edastamine päev tipuaeg',
                                         style: font))),
                             Expanded(
                               child: Container(
@@ -575,7 +582,7 @@ class _MinuPakettState extends State<MinuPakett> {
                                       const EdgeInsets.fromLTRB(20, 0, 20, 0),
                                   child: TextField(
                                     //textAlignVertical: TextAlignVertical.top,
-        
+
                                     style: font,
                                     controller: textController,
                                     decoration: InputDecoration(
@@ -606,7 +613,7 @@ class _MinuPakettState extends State<MinuPakett> {
                       child: SizedBox(height: vahe),
                       visible: edastamine3,
                     ),
-        
+
                     Visibility(
                       child: Container(
                         alignment: Alignment.center,
@@ -638,7 +645,7 @@ class _MinuPakettState extends State<MinuPakett> {
                                       const EdgeInsets.fromLTRB(20, 0, 20, 0),
                                   child: TextField(
                                     //textAlignVertical: TextAlignVertical.top,
-        
+
                                     style: font,
                                     controller: textController,
                                     decoration: InputDecoration(
@@ -698,7 +705,7 @@ class _MinuPakettState extends State<MinuPakett> {
                                       const EdgeInsets.fromLTRB(20, 0, 20, 0),
                                   child: TextField(
                                     //textAlignVertical: TextAlignVertical.top,
-        
+
                                     style: font,
                                     controller: textController,
                                     decoration: InputDecoration(
@@ -729,7 +736,7 @@ class _MinuPakettState extends State<MinuPakett> {
                       child: SizedBox(height: vahe),
                       visible: edastamine3,
                     ),
-        
+
                     Visibility(
                       child: Container(
                         alignment: Alignment.center,
@@ -751,8 +758,8 @@ class _MinuPakettState extends State<MinuPakett> {
                           children: [
                             Expanded(
                                 child: Center(
-                                    child:
-                                        Text('Elektri edastamine', style: font))),
+                                    child: Text('Elektri edastamine',
+                                        style: font))),
                             Expanded(
                               child: Container(
                                 alignment: Alignment.center,
@@ -761,7 +768,7 @@ class _MinuPakettState extends State<MinuPakett> {
                                       const EdgeInsets.fromLTRB(20, 0, 20, 0),
                                   child: TextField(
                                     //textAlignVertical: TextAlignVertical.top,
-        
+
                                     style: font,
                                     controller: textController,
                                     decoration: InputDecoration(
@@ -789,7 +796,7 @@ class _MinuPakettState extends State<MinuPakett> {
                       child: SizedBox(height: vahe),
                       visible: edastamine1,
                     ),
-        
+
                     Visibility(
                       child: Container(
                         alignment: Alignment.center,
@@ -810,15 +817,15 @@ class _MinuPakettState extends State<MinuPakett> {
                         child: Row(
                           children: [
                             Expanded(
-                                child:
-                                    Center(child: Text('Kuutasu', style: font))),
+                                child: Center(
+                                    child: Text('Kuutasu', style: font))),
                             DropdownButton<String>(
                               underline: Container(
                                 // Replace the default underline
                                 height: 0,
-        
-                                color:
-                                    Colors.black, // Customize the underline color
+
+                                color: Colors
+                                    .black, // Customize the underline color
                               ),
                               dropdownColor: roheline,
                               borderRadius: borderRadius,
@@ -831,7 +838,7 @@ class _MinuPakettState extends State<MinuPakett> {
                                 setState(() {
                                   selectedOptionKuu = newValue!;
                                   // Show the loading animation
-        
+
                                   // Call the async function and wait for the result
                                   maksumus(selectedOptionKuu).then((result) {
                                     setState(() {
@@ -841,7 +848,8 @@ class _MinuPakettState extends State<MinuPakett> {
                                 });
                               },
                               items: dropdownOptionsKuu
-                                  .map<DropdownMenuItem<String>>((String value) {
+                                  .map<DropdownMenuItem<String>>(
+                                      (String value) {
                                 return DropdownMenuItem<String>(
                                   value: value,
                                   child: Padding(
@@ -859,7 +867,7 @@ class _MinuPakettState extends State<MinuPakett> {
                                       const EdgeInsets.fromLTRB(20, 0, 20, 0),
                                   child: TextField(
                                     //textAlignVertical: TextAlignVertical.top,
-        
+
                                     style: font,
                                     controller: textController,
                                     decoration: InputDecoration(
@@ -907,8 +915,8 @@ class _MinuPakettState extends State<MinuPakett> {
                         child: Row(
                           children: [
                             Expanded(
-                                child:
-                                    Center(child: Text('Baashind', style: font))),
+                                child: Center(
+                                    child: Text('Baashind', style: font))),
                             Expanded(
                               child: Container(
                                 alignment: Alignment.center,
@@ -917,7 +925,7 @@ class _MinuPakettState extends State<MinuPakett> {
                                       const EdgeInsets.fromLTRB(20, 0, 20, 0),
                                   child: TextField(
                                     //textAlignVertical: TextAlignVertical.top,
-        
+
                                     style: font,
                                     controller: textController,
                                     decoration: InputDecoration(
@@ -945,7 +953,7 @@ class _MinuPakettState extends State<MinuPakett> {
                       child: SizedBox(height: vahe),
                       visible: edastaminePakett,
                     ),
-        
+
                     Visibility(
                       child: Container(
                         alignment: Alignment.center,
@@ -976,7 +984,7 @@ class _MinuPakettState extends State<MinuPakett> {
                                       const EdgeInsets.fromLTRB(20, 0, 20, 0),
                                   child: TextField(
                                     //textAlignVertical: TextAlignVertical.top,
-        
+
                                     style: font,
                                     controller: textController,
                                     decoration: InputDecoration(
@@ -1024,8 +1032,8 @@ class _MinuPakettState extends State<MinuPakett> {
                         child: Row(
                           children: [
                             Expanded(
-                                child:
-                                    Center(child: Text('Kuutasu', style: font))),
+                                child: Center(
+                                    child: Text('Kuutasu', style: font))),
                             Expanded(
                               child: Container(
                                 alignment: Alignment.center,
@@ -1034,7 +1042,7 @@ class _MinuPakettState extends State<MinuPakett> {
                                       const EdgeInsets.fromLTRB(20, 0, 20, 0),
                                   child: TextField(
                                     //textAlignVertical: TextAlignVertical.top,
-        
+
                                     style: font,
                                     controller: textController,
                                     decoration: InputDecoration(
