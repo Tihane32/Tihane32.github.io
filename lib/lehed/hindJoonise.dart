@@ -620,7 +620,7 @@ class _TulpDiagrammState extends State<TulpDiagramm> {
                             dataLabelMapper: (inf, _) => inf[2],
                             color: Colors.red,
                             dataLabelSettings: DataLabelSettings(
-                              offset: Offset(-17, 0),
+                              offset: Offset(-20, 0),
                               isVisible: true,
                               labelAlignment: ChartDataLabelAlignment.middle,
                               textStyle: TextStyle(
