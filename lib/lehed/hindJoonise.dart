@@ -137,8 +137,17 @@ class _TulpDiagrammState extends State<TulpDiagramm> {
     for (var i = 0; i < 24; i++) {
       lulitusTana[i][1] = data[i]['price'];
     }
+
+    if (date.hour >
+          15) //Kui kell on vähem, kui 15 või on saadetud String 'täna'
+      {
+        var data = await getElering('homme');
+    for (var i = 0; i < 24; i++) {
+      lulitusHomme[i][1] = data[i]['price'];
+    }
+      }
     setState(() {
-      if (date.hour <
+      if (date.hour >
           15) //Kui kell on vähem, kui 15 või on saadetud String 'täna'
       {
         hommeNahtav = true;
@@ -619,6 +628,7 @@ class _TulpDiagrammState extends State<TulpDiagramm> {
                             yValueMapper: (inf, _) => inf[1],
                             dataLabelMapper: (inf, _) => inf[2],
                             color: Colors.red,
+                            dashArray: [20, 22],
                             dataLabelSettings: DataLabelSettings(
                               offset: Offset(-20, 0),
                               isVisible: true,
@@ -639,20 +649,7 @@ class _TulpDiagrammState extends State<TulpDiagramm> {
             ),
           ),
         ),
-        bottomNavigationBar: Container(
-          decoration: const BoxDecoration(
-            border: Border(
-              top: BorderSide(
-                color: Colors.black,
-                width: 2.0,
-              ),
-            ),
-          ),
-          child: SizedBox(
-            height: navBarHeight,
-            child: AppNavigationBar(i: 3),
-          ),
-        ));
+        bottomNavigationBar: AppNavigationBar(i: 3));
   }
 }
 

@@ -9,6 +9,7 @@ import 'lehed/kaksTabelit.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'lehed/seadmeteList.dart';
+import 'package:get/get.dart';
 //Maini käivitamine, home on koduleht.
 
 double navBarHeight = 50;
@@ -35,7 +36,7 @@ Border border = Border.all(
   width: 2,
 );
 void main() {
-  runApp(MaterialApp(
+  runApp(GetMaterialApp(
     theme: ThemeData(brightness: Brightness.light),
     home: SeadmeteList(), //Alustab appi kodulehest
   ));

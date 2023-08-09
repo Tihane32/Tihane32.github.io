@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:testuus4/funktsioonid/hetketarbimine.dart';
 import 'package:testuus4/funktsioonid/tarbimine.dart';
 import 'package:testuus4/funktsioonid/maksumus.dart';
+import 'package:testuus4/lehed/tarbimiseGraafik.dart';
 import '../funktsioonid/hetke_hind.dart';
 import 'package:testuus4/main.dart';
 import 'minuPakett.dart';
@@ -46,7 +47,7 @@ class _KoduLehtState extends State<KoduLeht> {
   TextStyle fontLaadimine() {
     return GoogleFonts.roboto(
       textStyle: TextStyle(
-        fontSize: 20,
+        fontSize: 18,
         color: isLoading ? Colors.grey : Colors.black,
         fontWeight: FontWeight.w500,
       ),
@@ -154,7 +155,7 @@ class _KoduLehtState extends State<KoduLeht> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Align(
+                 /* Align(
                     alignment: Alignment.centerLeft,
                     child: Container(
                       alignment: Alignment.center,
@@ -187,79 +188,95 @@ class _KoduLehtState extends State<KoduLeht> {
                     ),
                   ),
                   SizedBox(
-                      height: vahe), // Add some spacing between the two widgets
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: Container(
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        color: boxColor,
-                        borderRadius: borderRadius,
-                        border: border,
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.2),
-                            spreadRadius: 2,
-                            blurRadius: 5,
-                            offset: const Offset(3, 3),
-                          ),
-                        ],
-                      ),
-                      width: sinineKastLaius,
-                      height: sinineKastKorgus,
-                      child: RichText(
-                        text: TextSpan(
-                          style: const TextStyle(
-                            fontSize: 20,
-                            color: Colors.black,
-                          ),
-                          children: [
-                            TextSpan(
-                                text: 'Seadmete hetke tarbimine: ',
-                                style: font),
-                            TextSpan(
-                                text: '$hetkevoismus W',
-                                style: fontLaadimine()),
+                      height: vahe),*/ // Add some spacing between the two widgets
+                  GestureDetector(
+                    onTap: () {
+                    showDialog(
+                        context: context,
+                        builder: (context) => AlertDialog(
+                              title: Text("Tabel seadmete tarbimisest"),
+                            ));
+                  },
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Container(
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          color: boxColor,
+                          borderRadius: borderRadius,
+                          border: border,
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.2),
+                              spreadRadius: 2,
+                              blurRadius: 5,
+                              offset: const Offset(3, 3),
+                            ),
                           ],
+                        ),
+                        width: sinineKastLaius,
+                        height: sinineKastKorgus,
+                        child: RichText(
+                          text: TextSpan(
+                            style: font,
+                            children: [
+                              TextSpan(
+                                  text: 'Seadmete hetke tarbimine: ',
+                                  style: font),
+                              TextSpan(
+                                  text: '$hetkevoismus W',
+                                  style: fontLaadimine()),
+                            ],
+                          ),
                         ),
                       ),
                     ),
                   ),
                   SizedBox(
                       height: vahe), // Add some spacing between the two widgets
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: Container(
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        color: boxColor,
-                        borderRadius: borderRadius,
-                        border: border,
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.2),
-                            spreadRadius: 2,
-                            blurRadius: 5,
-                            offset: const Offset(3, 3),
-                          ),
-                        ],
-                      ),
-                      width: sinineKastLaius,
-                      height: sinineKastKorgus,
-                      child: RichText(
-                        text: TextSpan(
-                          style: const TextStyle(
-                            fontSize: 20,
-                            color: Colors.black,
-                          ),
-                          children: [
-                            TextSpan(
-                                text: '  Seadmete kuu tarbimine: ',
-                                style: font),
-                            TextSpan(
-                                text: '$ajatarbimine kWh',
-                                style: fontLaadimine()),
+                  GestureDetector(
+                      onTap: () {
+                    showDialog(
+                        context: context,
+                        builder: (context) => AlertDialog(
+                          insetPadding: EdgeInsets.zero,
+                              content: TarbimiseGraafik(),
+                            ));
+                  },
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Container(
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          color: boxColor,
+                          borderRadius: borderRadius,
+                          border: border,
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.2),
+                              spreadRadius: 2,
+                              blurRadius: 5,
+                              offset: const Offset(3, 3),
+                            ),
                           ],
+                        ),
+                        width: sinineKastLaius,
+                        height: sinineKastKorgus,
+                        child: RichText(
+                          text: TextSpan(
+                            style: const TextStyle(
+                              fontSize: 20,
+                              color: Colors.black,
+                            ),
+                            children: [
+                              TextSpan(
+                                  text: '  Seadmete kuu tarbimine: ',
+                                  style: font),
+                              TextSpan(
+                                  text: '$ajatarbimine kWh',
+                                  style: fontLaadimine()),
+                            ],
+                          ),
                         ),
                       ),
                     ),
@@ -331,67 +348,13 @@ class _KoduLehtState extends State<KoduLeht> {
                       ),
                     ),
                   ),
-                  SizedBox(height: vahe * 2),
-                  GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => MinuPakett()),
-                        );
-                      },
-                      child: // Add some spacing between the two widgets
-                          Align(
-                        alignment: Alignment.center,
-                        child: Container(
-                          alignment: Alignment.centerLeft,
-                          decoration: BoxDecoration(
-                            color: roheline,
-                            borderRadius: borderRadius,
-                            border: border,
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withOpacity(0.5),
-                                spreadRadius: 2,
-                                blurRadius: 5,
-                                offset: const Offset(3, 3),
-                              ),
-                            ],
-                          ),
-                          width: 175,
-                          height: sinineKastKorgus,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text('  Minu pakett ', style: font),
-                              const Icon(
-                                Icons.account_circle_rounded,
-                                color: Colors.black,
-                                size: 30,
-                              ),
-                              const SizedBox(width: 5),
-                            ],
-                          ),
-                        ),
-                      )),
+                  
                 ],
               ),
             ),
           ),
         ),
-        bottomNavigationBar: Container(
-          decoration: const BoxDecoration(
-            border: Border(
-              top: BorderSide(
-                color: Colors.black,
-                width: 2.0,
-              ),
-            ),
-          ),
-          child: SizedBox(
-            height: navBarHeight,
-            child: AppNavigationBar(i: 1),
-          ),
-        ));
+        bottomNavigationBar: AppNavigationBar(i: 1));
   }
 }
 /*

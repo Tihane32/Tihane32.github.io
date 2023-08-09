@@ -16,10 +16,11 @@ import 'hindJoonise.dart';
 import 'navigationBar.dart';
 import 'package:testuus4/main.dart';
 
+import 'package:get/get.dart';
 class SeadmeteListPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       home: SeadmeteList(),
     );
   }
@@ -261,20 +262,7 @@ class _SeadmeteListState extends State<SeadmeteList> {
             );
           },
         ),
-        bottomNavigationBar: Container(
-          decoration: const BoxDecoration(
-            border: Border(
-              top: BorderSide(
-                color: Colors.black,
-                width: 2.0,
-              ),
-            ),
-          ),
-          child: SizedBox(
-            height: navBarHeight,
-            child: AppNavigationBar(i: 0),
-          ),
-        ));
+        bottomNavigationBar: AppNavigationBar(i: 0,));
   }
 }
 
