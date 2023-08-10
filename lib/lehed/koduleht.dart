@@ -348,12 +348,15 @@ class _KoduLehtState extends State<KoduLeht> {
                       ),
                     ),
                   ),
-                  
+                   SizedBox(
+                      height: vahe), // Add some spacing between the two widgets
+                 TarbimiseGraafik()
                 ],
               ),
             ),
           ),
         ),
+
         bottomNavigationBar: AppNavigationBar(i: 1));
   }
 }
