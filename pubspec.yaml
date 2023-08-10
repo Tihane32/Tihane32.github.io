@@ -30,13 +30,9 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-    
-
-
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
-
   http: ^0.13.5
   intl: ^0.18.0
   path_provider: ^2.0.12
@@ -45,6 +41,10 @@ dependencies:
   crypto: ^3.0.2
   syncfusion_flutter_charts: ^21.1.41
   google_fonts: ^4.0.4
+  dropdown_button2: ^2.1.4
+  vibration: ^1.8.1
+  get: ^4.6.5
+  fl_chart: ^0.62.0
 
 
 dev_dependencies:
@@ -80,6 +80,11 @@ flutter:
     - assets/tuulik5.jpg
     - assets/tuulik8.jpg
     - assets/tuulik7.jpg
+    - assets/boiler1.jpg
+    - assets/pump1.jpg
+    - assets/verandaLamp1.png
+    
+    
     
 
   # An image asset can refer to one or more resolution-specific "variants", see

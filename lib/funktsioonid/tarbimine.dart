@@ -30,8 +30,8 @@ Future tarbimine() async {
       'id': asendus,
       'channel': '0',
       'date_range': 'custom',
-      'date_from': '2023-05-01 00:00:00',
-      'date_to': '2023-05-31 23:59:59',
+      'date_from': '2023-07-01 00:00:00',
+      'date_to': '2023-07-31 23:59:59',
     };
 
     var url = Uri.parse(

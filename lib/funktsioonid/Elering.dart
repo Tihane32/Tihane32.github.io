@@ -15,7 +15,7 @@ Future<List> getElering(String paevtest) async {
 
   if (date.hour < 15 ||
       paevtest ==
-          'täna') //Kui kell on vähem, kui 15 või on saadetud String 'täna'
+          'tana') //Kui kell on vähem, kui 15 või on saadetud String 'täna'
   {
     date = now.add(new Duration(days: -1));
   }

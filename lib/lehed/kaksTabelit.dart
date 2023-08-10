@@ -1,16 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:testuus4/funktsioonid/lulitamine.dart';
 import 'package:testuus4/lehed/hindJoonise.dart';
-import 'hinnaGraafik.dart';
 import 'Login.dart';
 import 'koduleht.dart';
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'seadmeSeaded.dart';
 import 'package:testuus4/funktsioonid/seisukord.dart';
-import 'SeadmeSeadedManuaalsed.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:testuus4/main.dart';
+import 'kasutajaSeaded.dart';
+import 'rakenduseSeaded.dart';
+import 'AbiLeht.dart';
+import 'drawer.dart';
+import 'navigationBar.dart';
 
 class MinuSeadmed extends StatelessWidget {
   @override
@@ -39,70 +43,31 @@ class _SeadmeTabelState extends State<SeadmeTabel> {
         backgroundColor: const Color.fromARGB(255, 208, 236, 239),
         //backgroundColor: Color.fromARGB(255, 189, 216, 225), //Taustavärv
         appBar: AppBar(
-          backgroundColor: const Color.fromARGB(255, 115, 162, 195),
+          backgroundColor: appbar,
           title: Text(
-            'Seadmed',
-            style: GoogleFonts.openSans(
+            'Shelly App',
+            style: GoogleFonts.roboto(
               textStyle: const TextStyle(fontSize: 25),
             ),
           ),
           actions: [
-            Container(
-              height: 20,
-              decoration: BoxDecoration(
-                  color: const Color.fromARGB(100, 157, 214, 171),
-                  shape: BoxShape.rectangle,
-                  border: Border.all(
-                    color: const Color.fromARGB(155, 0, 0, 0),
-                    width: 1,
+            Builder(
+              builder: (BuildContext context) {
+                return IconButton(
+                  padding: EdgeInsets.only(right: 20),
+                  icon: Icon(
+                    Icons.menu,
+                    size: 30,
                   ),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.2),
-                      spreadRadius: 2,
-                      blurRadius: 5,
-                      offset: const Offset(0, 0),
-                    ),
-                  ],
-                  borderRadius: BorderRadius.circular(30.0)),
-              child: TextButton(
-                style: TextButton.styleFrom(
-                  textStyle: const TextStyle(fontSize: 20),
-                ),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => LoginApp()),
-                  );
-                },
-                child: Row(
-                  children: [
-                    RichText(
-                      text: TextSpan(
-                        style: const TextStyle(
-                          fontSize: 18,
-                          color: Colors.black,
-                        ),
-                        children: [
-                          TextSpan(
-                            text: 'Login',
-                            style: GoogleFonts.openSans(),
-                          ),
-                        ],
-                      ),
-                    ),
-                    const Icon(
-                      Icons.login,
-                      color: Colors.black,
-                    ),
-                    const SizedBox(width: 5),
-                  ],
-                ),
-              ),
+                  onPressed: () {
+                    Scaffold.of(context).openEndDrawer();
+                  },
+                );
+              },
             ),
           ],
         ),
-
+        endDrawer: drawer(),
         body: Column(
           children: [
             const Padding(
@@ -142,57 +107,20 @@ class _SeadmeTabelState extends State<SeadmeTabel> {
             ),*/
           ],
         ),
-        bottomNavigationBar: BottomNavigationBar(
-          backgroundColor: const Color.fromARGB(255, 115, 162, 195),
-          fixedColor: const Color.fromARGB(255, 157, 214, 171),
-          unselectedItemColor: Colors.white,
-          selectedIconTheme: const IconThemeData(size: 30),
-          unselectedIconTheme: const IconThemeData(size: 26),
-          items: const <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
-              label: 'Seadmed',
-              icon: Icon(Icons.electrical_services_rounded),
+        bottomNavigationBar: Container(
+          decoration: const BoxDecoration(
+            border: Border(
+              top: BorderSide(
+                color: Colors.black,
+                width: 2.0,
+              ),
             ),
-            BottomNavigationBarItem(
-              label: 'Kodu',
-              icon: Icon(Icons.home),
-            ),
-            BottomNavigationBarItem(
-              label: 'Hinnagraafik',
-              icon: Icon(Icons.table_rows_outlined),
-            ),
-          ],
-          currentIndex: koduindex,
-          onTap: (int kodu) {
-            setState(() {
-              koduindex = kodu;
-
-              if (koduindex == 2) {
-                Navigator.push(
-                  //Kui vajutatakse Hinnagraafiku ikooni peale, siis viiakse Hinnagraafiku lehele
-
-                  context,
-
-                  MaterialPageRoute(builder: (context) => NordHinnad()),
-                );
-              } else if (koduindex == 1) {
-                Navigator.push(
-                  //Kui vajutatakse Teie seade ikooni peale, siis viiakse Seadmetelisamine lehele
-
-                  context,
-
-                  MaterialPageRoute(builder: (context) => const KoduLeht()),
-                );
-              }
-            });
-          },
-          selectedLabelStyle: TextStyle(
-            fontFamily: GoogleFonts.openSans().fontFamily,
           ),
-          unselectedLabelStyle: TextStyle(
-            fontFamily: GoogleFonts.openSans().fontFamily,
+          child: SizedBox(
+            height: 72,
+            child: AppNavigationBar(i: 0),
           ),
-        ),
+        )
       ),
     );
   }
@@ -285,7 +213,9 @@ class _KontoSeadmedState extends State<KontoSeadmed> {
   Future _submitForm() async {
     minuSeadmedK.clear();
     SharedPreferences prefs = await SharedPreferences.getInstance();
+    //await prefs.clear();
     String? storedJsonMap = prefs.getString('seadmed');
+    print(storedJsonMap);
     if (storedJsonMap != null) {
       Map<String, dynamic> storedMap = json.decode(storedJsonMap);
       await Future.delayed(const Duration(seconds: 3));

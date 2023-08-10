@@ -6,22 +6,11 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:testuus4/lehed/kaksTabelit.dart';
 //import '/SeadmeSeaded.dart';
 import 'package:testuus4/lehed/seadmeSeaded.dart';
+import 'package:testuus4/main.dart';
 import 'energiaGraafik.dart';
 import 'package:testuus4/funktsioonid/seisukord.dart';
-
-class LoginApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Login',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-      ),
-      home: LoginPage(),
-    );
-  }
-}
+import 'package:testuus4/lehed/koduleht.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -56,7 +45,7 @@ class _LoginPageState extends State<LoginPage> {
       _scaffoldMessengerKey.currentState?.showSnackBar(
         SnackBar(
           backgroundColor: Colors.green,
-          content: Text('Login successful'),
+          content: Text('Sisselogimine õnnestus'),
           duration: Duration(seconds: 3),
         ),
       );
@@ -75,7 +64,7 @@ class _LoginPageState extends State<LoginPage> {
       _scaffoldMessengerKey.currentState?.showSnackBar(
         SnackBar(
           backgroundColor: Colors.red,
-          content: Text('Login unsuccessful'),
+          content: Text('Sisselogimine ebaõnnestus'),
           duration: Duration(seconds: 5),
         ),
       );
@@ -107,6 +96,7 @@ class _LoginPageState extends State<LoginPage> {
       Map<String, dynamic> seadmed = json.decode(storedJsonMap);
 
       var j = 0;
+
       for (var device in seadmeteMap.values) {
         var seade = new Map<String, dynamic>();
         seade['Seadme_ID'] = device['id'];
@@ -114,14 +104,22 @@ class _LoginPageState extends State<LoginPage> {
         print(seade['Seadme_ID']);
         print(seadmed['Seade$i']['Seadme_ID']);
         print('lõpp');
-        for (String Seade in seadmed.keys) {
+        for (var test = seadmed.keys.length; j < test; j++) {
+          print('pikkus');
+          print(seadmed['Seade$i']['Seadme_ID']);
+          print(seadmed['Seade$j']['Seadme_ID']);
+          print('pikkus');
+
+          print(j);
+          print(seadmed);
+
           if (seade['Seadme_ID'] == seadmed['Seade$j']['Seadme_ID']) {
-            j++;
             print('break');
+            j++;
             break;
           }
           print('no break $j');
-          j++;
+
           seade['Seadme_nimi'] = device['name'];
           seade['Seadme_pistik'] = device['name'];
           seade['Seadme_generatsioon'] = device['gen'];
@@ -195,7 +193,17 @@ class _LoginPageState extends State<LoginPage> {
         key: _scaffoldMessengerKey,
         child: Scaffold(
           appBar: AppBar(
-            title: Text('Login'),
+            title: Text('Login',
+            style: GoogleFonts.roboto(
+              textStyle: const TextStyle(fontSize: 25),
+            ),),
+            backgroundColor: appbar,
+            leading: IconButton(
+              icon: Icon(Icons.arrow_back),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
           ),
           body: Padding(
             padding: const EdgeInsets.all(16.0),
@@ -205,34 +213,53 @@ class _LoginPageState extends State<LoginPage> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   TextFormField(
+                    style: font,
                     controller: kasutajanimi,
-                    decoration: InputDecoration(labelText: 'Username'),
+                    decoration: InputDecoration(labelText: 'Shelly kasutajanimi'),
                     validator: (value) {
                       if (value!.trim().isEmpty) {
-                        return 'Username is required';
+                        return 'Kasutajanime on vaja!';
                       }
                       return null;
                     },
                   ),
                   TextFormField(
+                    style: font,
                     controller: parool,
-                    decoration: InputDecoration(labelText: 'Password'),
+                    decoration: InputDecoration(labelText: 'Shelly salasõna'),
                     obscureText: true,
                     validator: (value) {
                       if (value!.trim().isEmpty) {
-                        return 'Password is required';
+                        return 'Salasõna on vaja!';
                       }
                       return null;
                     },
                   ),
-                  SizedBox(height: 16.0),
-                  ElevatedButton(
-                    onPressed: () {
-                      if (_formKey.currentState!.validate()) {
-                        _submitForm();
-                      }
-                    },
-                    child: Text('Login'),
+                  SizedBox(height: 20.0),
+                  Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(5.0),
+                      border: Border.all(
+    color: const Color.fromARGB(255, 0, 0, 0),
+    width: 2,
+  )
+                    ),
+                    width: sinineKastLaius,
+                    height: sinineKastKorgus,
+                    
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                         backgroundColor: roheline,
+                         
+                         
+                          ),
+                      onPressed: () {
+                        if (_formKey.currentState!.validate()) {
+                          _submitForm();
+                        }
+                      },
+                      child: Text('Login', style: font),
+                    ),
                   ),
                 ],
               ),

@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:testuus4/funktsioonid/KeskmineHind.dart';
-import 'kaksTabelit.dart';
-import 'graafikuValimine.dart';
-import 'hinnaGraafik.dart';
-import 'dart:io';
-import 'package:flutter/widgets.dart';
+import 'package:testuus4/lehed/drawer.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:testuus4/funktsioonid/hetketarbimine.dart';
 import 'package:testuus4/funktsioonid/tarbimine.dart';
 import 'package:testuus4/funktsioonid/maksumus.dart';
-import 'hindJoonise.dart';
+import 'package:testuus4/lehed/tarbimiseGraafik.dart';
 import '../funktsioonid/hetke_hind.dart';
+import 'package:testuus4/main.dart';
+import 'minuPakett.dart';
+
+import 'navigationBar.dart';
 
 class KoduLeht extends StatefulWidget {
   const KoduLeht({Key? key}) : super(key: key);
@@ -34,17 +34,26 @@ class _KoduLehtState extends State<KoduLeht> {
 
   var kulu = '0';
   bool isLoading = false;
-
+  String selectedOption = 'Nädala';
+  List<String> dropdownOptions = ['Nädala', 'Kuu', 'Aasta'];
   double vahe = 20;
 
-  Color boxColor = const Color.fromARGB(255, 143, 209, 238);
+  Color boxColor = sinineKast;
+  /*TextStyle font = GoogleFonts.roboto(
+      textStyle: const TextStyle(
+    fontWeight: FontWeight.w500,
+    fontSize: 20,
+  ));*/
+  TextStyle fontLaadimine() {
+    return GoogleFonts.roboto(
+      textStyle: TextStyle(
+        fontSize: 18,
+        color: isLoading ? Colors.grey : Colors.black,
+        fontWeight: FontWeight.w500,
+      ),
+    );
+  }
 
-  BorderRadius borderRadius = BorderRadius.circular(5.0);
-
-  Border border = Border.all(
-    color: const Color.fromARGB(255, 0, 0, 0),
-    width: 2,
-  );
 //Lehe avamisel toob hetke hinna ja tundide arvu
 
   @override
@@ -83,9 +92,10 @@ class _KoduLehtState extends State<KoduLeht> {
     double price = ajutine1[0]['price'];
     print('price: $price');
     price = price / 1000.0;
-
+    price = price * 1.2;
     num n = num.parse(price.toStringAsFixed(4));
     price = n as double;
+
     print('price: $price');
     setState(() {
       hetkeHind = price.toString();
@@ -93,7 +103,7 @@ class _KoduLehtState extends State<KoduLeht> {
       hetkevoismus = hetkeW.toString();
       ajatarbimine = test.toString();
     });
-    final temp = await maksumus();
+    final temp = await maksumus(selectedOption);
     setState(() {
       kulu = temp.toString(); //Pärast hinna saamist laadimis animatsioon lõppeb
     });
@@ -104,353 +114,246 @@ class _KoduLehtState extends State<KoduLeht> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 255, 255, 255),
-          appBar: AppBar(
-  backgroundColor: const Color.fromARGB(255, 115, 162, 195),
-  title: Text(
-    'Shelly App',
-    style: GoogleFonts.openSans(
-      textStyle: const TextStyle(fontSize: 25),
-    ),
-  ),
-  actions: [
-    Builder(
-      builder: (BuildContext context) {
-        return IconButton(
-          icon: Icon(Icons.menu),
-          onPressed: () {
-            Scaffold.of(context).openEndDrawer();
-          },
-        );
-      },
-    ),
-  ],
-),
-    endDrawer: Drawer(
-    child: Container(
-      color: const Color.fromARGB(255, 115, 162, 195), // Set the desired background color
-      child: ListView(
-        padding: EdgeInsets.zero,
-        children: [
-          // Drawer items...
-        ],
-      ),
-    ),
-  ),
-      body: Container(
-        decoration: const BoxDecoration(
-            /*image: DecorationImage(
+        backgroundColor: backround,
+        appBar: AppBar(
+          automaticallyImplyLeading: false,
+          backgroundColor: appbar,
+          title: Text(
+            'Shelly App',
+            style: GoogleFonts.roboto(
+              textStyle: const TextStyle(fontSize: 25),
+            ),
+          ),
+          actions: [
+            Builder(
+              builder: (BuildContext context) {
+                return IconButton(
+                  padding: const EdgeInsets.only(right: 20),
+                  icon: const Icon(
+                    Icons.menu,
+                    size: 30,
+                  ),
+                  onPressed: () {
+                    Scaffold.of(context).openEndDrawer();
+                  },
+                );
+              },
+            ),
+          ],
+        ),
+        endDrawer: drawer(),
+        body: Container(
+          decoration: const BoxDecoration(
+              /*image: DecorationImage(
             image: AssetImage('assets/tuulik7.jpg'),
             alignment: Alignment.bottomCenter,
           ),*/
-            ),
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(12, 20, 8, 8),
-          child: Center(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: Container(
+              ),
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(12, 20, 8, 8),
+            child: Center(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  /* Align(
                     alignment: Alignment.centerLeft,
-                    decoration: BoxDecoration(
-                      color: boxColor,
-                      borderRadius: borderRadius,
-                      border: border,
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.2),
-                          spreadRadius: 2,
-                          blurRadius: 5,
-                          offset: const Offset(3, 3),
-                        ),
-                      ],
-                    ),
-                    width: 260,
-                    height: 35,
-                    child: RichText(
-                      text: TextSpan(
-                        style: const TextStyle(
-                          fontSize: 18,
-                          color: Colors.black,
-                        ),
-                        children: [
-                          TextSpan(
-                            text: '  Hetke hind: ',
-                            style: GoogleFonts.openSans(
-                              textStyle: const TextStyle(
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ),
-                          TextSpan(
-                            text: '$hetkeHind €/kWh',
-                            style: GoogleFonts.openSans(
-                              textStyle: TextStyle(
-                                fontWeight: FontWeight.w500,
-                                fontSize: 20,
-                                color: isLoading ? Colors.grey : Colors.black,
-                              ),
-                            ),
+                    child: Container(
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        color: boxColor,
+                        borderRadius: borderRadius,
+                        border: border,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.2),
+                            spreadRadius: 2,
+                            blurRadius: 5,
+                            offset: const Offset(3, 3),
                           ),
                         ],
                       ),
-                    ),
-                  ),
-                ),
-                SizedBox(
-                    height: vahe), // Add some spacing between the two widgets
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: Container(
-                    alignment: Alignment.centerLeft,
-                    decoration: BoxDecoration(
-                      color: boxColor,
-                      borderRadius: borderRadius,
-                      border: border,
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.2),
-                          spreadRadius: 2,
-                          blurRadius: 5,
-                          offset: const Offset(3, 3),
+                      width: sinineKastLaius,
+                      height: sinineKastKorgus,
+                      child: RichText(
+                        text: TextSpan(
+                          style: font,
+                          children: [
+                            TextSpan(text: 'Hetke hind: ', style: font),
+                            TextSpan(
+                                text: '$hetkeHind €/kWh',
+                                style: fontLaadimine()),
+                          ],
                         ),
-                      ],
-                    ),
-                    width: 300,
-                    height: 35,
-                    child: RichText(
-                      text: TextSpan(
-                        style: const TextStyle(
-                          fontSize: 18,
-                          color: Colors.black,
-                        ),
-                        children: [
-                          TextSpan(
-                            text: '  Hetke tarbimine: ',
-                            style: GoogleFonts.openSans(
-                              textStyle: const TextStyle(
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ),
-                          TextSpan(
-                            text: '$hetkevoismus W',
-                            style: GoogleFonts.openSans(
-                              textStyle: TextStyle(
-                                fontWeight: FontWeight.w500,
-                                fontSize: 20,
-                                color: isLoading ? Colors.grey : Colors.black,
-                              ),
-                            ),
-                          ),
-                        ],
                       ),
                     ),
                   ),
-                ),
-                SizedBox(
-                    height: vahe), // Add some spacing between the two widgets
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: Container(
-                    alignment: Alignment.centerLeft,
-                    decoration: BoxDecoration(
-                      color: boxColor,
-                      borderRadius: borderRadius,
-                      border: border,
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.2),
-                          spreadRadius: 2,
-                          blurRadius: 5,
-                          offset: const Offset(3, 3),
-                        ),
-                      ],
-                    ),
-                    width: 260,
-                    height: 35,
-                    child: RichText(
-                      text: TextSpan(
-                        style: const TextStyle(
-                          fontSize: 18,
-                          color: Colors.black,
-                        ),
-                        children: [
-                          TextSpan(
-                            text: '  Kuu tarbimine: ',
-                            style: GoogleFonts.openSans(
-                              textStyle: const TextStyle(
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ),
-                          TextSpan(
-                            text: '$ajatarbimine kWh',
-                            style: GoogleFonts.openSans(
-                              textStyle: TextStyle(
-                                fontWeight: FontWeight.w500,
-                                fontSize: 20,
-                                color: isLoading ? Colors.grey : Colors.black,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-                SizedBox(
-                    height: vahe), // Add some spacing between the two widgets
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: Container(
-                    alignment: Alignment.centerLeft,
-                    decoration: BoxDecoration(
-                      color: boxColor,
-                      borderRadius: borderRadius,
-                      border: border,
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.2),
-                          spreadRadius: 2,
-                          blurRadius: 5,
-                          offset: const Offset(3, 3),
-                        ),
-                      ],
-                    ),
-                    width: 300,
-                    height: 35,
-                    child: RichText(
-                      text: TextSpan(
-                        style: const TextStyle(
-                          fontSize: 18,
-                          color: Colors.black,
-                        ),
-                        children: [
-                          TextSpan(
-                            text: '  Kuu maksumus: ',
-                            style: GoogleFonts.openSans(
-                              textStyle: const TextStyle(
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ),
-                          TextSpan(
-                            text: '$kulu €',
-                            style: GoogleFonts.openSans(
-                              textStyle: TextStyle(
-                                fontWeight: FontWeight.w500,
-                                fontSize: 20,
-                                color: isLoading ? Colors.grey : Colors.black,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-                SizedBox(height: vahe * 2),
-                GestureDetector(
+                  SizedBox(
+                      height: vahe),*/ // Add some spacing between the two widgets
+                  GestureDetector(
                     onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => HinnaGraafik()),
-                      );
+                      showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                                title: Text("Tabel seadmete tarbimisest"),
+                              ));
                     },
-                    child: // Add some spacing between the two widgets
-                        Align(
+                    child: Align(
                       alignment: Alignment.centerLeft,
                       child: Container(
-                        alignment: Alignment.centerLeft,
+                        alignment: Alignment.center,
                         decoration: BoxDecoration(
-                          color: const Color.fromARGB(255, 143, 238, 152),
+                          color: boxColor,
                           borderRadius: borderRadius,
                           border: border,
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.black.withOpacity(0.5),
+                              color: Colors.black.withOpacity(0.2),
                               spreadRadius: 2,
                               blurRadius: 5,
                               offset: const Offset(3, 3),
                             ),
                           ],
                         ),
-                        width: 175,
-                        height: 35,
-                        child: Row(
-                          children: [
-                            Text(
-                              '  Minu pakett ',
-                              style: GoogleFonts.openSans(
-                                textStyle: const TextStyle(
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 18,
-                                ),
-                              ),
-                            ),
-                            const Icon(
-                              Icons.account_circle_rounded,
-                              color: Colors.black,
-                            ),
-                            const SizedBox(width: 5),
-                          ],
+                        width: sinineKastLaius,
+                        height: sinineKastKorgus,
+                        child: RichText(
+                          text: TextSpan(
+                            style: font,
+                            children: [
+                              TextSpan(
+                                  text: 'Seadmete hetke tarbimine: ',
+                                  style: font),
+                              TextSpan(
+                                  text: '$hetkevoismus W',
+                                  style: fontLaadimine()),
+                            ],
+                          ),
                         ),
                       ),
-                    )),
-              ],
+                    ),
+                  ),
+                  SizedBox(
+                      height: vahe), // Add some spacing between the two widgets
+                  GestureDetector(
+                    onTap: () {
+                      showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                                insetPadding: EdgeInsets.zero,
+                                content: TarbimiseGraafik(),
+                              ));
+                    },
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Container(
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          color: boxColor,
+                          borderRadius: borderRadius,
+                          border: border,
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.2),
+                              spreadRadius: 2,
+                              blurRadius: 5,
+                              offset: const Offset(3, 3),
+                            ),
+                          ],
+                        ),
+                        width: sinineKastLaius,
+                        height: sinineKastKorgus,
+                        child: RichText(
+                          text: TextSpan(
+                            style: const TextStyle(
+                              fontSize: 20,
+                              color: Colors.black,
+                            ),
+                            children: [
+                              TextSpan(
+                                  text: '  Seadmete kuu tarbimine: ',
+                                  style: font),
+                              TextSpan(
+                                  text: '$ajatarbimine kWh',
+                                  style: fontLaadimine()),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                      height: vahe), // Add some spacing between the two widgets
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Container(
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        color: boxColor,
+                        borderRadius: borderRadius,
+                        border: border,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.2),
+                            spreadRadius: 2,
+                            blurRadius: 5,
+                            offset: const Offset(3, 3),
+                          ),
+                        ],
+                      ),
+                      width: sinineKastLaius,
+                      height: sinineKastKorgus,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          DropdownButton<String>(
+                            underline: Container(
+                              // Replace the default underline
+                              height: 0,
+
+                              color:
+                                  Colors.black, // Customize the underline color
+                            ),
+                            dropdownColor: sinineKast,
+                            borderRadius: borderRadius,
+                            value: selectedOption,
+                            icon: const Icon(Icons.expand_circle_down_outlined,
+                                color: Color.fromARGB(255, 0, 0, 0)),
+                            onChanged: (String? newValue) async {
+                              // Use an async function
+                              setState(() {
+                                selectedOption = newValue!;
+                                isLoading = true; // Show the loading animation
+
+                                // Call the async function and wait for the result
+                                maksumus(selectedOption).then((result) {
+                                  setState(() {
+                                    kulu = result.toString();
+                                    isLoading =
+                                        false; // Hide the loading animation
+                                  });
+                                });
+                              });
+                            },
+                            items: dropdownOptions
+                                .map<DropdownMenuItem<String>>((String value) {
+                              return DropdownMenuItem<String>(
+                                value: value,
+                                child: Text('  ' + value + ' maksumus:',
+                                    style: font),
+                              );
+                            }).toList(),
+                          ),
+                          Text(" $kulu €", style: fontLaadimine()),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: const Color.fromARGB(255, 115, 162, 195),
-        fixedColor: const Color.fromARGB(255, 157, 214, 171),
-        unselectedItemColor: Colors.white,
-        selectedIconTheme: const IconThemeData(size: 30),
-        unselectedIconTheme: const IconThemeData(size: 26),
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            label: 'Seadmed',
-            icon: Icon(Icons.electrical_services_rounded),
-          ),
-          BottomNavigationBarItem(
-            label: 'Kodu',
-            icon: Icon(Icons.home),
-          ),
-          BottomNavigationBarItem(
-            label: 'Hinnagraafik',
-            icon: Icon(Icons.table_rows_outlined),
-          ),
-        ],
-        currentIndex: koduindex,
-        onTap: (int kodu) {
-          setState(() {
-            koduindex = kodu;
-
-            if (koduindex == 2) {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => NordHinnad()),
-              );
-            } else if (koduindex == 0) {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => MinuSeadmed()),
-              );
-            }
-          });
-        },
-        selectedLabelStyle: TextStyle(
-          fontFamily: GoogleFonts.openSans().fontFamily,
-        ),
-        unselectedLabelStyle: TextStyle(
-          fontFamily: GoogleFonts.openSans().fontFamily,
-        ),
-      ),
-    );
+        bottomNavigationBar: AppNavigationBar(i: 1));
   }
 }
 /*
@@ -465,7 +368,7 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
       backgroundColor: const Color.fromARGB(255, 115, 162, 195),
       title: Text(
         'Shelly app',
-        style: GoogleFonts.openSans(
+        style: GoogleFonts.roboto(
           textStyle: const TextStyle(fontSize: 25),
         ),
       ),

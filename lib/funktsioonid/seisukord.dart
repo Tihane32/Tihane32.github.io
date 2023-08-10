@@ -3,6 +3,7 @@ import 'token.dart';
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 
+
 seisukord() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   var token =
@@ -34,6 +35,7 @@ seisukord() async {
         storedMap['Seade$i']['Seadme_olek'] = 'Offline';
 
         await prefs.setString('seadmed', json.encode(storedMap));
+        print(storedMap);
       } else {
         if (storedMap['Seade$i']['Seadme_generatsioon'] == 1) {
           var asendus = vastus['data']['devices_status']['$id']['relays'];
@@ -47,6 +49,7 @@ seisukord() async {
           storedMap['Seade$i']['Seadme_olek'] = olek;
 
           await prefs.setString('seadmed', json.encode(storedMap));
+          print(storedMap);
         } else {
           var asendus =
               vastus['data']['devices_status']['$id']['switch:0']['output'];
@@ -60,10 +63,12 @@ seisukord() async {
           storedMap['Seade$i']['Seadme_olek'] = olek;
 
           await prefs.setString('seadmed', json.encode(storedMap));
+          print(storedMap);
         }
       }
 
       i++;
     }
-  }
+  print(storedMap);}
+
 }
