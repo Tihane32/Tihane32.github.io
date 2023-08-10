@@ -148,7 +148,7 @@ class _TulpDiagrammState extends State<TulpDiagramm> {
       }
     setState(() {
       if (date.hour >
-          15) //Kui kell on vähem, kui 15 või on saadetud String 'täna'
+          15) 
       {
         hommeNahtav = true;
       }
