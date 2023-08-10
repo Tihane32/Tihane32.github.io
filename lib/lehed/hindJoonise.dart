@@ -20,23 +20,9 @@ import 'graafikuKoostamine.dart';
 import 'package:testuus4/lehed/kaksTabelit.dart';
 import 'package:http/http.dart' as http;
 import 'package:syncfusion_flutter_charts/charts.dart';
-<<<<<<< HEAD
-import 'package:testuus4/funktsioonid/Elering.dart';
-import 'seadmedKontoltNim.dart';
-
-class NordHinnad extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: TulpDiagramm(),
-    );
-  }
-}
-=======
 import 'navigationBar.dart';
 import 'package:testuus4/main.dart';
 import 'drawer.dart';
->>>>>>> 9f30e28169e0a249539fc75ab362c4ff08fb4d30
 
 class TulpDiagramm extends StatefulWidget {
   const TulpDiagramm({Key? key}) : super(key: key);
@@ -54,11 +40,8 @@ TextStyle hommeFont = font;
 TextStyle tanaFont = fontValge;
 int? tappedIndex;
 
-<<<<<<< HEAD
-=======
 bool hommeNahtav = false;
 
->>>>>>> 9f30e28169e0a249539fc75ab362c4ff08fb4d30
 class _TulpDiagrammState extends State<TulpDiagramm> {
   late Map<int, dynamic> lulitus;
   late Map<int, dynamic> lulitusTana;
@@ -71,66 +54,6 @@ class _TulpDiagrammState extends State<TulpDiagramm> {
   Color boxColor = sinineKast;
 
   Map<int, dynamic> keskHind = {
-<<<<<<< HEAD
-    0: ['0', 0],
-    1: ['0.0', 0],
-    2: ['1', 0],
-    3: ['2', 0],
-    4: ['3', 0],
-    5: ['4', 0],
-    6: ['5', 0],
-    7: ['6', 0],
-    8: ['7', 0],
-    9: ['8', 0],
-    10: ['9', 0],
-    11: ['10', 0],
-    12: ['12', 0],
-    13: ['0', 0],
-    14: ['0', 0],
-    15: ['0', 0],
-    16: ['0', 0],
-    17: ['0', 0],
-    18: ['0', 0],
-    19: ['0', 0],
-    20: ['0', 0],
-    21: ['0', 0],
-    22: ['0', 0],
-    23: ['0', 0],
-  };
-
-  Future norm() async {
-    setState(() {
-      lulitus = {
-        0: ['00.00', 22, false],
-        1: ['01.00', 34, false],
-        2: ['02.00', 0.5, true],
-        3: ['03.00', 56, false],
-        4: ['04.00', 45, true],
-        5: ['05.00', 44, true],
-        6: ['06.00', 3, false],
-        7: ['07.00', 3, true],
-        8: ['08.00', 56, false],
-        9: ['09.00', 44, true],
-        10: ['10.00', 4, false],
-        11: ['11.00', 4, true],
-        12: ['12.00', 4, true],
-        13: ['13.00', 22.55, true],
-        14: ['14.00', 40.567, true],
-        15: ['15.00', 44.4, true],
-        16: ['16.00', 80, true],
-        17: ['17.00', 121, true],
-        18: ['18.00', 100.2, false],
-        19: ['19.00', 0, true],
-        20: ['20.00', 22, false],
-        21: ['21.00', 13.5, true],
-        22: ['22.00', 24, false],
-        23: ['23.00', 44, false],
-      };
-
-      hindAVG = keskmineHindArvutaus(lulitus);
-      keskHind = keskmineHindMapVaartustamine(hindAVG, keskHind);
-    });
-=======
     0: ['0', 0, ''],
     1: ['0.0', 0, ''],
     2: ['1', 0, ''],
@@ -248,7 +171,6 @@ class _TulpDiagrammState extends State<TulpDiagramm> {
     });
 
     print(data);
->>>>>>> 9f30e28169e0a249539fc75ab362c4ff08fb4d30
   }
 
   @override
