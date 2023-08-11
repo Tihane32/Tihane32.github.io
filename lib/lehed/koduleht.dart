@@ -9,6 +9,7 @@ import 'package:testuus4/lehed/tarbimiseGraafik.dart';
 import '../funktsioonid/hetke_hind.dart';
 import 'package:testuus4/main.dart';
 import 'minuPakett.dart';
+import 'maksumuseGraafik.dart';
 
 import 'navigationBar.dart';
 
@@ -273,7 +274,6 @@ class _KoduLehtState extends State<KoduLeht> {
                     SizedBox(
                         height: vahe), */ // Add some spacing between the two widgets
 
-                    
                     Center(
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -292,8 +292,7 @@ class _KoduLehtState extends State<KoduLeht> {
                                   style: font,
                                   children: [
                                     TextSpan(
-                                        text: 'Seadmete kuu tarbimine',
-                                        style: fontSuur),
+                                        text: 'Kuu tarbimine', style: fontSuur),
                                   ],
                                 ),
                               ),
@@ -372,7 +371,100 @@ class _KoduLehtState extends State<KoduLeht> {
                       color: Colors.black,
                     ),
                     SizedBox(height: vahe),
-                    Align(
+                    Center(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Align(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                DropdownButton<String>(
+                                  underline: Container(
+                                    // Replace the default underline
+                                    height: 0,
+
+                                    color: Colors
+                                        .black, // Customize the underline color
+                                  ),
+                                  dropdownColor: sinineKast,
+                                  borderRadius: borderRadius,
+                                  value: selectedOption,
+                                  icon: const Icon(
+                                      Icons.expand_circle_down_outlined,
+                                      color: Color.fromARGB(255, 0, 0, 0)),
+                                  onChanged: (String? newValue) async {
+                                    // Use an async function
+                                    setState(() {
+                                      selectedOption = newValue!;
+                                      isLoading =
+                                          true; // Show the loading animation
+
+                                      // Call the async function and wait for the result
+                                      maksumus(selectedOption).then((result) {
+                                        setState(() {
+                                          kulu = result.toString();
+                                          isLoading =
+                                              false; // Hide the loading animation
+                                        });
+                                      });
+                                    });
+                                  },
+                                  items: dropdownOptions
+                                      .map<DropdownMenuItem<String>>(
+                                          (String value) {
+                                    return DropdownMenuItem<String>(
+                                      value: value,
+                                      child: Text('  ' + value + ' maksumus',
+                                          style: fontSuur),
+                                    );
+                                  }).toList(),
+                                ),
+                                //Text(" $kulu €", style: fontLaadimine()),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+
+                    //SizedBox(height: vahe / 8),
+                    Container(
+                      height: 1,
+                      width: double.infinity,
+                      color: Colors.black,
+                    ),
+                    SizedBox(height: vahe / 4),
+
+                    Center(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Align(
+                            child: Container(
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                              ),
+                              //width: sinineKastLaius,
+                              //height: sinineKastKorgus,
+                              child: RichText(
+                                textAlign: TextAlign.center,
+                                text: TextSpan(
+                                  style: font,
+                                  children: [
+                                    TextSpan(
+                                        text: 'Kokku: $kulu €',
+                                        style: fontLaadimine()),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    /*Align(
                       alignment: Alignment.centerLeft,
                       child: Padding(
                         padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
@@ -442,6 +534,39 @@ class _KoduLehtState extends State<KoduLeht> {
                           ),
                         ),
                       ),
+                    ),*/
+                    SizedBox(height: vahe / 2),
+                    Center(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Align(
+                            child: Container(
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                              ),
+                              //width: sinineKastLaius,
+                              //height: sinineKastKorgus,
+                              child: RichText(
+                                textAlign: TextAlign.center,
+                                text: TextSpan(
+                                  style: font,
+                                  children: [
+                                    TextSpan(text: '€', style: fontVaike),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    MaksumuseGraafik(),
+                    Container(
+                      height: 1,
+                      width: double.infinity,
+                      color: Colors.black,
                     ),
                   ],
                 ),
