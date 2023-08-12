@@ -139,17 +139,15 @@ class _TulpDiagrammState extends State<TulpDiagramm> {
     }
 
     if (date.hour >
-          15) //Kui kell on vähem, kui 15 või on saadetud String 'täna'
-      {
-        var data = await getElering('homme');
-    for (var i = 0; i < 24; i++) {
-      lulitusHomme[i][1] = data[i]['price'];
-    }
+        15) //Kui kell on vähem, kui 15 või on saadetud String 'täna'
+    {
+      var data = await getElering('homme');
+      for (var i = 0; i < 24; i++) {
+        lulitusHomme[i][1] = data[i]['price'];
       }
+    }
     setState(() {
-      if (date.hour >
-          15) 
-      {
+      if (date.hour > 15) {
         hommeNahtav = true;
       }
       lulitus = lulitusTana;
@@ -266,10 +264,9 @@ class _TulpDiagrammState extends State<TulpDiagramm> {
                                 tana = valge;
                                 tanaFont = font;
                                 hindMax = maxLeidmine(lulitus);
-                              hindMin = minLeidmine(lulitus);
-                              hindAVG = keskmineHindArvutaus(lulitus);
+                                hindMin = minLeidmine(lulitus);
+                                hindAVG = keskmineHindArvutaus(lulitus);
                                 HapticFeedback.vibrate();
-
                               } /*else {
                                 lulitus = lulitusTana;
                                 homme = valge;
@@ -539,7 +536,7 @@ class _TulpDiagrammState extends State<TulpDiagramm> {
                             text: TextSpan(
                               style: fontVaike,
                               children: [
-                                TextSpan(text: 'EUR/MWh', style: fontVaike),
+                                TextSpan(text: 'EUR / MWh', style: fontVaike),
                               ],
                             ),
                           ),

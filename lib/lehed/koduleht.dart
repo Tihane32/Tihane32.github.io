@@ -37,6 +37,12 @@ class _KoduLehtState extends State<KoduLeht> {
   bool isLoading = false;
   String selectedOption = 'Nädala';
   List<String> dropdownOptions = ['Nädala', 'Kuu', 'Aasta'];
+  String selectedOption2 = 'Nädala';
+  List<String> dropdownOptions2 = [
+    'Hetke',
+    'Nädala',
+    'Kuu',
+  ];
   double vahe = 20;
 
   Color boxColor = sinineKast;
@@ -274,7 +280,7 @@ class _KoduLehtState extends State<KoduLeht> {
                     SizedBox(
                         height: vahe), */ // Add some spacing between the two widgets
 
-                    Center(
+                    /*Center(
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
@@ -300,8 +306,70 @@ class _KoduLehtState extends State<KoduLeht> {
                           ),
                         ],
                       ),
+                    ),*/
+                    Center(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Align(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(right: 2.0),
+                                  child:
+                                      Icon(Icons.expand_circle_down_outlined),
+                                ),
+                                DropdownButton<String>(
+                                  underline: Container(
+                                    // Replace the default underline
+                                    height: 0,
+
+                                    color: Colors
+                                        .black, // Customize the underline color
+                                  ),
+                                  dropdownColor: sinineKast,
+                                  borderRadius: borderRadius,
+                                  value: selectedOption2,
+                                  iconSize: 0,
+                                  icon: const Icon(
+                                      Icons.expand_circle_down_outlined,
+                                      color: Color.fromARGB(0, 0, 0, 0)),
+                                  onChanged: (String? newValue) async {
+                                    // Use an async function
+                                    setState(() {
+                                      selectedOption2 = newValue!;
+                                      /*isLoading =
+                                          true; // Show the loading animation
+
+                                      // Call the async function and wait for the result
+                                      maksumus(selectedOption).then((result) {
+                                        setState(() {
+                                          kulu = result.toString();
+                                          isLoading =
+                                              false; // Hide the loading animation
+                                        });
+                                      });*/
+                                    });
+                                  },
+                                  items: dropdownOptions2
+                                      .map<DropdownMenuItem<String>>(
+                                          (String value) {
+                                    return DropdownMenuItem<String>(
+                                      value: value,
+                                      child: Text(value + ' tarbimine',
+                                          style: fontSuur),
+                                    );
+                                  }).toList(),
+                                ),
+                                //Text(" $kulu €", style: fontLaadimine()),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                    SizedBox(height: vahe / 4),
+                    //SizedBox(height: vahe / 4),
                     Container(
                       height: 1,
                       width: double.infinity,
@@ -379,6 +447,11 @@ class _KoduLehtState extends State<KoduLeht> {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(right: 2.0),
+                                  child:
+                                      Icon(Icons.expand_circle_down_outlined),
+                                ),
                                 DropdownButton<String>(
                                   underline: Container(
                                     // Replace the default underline
@@ -390,6 +463,7 @@ class _KoduLehtState extends State<KoduLeht> {
                                   dropdownColor: sinineKast,
                                   borderRadius: borderRadius,
                                   value: selectedOption,
+                                  iconSize: 0,
                                   icon: const Icon(
                                       Icons.expand_circle_down_outlined,
                                       color: Color.fromARGB(255, 0, 0, 0)),
@@ -415,7 +489,7 @@ class _KoduLehtState extends State<KoduLeht> {
                                           (String value) {
                                     return DropdownMenuItem<String>(
                                       value: value,
-                                      child: Text('  ' + value + ' maksumus',
+                                      child: Text(value + ' maksumus',
                                           style: fontSuur),
                                     );
                                   }).toList(),

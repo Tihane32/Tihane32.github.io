@@ -7,7 +7,6 @@ import 'kaksTabelit.dart';
 import 'hindJoonise.dart';
 import 'package:get/get.dart';
 
-
 class AppNavigationBar extends StatelessWidget {
   final int i;
   const AppNavigationBar({
@@ -18,156 +17,155 @@ class AppNavigationBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      
-          decoration: const BoxDecoration(
-            border: Border(
-              top: BorderSide(
-                color: Colors.black,
-                width: 0,
-              ),
+        decoration: const BoxDecoration(
+          border: Border(
+            top: BorderSide(
+              color: Colors.black,
+              width: 0,
             ),
           ),
-          child: SizedBox(
+        ),
+        child: SizedBox(
             height: navBarHeight,
             child: Stack(
-        children: [
-          Positioned(
-            top: -10,
-            left: 0,
-            right: 0,
-            child: BottomNavigationBar(
-              showSelectedLabels: false,
-              showUnselectedLabels: false,
-              backgroundColor: roheline,
-              fixedColor: Colors.black,
-              unselectedItemColor: Colors.black,
-              selectedIconTheme:
-                  const IconThemeData(color: Color.fromARGB(255, 0, 0, 0)),
-              unselectedIconTheme: const IconThemeData(color: Colors.black),
-              items: <BottomNavigationBarItem>[
-                BottomNavigationBarItem(
-                  label: '',
-                  icon: GestureDetector(
-                    onTap: () {
-                      Get.to(KoduLeht(),
-                          transition: Transition.topLevel);
-                      /*Navigator.push(
+              children: [
+                Positioned(
+                  top: -5,
+                  left: 0,
+                  right: 0,
+                  child: BottomNavigationBar(
+                    showSelectedLabels: true,
+                    showUnselectedLabels: true,
+                    backgroundColor: roheline,
+                    selectedFontSize: 12.0,
+                    unselectedFontSize: 12.0,
+                    fixedColor: Colors.black,
+                    unselectedItemColor: Colors.black,
+                    selectedIconTheme: const IconThemeData(
+                        color: Color.fromARGB(255, 0, 0, 0)),
+                    unselectedIconTheme:
+                        const IconThemeData(color: Colors.black),
+                    items: <BottomNavigationBarItem>[
+                      BottomNavigationBarItem(
+                        label: 'Ülevaade',
+                        icon: GestureDetector(
+                          onTap: () {
+                            Get.to(KoduLeht(), transition: Transition.topLevel);
+                            /*Navigator.push(
                         context,
                         MaterialPageRoute(builder: (context) => SeadmeteList()),
                       );*/
-                    },
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment
-                          .center, // Adjust the spacing between icons
-                      children: [
-                        if (i ==
-                            1) // Replace isSelected with your own logic to determine which label is selected
-                          Container(
-                            decoration: BoxDecoration(
-                              color: Color.fromARGB(40, 41, 137, 205),
-                              shape: BoxShape.circle,
-                            ),
-                            child: Icon(
-                              Icons.person_outlined,
-                              size: 40,
-                              color: Colors.blue,
-                            ),
-                          )
-                        else
-                          Icon(
-                            Icons.person_outlined,
-                            size: 40,
+                          },
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment
+                                .center, // Adjust the spacing between icons
+                            children: [
+                              if (i ==
+                                  1) // Replace isSelected with your own logic to determine which label is selected
+                                Container(
+                                  decoration: BoxDecoration(
+                                    color: Color.fromARGB(40, 41, 137, 205),
+                                    shape: BoxShape.circle,
+                                  ),
+                                  child: Icon(
+                                    Icons.person_outlined,
+                                    size: 35,
+                                    color: Colors.blue,
+                                  ),
+                                )
+                              else
+                                Icon(
+                                  Icons.person_outlined,
+                                  size: 35,
+                                ),
+
+                              // Adjust the spacing between the icons
+                            ],
                           ),
-    
-                        // Adjust the spacing between the icons
-                      ],
-                    ),
-                  ),
-                ),
-                BottomNavigationBarItem(
-                  label: '',
-                  icon: GestureDetector(
-                    onTap: () {
-                      Get.to(SeadmeteList(),
-                          transition: Transition.topLevel,
-                      );
-                      /*Navigator.push(
+                        ),
+                      ),
+                      BottomNavigationBarItem(
+                        label: 'Seadmed',
+                        icon: GestureDetector(
+                          onTap: () {
+                            Get.to(
+                              SeadmeteList(),
+                              transition: Transition.topLevel,
+                            );
+                            /*Navigator.push(
                         context,
                         MaterialPageRoute(builder: (context) => SeadmeteList()),
                       );*/
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.only(bottom: 0.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment
-                            .center, // Adjust the spacing between icons
-                        children: [
-                          if (i ==
-                              0) // Replace isSelected with your own logic to determine which label is selected
-                            Container(
-                              decoration: BoxDecoration(
-                                color: Color.fromARGB(81, 80, 129, 164),
-                                shape: BoxShape.circle,
-                              ),
-                              child: Icon(Icons.home_outlined,
-                                  size: 40, color: Colors.blue),
-                            )
-                          else
-                            Icon(
-                              Icons.home_outlined,
-                              size: 40,
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.only(bottom: 0.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment
+                                  .center, // Adjust the spacing between icons
+                              children: [
+                                if (i ==
+                                    0) // Replace isSelected with your own logic to determine which label is selected
+                                  Container(
+                                    decoration: BoxDecoration(
+                                      color: Color.fromARGB(81, 80, 129, 164),
+                                      shape: BoxShape.circle,
+                                    ),
+                                    child: Icon(Icons.home_outlined,
+                                        size: 35, color: Colors.blue),
+                                  )
+                                else
+                                  Icon(
+                                    Icons.home_outlined,
+                                    size: 35,
+                                  ),
+                                // Adjust the spacing between the icons
+                              ],
                             ),
-                          // Adjust the spacing between the icons
-                        ],
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
-                ),
-                BottomNavigationBarItem(
-                  label: '',
-                  icon: GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => SeadmeteValmisPage()),
-                      );
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.only(bottom: 0.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment
-                            .center, // Adjust the spacing between icons
-                        children: [
-                          if (i ==
-                              2) // Replace isSelected with your own logic to determine which label is selected
-                            Container(
-                              decoration: BoxDecoration(
-                                color: Color.fromARGB(81, 80, 129, 164),
-                                shape: BoxShape.circle,
-                              ),
-                              child: Icon(Icons.addchart_outlined,
-                                  size: 35, color: Colors.blue),
-                            )
-                          else
-                            Icon(
-                              Icons.addchart_outlined,
-                              size: 35,
+                      BottomNavigationBarItem(
+                        label: 'Graafiku koostamine',
+                        icon: GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => SeadmeteValmisPage()),
+                            );
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.only(bottom: 0.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment
+                                  .center, // Adjust the spacing between icons
+                              children: [
+                                if (i ==
+                                    2) // Replace isSelected with your own logic to determine which label is selected
+                                  Container(
+                                    decoration: BoxDecoration(
+                                      color: Color.fromARGB(81, 80, 129, 164),
+                                      shape: BoxShape.circle,
+                                    ),
+                                    child: Icon(Icons.addchart_outlined,
+                                        size: 35, color: Colors.blue),
+                                  )
+                                else
+                                  Icon(
+                                    Icons.addchart_outlined,
+                                    size: 35,
+                                  ),
+
+                                // Adjust the spacing between the icons
+                              ],
                             ),
-    
-                          // Adjust the spacing between the icons
-                        ],
+                          ),
+                        ),
                       ),
-                    ),
+                    ],
                   ),
                 ),
               ],
-            ),
-          ),
-        ],
-      )));
-          
-        
-     
+            )));
   }
 }
