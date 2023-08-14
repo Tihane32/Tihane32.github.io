@@ -2,16 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:testuus4/main.dart';
 
-class TarbimiseGraafik extends StatelessWidget {
+class MaksumuseGraafik extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final List<ChartData> chartData = [
-      ChartData('Seade 1', 35),
-      ChartData('Seade 2', 16),
-      ChartData('Seade 3', 24),
-      ChartData('Seade 4', 46),
-      ChartData('Seade 5', 9),
-      ChartData('Seade 6', 30),
+      ChartData('Seade 1', 0.35),
+      ChartData('Seade 2', 0.13),
+      ChartData('Seade 3', 0.63),
+      ChartData('Seade 4', 0.57),
+      ChartData('Seade 5', 0.13),
+      ChartData('Seade 6', 0.93),
     ];
     return Container(
       height: MediaQuery.of(context).size.height * chartData.length * 0.04,

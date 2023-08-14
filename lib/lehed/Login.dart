@@ -4,6 +4,7 @@ import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:testuus4/lehed/kaksTabelit.dart';
+import 'package:testuus4/lehed/lisaSeade.dart';
 //import '/SeadmeSeaded.dart';
 import 'package:testuus4/lehed/seadmeSeaded.dart';
 import 'package:testuus4/main.dart';
@@ -193,10 +194,12 @@ class _LoginPageState extends State<LoginPage> {
         key: _scaffoldMessengerKey,
         child: Scaffold(
           appBar: AppBar(
-            title: Text('Login',
-            style: GoogleFonts.roboto(
-              textStyle: const TextStyle(fontSize: 25),
-            ),),
+            title: Text(
+              'Shelly login',
+              style: GoogleFonts.roboto(
+                textStyle: const TextStyle(fontSize: 25),
+              ),
+            ),
             backgroundColor: appbar,
             leading: IconButton(
               icon: Icon(Icons.arrow_back),
@@ -215,7 +218,8 @@ class _LoginPageState extends State<LoginPage> {
                   TextFormField(
                     style: font,
                     controller: kasutajanimi,
-                    decoration: InputDecoration(labelText: 'Shelly kasutajanimi'),
+                    decoration:
+                        InputDecoration(labelText: 'Shelly kasutajanimi'),
                     validator: (value) {
                       if (value!.trim().isEmpty) {
                         return 'Kasutajanime on vaja!';
@@ -238,27 +242,46 @@ class _LoginPageState extends State<LoginPage> {
                   SizedBox(height: 20.0),
                   Container(
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(5.0),
-                      border: Border.all(
-    color: const Color.fromARGB(255, 0, 0, 0),
-    width: 2,
-  )
-                    ),
+                        borderRadius: BorderRadius.circular(5.0),
+                        border: Border.all(
+                          color: const Color.fromARGB(255, 0, 0, 0),
+                          width: 2,
+                        )),
                     width: sinineKastLaius,
                     height: sinineKastKorgus,
-                    
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                         backgroundColor: roheline,
-                         
-                         
-                          ),
+                        backgroundColor: roheline,
+                      ),
                       onPressed: () {
                         if (_formKey.currentState!.validate()) {
                           _submitForm();
                         }
                       },
                       child: Text('Login', style: font),
+                    ),
+                  ),
+                  SizedBox(height: 20.0),
+                  Container(
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(5.0),
+                        border: Border.all(
+                          color: const Color.fromARGB(255, 0, 0, 0),
+                          width: 2,
+                        )),
+                    width: sinineKastLaius,
+                    height: sinineKastKorgus,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: sinineKast,
+                      ),
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => LisaSeade()));
+                      },
+                      child: Text('Lisa seade manuaalselt', style: font),
                     ),
                   ),
                 ],
