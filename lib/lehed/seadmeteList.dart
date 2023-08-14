@@ -137,7 +137,7 @@ class _SeadmeteListState extends State<SeadmeteList> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => SeadmeteListValimine(),
+                      builder: (context) => LoginPage(),
                     ),
                   );
                 },

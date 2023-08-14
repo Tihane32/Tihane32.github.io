@@ -6,6 +6,7 @@ import 'package:testuus4/funktsioonid/hetketarbimine.dart';
 import 'package:testuus4/funktsioonid/tarbimine.dart';
 import 'package:testuus4/funktsioonid/maksumus.dart';
 import 'package:testuus4/lehed/tarbimiseGraafik.dart';
+import 'package:testuus4/lehed/tarbimiseGraafikSpline.dart';
 import '../funktsioonid/hetke_hind.dart';
 import 'package:testuus4/main.dart';
 import 'minuPakett.dart';
@@ -22,7 +23,7 @@ class KoduLeht extends StatefulWidget {
 
 class _KoduLehtState extends State<KoduLeht> {
   String onoffNupp = 'Shelly ON';
-
+  bool tarbimineBool = true;
   int koduindex = 1;
 
   int onTunnidSisestatud = 0;
@@ -401,10 +402,55 @@ class _KoduLehtState extends State<KoduLeht> {
                               ),
                             ),
                           ),
+                         
                         ],
                       ),
                     ),
-                    SizedBox(height: vahe / 2),
+                    Align(
+                            child: Visibility(
+                              visible: tarbimineBool,
+                              child: GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    tarbimineBool = !tarbimineBool;
+                                  });
+                                },
+                                child: Container(
+                                  alignment: Alignment.centerRight,
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(right:8.0),
+                                    child: Icon(Icons.show_chart_rounded,size: 30,),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                          Align(
+                            child: Visibility(
+                              visible: !tarbimineBool,
+                              child: GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    tarbimineBool = !tarbimineBool;
+                                  });
+                                },
+                                child: Container(
+                                  alignment: Alignment.centerRight,
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(right:8.0),
+                                    child: Icon(Icons.bar_chart_rounded,size: 30,),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                    
                     Center(
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -432,7 +478,10 @@ class _KoduLehtState extends State<KoduLeht> {
                       ),
                     ),
                     // Add some spacing between the two widgets
-                    TarbimiseGraafik(),
+                    Visibility(
+                        visible: tarbimineBool, child: TarbimiseGraafik()),
+                        Visibility(
+                        visible: !tarbimineBool, child: TarbimiseGraafikSpline()),
                     Container(
                       height: 1,
                       width: double.infinity,
