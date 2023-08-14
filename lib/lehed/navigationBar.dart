@@ -30,7 +30,7 @@ class AppNavigationBar extends StatelessWidget {
             child: Stack(
               children: [
                 Positioned(
-                  top: -5,
+                  top: 0,
                   left: 0,
                   right: 0,
                   child: BottomNavigationBar(

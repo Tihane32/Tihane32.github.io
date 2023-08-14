@@ -12,7 +12,7 @@ import 'lehed/seadmeteList.dart';
 import 'package:get/get.dart';
 //Maini käivitamine, home on koduleht.
 
-double navBarHeight = 65;
+double navBarHeight = 55;
 Color sinineKast = const Color.fromARGB(255, 143, 209, 238);
 Color backround = const Color.fromARGB(255, 255, 255, 255);
 Color appbar = const Color.fromARGB(255, 115, 162, 195);

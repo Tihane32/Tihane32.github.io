@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:testuus4/lehed/Login.dart';
 import 'package:testuus4/lehed/kaksTabelit.dart';
 //import '/SeadmeSeaded.dart';
 import 'package:testuus4/lehed/seadmeSeaded.dart';
@@ -83,7 +84,7 @@ class _LisaSeadeState extends State<LisaSeade> {
         child: Scaffold(
           appBar: AppBar(
             title: Text(
-              'Shelly seadme lisamine',
+              'Lisa seade manuaalselt',
               style: GoogleFonts.roboto(
                 textStyle: const TextStyle(fontSize: 25),
               ),
@@ -146,6 +147,29 @@ class _LisaSeadeState extends State<LisaSeade> {
                         }
                       },
                       child: Text('Lisa seade', style: font),
+                    ),
+                  ),
+                  SizedBox(height: 20.0),
+                  Container(
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(5.0),
+                        border: Border.all(
+                          color: const Color.fromARGB(255, 0, 0, 0),
+                          width: 2,
+                        )),
+                    width: sinineKastLaius,
+                    height: sinineKastKorgus,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: sinineKast,
+                      ),
+                      onPressed: () {
+                       Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => LoginPage()));
+                      },
+                      child: Text('Lisa seade Shelly kontoga', style: font),
                     ),
                   ),
                 ],

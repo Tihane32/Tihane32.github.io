@@ -15,7 +15,7 @@ class drawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Drawer(
-      width: MediaQuery.of(context).size.width * 0.55,
+      width: MediaQuery.of(context).size.width * 0.60,
       child: Container(
         color: const Color.fromARGB(
             255, 115, 162, 195), // Set the desired background color
@@ -26,12 +26,12 @@ class drawer extends StatelessWidget {
             const ListTile(),
             ListTile(
               leading: const Icon(
-                Icons.login,
+                Icons.add_circle_outline_outlined,
                 size: 32,
               ),
               title: RichText(
                 text: TextSpan(
-                  text: 'Shelly Login',
+                  text: 'Seadme lisamine',
                   style: GoogleFonts.roboto(
                     textStyle: const TextStyle(
                       fontSize: 18,
@@ -49,7 +49,7 @@ class drawer extends StatelessWidget {
                 );
               },
             ),
-            ListTile(
+            /*ListTile(
               leading: const Icon(
                 Icons.add_circle_outline_outlined,
                 size: 32,
@@ -73,7 +73,7 @@ class drawer extends StatelessWidget {
                   MaterialPageRoute(builder: (context) => LisaSeade()),
                 );
               },
-            ),
+            ),*/
             ListTile(
               leading: const Icon(
                 Icons.manage_accounts,
