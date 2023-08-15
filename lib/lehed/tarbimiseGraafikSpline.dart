@@ -36,48 +36,46 @@ class TarbimiseGraafikSpline extends StatelessWidget {
     return Container(
       height: MediaQuery.of(context).size.height * 0.3,
       //width: double.infinity,
-      child: Expanded(
-        child: Padding(
-          padding: const EdgeInsets.only(right:12.0),
-          child: Container(
-            child: SfCartesianChart(
-              primaryXAxis: DateTimeAxis(
-                majorGridLines: MajorGridLines(width: 1),
-                //minorGridLines: MinorGridLines(width: 10),
-                  dateFormat: DateFormat('dd.MM'),
-                  //interval: 1,
-                  labelStyle: fontVaike),
-              primaryYAxis: NumericAxis(
-                majorGridLines: MajorGridLines(width: 1),
+      child: Padding(
+        padding: const EdgeInsets.only(right:12.0),
+        child: Container(
+          child: SfCartesianChart(
+            primaryXAxis: DateTimeAxis(
+              majorGridLines: MajorGridLines(width: 1),
+              //minorGridLines: MinorGridLines(width: 10),
+                dateFormat: DateFormat('dd.MM'),
+                //interval: 1,
+                labelStyle: fontVaike),
+            primaryYAxis: NumericAxis(
+              majorGridLines: MajorGridLines(width: 1),
 
-                  minimum: chartData.map((data) => data.y!).reduce((min, value) => min > value ? value : min) * 0.5,
+                minimum: chartData.map((data) => data.y!).reduce((min, value) => min > value ? value : min) * 0.5,
+                isVisible: true,
+                labelStyle: fontVaike,
+                
+                //anchorRangeToVisiblePoints: true,
+                title: AxisTitle(
+                              text: 'kWh',
+                              textStyle: fontVaike,
+                              alignment: ChartAlignment.center),
+                              
+                              ),
+            series: <ChartSeries>[
+              // Renders spline chart
+              SplineSeries<ChartData, DateTime>(
+                //width: 0.9,
+                //spacing: 0.5,
+      splineType: SplineType.cardinal,
+                dataSource: chartData,
+                xValueMapper: (ChartData data, _) => data.x,
+                yValueMapper: (ChartData data, _) => data.y,
+                dataLabelSettings: DataLabelSettings(
                   isVisible: true,
-                  labelStyle: fontVaike,
-                  
-                  //anchorRangeToVisiblePoints: true,
-                  title: AxisTitle(
-                                text: 'kWh',
-                                textStyle: fontVaike,
-                                alignment: ChartAlignment.center),
-                                
-                                ),
-              series: <ChartSeries>[
-                // Renders spline chart
-                SplineSeries<ChartData, DateTime>(
-                  //width: 0.9,
-                  //spacing: 0.5,
-        splineType: SplineType.cardinal,
-                  dataSource: chartData,
-                  xValueMapper: (ChartData data, _) => data.x,
-                  yValueMapper: (ChartData data, _) => data.y,
-                  dataLabelSettings: DataLabelSettings(
-                    isVisible: true,
-                    labelAlignment: ChartDataLabelAlignment.bottom,
-                    textStyle: fontVaike,
-                  ),
+                  labelAlignment: ChartDataLabelAlignment.bottom,
+                  textStyle: fontVaike,
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),

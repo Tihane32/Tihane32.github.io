@@ -402,86 +402,95 @@ class _KoduLehtState extends State<KoduLeht> {
                               ),
                             ),
                           ),
-                         
                         ],
                       ),
                     ),
                     Align(
-                            child: Visibility(
-                              visible: tarbimineBool,
-                              child: GestureDetector(
-                                onTap: () {
-                                  setState(() {
-                                    tarbimineBool = !tarbimineBool;
-                                  });
-                                },
-                                child: Container(
-                                  alignment: Alignment.centerRight,
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                  ),
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(right:8.0),
-                                    child: Icon(Icons.show_chart_rounded,size: 30,),
+                      child: Visibility(
+                        visible: tarbimineBool,
+                        child: GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              tarbimineBool = !tarbimineBool;
+                            });
+                          },
+                          child: Container(
+                            alignment: Alignment.centerRight,
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.only(right: 8.0),
+                              child: Icon(
+                                Icons.show_chart_rounded,
+                                size: 30,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    Align(
+                      child: Visibility(
+                        visible: !tarbimineBool,
+                        child: GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              tarbimineBool = !tarbimineBool;
+                            });
+                          },
+                          child: Container(
+                            alignment: Alignment.centerRight,
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.only(right: 8.0),
+                              child: Icon(
+                                Icons.bar_chart_rounded,
+                                size: 30,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+
+                    Visibility(
+                      visible: tarbimineBool,
+                      child: Center(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Align(
+                              child: Container(
+                                alignment: Alignment.center,
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                ),
+                                //width: sinineKastLaius,
+                                //height: sinineKastKorgus,
+                                child: RichText(
+                                  textAlign: TextAlign.center,
+                                  text: TextSpan(
+                                    style: font,
+                                    children: [
+                                      TextSpan(text: 'kWh', style: fontVaike),
+                                    ],
                                   ),
                                 ),
                               ),
                             ),
-                          ),
-                          Align(
-                            child: Visibility(
-                              visible: !tarbimineBool,
-                              child: GestureDetector(
-                                onTap: () {
-                                  setState(() {
-                                    tarbimineBool = !tarbimineBool;
-                                  });
-                                },
-                                child: Container(
-                                  alignment: Alignment.centerRight,
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                  ),
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(right:8.0),
-                                    child: Icon(Icons.bar_chart_rounded,size: 30,),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                    
-                    Center(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          Align(
-                            child: Container(
-                              alignment: Alignment.center,
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                              ),
-                              //width: sinineKastLaius,
-                              //height: sinineKastKorgus,
-                              child: RichText(
-                                textAlign: TextAlign.center,
-                                text: TextSpan(
-                                  style: font,
-                                  children: [
-                                    TextSpan(text: 'kWh', style: fontVaike),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
                     // Add some spacing between the two widgets
                     Visibility(
                         visible: tarbimineBool, child: TarbimiseGraafik()),
-                        Visibility(
-                        visible: !tarbimineBool, child: TarbimiseGraafikSpline()),
+                    Visibility(
+                        visible: !tarbimineBool,
+                        child: TarbimiseGraafikSpline()),
                     Container(
                       height: 1,
                       width: double.infinity,
