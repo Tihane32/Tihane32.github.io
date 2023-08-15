@@ -132,7 +132,7 @@ class _LisaSeadeState extends State<LisaSeade> {
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(5.0),
                         border: Border.all(
-                          color: const Color.fromARGB(255, 0, 0, 0),
+                          color: Color.fromARGB(0, 0, 0, 0),
                           width: 2,
                         )),
                     width: sinineKastLaius,
@@ -154,7 +154,7 @@ class _LisaSeadeState extends State<LisaSeade> {
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(5.0),
                         border: Border.all(
-                          color: const Color.fromARGB(255, 0, 0, 0),
+                          color: Color.fromARGB(0, 0, 0, 0),
                           width: 2,
                         )),
                     width: sinineKastLaius,

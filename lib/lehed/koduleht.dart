@@ -6,6 +6,7 @@ import 'package:testuus4/funktsioonid/hetketarbimine.dart';
 import 'package:testuus4/funktsioonid/tarbimine.dart';
 import 'package:testuus4/funktsioonid/maksumus.dart';
 import 'package:testuus4/lehed/tarbimiseGraafik.dart';
+import 'package:testuus4/lehed/tarbimiseGraafikSpline.dart';
 import '../funktsioonid/hetke_hind.dart';
 import 'package:testuus4/main.dart';
 import 'minuPakett.dart';
@@ -22,7 +23,7 @@ class KoduLeht extends StatefulWidget {
 
 class _KoduLehtState extends State<KoduLeht> {
   String onoffNupp = 'Shelly ON';
-
+  bool tarbimineBool = true;
   int koduindex = 1;
 
   int onTunnidSisestatud = 0;
@@ -375,32 +376,96 @@ class _KoduLehtState extends State<KoduLeht> {
                         ),
                       ],
                     ),
-                  ),
-                  SizedBox(height: vahe / 2),
-                  Center(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Align(
+                    Align(
+                      child: Visibility(
+                        visible: tarbimineBool,
+                        child: GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              tarbimineBool = !tarbimineBool;
+                            });
+                          },
                           child: Container(
-                            alignment: Alignment.center,
+                            alignment: Alignment.centerRight,
                             decoration: BoxDecoration(
                               color: Colors.white,
                             ),
-                            //width: sinineKastLaius,
-                            //height: sinineKastKorgus,
-                            child: RichText(
-                              textAlign: TextAlign.center,
-                              text: TextSpan(
-                                style: font,
-                                children: [
-                                  TextSpan(text: 'kWh', style: fontVaike),
-                                ],
+                            child: Padding(
+                              padding: const EdgeInsets.only(right: 8.0),
+                              child: Icon(
+                                Icons.show_chart_rounded,
+                                size: 30,
                               ),
                             ),
                           ),
                         ),
-                      ],
+                      ),
+                    ),
+                    Align(
+                      child: Visibility(
+                        visible: !tarbimineBool,
+                        child: GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              tarbimineBool = !tarbimineBool;
+                            });
+                          },
+                          child: Container(
+                            alignment: Alignment.centerRight,
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.only(right: 8.0),
+                              child: Icon(
+                                Icons.bar_chart_rounded,
+                                size: 30,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+
+                    Visibility(
+                      visible: tarbimineBool,
+                      child: Center(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Align(
+                              child: Container(
+                                alignment: Alignment.center,
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                ),
+                                //width: sinineKastLaius,
+                                //height: sinineKastKorgus,
+                                child: RichText(
+                                  textAlign: TextAlign.center,
+                                  text: TextSpan(
+                                    style: font,
+                                    children: [
+                                      TextSpan(text: 'kWh', style: fontVaike),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    // Add some spacing between the two widgets
+                    Visibility(
+                        visible: tarbimineBool, child: TarbimiseGraafik()),
+                    Visibility(
+                        visible: !tarbimineBool,
+                        child: TarbimiseGraafikSpline()),
+                    Container(
+                      height: 1,
+                      width: double.infinity,
+                      color: Colors.black,
                     ),
                   ),
                   // Add some spacing between the two widgets

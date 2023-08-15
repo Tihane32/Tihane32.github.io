@@ -14,18 +14,22 @@ import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:testuus4/main.dart';
 
 class SeadmeGraafikuLeht extends StatefulWidget {
-  const SeadmeGraafikuLeht({Key? key, required this.seadmeNimi})
+  const SeadmeGraafikuLeht(
+      {Key? key,
+      required this.seadmeNimi,
+       required this.SeadmeteMap})
       : super(key: key);
 
   final String seadmeNimi;
-
+  final Map<String, List<String>> SeadmeteMap;
   @override
   _SeadmeGraafikuLehtState createState() =>
-      _SeadmeGraafikuLehtState(seadmeNimi: seadmeNimi);
+      _SeadmeGraafikuLehtState(seadmeNimi: seadmeNimi, SeadmeteMap:SeadmeteMap);
 }
 
 class _SeadmeGraafikuLehtState extends State<SeadmeGraafikuLeht> {
-  _SeadmeGraafikuLehtState({Key? key, required this.seadmeNimi});
+  _SeadmeGraafikuLehtState({Key? key, required this.seadmeNimi, required this.SeadmeteMap});
+  Map<String, List<String>> SeadmeteMap;
   final String seadmeNimi;
   late Map<int, dynamic> lulitusMap;
   int selectedRowIndex = -1;
@@ -40,50 +44,7 @@ class _SeadmeGraafikuLehtState extends State<SeadmeGraafikuLeht> {
     width: 2,
   );
 
-  Map<String, List<String>> SeadmeteMap = {
-    'Keldri boiler': [
-      'assets/boiler1.jpg',
-      '123456',
-      'off',
-      'Shelly plug S',
-    ],
-    'Veranda lamp': [
-      'assets/verandaLamp1.png',
-      '123456',
-      'offline',
-      'Shelly plug S',
-    ],
-    'veranda lamp': [
-      'assets/verandaLamp1.png',
-      '123456',
-      'on',
-      'Shelly plug S',
-    ],
-    'Keldri pump': [
-      'assets/pump1.jpg',
-      '123456',
-      'on',
-      'Shelly plug S',
-    ],
-    'Garaazi pump': [
-      'assets/pump1.jpg',
-      '123456',
-      'offline',
-      'Shelly plug S',
-    ],
-    'Main boiler': [
-      'assets/boiler1.jpg',
-      '123456',
-      'on',
-      'Shelly plug S',
-    ],
-    'Sauna boiler': [
-      'assets/boiler1.jpg',
-      '123456',
-      'off',
-      'Shelly plug S',
-    ],
-  };
+ 
 
   Map<int, dynamic> keskHind = {
     0: ['0', 0, 'Keskmine Hind'],
