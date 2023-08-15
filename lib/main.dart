@@ -47,6 +47,6 @@ Border border = Border.all(
 void main() {
   runApp(MaterialApp(
     theme: ThemeData(brightness: Brightness.light),
-    home: DynaamilenieKoduLeht(), //Alustab appi kodulehest
+    home: DynaamilenieKoduLeht(i: 1), //Alustab appi kodulehest
   ));
 }

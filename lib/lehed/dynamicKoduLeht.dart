@@ -12,15 +12,21 @@ import 'kaksTabelit.dart';
 import 'hindJoonise.dart';
 import 'package:get/get.dart';
 import 'kasutajaSeaded.dart';
+import 'lisaSeade.dart';
 import 'navigationBar.dart';
 
 class DynaamilenieKoduLeht extends StatefulWidget {
+  DynaamilenieKoduLeht({Key? key, required this.i}) : super(key: key);
+
+  int i;
+
   @override
-  State<DynaamilenieKoduLeht> createState() => _DynaamilenieKoduLehtState();
+  State<DynaamilenieKoduLeht> createState() => _DynaamilenieKoduLehtState(i: i);
 }
 
 class _DynaamilenieKoduLehtState extends State<DynaamilenieKoduLeht> {
-  int i = 1;
+  _DynaamilenieKoduLehtState({Key? key, required this.i});
+  int i;
   String appBarText = 'Minu seadmed';
 
   final List<Widget> lehed = [
@@ -29,6 +35,7 @@ class _DynaamilenieKoduLehtState extends State<DynaamilenieKoduLeht> {
     LoginPage(),
     KasutajaSeaded(),
     TulpDiagramm(),
+    LisaSeade(),
   ];
 
   @override

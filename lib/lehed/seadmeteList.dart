@@ -8,6 +8,7 @@ import 'package:testuus4/lehed/kasutajaSeaded.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:testuus4/lehed/rakenduseSeaded.dart';
 import 'GraafikusseSeadmeteValik.dart';
+import 'dynamicKoduLeht.dart';
 import 'kaksTabelit.dart';
 import 'dart:convert';
 import 'package:google_fonts/google_fonts.dart';
@@ -44,9 +45,7 @@ class _SeadmeteListState extends State<SeadmeteList> {
 
   int koduindex = 1;
 
-  Map<String, List<String>> SeadmeteMap = {
-    
-  };
+  Map<String, List<String>> SeadmeteMap = {};
   Set<String> selectedPictures = Set<String>();
 
   void toggleSelection(String pictureName) {
@@ -77,7 +76,7 @@ class _SeadmeteListState extends State<SeadmeteList> {
         var olek = storedMap['Seade$i']['Seadme_olek'];
         print('olek: $olek');
         Map<String, List<String>> ajutineMap = {
-          name: ['assets/boiler1.jpg','$id','$olek' , '$pistik'],
+          name: ['assets/boiler1.jpg', '$id', '$olek', '$pistik'],
         };
         minuSeadmedK.addAll(ajutineMap);
         i++;
@@ -92,7 +91,7 @@ class _SeadmeteListState extends State<SeadmeteList> {
     });
   }
 
-    @override
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: backround,
@@ -106,11 +105,9 @@ class _SeadmeteListState extends State<SeadmeteList> {
             return GestureDetector(
               onTap: () {
                 Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => LoginPage(),
-                  ),
-                );
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => DynaamilenieKoduLeht(i: 2)));
               },
               child: Container(
                 width: double.infinity,

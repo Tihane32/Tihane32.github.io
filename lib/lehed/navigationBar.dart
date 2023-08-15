@@ -93,7 +93,8 @@ class AppNavigationBar extends StatelessWidget {
                             Navigator.push(
                               context,
                               CupertinoPageRoute(
-                                  builder: (context) => DynaamilenieKoduLeht()),
+                                  builder: (context) =>
+                                      DynaamilenieKoduLeht(i: 1)),
                             );
                           },
                           child: Padding(
