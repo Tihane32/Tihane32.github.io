@@ -50,11 +50,11 @@ class AppNavigationBar extends StatelessWidget {
                         label: 'Ülevaade',
                         icon: GestureDetector(
                           onTap: () {
-                            Get.to(KoduLeht(), transition: Transition.topLevel);
-                            /*Navigator.push(
+                            //Get.to(KoduLeht(), transition: Transition.topLevel);
+                            Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => SeadmeteList()),
-                      );*/
+                        MaterialPageRoute(builder: (context) => KoduLeht()),
+                      );
                           },
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment
@@ -88,14 +88,14 @@ class AppNavigationBar extends StatelessWidget {
                         label: 'Seadmed',
                         icon: GestureDetector(
                           onTap: () {
-                            Get.to(
+                            /*Get.to(
                               SeadmeteList(),
                               transition: Transition.topLevel,
-                            );
-                            /*Navigator.push(
+                            );*/
+                            Navigator.push(
                         context,
                         MaterialPageRoute(builder: (context) => SeadmeteList()),
-                      );*/
+                      );
                           },
                           child: Padding(
                             padding: const EdgeInsets.only(bottom: 0.0),

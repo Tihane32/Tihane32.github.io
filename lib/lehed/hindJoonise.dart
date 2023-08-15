@@ -44,6 +44,7 @@ class _TulpDiagrammState extends State<TulpDiagramm> {
   late double hindMax = 0;
   double vahe = 10;
   Color boxColor = sinineKast;
+  int tund = 0;
 
   Map<int, dynamic> keskHind = {
     0: ['0', 0, ''],
@@ -146,12 +147,13 @@ class _TulpDiagrammState extends State<TulpDiagramm> {
         lulitusHomme[i][1] = data[i]['price'];
       }
     }
+
     setState(() {
       if (date.hour > 15) {
         hommeNahtav = true;
       }
       lulitus = lulitusTana;
-
+      tund = date.hour;
       hindMax = maxLeidmine(lulitusTana);
       hindMin = minLeidmine(lulitusTana);
       print(lulitus);
@@ -608,9 +610,16 @@ class _TulpDiagrammState extends State<TulpDiagramm> {
                             },
                             dataLabelMapper: (data, _) => data[1].toString(),
                             pointColorMapper: (data, index) {
-                              return tappedIndex == index
-                                  ? Colors.blue
-                                  : Colors.green;
+                              double yValue = data[1];
+                              if (tappedIndex == index) {
+                                return Colors
+                                    .blue; // Set the color to blue if tapped
+                              } else if (tund == index) {
+                                return Colors
+                                    .yellow; // Set the color to yellow if it corresponds to "tund" value
+                              } else {
+                                return Colors.green;
+                              }
                             },
                             dataLabelSettings: DataLabelSettings(
                               isVisible: true,

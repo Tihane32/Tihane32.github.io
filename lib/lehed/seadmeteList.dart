@@ -5,18 +5,19 @@ import 'package:testuus4/lehed/SeadmeGraafikLeht.dart';
 import 'package:testuus4/lehed/abiLeht.dart';
 import 'package:testuus4/lehed/drawer.dart';
 import 'package:testuus4/lehed/kasutajaSeaded.dart';
-
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:testuus4/lehed/rakenduseSeaded.dart';
 import 'GraafikusseSeadmeteValik.dart';
 import 'kaksTabelit.dart';
-
+import 'dart:convert';
 import 'package:google_fonts/google_fonts.dart';
-
+import 'package:testuus4/funktsioonid/seisukord.dart';
 import 'hindJoonise.dart';
 import 'navigationBar.dart';
 import 'package:testuus4/main.dart';
 
 import 'package:get/get.dart';
+
 class SeadmeteListPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -34,7 +35,12 @@ class SeadmeteList extends StatefulWidget {
 }
 
 class _SeadmeteListState extends State<SeadmeteList> {
+  late Map<String, List<String>> minuSeadmedK = {};
   String onoffNupp = 'Shelly ON';
+  void initState() {
+    super.initState();
+    _submitForm();
+  }
 
   int koduindex = 1;
 
@@ -94,6 +100,39 @@ class _SeadmeteListState extends State<SeadmeteList> {
     });
   }
 
+  Future _submitForm() async {
+    minuSeadmedK.clear();
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    //await prefs.clear();
+    String? storedJsonMap = prefs.getString('seadmed');
+    print(storedJsonMap);
+    if (storedJsonMap != null) {
+      Map<String, dynamic> storedMap = json.decode(storedJsonMap);
+      await Future.delayed(const Duration(seconds: 3));
+      var i = 0;
+      for (String Seade in storedMap.keys) {
+        seisukord();
+        var id = storedMap['Seade$i']['Seadme_ID'];
+        var name = storedMap['Seade$i']['Seadme_nimi'];
+        var pistik = storedMap['Seade$i']['Seadme_pistik'];
+        var olek = storedMap['Seade$i']['Seadme_olek'];
+        print('olek: $olek');
+        Map<String, List<String>> ajutineMap = {
+          name: ['assets/boiler1.jpg','$id','$olek' , '$pistik'],
+        };
+        minuSeadmedK.addAll(ajutineMap);
+        i++;
+      }
+      print('seadmed');
+      print(minuSeadmedK);
+      print(SeadmeteMap);
+    }
+    setState(() {
+      SeadmeteMap = minuSeadmedK;
+      //isLoading = false;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -137,7 +176,7 @@ class _SeadmeteListState extends State<SeadmeteList> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => SeadmeteListValimine(),
+                      builder: (context) => LoginPage(),
                     ),
                   );
                 },
@@ -166,6 +205,7 @@ class _SeadmeteListState extends State<SeadmeteList> {
                   MaterialPageRoute(
                     builder: (context) => SeadmeGraafikuLeht(
                       seadmeNimi: SeadmeteMap.keys.elementAt(index),
+                      SeadmeteMap: SeadmeteMap
                     ),
                   ),
                 );
@@ -262,7 +302,9 @@ class _SeadmeteListState extends State<SeadmeteList> {
             );
           },
         ),
-        bottomNavigationBar: AppNavigationBar(i: 0,));
+        bottomNavigationBar: AppNavigationBar(
+          i: 0,
+        ));
   }
 }
 
