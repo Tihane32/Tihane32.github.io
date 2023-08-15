@@ -193,21 +193,6 @@ class _LoginPageState extends State<LoginPage> {
     return ScaffoldMessenger(
         key: _scaffoldMessengerKey,
         child: Scaffold(
-          appBar: AppBar(
-            title: Text(
-              'Shelly login',
-              style: GoogleFonts.roboto(
-                textStyle: const TextStyle(fontSize: 25),
-              ),
-            ),
-            backgroundColor: appbar,
-            leading: IconButton(
-              icon: Icon(Icons.arrow_back),
-              onPressed: () {
-                Navigator.pop(context);
-              },
-            ),
-          ),
           body: Padding(
             padding: const EdgeInsets.all(16.0),
             child: Form(

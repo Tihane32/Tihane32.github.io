@@ -5,10 +5,13 @@ import 'package:testuus4/lehed/GraafikusseSeadmeteValik.dart';
 import 'package:testuus4/lehed/koduleht.dart';
 import 'package:testuus4/lehed/seadmeteList.dart';
 import 'package:testuus4/main.dart';
+import 'AbiLeht.dart';
+import 'Login.dart';
 import 'drawer.dart';
 import 'kaksTabelit.dart';
 import 'hindJoonise.dart';
 import 'package:get/get.dart';
+import 'kasutajaSeaded.dart';
 import 'navigationBar.dart';
 
 class DynaamilenieKoduLeht extends StatefulWidget {
@@ -18,10 +21,14 @@ class DynaamilenieKoduLeht extends StatefulWidget {
 
 class _DynaamilenieKoduLehtState extends State<DynaamilenieKoduLeht> {
   int i = 1;
+  String appBarText = 'Minu seadmed';
 
   final List<Widget> lehed = [
     KoduLeht(),
     SeadmeteList(),
+    LoginPage(),
+    KasutajaSeaded(),
+    TulpDiagramm(),
   ];
 
   @override
@@ -32,7 +39,7 @@ class _DynaamilenieKoduLehtState extends State<DynaamilenieKoduLeht> {
           automaticallyImplyLeading: false,
           backgroundColor: appbar,
           title: Text(
-            'Shelly App',
+            appBarText,
             style: GoogleFonts.roboto(
               textStyle: const TextStyle(fontSize: 25),
             ),
@@ -54,7 +61,145 @@ class _DynaamilenieKoduLehtState extends State<DynaamilenieKoduLeht> {
             ),
           ],
         ),
-        endDrawer: drawer(),
+        endDrawer: Drawer(
+          width: MediaQuery.of(context).size.width * 0.60,
+          child: Container(
+            color: const Color.fromARGB(
+                255, 115, 162, 195), // Set the desired background color
+            child: ListView(
+              padding: EdgeInsets.zero,
+              children: [
+                // Drawer items...
+                const ListTile(),
+                ListTile(
+                  leading: const Icon(
+                    Icons.add_circle_outline_outlined,
+                    size: 32,
+                  ),
+                  title: RichText(
+                    text: TextSpan(
+                      text: 'Seadme lisamine',
+                      style: GoogleFonts.roboto(
+                        textStyle: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w500,
+                          color: Color.fromARGB(255, 255, 255, 255),
+                        ),
+                      ),
+                    ),
+                  ),
+                  onTap: () {
+                    setState(() {
+                      i = 2;
+                      appBarText = 'Seadme lisamine';
+                    });
+                  },
+                ),
+                /*ListTile(
+              leading: const Icon(
+                Icons.add_circle_outline_outlined,
+                size: 32,
+              ),
+              title: RichText(
+                text: TextSpan(
+                  text: 'Lisa seade',
+                  style: GoogleFonts.roboto(
+                    textStyle: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w500,
+                      color: Color.fromARGB(255, 255, 255, 255),
+                    ),
+                  ),
+                ),
+              ),
+              onTap: () {
+                // Navigate to the home page
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => LisaSeade()),
+                );
+              },
+            ),*/
+                ListTile(
+                  leading: const Icon(
+                    Icons.manage_accounts,
+                    size: 32,
+                  ),
+                  title: RichText(
+                    text: TextSpan(
+                      text: 'Seaded',
+                      style: GoogleFonts.roboto(
+                        textStyle: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w500,
+                          color: Color.fromARGB(255, 255, 255, 255),
+                        ),
+                      ),
+                    ),
+                  ),
+                  onTap: () {
+                    setState(() {
+                      i = 3;
+                      appBarText = 'Seaded';
+                    });
+                  },
+                ),
+                ListTile(
+                  leading: Transform.rotate(
+                    angle: 0 * 0.0174533,
+                    child: const Icon(
+                      Icons.bar_chart_rounded,
+                      size: 32, // Adjust the size as needed
+                    ),
+                  ),
+                  title: RichText(
+                    text: TextSpan(
+                      text: 'Elektri börsihind',
+                      style: GoogleFonts.roboto(
+                        textStyle: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w500,
+                          color: Color.fromARGB(255, 255, 255, 255),
+                        ),
+                      ),
+                    ),
+                  ),
+                  onTap: () {
+                    setState(() {
+                      i = 4;
+                      appBarText = 'Elektri börsihind';
+                    });
+                  },
+                ),
+                ListTile(
+                  leading: const Icon(
+                    Icons.help_outline_outlined,
+                    size: 32, // Adjust the size as needed
+                  ),
+                  title: RichText(
+                    text: TextSpan(
+                      text: 'Abi',
+                      style: GoogleFonts.roboto(
+                        textStyle: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w500,
+                          color: Color.fromARGB(255, 255, 255, 255),
+                        ),
+                      ),
+                    ),
+                  ),
+                  onTap: () {
+                    // Navigate to the home page
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => AbiLeht()),
+                    );
+                  },
+                ),
+              ],
+            ),
+          ),
+        ),
         body: IndexedStack(
           index: i,
           children: lehed,
@@ -95,6 +240,7 @@ class _DynaamilenieKoduLehtState extends State<DynaamilenieKoduLeht> {
                               onTap: () {
                                 setState(() {
                                   i = 0;
+                                  appBarText = 'Ülevaade';
                                 });
                               },
                               child: Row(
@@ -131,6 +277,7 @@ class _DynaamilenieKoduLehtState extends State<DynaamilenieKoduLeht> {
                               onTap: () {
                                 setState(() {
                                   i = 1;
+                                  appBarText = 'Minu seadmed';
                                 });
                               },
                               child: Padding(
