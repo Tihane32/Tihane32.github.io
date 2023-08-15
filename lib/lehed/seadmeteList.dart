@@ -45,48 +45,7 @@ class _SeadmeteListState extends State<SeadmeteList> {
   int koduindex = 1;
 
   Map<String, List<String>> SeadmeteMap = {
-    'Keldri boiler': [
-      'assets/boiler1.jpg',
-      '123456',
-      'off',
-      'Shelly plug S',
-    ],
-    'Veranda lamp': [
-      'assets/verandaLamp1.png',
-      '123456',
-      'offline',
-      'Shelly plug S',
-    ],
-    'veranda lamp': [
-      'assets/verandaLamp1.png',
-      '123456',
-      'on',
-      'Shelly plug S',
-    ],
-    'Keldri pump': [
-      'assets/pump1.jpg',
-      '123456',
-      'on',
-      'Shelly plug S',
-    ],
-    'Garaazi pump': [
-      'assets/pump1.jpg',
-      '123456',
-      'offline',
-      'Shelly plug S',
-    ],
-    'Main boiler': [
-      'assets/boiler1.jpg',
-      '123456',
-      'on',
-      'Shelly plug S',
-    ],
-    'Sauna boiler': [
-      'assets/boiler1.jpg',
-      '123456',
-      'off',
-      'Shelly plug S',
-    ],
+    
   };
   Set<String> selectedPictures = Set<String>();
 
@@ -133,7 +92,7 @@ class _SeadmeteListState extends State<SeadmeteList> {
     });
   }
 
-  @override
+    @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: backround,
@@ -141,50 +100,15 @@ class _SeadmeteListState extends State<SeadmeteList> {
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
         ),
-        endDrawer: drawer(),
-        body: GridView.builder(
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-          ),
-          itemCount: SeadmeteMap.length + 1,
-          itemBuilder: (context, index) {
-            if (index == SeadmeteMap.length) {
-              return GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => LoginPage(),
-                    ),
-                  );
-                },
-                child: Container(
-                  width: double.infinity,
-                  height: double.infinity,
-                  color: Colors.grey[300],
-                  child: Center(
-                    child: Icon(
-                      Icons.add,
-                      size: 48,
-                      color: Colors.black,
-                    ),
-                  ),
-                ),
-              );
-            }
-
-            final seade = SeadmeteMap.keys.elementAt(index);
-            final pilt = SaaSeadmePilt(SeadmeteMap, seade);
-            final staatus = SaaSeadmeolek(SeadmeteMap, seade);
+        itemCount: SeadmeteMap.length + 1,
+        itemBuilder: (context, index) {
+          if (index == SeadmeteMap.length) {
             return GestureDetector(
               onTap: () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => SeadmeGraafikuLeht(
-                      seadmeNimi: SeadmeteMap.keys.elementAt(index),
-                      SeadmeteMap: SeadmeteMap
-                    ),
+                    builder: (context) => LoginPage(),
                   ),
                 );
               },
@@ -213,6 +137,7 @@ class _SeadmeteListState extends State<SeadmeteList> {
                 MaterialPageRoute(
                   builder: (context) => SeadmeGraafikuLeht(
                     seadmeNimi: SeadmeteMap.keys.elementAt(index),
+                    SeadmeteMap: SeadmeteMap,
                   ),
                 ),
               );
@@ -272,7 +197,7 @@ class _SeadmeteListState extends State<SeadmeteList> {
                         top: 8,
                         left: 8,
                         child: Visibility(
-                          visible: staatus == 'offline',
+                          visible: staatus == 'Offline',
                           child: Container(
                             child: Icon(
                               Icons.wifi_off_outlined,

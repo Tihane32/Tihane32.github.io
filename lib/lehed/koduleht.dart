@@ -376,6 +376,7 @@ class _KoduLehtState extends State<KoduLeht> {
                         ),
                       ],
                     ),
+                  ),
                     Align(
                       child: Visibility(
                         visible: tarbimineBool,
@@ -467,14 +468,10 @@ class _KoduLehtState extends State<KoduLeht> {
                       width: double.infinity,
                       color: Colors.black,
                     ),
-                  ),
+                
                   // Add some spacing between the two widgets
-                  TarbimiseGraafik(),
-                  Container(
-                    height: 1,
-                    width: double.infinity,
-                    color: Colors.black,
-                  ),
+                  
+                  
                   SizedBox(height: vahe),
                   Center(
                     child: Row(
@@ -678,13 +675,13 @@ class _KoduLehtState extends State<KoduLeht> {
                     width: double.infinity,
                     color: Colors.black,
                   ),
+              
                 ],
-              ),
             ),
           ),
         ),
       ),
-    );
+    ));
   }
 }
 /*

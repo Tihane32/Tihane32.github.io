@@ -571,7 +571,8 @@ class _TulpDiagrammState extends State<TulpDiagramm> {
                               setState(() {
                                 tappedIndex = null; // Reset tappedIndex to null
                               });
-                            },
+                            });
+                          },
                             borderRadius: BorderRadius.only(
                                 topLeft: Radius.circular(20),
                                 topRight: Radius.circular(20)),
@@ -601,7 +602,7 @@ class _TulpDiagrammState extends State<TulpDiagramm> {
                               angle: 270,
                             ),
                           ),
-                        ),
+                          
                         LineSeries(
                           dataSource: keskHind.values.toList(),
                           xValueMapper: (inf, _) => inf[0],
