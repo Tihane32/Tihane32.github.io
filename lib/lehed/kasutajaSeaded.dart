@@ -34,93 +34,217 @@ class _KasutajaSeadedState extends State<KasutajaSeaded> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: backround,
-        appBar: AppBar(
-          backgroundColor: appbar,
-          title: Text(
-            'Seaded',
-            style: GoogleFonts.roboto(
-              textStyle: const TextStyle(fontSize: 25),
-            ),
-          ),
-          actions: [
-            Builder(
-              builder: (BuildContext context) {
-                return IconButton(
-                  padding: const EdgeInsets.only(right: 20),
-                  icon: const Icon(
-                    Icons.menu,
-                    size: 30,
-                  ),
-                  onPressed: () {
-                    Scaffold.of(context).openEndDrawer();
-                  },
-                );
-              },
-            ),
-          ],
-        ),
-        endDrawer: drawer(),
-        body: Container(
-          decoration: const BoxDecoration(
-              /*image: DecorationImage(
+      backgroundColor: backround,
+      body: Container(
+        decoration: const BoxDecoration(
+            /*image: DecorationImage(
             image: AssetImage('assets/tuulik7.jpg'),
             alignment: Alignment.bottomCenter,
           ),*/
-              ),
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(12, 20, 8, 8),
-            child: Center(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => MinuPakett()),
-                        );
-                      },
-                      child: // Add some spacing between the two widgets
-                          Align(
-                        alignment: Alignment.center,
-                        child: Container(
-                          alignment: Alignment.centerLeft,
-                          decoration: BoxDecoration(
-                            color: roheline,
-                            borderRadius: borderRadius,
-                            border: border,
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withOpacity(0.5),
-                                spreadRadius: 2,
-                                blurRadius: 5,
-                                offset: const Offset(3, 3),
-                              ),
-                            ],
-                          ),
-                          width: sinineKastLaius,
+            ),
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(12, 20, 8, 8),
+          child: Center(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => MinuPakett()),
+                      );
+                    },
+                    child: // Add some spacing between the two widgets
+                        Align(
+                      alignment: Alignment.center,
+                      child: Container(
+                        alignment: Alignment.centerLeft,
+                        decoration: BoxDecoration(
+                          color: roheline,
+                          borderRadius: borderRadius,
+                          border: border,
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.5),
+                              spreadRadius: 2,
+                              blurRadius: 5,
+                              offset: const Offset(3, 3),
+                            ),
+                          ],
+                        ),
+                        width: sinineKastLaius,
+                        height: sinineKastKorgus,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text('  Minu pakett ', style: font),
+                            const Icon(
+                              Icons.account_circle_rounded,
+                              color: Colors.black,
+                              size: 30,
+                            ),
+                            const SizedBox(width: 5),
+                          ],
+                        ),
+                      ),
+                    )),
+                SizedBox(height: vahe),
+
+                Align(
+                  alignment: Alignment.center,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: sinineKast,
+                      borderRadius: borderRadius,
+                      border: border,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.2),
+                          spreadRadius: 2,
+                          blurRadius: 5,
+                          offset: const Offset(3, 3),
+                        ),
+                      ],
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Container(
+                          alignment: Alignment.center,
+                          width: 300,
                           height: sinineKastKorgus,
                           child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Text('  Minu pakett ', style: font),
-                              const Icon(
-                                Icons.account_circle_rounded,
-                                color: Colors.black,
-                                size: 30,
+                              Padding(
+                                padding: const EdgeInsets.only(left: 8.0),
+                                child: Center(
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      RichText(
+                                        text: TextSpan(
+                                          style: const TextStyle(
+                                            fontSize: 20,
+                                            color: Colors.black,
+                                          ),
+                                          children: [
+                                            TextSpan(
+                                                text:
+                                                    'Taustal töötamine lubatud',
+                                                style: font),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
                               ),
-                              const SizedBox(width: 5),
                             ],
                           ),
                         ),
-                      )),
-                  SizedBox(height: vahe),
+                        Transform.scale(
+                          scale: 1.5,
+                          child: Checkbox(
+                            value: value,
+                            activeColor: Color.fromARGB(255, 69, 207, 44),
+                            onChanged: (bool? newValue) {
+                              setState(() {
+                                value = !value;
+                              });
+                            },
+                            shape: CircleBorder(),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                SizedBox(height: vahe),
+                Align(
+                  alignment: Alignment.center,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: sinineKast,
+                      borderRadius: borderRadius,
+                      border: border,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.2),
+                          spreadRadius: 2,
+                          blurRadius: 5,
+                          offset: const Offset(3, 3),
+                        ),
+                      ],
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Container(
+                          alignment: Alignment.center,
+                          width: 300,
+                          height: sinineKastKorgus,
+                          child: Row(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.only(left: 8.0),
+                                child: Center(
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      RichText(
+                                        text: TextSpan(
+                                          style: const TextStyle(
+                                            fontSize: 20,
+                                            color: Colors.black,
+                                          ),
+                                          children: [
+                                            TextSpan(
+                                                text: 'Teavitused lubatud',
+                                                style: font),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Transform.scale(
+                          scale: 1.5,
+                          child: Checkbox(
+                            activeColor: Color.fromARGB(255, 69, 207, 44),
+                            value: valueTeavitus,
+                            onChanged: (bool? newValue) {
+                              setState(() {
+                                valueTeavitus = !valueTeavitus;
+                              });
+                            },
+                            shape: CircleBorder(),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
 
-               
-                  Align(
-                    alignment: Alignment.center,
+                SizedBox(
+                    height: vahe), // Add some spacing between the two widgets
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => KoduLeht()),
+                    );
+                  },
+                  child: Align(
+                    alignment: Alignment.centerLeft,
                     child: Container(
+                      alignment: Alignment.center,
                       decoration: BoxDecoration(
                         color: sinineKast,
                         borderRadius: borderRadius,
@@ -134,64 +258,36 @@ class _KasutajaSeadedState extends State<KasutajaSeaded> {
                           ),
                         ],
                       ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Container(
-                            alignment: Alignment.center,
-                            width: 300,
-                            height: sinineKastKorgus,
-                            child: Row(
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.only(left: 8.0),
-                                  child: Center(
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        RichText(
-                                          text: TextSpan(
-                                            style: const TextStyle(
-                                              fontSize: 20,
-                                              color: Colors.black,
-                                            ),
-                                            children: [
-                                              TextSpan(
-                                                  text: 'Taustal töötamine lubatud',
-                                                  style: font),
-                                            ],
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
+                      width: sinineKastLaius,
+                      height: sinineKastKorgus,
+                      child: RichText(
+                        text: TextSpan(
+                          style: const TextStyle(
+                            fontSize: 20,
+                            color: Colors.black,
                           ),
-                          Transform.scale(
-                             scale: 1.5,
-                            child: Checkbox(
-                              value: value,
-                              activeColor: Color.fromARGB(255, 69, 207, 44),
-                              
-                              onChanged: (bool? newValue) {
-                                setState(() {
-                                  value = !value;
-                                });
-                              },
-                              shape: CircleBorder(),
-                            ),
-                          ),
-                        ],
+                          children: [
+                            TextSpan(text: 'Logi', style: font),
+                          ],
+                        ),
                       ),
                     ),
                   ),
-                  SizedBox(height: vahe),
-                  Align(
-                    alignment: Alignment.center,
+                ),
+                SizedBox(
+                    height: vahe), // Add some spacing between the two widgets
+                GestureDetector(
+                  onTap: () {
+                    showDialog(
+                        context: context,
+                        builder: (context) => AlertDialog(
+                              title: Text("Lisada Shelly Cloud key siia"),
+                            ));
+                  },
+                  child: Align(
+                    alignment: Alignment.centerLeft,
                     child: Container(
+                      alignment: Alignment.center,
                       decoration: BoxDecoration(
                         color: sinineKast,
                         borderRadius: borderRadius,
@@ -205,165 +301,29 @@ class _KasutajaSeadedState extends State<KasutajaSeaded> {
                           ),
                         ],
                       ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Container(
-                            alignment: Alignment.center,
-                            width: 300,
-                            height: sinineKastKorgus,
-                            child: Row(
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.only(left: 8.0),
-                                  child: Center(
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        RichText(
-                                          text: TextSpan(
-                                            style: const TextStyle(
-                                              fontSize: 20,
-                                              color: Colors.black,
-                                            ),
-                                            children: [
-                                              TextSpan(
-                                                  text: 'Teavitused lubatud',
-                                                  style: font),
-                                            ],
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
+                      width: sinineKastLaius,
+                      height: sinineKastKorgus,
+                      child: RichText(
+                        text: TextSpan(
+                          style: const TextStyle(
+                            fontSize: 20,
+                            color: Colors.black,
                           ),
-                          Transform.scale(
-                            scale: 1.5,
-                            child: Checkbox(
-                              activeColor: Color.fromARGB(255, 69, 207, 44),
-                              value: valueTeavitus,
-                              onChanged: (bool? newValue) {
-                                setState(() {
-                                  valueTeavitus = !valueTeavitus;
-                                });
-                              },
-                              shape: CircleBorder(),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-
-                  SizedBox(
-                      height: vahe), // Add some spacing between the two widgets
-                  GestureDetector(
-                    onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => KoduLeht()),
-                        );
-                    },
-                    child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: Container(
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                          color: sinineKast,
-                          borderRadius: borderRadius,
-                          border: border,
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.2),
-                              spreadRadius: 2,
-                              blurRadius: 5,
-                              offset: const Offset(3, 3),
-                            ),
+                          children: [
+                            TextSpan(text: 'Shelly Cloud Key', style: font),
                           ],
                         ),
-                        width: sinineKastLaius,
-                        height: sinineKastKorgus,
-                        child: RichText(
-                          text: TextSpan(
-                            style: const TextStyle(
-                              fontSize: 20,
-                              color: Colors.black,
-                            ),
-                            children: [
-                              TextSpan(text: 'Logi', style: font),
-                            ],
-                          ),
-                        ),
                       ),
                     ),
                   ),
-                  SizedBox(
-                      height: vahe), // Add some spacing between the two widgets
-                  GestureDetector(
-                    onTap: () {
-                      showDialog(
-                          context: context,
-                          builder: (context) => AlertDialog(
-                                title: Text("Lisada Shelly Cloud key siia"),
-                              ));
-                    },
-                    child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: Container(
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                          color: sinineKast,
-                          borderRadius: borderRadius,
-                          border: border,
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.2),
-                              spreadRadius: 2,
-                              blurRadius: 5,
-                              offset: const Offset(3, 3),
-                            ),
-                          ],
-                        ),
-                        width: sinineKastLaius,
-                        height: sinineKastKorgus,
-                        child: RichText(
-                          text: TextSpan(
-                            style: const TextStyle(
-                              fontSize: 20,
-                              color: Colors.black,
-                            ),
-                            children: [
-                              TextSpan(text: 'Shelly Cloud Key', style: font),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                      height: vahe), // Add some spacing between the two widgets
-                ],
-              ),
+                ),
+                SizedBox(
+                    height: vahe), // Add some spacing between the two widgets
+              ],
             ),
           ),
         ),
-        bottomNavigationBar: Container(
-          decoration: const BoxDecoration(
-            border: Border(
-              top: BorderSide(
-                color: Colors.black,
-                width: 2.0,
-              ),
-            ),
-          ),
-          child: SizedBox(
-            height: navBarHeight,
-            child: AppNavigationBar(i: 3),
-          ),
-        ));
+      ),
+    );
   }
 }

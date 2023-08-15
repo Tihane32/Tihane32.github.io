@@ -4,6 +4,7 @@ TalTech
 */
 //Kit test
 import 'package:flutter/material.dart';
+import 'lehed/dynamicKoduLeht.dart';
 import 'lehed/koduleht.dart';
 import 'lehed/kaksTabelit.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -46,6 +47,6 @@ Border border = Border.all(
 void main() {
   runApp(MaterialApp(
     theme: ThemeData(brightness: Brightness.light),
-    home: SeadmeteList(), //Alustab appi kodulehest
+    home: DynaamilenieKoduLeht(), //Alustab appi kodulehest
   ));
 }

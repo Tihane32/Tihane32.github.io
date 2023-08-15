@@ -136,32 +136,10 @@ class _SeadmeteListState extends State<SeadmeteList> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: backround,
-        appBar: AppBar(
-          automaticallyImplyLeading: false,
-          backgroundColor: appbar,
-          title: Text(
-            'Shelly App',
-            style: GoogleFonts.roboto(
-              textStyle: const TextStyle(fontSize: 25),
-            ),
-          ),
-          actions: [
-            Builder(
-              builder: (BuildContext context) {
-                return IconButton(
-                  padding: EdgeInsets.only(right: 20),
-                  icon: Icon(
-                    Icons.menu,
-                    size: 30,
-                  ),
-                  onPressed: () {
-                    Scaffold.of(context).openEndDrawer();
-                  },
-                );
-              },
-            ),
-          ],
+      backgroundColor: backround,
+      body: GridView.builder(
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
         ),
         endDrawer: drawer(),
         body: GridView.builder(
@@ -210,101 +188,128 @@ class _SeadmeteListState extends State<SeadmeteList> {
                   ),
                 );
               },
-              child: Padding(
-                padding: const EdgeInsets.all(1),
-                child: Container(
-                  decoration: BoxDecoration(
-                    border: border,
-                  ),
-                  child: Container(
-                    width: double.infinity,
-                    height: double.infinity,
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        color: staatus == 'on'
-                            ? Colors.green
-                            : staatus == 'off'
-                                ? Colors.red
-                                : Colors.grey,
-                        width: 8,
-                      ),
-                    ),
-                    child: Stack(
-                      children: [
-                        AspectRatio(
-                          aspectRatio: 1,
-                          child: ClipRRect(
-                            child: Image.asset(
-                              pilt,
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                        ),
-                        Positioned(
-                          top: 8,
-                          right: 8,
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: Colors.blue.withOpacity(0.6),
-                              shape: BoxShape.circle,
-                            ),
-                            child: IconButton(
-                              iconSize: 60,
-                              icon: Icon(Icons.power_settings_new),
-                              color: Colors.white,
-                              onPressed: () {
-                                setState(() {
-                                  SeadmeteMap =
-                                      muudaSeadmeOlek(SeadmeteMap, seade);
-                                });
-                              },
-                            ),
-                          ),
-                        ),
-                        Positioned(
-                          top: 8,
-                          left: 8,
-                          child: Visibility(
-                            visible: staatus == 'offline',
-                            child: Container(
-                              child: Icon(
-                                Icons.wifi_off_outlined,
-                                size: 60,
-                                color: Colors.amber,
-                              ),
-                            ),
-                          ),
-                        ),
-                        Positioned(
-                          bottom: 0,
-                          left: 0,
-                          right: 0,
-                          child: Container(
-                            color: Colors.blue.withOpacity(0.6),
-                            padding: EdgeInsets.symmetric(vertical: 8),
-                            child: Center(
-                              child: Text(
-                                seade,
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
+              child: Container(
+                width: double.infinity,
+                height: double.infinity,
+                color: Colors.grey[300],
+                child: Center(
+                  child: Icon(
+                    Icons.add,
+                    size: 48,
+                    color: Colors.black,
                   ),
                 ),
               ),
             );
-          },
-        ),
-        bottomNavigationBar: AppNavigationBar(
-          i: 0,
-        ));
+          }
+
+          final seade = SeadmeteMap.keys.elementAt(index);
+          final pilt = SaaSeadmePilt(SeadmeteMap, seade);
+          final staatus = SaaSeadmeolek(SeadmeteMap, seade);
+          return GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => SeadmeGraafikuLeht(
+                    seadmeNimi: SeadmeteMap.keys.elementAt(index),
+                  ),
+                ),
+              );
+            },
+            child: Padding(
+              padding: const EdgeInsets.all(1),
+              child: Container(
+                decoration: BoxDecoration(
+                  border: border,
+                ),
+                child: Container(
+                  width: double.infinity,
+                  height: double.infinity,
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      color: staatus == 'on'
+                          ? Colors.green
+                          : staatus == 'off'
+                              ? Colors.red
+                              : Colors.grey,
+                      width: 8,
+                    ),
+                  ),
+                  child: Stack(
+                    children: [
+                      AspectRatio(
+                        aspectRatio: 1,
+                        child: ClipRRect(
+                          child: Image.asset(
+                            pilt,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ),
+                      Positioned(
+                        top: 8,
+                        right: 8,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Colors.blue.withOpacity(0.6),
+                            shape: BoxShape.circle,
+                          ),
+                          child: IconButton(
+                            iconSize: 60,
+                            icon: Icon(Icons.power_settings_new),
+                            color: Colors.white,
+                            onPressed: () {
+                              setState(() {
+                                SeadmeteMap =
+                                    muudaSeadmeOlek(SeadmeteMap, seade);
+                              });
+                            },
+                          ),
+                        ),
+                      ),
+                      Positioned(
+                        top: 8,
+                        left: 8,
+                        child: Visibility(
+                          visible: staatus == 'offline',
+                          child: Container(
+                            child: Icon(
+                              Icons.wifi_off_outlined,
+                              size: 60,
+                              color: Colors.amber,
+                            ),
+                          ),
+                        ),
+                      ),
+                      Positioned(
+                        bottom: 0,
+                        left: 0,
+                        right: 0,
+                        child: Container(
+                          color: Colors.blue.withOpacity(0.6),
+                          padding: EdgeInsets.symmetric(vertical: 8),
+                          child: Center(
+                            child: Text(
+                              seade,
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          );
+        },
+      ),
+    );
   }
 }
 

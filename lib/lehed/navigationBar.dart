@@ -1,8 +1,10 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:testuus4/lehed/GraafikusseSeadmeteValik.dart';
 import 'package:testuus4/lehed/koduleht.dart';
 import 'package:testuus4/lehed/seadmeteList.dart';
 import 'package:testuus4/main.dart';
+import 'dynamicKoduLeht.dart';
 import 'kaksTabelit.dart';
 import 'hindJoonise.dart';
 import 'package:get/get.dart';
@@ -50,11 +52,11 @@ class AppNavigationBar extends StatelessWidget {
                         label: 'Ülevaade',
                         icon: GestureDetector(
                           onTap: () {
-                            //Get.to(KoduLeht(), transition: Transition.topLevel);
                             Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => KoduLeht()),
-                      );
+                              context,
+                              CupertinoPageRoute(
+                                  builder: (context) => KoduLeht()),
+                            );
                           },
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment
@@ -88,14 +90,11 @@ class AppNavigationBar extends StatelessWidget {
                         label: 'Seadmed',
                         icon: GestureDetector(
                           onTap: () {
-                            /*Get.to(
-                              SeadmeteList(),
-                              transition: Transition.topLevel,
-                            );*/
                             Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => SeadmeteList()),
-                      );
+                              context,
+                              CupertinoPageRoute(
+                                  builder: (context) => DynaamilenieKoduLeht()),
+                            );
                           },
                           child: Padding(
                             padding: const EdgeInsets.only(bottom: 0.0),
@@ -130,7 +129,7 @@ class AppNavigationBar extends StatelessWidget {
                           onTap: () {
                             Navigator.push(
                               context,
-                              MaterialPageRoute(
+                              CupertinoPageRoute(
                                   builder: (context) => SeadmeteValmisPage()),
                             );
                           },

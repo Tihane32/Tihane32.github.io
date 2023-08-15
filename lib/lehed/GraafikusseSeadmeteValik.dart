@@ -7,6 +7,7 @@ import 'package:testuus4/lehed/kasutajaSeaded.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:testuus4/lehed/keskimiseHinnaAluselTundideValimine.dart';
 import 'package:testuus4/lehed/seadmeteList.dart';
+import 'dynamicKoduLeht.dart';
 import 'navigationBar.dart';
 import 'package:testuus4/main.dart';
 
@@ -241,7 +242,7 @@ class _SeadmeteListValimineState extends State<SeadmeteListValimine> {
           items: const <BottomNavigationBarItem>[
             BottomNavigationBarItem(
               label: 'Tühista',
-              icon: Icon(Icons.arrow_back),
+              icon: Icon(Icons.cancel),
             ),
             BottomNavigationBarItem(
               label: 'Tundide Valimine',
@@ -256,7 +257,8 @@ class _SeadmeteListValimineState extends State<SeadmeteListValimine> {
                 Navigator.push(
                   //Kui vajutatakse Hinnagraafiku ikooni peale, siis viiakse Hinnagraafiku lehele
                   context,
-                  MaterialPageRoute(builder: (context) => const SeadmeteList()),
+                  MaterialPageRoute(
+                      builder: (context) => DynaamilenieKoduLeht()),
                 );
               } else if (koduindex == 1) {
                 Navigator.push(
