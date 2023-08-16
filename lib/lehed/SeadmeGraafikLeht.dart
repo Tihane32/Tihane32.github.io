@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:testuus4/funktsioonid/graafikGen1.dart';
 import 'package:testuus4/lehed/AbiLeht.dart';
 import 'package:testuus4/lehed/SeadmeTarbimisLeht.dart';
 import 'SeadmeYldInfo.dart';
@@ -57,6 +58,7 @@ class _SeadmeGraafikuLehtState extends State<SeadmeGraafikuLeht> {
     color: const Color.fromARGB(255, 0, 0, 0),
     width: 2,
   );
+  bool kinnitusNahtav = false;
   late Map<int, dynamic> lulitus;
   late Map<int, dynamic> lulitusTana;
   late Map<int, dynamic> lulitusHomme;
@@ -280,14 +282,17 @@ class _SeadmeGraafikuLehtState extends State<SeadmeGraafikuLeht> {
                 print(formattedTime);
                 print(asendus);
                 if (formattedTime == asendus) {
+                  print(j);
+                  print(u);
                   print('yoss');
                   if (parts[2] == 'on') {
-                    lulitus[u][2] = true;
+                    lulitus[j][2] = true;
                     k = true;
                   } else {
-                    lulitus[u][2] = false;
+                    lulitus[j][2] = false;
                     k = false;
                   }
+                  break;
                 }
               }
             }
@@ -812,6 +817,7 @@ class _SeadmeGraafikuLehtState extends State<SeadmeGraafikuLeht> {
                                 int rowIndex =
                                     pointInteractionDetails.pointIndex!;
                                 print('Row Index: $rowIndex');
+                                kinnitusNahtav = true;
                                 setState(() {
                                   lulitus[rowIndex][2] = !lulitus[rowIndex][2];
                                 });
@@ -860,6 +866,33 @@ class _SeadmeGraafikuLehtState extends State<SeadmeGraafikuLeht> {
                     )),
                   ),
                 ],
+              ),
+            ),
+            Visibility(
+              visible: kinnitusNahtav,
+              child: Align(
+                child: GestureDetector(
+                  onTap: () {
+                    gen1GraafikLoomine(
+                        lulitus, 'täna', SeadmeteMap[seadmeNimi]![1]);
+                  },
+                  child: Container(
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      color: sinineKast,
+                    ),
+                    width: sinineKastLaius,
+                    height: sinineKastKorgus,
+                    child: RichText(
+                      textAlign: TextAlign.center,
+                      text: TextSpan(
+                        children: [
+                          TextSpan(text: 'Kinnita', style: font),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
               ),
             ),
           ],

@@ -187,7 +187,7 @@ class Graafik extends StatelessWidget {
             List<String> myList = graafik.split(',');
             List<dynamic> dynamicList = graafik.split(',');
             print("dynamic: $dynamicList");
-            prefs.setString('dynamicList$value',graafik);
+            prefs.setString('dynamicList$value', graafik);
             print(graafik);
             List<String> filteredList = myList
                 .where(
