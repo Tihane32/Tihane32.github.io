@@ -68,8 +68,34 @@ class _KeskmiseHinnaAluselTundideValimineState
     21: ['21.00', 0, true],
     22: ['22.00', 0, false],
     23: ['23.00', 0, false],
-    24: ['23.00', 0, false],
-    25: ['23.00', 0, false],
+  };
+
+  Map<int, dynamic> hind = {
+    0: ['', 0, ''],
+    1: ['00.00', 0, ''],
+    2: ['01.00', 0, ''],
+    3: ['02.00', 0, ''],
+    4: ['03.00', 0, ''],
+    5: ['04.00', 0, ''],
+    6: ['05.00', 0, ''],
+    7: ['06.00', 0, ''],
+    8: ['07.00', 0, ''],
+    9: ['08.00', 0, ''],
+    10: ['09.00', 0, ''],
+    11: ['10.00', 0, ''],
+    12: ['11.00', 0, ''],
+    13: ['12.00', 0, ''],
+    14: ['13.00', 0, ''],
+    15: ['14.00', 0, ''],
+    16: ['15.00', 0, ''],
+    17: ['16.00', 0, ''],
+    18: ['17.00', 0, ''],
+    19: ['18.00', 0, ''],
+    20: ['19.00', 0, ''],
+    21: ['20.00', 0, ''],
+    22: ['21.00', 0, ''],
+    23: ['22.00', 0, ''],
+    24: ['23.00', 0, ''],
   };
 
   Map<int, dynamic> lulitusMapVasak = {
@@ -156,6 +182,8 @@ class _KeskmiseHinnaAluselTundideValimineState
       };
 
       hindAVG = keskmineHindArvutaus(lulitusMap);
+
+      hind = KeskHindString(hind, hindAVG);
 
       lulitusMapVasak =
           LulitusMapVasakVaartustamine(hindAVG, lulitusMap, lulitusMapVasak);
@@ -276,14 +304,11 @@ class _KeskmiseHinnaAluselTundideValimineState
                       SizedBox(width: 20),
                       Container(
                         decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: paevNupp == 'Täna'
-                              ? Colors.blue
-                              : Color.fromARGB(0, 171, 161, 161),
-                          border: paevNupp == 'Homme'
-                              ? Border.all(color: Colors.blue, width: 2)
-                              : null,
-                        ),
+                            borderRadius: BorderRadius.circular(10),
+                            color: paevNupp == 'Täna'
+                                ? Colors.green
+                                : Color.fromARGB(0, 171, 161, 161),
+                            border: Border.all(color: Colors.blue, width: 2)),
                         child: TextButton(
                           onPressed: () {
                             setState(() {
@@ -303,14 +328,11 @@ class _KeskmiseHinnaAluselTundideValimineState
                       SizedBox(width: 40),
                       Container(
                         decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: paevNupp == 'Homme'
-                              ? Colors.blue
-                              : Color.fromARGB(0, 171, 161, 161),
-                          border: paevNupp == 'Täna'
-                              ? Border.all(color: Colors.blue, width: 2)
-                              : null,
-                        ),
+                            borderRadius: BorderRadius.circular(10),
+                            color: paevNupp == 'Homme'
+                                ? Colors.green
+                                : Color.fromARGB(0, 171, 161, 161),
+                            border: Border.all(color: Colors.blue, width: 2)),
                         child: TextButton(
                           onPressed: () {
                             setState(() {
@@ -417,51 +439,6 @@ class _KeskmiseHinnaAluselTundideValimineState
                 ),
               ),
               SizedBox(height: vahe),
-              Align(
-                alignment: Alignment.centerLeft,
-                child: Container(
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    color: boxColor,
-                    borderRadius: borderRadius,
-                    border: border,
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.2),
-                        spreadRadius: 2,
-                        blurRadius: 5,
-                        offset: const Offset(3, 3),
-                      ),
-                    ],
-                  ),
-                  width: sinineKastLaius,
-                  height: sinineKastKorgus,
-                  child: RichText(
-                    text: TextSpan(
-                      style: const TextStyle(
-                        fontSize: 20,
-                        color: Colors.black,
-                      ),
-                      children: [
-                        TextSpan(text: '  Päeva keskmine: ', style: font),
-                        TextSpan(
-                          text: ((hindAVG * pow(10.0, 2)).round().toDouble() /
-                                      pow(10.0, 2))
-                                  .toString() +
-                              '€/MWh',
-                          style: GoogleFonts.openSans(
-                            textStyle: TextStyle(
-                              fontWeight: FontWeight.w500,
-                              fontSize: 20,
-                              color: Colors.black,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
               Center(
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -508,6 +485,20 @@ class _KeskmiseHinnaAluselTundideValimineState
                         title: AxisTitle(text: ' €/kWh'),
                       ),
                       series: <ChartSeries>[
+                        SplineSeries(
+                          dataSource: hind.values.toList(),
+                          xValueMapper: (inf, _) => inf[0],
+                          yValueMapper: (inf, _) => inf[1],
+                          dataLabelMapper: (data, _) => data[2],
+                          dataLabelSettings: DataLabelSettings(
+                            isVisible: true,
+                            labelAlignment: ChartDataLabelAlignment.middle,
+                            textStyle:
+                                TextStyle(fontSize: 15, color: Colors.red),
+                            angle: 270,
+                          ),
+                          pointColorMapper: (data, _) => Colors.transparent,
+                        ),
                         ColumnSeries(
                           width: 0.9,
                           spacing: 0.1,
@@ -661,6 +652,13 @@ keskmineHindArvutaus(Map<int, dynamic> lulitus) {
   } else {
     return 0;
   }
+}
+
+KeskHindString(Map<int, dynamic> keskHind, double hindAVG) {
+  hindAVG = ((hindAVG * pow(10.0, 2)).round().toDouble() / pow(10.0, 2));
+  String summa = 'Paeva Keskmine $hindAVG';
+  keskHind[0][2] = summa;
+  return keskHind;
 }
 
 LulitusMapVasakVaartustamine(
