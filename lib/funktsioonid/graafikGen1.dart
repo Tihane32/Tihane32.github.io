@@ -47,10 +47,38 @@ gen1GraafikLoomine(
   }
   List<String> graafik = [];
   for (int i = 0; i < 24; i++) {
-    String temp = selected[i][0] + '-$paev-' + selected[i][2];
-    graafik.add(temp);
+    if (i != 0) {
+      if (selected[i][2] != selected[i - 1][2]) {
+        String temp = selected[i][0] + '-$paev-' + selected[i][2];
+        graafik.add(temp);
+      }
+    } else {
+      String temp = selected[i][0] + '-$paev-' + selected[i][2];
+      graafik.add(temp);
+    }
     print(graafik);
   }
+  String graafikString = graafik.join(',');
+  print(graafikString);
+  var headers1 = {
+    'Content-Type': 'application/x-www-form-urlencoded',
+  };
+
+  var data1 = {
+    'channel': '0',
+    'enabled': "1",
+    'schedule_rules': graafikString,
+    'id': value,
+    'auth_key': storedKeyString,
+  };
+
+  var url1 = Uri.parse(
+      'https://shelly-64-eu.shelly.cloud/device/relay/settings/schedule_rules');
+  var res1 = await http.post(url1, headers: headers1, body: data1);
+  print(graafik);
+
+  print(res1.body);
+
   for (int i = 0; i < 24; i++) {
     print(selected[i][2]);
     String temp = selected[i][2];
