@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:testuus4/funktsioonid/lulitamine.dart';
+import 'dart:async';
 
 import 'package:testuus4/lehed/Login.dart';
 import 'package:testuus4/lehed/SeadmeGraafikLeht.dart';
@@ -44,9 +46,7 @@ class _SeadmeteListState extends State<SeadmeteList> {
 
   int koduindex = 1;
 
-  Map<String, List<String>> SeadmeteMap = {
-    
-  };
+  Map<String, List<String>> SeadmeteMap = {};
   Set<String> selectedPictures = Set<String>();
 
   void toggleSelection(String pictureName) {
@@ -77,7 +77,7 @@ class _SeadmeteListState extends State<SeadmeteList> {
         var olek = storedMap['Seade$i']['Seadme_olek'];
         print('olek: $olek');
         Map<String, List<String>> ajutineMap = {
-          name: ['assets/boiler1.jpg','$id','$olek' , '$pistik'],
+          name: ['assets/boiler1.jpg', '$id', '$olek', '$pistik'],
         };
         minuSeadmedK.addAll(ajutineMap);
         i++;
@@ -92,7 +92,24 @@ class _SeadmeteListState extends State<SeadmeteList> {
     });
   }
 
-    @override
+  bool canPressButton = true;
+
+  void _handleButtonPress(seade) {
+    if (!canPressButton) return;
+
+    setState(() {
+      canPressButton = false;
+      SeadmeteMap = muudaSeadmeOlek(SeadmeteMap, seade);
+    });
+
+    Timer(Duration(seconds: 3), () {
+      setState(() {
+        canPressButton = true;
+      });
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: backround,
@@ -185,10 +202,7 @@ class _SeadmeteListState extends State<SeadmeteList> {
                             icon: Icon(Icons.power_settings_new),
                             color: Colors.white,
                             onPressed: () {
-                              setState(() {
-                                SeadmeteMap =
-                                    muudaSeadmeOlek(SeadmeteMap, seade);
-                              });
+                              _handleButtonPress(seade);
                             },
                           ),
                         ),
@@ -264,9 +278,11 @@ muudaSeadmeOlek(Map<String, List<String>> SeadmeteMap, SeadmeNimi) {
     if (status == 'on') {
       deviceInfo[2] = 'off';
       SeadmeteMap[SeadmeNimi] = deviceInfo;
+      lulitamine(deviceInfo[1]);
     } else if (status == 'off') {
       deviceInfo[2] = 'on';
       SeadmeteMap[SeadmeNimi] = deviceInfo;
+      lulitamine(deviceInfo[1]);
     }
     return SeadmeteMap;
   }
