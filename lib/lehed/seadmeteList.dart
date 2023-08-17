@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:testuus4/funktsioonid/lulitamine.dart';
+import 'dart:async';
 
 import 'package:testuus4/lehed/Login.dart';
 import 'package:testuus4/lehed/SeadmeGraafikLeht.dart';
@@ -88,6 +90,23 @@ class _SeadmeteListState extends State<SeadmeteList> {
     setState(() {
       SeadmeteMap = minuSeadmedK;
       //isLoading = false;
+    });
+  }
+
+  bool canPressButton = true;
+
+  void _handleButtonPress(seade) {
+    if (!canPressButton) return;
+
+    setState(() {
+      canPressButton = false;
+      SeadmeteMap = muudaSeadmeOlek(SeadmeteMap, seade);
+    });
+
+    Timer(Duration(seconds: 3), () {
+      setState(() {
+        canPressButton = true;
+      });
     });
   }
 
@@ -182,10 +201,7 @@ class _SeadmeteListState extends State<SeadmeteList> {
                             icon: Icon(Icons.power_settings_new),
                             color: Colors.white,
                             onPressed: () {
-                              setState(() {
-                                SeadmeteMap =
-                                    muudaSeadmeOlek(SeadmeteMap, seade);
-                              });
+                              _handleButtonPress(seade);
                             },
                           ),
                         ),
@@ -261,9 +277,11 @@ muudaSeadmeOlek(Map<String, List<String>> SeadmeteMap, SeadmeNimi) {
     if (status == 'on') {
       deviceInfo[2] = 'off';
       SeadmeteMap[SeadmeNimi] = deviceInfo;
+      lulitamine(deviceInfo[1]);
     } else if (status == 'off') {
       deviceInfo[2] = 'on';
       SeadmeteMap[SeadmeNimi] = deviceInfo;
+      lulitamine(deviceInfo[1]);
     }
     return SeadmeteMap;
   }
