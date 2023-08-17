@@ -255,11 +255,9 @@ class _SeadmeteListValimineState extends State<SeadmeteListValimine> {
               koduindex = kodu;
               if (koduindex == 0) {
                 Navigator.push(
-                  //Kui vajutatakse Hinnagraafiku ikooni peale, siis viiakse Hinnagraafiku lehele
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => DynaamilenieKoduLeht()),
-                );
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => DynaamilenieKoduLeht(i: 1)));
               } else if (koduindex == 1) {
                 Navigator.push(
                   //Kui vajutatakse Teie seade ikooni peale, siis viiakse Seadmetelisamine lehele

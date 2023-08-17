@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:testuus4/lehed/dynamicKoduLeht.dart';
 import 'package:testuus4/lehed/kaksTabelit.dart';
 import 'package:testuus4/lehed/lisaSeade.dart';
 //import '/SeadmeSeaded.dart';
@@ -264,7 +265,8 @@ class _LoginPageState extends State<LoginPage> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => LisaSeade()));
+                                builder: (context) =>
+                                    DynaamilenieKoduLeht(i: 5)));
                       },
                       child: Text('Lisa seade manuaalselt', style: font),
                     ),

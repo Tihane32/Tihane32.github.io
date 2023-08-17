@@ -10,6 +10,7 @@ import 'package:testuus4/lehed/kasutajaSeaded.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:testuus4/lehed/rakenduseSeaded.dart';
 import 'GraafikusseSeadmeteValik.dart';
+import 'dynamicKoduLeht.dart';
 import 'kaksTabelit.dart';
 import 'dart:convert';
 import 'package:google_fonts/google_fonts.dart';
@@ -123,11 +124,9 @@ class _SeadmeteListState extends State<SeadmeteList> {
             return GestureDetector(
               onTap: () {
                 Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => LoginPage(),
-                  ),
-                );
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => DynaamilenieKoduLeht(i: 2)));
               },
               child: Container(
                 width: double.infinity,

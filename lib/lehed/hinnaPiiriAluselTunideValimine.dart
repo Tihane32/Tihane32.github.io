@@ -68,7 +68,34 @@ class _HinnaPiiriAluselTundideValimineState
     25: ['23.00', 0, false],
   };
 
-  Map<int, dynamic> lulitusMap2 = {
+  Map<int, dynamic> lulitusMapVasak = {
+    0: ['00.00', 0, false, 0],
+    1: ['01.00', 0, false, 0],
+    2: ['02.00', 0, true, 0],
+    3: ['03.00', 0, false, 0],
+    4: ['04.00', 0, true, 0],
+    5: ['05.00', 0, true, 0],
+    6: ['06.00', 0, false, 0],
+    7: ['07.00', 0, true, 0],
+    8: ['08.00', 0, false, 0],
+    9: ['09.00', 0, true, 0],
+    10: ['10.00', 0, false, 0],
+    11: ['11.00', 0, true, 0],
+    12: ['12.00', 0, true, 0],
+    13: ['13.00', 0, true, 0],
+    14: ['14.00', 0, true, 0],
+    15: ['15.00', 0, true, 0],
+    16: ['16.00', 0, true, 0],
+    17: ['17.00', 0, true, 0],
+    18: ['18.00', 0, false, 0],
+    19: ['19.00', 0, true, 0],
+    20: ['20.00', 0, false, 0],
+    21: ['21.00', 0, true, 0],
+    22: ['22.00', 0, false, 0],
+    23: ['23.00', 0, false, 0],
+  };
+
+  Map<int, dynamic> lulitusMapParem = {
     0: ['00.00', 0, false, 0],
     1: ['01.00', 0, false, 0],
     2: ['02.00', 0, true, 0],
@@ -126,8 +153,10 @@ class _HinnaPiiriAluselTundideValimineState
 
       hindAVG = keskmineHindArvutaus(lulitusMap);
 
-      lulitusMap2 =
-          LulitusMap2Vaartustamine(hinnaPiir, lulitusMap, lulitusMap2);
+      lulitusMapVasak =
+          LulitusMapVasakVaartustamine(hinnaPiir, lulitusMap, lulitusMapVasak);
+      lulitusMapParem =
+          LulitusMapParemVaartustamine(hinnaPiir, lulitusMap, lulitusMapParem);
     });
   }
 
@@ -243,14 +272,11 @@ class _HinnaPiiriAluselTundideValimineState
                       SizedBox(width: 20),
                       Container(
                         decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: paevNupp == 'Täna'
-                              ? Colors.blue
-                              : Color.fromARGB(0, 171, 161, 161),
-                          border: paevNupp == 'Homme'
-                              ? Border.all(color: Colors.blue, width: 2)
-                              : null,
-                        ),
+                            borderRadius: BorderRadius.circular(10),
+                            color: paevNupp == 'Täna'
+                                ? Colors.green
+                                : Color.fromARGB(0, 171, 161, 161),
+                            border: Border.all(color: Colors.blue, width: 2)),
                         child: TextButton(
                           onPressed: () {
                             setState(() {
@@ -270,14 +296,11 @@ class _HinnaPiiriAluselTundideValimineState
                       SizedBox(width: 40),
                       Container(
                         decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: paevNupp == 'Homme'
-                              ? Colors.blue
-                              : Color.fromARGB(0, 171, 161, 161),
-                          border: paevNupp == 'Täna'
-                              ? Border.all(color: Colors.blue, width: 2)
-                              : null,
-                        ),
+                            borderRadius: BorderRadius.circular(10),
+                            color: paevNupp == 'Homme'
+                                ? Colors.green
+                                : Color.fromARGB(0, 171, 161, 161),
+                            border: Border.all(color: Colors.blue, width: 2)),
                         child: TextButton(
                           onPressed: () {
                             setState(() {
@@ -352,8 +375,9 @@ class _HinnaPiiriAluselTundideValimineState
                                 onSubmitted: (value) {
                                   setState(() {
                                     hinnaPiir = double.tryParse(value) ?? 0;
-                                    lulitusMap2 = LulitusMap2Vaartustamine(
-                                        hinnaPiir, lulitusMap, lulitusMap2);
+                                    lulitusMapVasak =
+                                        LulitusMapVasakVaartustamine(hinnaPiir,
+                                            lulitusMap, lulitusMapVasak);
                                     print(hinnaPiir);
                                   });
                                 },
@@ -425,6 +449,32 @@ class _HinnaPiiriAluselTundideValimineState
                 ),
               ),
               SizedBox(height: vahe),
+              Center(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Align(
+                      child: Container(
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                        ),
+                        //width: sinineKastLaius,
+                        //height: sinineKastKorgus,
+                        child: RichText(
+                          textAlign: TextAlign.center,
+                          text: TextSpan(
+                            style: fontVaike,
+                            children: [
+                              TextSpan(text: 'EUR / MWh', style: fontVaike),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
               Container(
                 height: MediaQuery.of(context).size.height * 0.791,
                 child: Center(
@@ -434,6 +484,7 @@ class _HinnaPiiriAluselTundideValimineState
                     width: double.infinity,
                     height: double.infinity,
                     child: SfCartesianChart(
+                      enableSideBySideSeriesPlacement: false,
                       primaryXAxis: CategoryAxis(
                         interval: 1,
                         labelRotation: 270,
@@ -450,18 +501,61 @@ class _HinnaPiiriAluselTundideValimineState
                             int? rowIndex = pointInteractionDetails.pointIndex;
                             print('Row Index: $rowIndex');
                             setState(() {
-                              lulitusMap2 =
-                                  TunniVarviMuutus(rowIndex, lulitusMap2);
+                              lulitusMapVasak =
+                                  TunniVarviMuutus(rowIndex, lulitusMapVasak);
+                              lulitusMapParem =
+                                  TunniVarviMuutus(rowIndex, lulitusMapParem);
                             });
                           },
-                          dataSource: lulitusMap2.values.toList(),
+                          borderRadius: BorderRadius.only(
+                              bottomLeft: Radius.circular(20),
+                              bottomRight: Radius.circular(20)),
+                          dataSource: lulitusMapVasak.values.toList(),
                           xValueMapper: (data, _) => data[0],
                           yValueMapper: (data, _) => data[1],
-                          dataLabelMapper: (data, _) =>
-                              ((data[3] * pow(10.0, 2)).round().toDouble() /
+                          dataLabelMapper: (data, _) => data[1] < 0
+                              ? (((data[1] + hinnaPiir) * pow(10.0, 2))
+                                          .round()
+                                          .toDouble() /
                                       pow(10.0, 2))
-                                  .toString() +
-                              '€/MWh',
+                                  .toString()
+                              : '',
+                          pointColorMapper: (data, _) => data[2]
+                              ? Colors.green
+                              : Color.fromARGB(255, 164, 159, 159),
+                          dataLabelSettings: DataLabelSettings(
+                            isVisible: true,
+                            labelAlignment: ChartDataLabelAlignment.outer,
+                            textStyle:
+                                TextStyle(fontSize: 15, color: Colors.black),
+                            angle: 270,
+                          ),
+                        ),
+                        ColumnSeries(
+                          width: 0.9,
+                          onPointTap: (pointInteractionDetails) {
+                            int? rowIndex = pointInteractionDetails.pointIndex;
+                            print('Row Index: $rowIndex');
+                            setState(() {
+                              lulitusMapParem =
+                                  TunniVarviMuutus(rowIndex, lulitusMapParem);
+                              lulitusMapVasak =
+                                  TunniVarviMuutus(rowIndex, lulitusMapVasak);
+                            });
+                          },
+                          borderRadius: BorderRadius.only(
+                              topRight: Radius.circular(20),
+                              topLeft: Radius.circular(20)),
+                          dataSource: lulitusMapParem.values.toList(),
+                          xValueMapper: (data, _) => data[0],
+                          yValueMapper: (data, _) => data[1],
+                          dataLabelMapper: (data, _) => data[1] > 0
+                              ? (((data[1] + hinnaPiir) * pow(10.0, 2))
+                                          .round()
+                                          .toDouble() /
+                                      pow(10.0, 2))
+                                  .toString()
+                              : '',
                           pointColorMapper: (data, _) => data[2]
                               ? Colors.green
                               : Color.fromARGB(255, 164, 159, 159),
@@ -554,27 +648,50 @@ keskmineHindArvutaus(Map<int, dynamic> lulitus) {
   }
 }
 
-LulitusMap2Vaartustamine(
+LulitusMapVasakVaartustamine(
     double hinnaPiir, Map<int, dynamic> lulitus1, Map<int, dynamic> lulitus2) {
   for (int key in lulitus1.keys) {
     double secondValue = lulitus1[key][1];
 
     lulitus2[key][3] = lulitus1[key][1];
 
-    if (secondValue <= hinnaPiir) {
+    if (secondValue < hinnaPiir) {
       lulitus2[key][2] = true;
+      lulitus2[key][1] = secondValue - hinnaPiir;
     } else {
       lulitus2[key][2] = false;
-    }
-
-    if (secondValue <= hinnaPiir) {
-      lulitus2[key][1] = (hinnaPiir - secondValue) * (-1);
-    } else {
-      lulitus2[key][1] = secondValue - hinnaPiir;
+      lulitus2[key][1] = 0;
     }
   }
 
-  print('lylitus 2 hinnapiir:');
+  print('lylitus vasak hinnapiir:');
+  print('**************************');
+
+  lulitus2.forEach((key, value) {
+    print('$key: $value');
+  });
+
+  print('**************************');
+  return lulitus2;
+}
+
+LulitusMapParemVaartustamine(
+    double hinnaPiir, Map<int, dynamic> lulitus1, Map<int, dynamic> lulitus2) {
+  for (int key in lulitus1.keys) {
+    double secondValue = lulitus1[key][1];
+
+    lulitus2[key][3] = lulitus1[key][1];
+
+    if (secondValue >= hinnaPiir) {
+      lulitus2[key][2] = false;
+      lulitus2[key][1] = secondValue - hinnaPiir;
+    } else {
+      lulitus2[key][2] = true;
+      lulitus2[key][1] = 0;
+    }
+  }
+
+  print('lylitus parem hinnapiir:');
   print('**************************');
 
   lulitus2.forEach((key, value) {

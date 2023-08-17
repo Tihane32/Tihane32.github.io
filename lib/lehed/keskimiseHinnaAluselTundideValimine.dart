@@ -68,11 +68,64 @@ class _KeskmiseHinnaAluselTundideValimineState
     21: ['21.00', 0, true],
     22: ['22.00', 0, false],
     23: ['23.00', 0, false],
-    24: ['23.00', 0, false],
-    25: ['23.00', 0, false],
   };
 
-  Map<int, dynamic> lulitusMap2 = {
+  Map<int, dynamic> hind = {
+    0: ['', 0, ''],
+    1: ['00.00', 0, ''],
+    2: ['01.00', 0, ''],
+    3: ['02.00', 0, ''],
+    4: ['03.00', 0, ''],
+    5: ['04.00', 0, ''],
+    6: ['05.00', 0, ''],
+    7: ['06.00', 0, ''],
+    8: ['07.00', 0, ''],
+    9: ['08.00', 0, ''],
+    10: ['09.00', 0, ''],
+    11: ['10.00', 0, ''],
+    12: ['11.00', 0, ''],
+    13: ['12.00', 0, ''],
+    14: ['13.00', 0, ''],
+    15: ['14.00', 0, ''],
+    16: ['15.00', 0, ''],
+    17: ['16.00', 0, ''],
+    18: ['17.00', 0, ''],
+    19: ['18.00', 0, ''],
+    20: ['19.00', 0, ''],
+    21: ['20.00', 0, ''],
+    22: ['21.00', 0, ''],
+    23: ['22.00', 0, ''],
+    24: ['23.00', 0, ''],
+  };
+
+  Map<int, dynamic> lulitusMapVasak = {
+    0: ['00.00', 0, false],
+    1: ['01.00', 0, false],
+    2: ['02.00', 0, true],
+    3: ['03.00', 0, false],
+    4: ['04.00', 0, true],
+    5: ['05.00', 0, true],
+    6: ['06.00', 0, false],
+    7: ['07.00', 0, true],
+    8: ['08.00', 0, false],
+    9: ['09.00', 0, true],
+    10: ['10.00', 0, false],
+    11: ['11.00', 0, true],
+    12: ['12.00', 0, true],
+    13: ['13.00', 0, true],
+    14: ['14.00', 0, true],
+    15: ['15.00', 0, true],
+    16: ['16.00', 0, true],
+    17: ['17.00', 0, true],
+    18: ['18.00', 0, false],
+    19: ['19.00', 0, true],
+    20: ['20.00', 0, false],
+    21: ['21.00', 0, true],
+    22: ['22.00', 0, false],
+    23: ['23.00', 0, false],
+  };
+
+  Map<int, dynamic> lulitusMapParem = {
     0: ['00.00', 0, false],
     1: ['01.00', 0, false],
     2: ['02.00', 0, true],
@@ -130,7 +183,12 @@ class _KeskmiseHinnaAluselTundideValimineState
 
       hindAVG = keskmineHindArvutaus(lulitusMap);
 
-      lulitusMap2 = LulitusMap2Vaartustamine(hindAVG, lulitusMap, lulitusMap2);
+      hind = KeskHindString(hind, hindAVG);
+
+      lulitusMapVasak =
+          LulitusMapVasakVaartustamine(hindAVG, lulitusMap, lulitusMapVasak);
+      lulitusMapParem =
+          LulitusParemVaartustamine(hindAVG, lulitusMap, lulitusMapParem);
     });
   }
 
@@ -246,14 +304,11 @@ class _KeskmiseHinnaAluselTundideValimineState
                       SizedBox(width: 20),
                       Container(
                         decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: paevNupp == 'Täna'
-                              ? Colors.blue
-                              : Color.fromARGB(0, 171, 161, 161),
-                          border: paevNupp == 'Homme'
-                              ? Border.all(color: Colors.blue, width: 2)
-                              : null,
-                        ),
+                            borderRadius: BorderRadius.circular(10),
+                            color: paevNupp == 'Täna'
+                                ? Colors.green
+                                : Color.fromARGB(0, 171, 161, 161),
+                            border: Border.all(color: Colors.blue, width: 2)),
                         child: TextButton(
                           onPressed: () {
                             setState(() {
@@ -273,14 +328,11 @@ class _KeskmiseHinnaAluselTundideValimineState
                       SizedBox(width: 40),
                       Container(
                         decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: paevNupp == 'Homme'
-                              ? Colors.blue
-                              : Color.fromARGB(0, 171, 161, 161),
-                          border: paevNupp == 'Täna'
-                              ? Border.all(color: Colors.blue, width: 2)
-                              : null,
-                        ),
+                            borderRadius: BorderRadius.circular(10),
+                            color: paevNupp == 'Homme'
+                                ? Colors.green
+                                : Color.fromARGB(0, 171, 161, 161),
+                            border: Border.all(color: Colors.blue, width: 2)),
                         child: TextButton(
                           onPressed: () {
                             setState(() {
@@ -387,52 +439,32 @@ class _KeskmiseHinnaAluselTundideValimineState
                 ),
               ),
               SizedBox(height: vahe),
-              Align(
-                alignment: Alignment.centerLeft,
-                child: Container(
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    color: boxColor,
-                    borderRadius: borderRadius,
-                    border: border,
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.2),
-                        spreadRadius: 2,
-                        blurRadius: 5,
-                        offset: const Offset(3, 3),
-                      ),
-                    ],
-                  ),
-                  width: sinineKastLaius,
-                  height: sinineKastKorgus,
-                  child: RichText(
-                    text: TextSpan(
-                      style: const TextStyle(
-                        fontSize: 20,
-                        color: Colors.black,
-                      ),
-                      children: [
-                        TextSpan(text: '  Päeva keskmine: ', style: font),
-                        TextSpan(
-                          text: ((hindAVG * pow(10.0, 2)).round().toDouble() /
-                                      pow(10.0, 2))
-                                  .toString() +
-                              '€/MWh',
-                          style: GoogleFonts.openSans(
-                            textStyle: TextStyle(
-                              fontWeight: FontWeight.w500,
-                              fontSize: 20,
-                              color: Colors.black,
-                            ),
+              Center(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Align(
+                      child: Container(
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                        ),
+                        //width: sinineKastLaius,
+                        //height: sinineKastKorgus,
+                        child: RichText(
+                          textAlign: TextAlign.center,
+                          text: TextSpan(
+                            style: fontVaike,
+                            children: [
+                              TextSpan(text: 'EUR / MWh', style: fontVaike),
+                            ],
                           ),
                         ),
-                      ],
+                      ),
                     ),
-                  ),
+                  ],
                 ),
               ),
-              SizedBox(height: vahe),
               Container(
                 height: MediaQuery.of(context).size.height * 0.791,
                 child: Center(
@@ -442,6 +474,7 @@ class _KeskmiseHinnaAluselTundideValimineState
                     width: double.infinity,
                     height: double.infinity,
                     child: SfCartesianChart(
+                      enableSideBySideSeriesPlacement: false,
                       primaryXAxis: CategoryAxis(
                         interval: 1,
                         labelRotation: 270,
@@ -452,26 +485,83 @@ class _KeskmiseHinnaAluselTundideValimineState
                         title: AxisTitle(text: ' €/kWh'),
                       ),
                       series: <ChartSeries>[
+                        SplineSeries(
+                          dataSource: hind.values.toList(),
+                          xValueMapper: (inf, _) => inf[0],
+                          yValueMapper: (inf, _) => inf[1],
+                          dataLabelMapper: (data, _) => data[2],
+                          dataLabelSettings: DataLabelSettings(
+                            isVisible: true,
+                            labelAlignment: ChartDataLabelAlignment.middle,
+                            textStyle:
+                                TextStyle(fontSize: 15, color: Colors.red),
+                            angle: 270,
+                          ),
+                          pointColorMapper: (data, _) => Colors.transparent,
+                        ),
                         ColumnSeries(
                           width: 0.9,
+                          spacing: 0.1,
                           onPointTap: (pointInteractionDetails) {
                             int? rowIndex = pointInteractionDetails.pointIndex;
                             print('Row Index: $rowIndex');
                             setState(() {
-                              lulitusMap2 =
-                                  TunniVarviMuutus(rowIndex, lulitusMap2);
+                              lulitusMapVasak =
+                                  TunniVarviMuutus(rowIndex, lulitusMapVasak);
+                              lulitusMapParem =
+                                  TunniVarviMuutus(rowIndex, lulitusMapParem);
                             });
                           },
-                          dataSource: lulitusMap2.values.toList(),
+                          borderRadius: BorderRadius.only(
+                              bottomLeft: Radius.circular(20),
+                              bottomRight: Radius.circular(20)),
+                          dataSource: lulitusMapVasak.values.toList(),
                           xValueMapper: (data, _) => data[0],
                           yValueMapper: (data, _) => data[1],
-                          dataLabelMapper: (data, _) =>
-                              (((data[1] + hindAVG) * pow(10.0, 2))
+                          dataLabelMapper: (data, _) => data[1] < 0
+                              ? (((data[1] + hindAVG) * pow(10.0, 2))
                                           .round()
                                           .toDouble() /
                                       pow(10.0, 2))
-                                  .toString() +
-                              '€/MWh',
+                                  .toString()
+                              : '',
+                          pointColorMapper: (data, _) => data[2]
+                              ? Colors.green
+                              : Color.fromARGB(255, 164, 159, 159),
+                          dataLabelSettings: DataLabelSettings(
+                            isVisible: true,
+                            labelAlignment: ChartDataLabelAlignment.outer,
+                            textStyle:
+                                TextStyle(fontSize: 15, color: Colors.black),
+                            angle: 270,
+                          ),
+                        ),
+                        ColumnSeries(
+                          width: 0.9,
+                          spacing: 0.1,
+                          onPointTap: (pointInteractionDetails) {
+                            int? rowIndex = pointInteractionDetails.pointIndex;
+                            print('Row Index: $rowIndex');
+                            setState(() {
+                              lulitusMapVasak =
+                                  TunniVarviMuutus(rowIndex, lulitusMapVasak);
+                              lulitusMapParem =
+                                  TunniVarviMuutus(rowIndex, lulitusMapParem);
+                            });
+                          },
+                          borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(20),
+                              topRight: Radius.circular(20)),
+                          dataSource: lulitusMapParem.values.toList(),
+                          xValueMapper: (data, _) => data[0],
+                          yValueMapper: (data, _) => data[1],
+                          dataLabelMapper: (data, _) => data[1] > 0
+                              ? (((data[1] + hindAVG) * pow(10.0, 2))
+                                          .round()
+                                          .toDouble() /
+                                      pow(10.0, 2))
+                                  .toString()
+                              : '',
                           pointColorMapper: (data, _) => data[2]
                               ? Colors.green
                               : Color.fromARGB(255, 164, 159, 159),
@@ -564,27 +654,38 @@ keskmineHindArvutaus(Map<int, dynamic> lulitus) {
   }
 }
 
-LulitusMap2Vaartustamine(
+KeskHindString(Map<int, dynamic> keskHind, double hindAVG) {
+  hindAVG = ((hindAVG * pow(10.0, 2)).round().toDouble() / pow(10.0, 2));
+  String summa = 'Paeva Keskmine $hindAVG';
+  keskHind[0][2] = summa;
+  return keskHind;
+}
+
+LulitusMapVasakVaartustamine(
     var hindAVG, Map<int, dynamic> lulitus1, Map<int, dynamic> lulitus2) {
   for (int key in lulitus1.keys) {
     double hind = lulitus1[key][1];
 
     if (hind <= hindAVG) {
-      lulitus2[key][1] = (hindAVG - hind) * (-1);
-    } else {
       lulitus2[key][1] = hind - hindAVG;
     }
   }
 
-  print('lylitus 2 kekminehind:');
-  print('**************************');
-
-  lulitus2.forEach((key, value) {
-    print('$key: $value');
-  });
-
-  print('**************************');
   return lulitus2;
+}
+
+LulitusParemVaartustamine(
+    var hindAVG, Map<int, dynamic> lulitus1, Map<int, dynamic> lulitus3) {
+  for (int key in lulitus1.keys) {
+    double hind = lulitus1[key][1];
+
+    if (hind >= hindAVG) {
+      lulitus3[key][1] = hind - hindAVG;
+      ;
+    }
+  }
+
+  return lulitus3;
 }
 
 TunniVarviMuutus(int? rowIndex, Map<int, dynamic> lulitusMap2) {
@@ -598,13 +699,4 @@ TunniVarviMuutus(int? rowIndex, Map<int, dynamic> lulitusMap2) {
   print('uus');
   print(lulitusMap2[rowIndex]);
   return lulitusMap2;
-}
-
-paevaMuutmine(String paevNupp) {
-  if (paevNupp == 'Täna') {
-    paevNupp = 'Homme';
-  } else if (paevNupp == 'Homme') {
-    paevNupp = 'Täna';
-  }
-  return paevNupp;
 }
