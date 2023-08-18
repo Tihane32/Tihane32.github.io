@@ -13,28 +13,34 @@ gen1GraafikLoomine(
   String storedKeyString = jsonDecode(storedKey!);
   Map<int, dynamic> selected = lulitus;
   Map<int, dynamic> ajutine = selected;
-  print(selected);
-  print(valitudPaev);
-  print(value);
   for (int i = 0; i < 24; i++) {
     ajutine[i][0] = selected[i][0];
   }
 
   for (int i = 0; i < 24; i++) {
-    print(selected[i][0]);
     String temp = selected[i][0];
     temp = temp.replaceAll(".", '');
     selected[i][0] = temp;
-    print(selected[i][0]);
   }
   int paev = 0;
+  int teinePaev = 0;
   if (valitudPaev == "täna") {
     paev = now.weekday - 1;
-    print(paev);
+    if (now.weekday == 7) {
+      teinePaev = 0;
+    } else {
+      teinePaev = now.weekday;
+    }
+  } else {
+    if (now.weekday == 7) {
+      paev = 0;
+    } else {
+      paev = now.weekday;
+    }
+    teinePaev=now.weekday - 1;
   }
 
   for (int i = 0; i < 24; i++) {
-    print(selected[i][2]);
     bool temp = selected[i][2];
     String temp1;
     if (temp == true) {
@@ -43,7 +49,6 @@ gen1GraafikLoomine(
       temp1 = 'off';
     }
     selected[i][2] = temp1;
-    print(selected[i][2]);
   }
   List<String> graafik = [];
   for (int i = 0; i < 24; i++) {
@@ -56,10 +61,50 @@ gen1GraafikLoomine(
       String temp = selected[i][0] + '-$paev-' + selected[i][2];
       graafik.add(temp);
     }
-    print(graafik);
   }
-  String graafikString = graafik.join(',');
-  print(graafikString);
+  
+
+  var headers = {
+    'Content-Type': 'application/x-www-form-urlencoded',
+  };
+
+  var data = {
+    'channel': '0',
+    'id': value,
+    'auth_key': storedKeyString,
+  };
+
+  var url = Uri.parse('https://shelly-64-eu.shelly.cloud/device/settings');
+  var res = await http.post(url, headers: headers, body: data);
+  await Future.delayed(const Duration(seconds: 2));
+  //Kui post läheb läbi siis:
+  List<String> newList = [];
+  final httpPackageJson = json.decode(res.body) as Map<String, dynamic>;
+
+  var scheduleRules1 =
+      httpPackageJson['data']['device_settings']['relays'][0]['schedule_rules'];
+  for (String item in scheduleRules1) {
+    List<String> parts = item.split('-');
+    if (parts[1].length > 1) {
+      for (int i = 0; i < parts[1].length; i++) {
+        //lülituskäsk tehakse iga "-" juures pooleks ja lisatakse eraldi listi
+        String newItem = '${parts[0]}-${parts[1][i]}-${parts[2]}';
+        newList.add(newItem);
+      }
+    } else {
+      newList.add(item);
+    }
+  }
+  
+
+  RegExp regExp = RegExp("-$teinePaev-");
+
+  for (var rule in newList) {
+    if (regExp.hasMatch(rule)) {
+      graafik.add(rule);
+    }
+  }
+String graafikString = graafik.join(',');
   var headers1 = {
     'Content-Type': 'application/x-www-form-urlencoded',
   };
@@ -75,12 +120,9 @@ gen1GraafikLoomine(
   var url1 = Uri.parse(
       'https://shelly-64-eu.shelly.cloud/device/relay/settings/schedule_rules');
   var res1 = await http.post(url1, headers: headers1, body: data1);
-  print(graafik);
 
-  print(res1.body);
 
   for (int i = 0; i < 24; i++) {
-    print(selected[i][2]);
     String temp = selected[i][2];
     bool temp1;
     if (temp == 'on') {
@@ -89,14 +131,10 @@ gen1GraafikLoomine(
       temp1 = false;
     }
     selected[i][2] = temp1;
-    print(selected[i][2]);
   }
   for (int i = 0; i < 24; i++) {
-    print(selected[i][2]);
     String temp = selected[i][0];
     temp = temp.substring(0, 2) + '.' + temp.substring(2);
     selected[i][0] = temp;
   }
-  print(lulitus);
-  print(selected);
 }
