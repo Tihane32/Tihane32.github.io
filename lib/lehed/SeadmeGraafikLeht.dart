@@ -18,6 +18,7 @@ import 'package:testuus4/funktsioonid/Elering.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:testuus4/funktsioonid/lulitamine.dart';
 
 class SeadmeGraafikuLeht extends StatefulWidget {
   const SeadmeGraafikuLeht(
@@ -912,8 +913,6 @@ class _SeadmeGraafikuLehtState extends State<SeadmeGraafikuLeht> {
                       lulitus, 'homme', SeadmeteMap[seadmeNimi]![1]);
                 }
                 HapticFeedback.vibrate();
-
-               
               },
               child: Container(
                 alignment: Alignment.center,
@@ -1043,9 +1042,11 @@ muudaSeadmeOlek(Map<String, List<String>> SeadmeteMap, SeadmeNimi) {
     if (status == 'on') {
       deviceInfo[2] = 'off';
       SeadmeteMap[SeadmeNimi] = deviceInfo;
+      lulitamine(deviceInfo[1]);
     } else if (status == 'off') {
       deviceInfo[2] = 'on';
       SeadmeteMap[SeadmeNimi] = deviceInfo;
+      lulitamine(deviceInfo[1]);
     }
     return SeadmeteMap;
   }
