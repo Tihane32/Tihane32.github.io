@@ -656,7 +656,8 @@ keskmineHindArvutaus(Map<int, dynamic> lulitus) {
 
 KeskHindString(Map<int, dynamic> keskHind, double hindAVG) {
   hindAVG = ((hindAVG * pow(10.0, 2)).round().toDouble() / pow(10.0, 2));
-  String summa = 'Paeva Keskmine $hindAVG';
+
+  String summa = 'Keskmine $hindAVG';
   keskHind[0][2] = summa;
   return keskHind;
 }
