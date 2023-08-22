@@ -192,32 +192,26 @@ class _SeadmeteListState extends State<SeadmeteList> {
                         top: 8,
                         right: 8,
                         child: Container(
+                          width: 80,
+                          height: 80,
                           decoration: BoxDecoration(
                             color: Colors.blue.withOpacity(0.6),
                             shape: BoxShape.circle,
                           ),
-                          child: IconButton(
-                            iconSize: 60,
-                            icon: Icon(Icons.power_settings_new),
-                            color: Colors.white,
-                            onPressed: () {
-                              _handleButtonPress(seade);
-                            },
-                          ),
-                        ),
-                      ),
-                      Positioned(
-                        top: 8,
-                        left: 8,
-                        child: Visibility(
-                          visible: staatus == 'Offline',
-                          child: Container(
-                            child: Icon(
-                              Icons.wifi_off_outlined,
-                              size: 60,
-                              color: Colors.amber,
-                            ),
-                          ),
+                          child: staatus == 'Offline'
+                              ? Icon(
+                                  Icons.wifi_off_outlined,
+                                  size: 60,
+                                  color: Colors.amber,
+                                )
+                              : IconButton(
+                                  iconSize: 60,
+                                  icon: Icon(Icons.power_settings_new),
+                                  color: Colors.white,
+                                  onPressed: () {
+                                    _handleButtonPress(seade);
+                                  },
+                                ),
                         ),
                       ),
                       Positioned(
