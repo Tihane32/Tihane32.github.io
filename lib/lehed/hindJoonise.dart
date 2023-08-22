@@ -587,7 +587,7 @@ class _TulpDiagrammState extends State<TulpDiagramm> {
                             if (tappedIndex == index) {
                               return Colors
                                   .blue; // Set the color to blue if tapped
-                            } else if (tund == index) {
+                            } else if (tund == index &&tana==green) {
                               return Colors
                                   .yellow; // Set the color to yellow if it corresponds to "tund" value
                             } else {
