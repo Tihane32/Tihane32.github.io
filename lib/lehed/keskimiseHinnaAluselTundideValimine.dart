@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:testuus4/lehed/GraafikusseSeadmeteValik.dart';
+import 'package:testuus4/lehed/dynamicKoduLeht.dart';
 import '../main.dart';
 import 'AbiLeht.dart';
 import 'koduleht.dart';
@@ -31,6 +33,13 @@ class KeskmiseHinnaAluselTundideValimine extends StatefulWidget {
 }
 
 int koduindex = 1;
+Color valge = Colors.white;
+Color green = Colors.green;
+Color homme = valge;
+Color tana = green;
+TextStyle hommeFont = font;
+TextStyle tanaFont = fontValge;
+int? tappedIndex;
 
 class _KeskmiseHinnaAluselTundideValimineState
     extends State<KeskmiseHinnaAluselTundideValimine> {
@@ -42,6 +51,9 @@ class _KeskmiseHinnaAluselTundideValimineState
   double vahe = 10;
   int valitudTunnid = 10;
   Color boxColor = sinineKast;
+  late Map<int, dynamic> lulitus;
+  late Map<int, dynamic> lulitusTana;
+  late Map<int, dynamic> lulitusHomme;
 
   Map<int, dynamic> keskHind = {
     0: ['00.00', 0, false],
@@ -203,14 +215,12 @@ class _KeskmiseHinnaAluselTundideValimineState
     return Padding(
       padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
       child: Scaffold(
-        backgroundColor: Color.fromARGB(255, 189, 216, 225), //TaustavÃ¤rv
-
         appBar: AppBar(
           backgroundColor: Color.fromARGB(255, 115, 162, 195),
           title: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text('Tunndide valik'),
+              Text('Tundide valimine'),
             ],
           ),
           actions: [
@@ -269,174 +279,164 @@ class _KeskmiseHinnaAluselTundideValimineState
           child: Column(
             children: [
               SizedBox(height: vahe),
-              Align(
-                alignment: Alignment.centerLeft,
-                child: Container(
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    color: boxColor,
-                    borderRadius: borderRadius,
-                    border: border,
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.2),
-                        spreadRadius: 2,
-                        blurRadius: 5,
-                        offset: const Offset(3, 3),
-                      ),
-                    ],
-                  ),
-                  width: sinineKastLaius,
-                  height: sinineKastKorgus,
-                  child: Row(
-                    children: [
-                      RichText(
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Center(
+                      child: GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        if (tana == valge) {
+                          lulitus = lulitusTana;
+                          tana = green;
+                          tanaFont = fontValge;
+                          homme = valge;
+                          hommeFont = font;
+                          HapticFeedback.vibrate();
+                        } /*else {
+                              lulitus = lulitusHomme;
+                              tana = valge;
+                              tanaFont = font;
+                              homme = green;
+                              hommeFont = fontValge;
+                            }*/
+                      });
+                    },
+                    child: Container(
+                      width: 100,
+                      height: 30,
+                      decoration: BoxDecoration(
+                          color: tana,
+                          borderRadius: BorderRadius.circular(20.0),
+                          border: Border.all(
+                            color: Colors.green,
+                            width: 3,
+                          )),
+                      child: Center(
+                          child: RichText(
                         text: TextSpan(
-                          style: const TextStyle(
-                            fontSize: 20,
-                            color: Colors.black,
+                          text: 'Täna',
+                          style: tanaFont,
+                        ),
+                        textAlign: TextAlign.center,
+                      )),
+                    ),
+                  )),
+                  Center(
+                      child: GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        if (homme == valge) {
+                          lulitus = lulitusHomme;
+                          homme = green;
+                          hommeFont = fontValge;
+                          tana = valge;
+                          tanaFont = font;
+                          HapticFeedback.vibrate();
+                        } /*else {
+                                lulitus = lulitusTana;
+                                homme = valge;
+                                hommeFont = font;
+                                tana = green;
+                                tanaFont = fontValge;
+                              }*/
+                      });
+                    },
+                    child: Container(
+                      width: 100,
+                      height: 30,
+                      decoration: BoxDecoration(
+                          color: homme,
+                          borderRadius: BorderRadius.circular(30.0),
+                          border: Border.all(
+                            color: Colors.green,
+                            width: 3,
+                          )),
+                      child: Center(
+                          child: RichText(
+                        text: TextSpan(
+                          text: 'Homme',
+                          style: hommeFont,
+                        ),
+                        textAlign: TextAlign.center,
+                      )),
+                    ),
+                  ))
+                ],
+              ),
+              Container(
+                height: 40,
+                alignment: Alignment.center,
+                child: RichText(
+                  text: TextSpan(
+                    style: TextStyle(
+                      fontSize: 18,
+                      color: Colors.black,
+                    ),
+                    children: [
+                      TextSpan(
+                        text: '  Valitud tunnid:  ',
+                        style: GoogleFonts.openSans(
+                          textStyle: TextStyle(
+                            fontWeight: FontWeight.w500,
                           ),
-                          children: [
-                            TextSpan(text: '  Kuvatav päev: ', style: font),
-                          ],
                         ),
                       ),
-                      SizedBox(width: 20),
-                      Container(
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            color: paevNupp == 'Täna'
-                                ? Colors.green
-                                : Color.fromARGB(0, 171, 161, 161),
-                            border: Border.all(color: Colors.blue, width: 2)),
-                        child: TextButton(
-                          onPressed: () {
-                            setState(() {
-                              paevNupp = paevaMuutmine(paevNupp);
-                            });
-                          },
-                          style: ButtonStyle(
-                            foregroundColor:
-                                MaterialStateProperty.all<Color>(Colors.white),
-                            textStyle: MaterialStateProperty.all<TextStyle>(
-                              TextStyle(fontSize: 20),
+                      WidgetSpan(
+                        alignment: PlaceholderAlignment.baseline,
+                        baseline: TextBaseline.alphabetic,
+                        child: Container(
+                          height: 25,
+                          width: 45,
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                              color: Colors.grey,
+                              width: 1.0,
+                            ),
+                            borderRadius: BorderRadius.circular(4.0),
+                          ),
+                          child: Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 8.0),
+                            child: TextField(
+                              keyboardType: TextInputType.number,
+                              inputFormatters: [
+                                FilteringTextInputFormatter.digitsOnly,
+                              ],
+                              onSubmitted: (value) {
+                                setState(() {
+                                  int parsedValue = int.tryParse(value) ?? 0;
+                                  if (parsedValue > 24) {
+                                    parsedValue = 24;
+                                  }
+                                  valitudTunnid = parsedValue;
+                                  print(valitudTunnid);
+                                });
+                              },
+                              decoration: InputDecoration(
+                                border: InputBorder.none,
+                                isDense: true,
+                                hintText: '12',
+                              ),
+                              style: GoogleFonts.openSans(
+                                textStyle: TextStyle(
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 20,
+                                  color: Colors.black,
+                                ),
+                              ),
                             ),
                           ),
-                          child: Text('Täna'),
-                        ),
-                      ),
-                      SizedBox(width: 40),
-                      Container(
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            color: paevNupp == 'Homme'
-                                ? Colors.green
-                                : Color.fromARGB(0, 171, 161, 161),
-                            border: Border.all(color: Colors.blue, width: 2)),
-                        child: TextButton(
-                          onPressed: () {
-                            setState(() {
-                              paevNupp = paevaMuutmine(paevNupp);
-                            });
-                          },
-                          style: ButtonStyle(
-                            foregroundColor:
-                                MaterialStateProperty.all<Color>(Colors.white),
-                            textStyle: MaterialStateProperty.all<TextStyle>(
-                              TextStyle(fontSize: 20),
-                            ),
-                          ),
-                          child: Text('Homme'),
                         ),
                       ),
                     ],
                   ),
                 ),
               ),
-              SizedBox(height: vahe),
-              Align(
-                alignment: Alignment.centerLeft,
-                child: Container(
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    color: boxColor,
-                    borderRadius: borderRadius,
-                    border: border,
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.2),
-                        spreadRadius: 2,
-                        blurRadius: 5,
-                        offset: const Offset(3, 3),
-                      ),
-                    ],
-                  ),
-                  width: sinineKastLaius,
-                  height: sinineKastKorgus,
-                  child: RichText(
-                    text: TextSpan(
-                      style: TextStyle(
-                        fontSize: 18,
-                        color: Colors.black,
-                      ),
-                      children: [
-                        TextSpan(
-                          text: '  Valitud tunnid:  ',
-                          style: GoogleFonts.openSans(
-                            textStyle: TextStyle(
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ),
-                        WidgetSpan(
-                          child: Container(
-                            height: 25,
-                            width: 45,
-                            decoration: BoxDecoration(
-                              border: Border.all(
-                                color: Colors.grey,
-                                width: 1.0,
-                              ),
-                              borderRadius: BorderRadius.circular(4.0),
-                            ),
-                            child: Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 8.0),
-                              child: TextField(
-                                keyboardType: TextInputType.number,
-                                inputFormatters: [
-                                  FilteringTextInputFormatter.digitsOnly,
-                                ],
-                                onSubmitted: (value) {
-                                  setState(() {
-                                    int parsedValue = int.tryParse(value) ?? 0;
-                                    if (parsedValue > 24) {
-                                      parsedValue = 24;
-                                    }
-                                    valitudTunnid = parsedValue;
-                                    print(valitudTunnid);
-                                  });
-                                },
-                                decoration: InputDecoration(
-                                  border: InputBorder.none,
-                                  isDense: true,
-                                  hintText: '12',
-                                ),
-                                style: GoogleFonts.openSans(
-                                  textStyle: TextStyle(
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 20,
-                                    color: Colors.black,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
+              Container(
+                height: 1,
+                width: double.infinity,
+                color: Colors.black,
               ),
               SizedBox(height: vahe),
               Center(
@@ -494,7 +494,7 @@ class _KeskmiseHinnaAluselTundideValimineState
                             isVisible: true,
                             labelAlignment: ChartDataLabelAlignment.middle,
                             textStyle:
-                                TextStyle(fontSize: 15, color: Colors.red),
+                                TextStyle(fontSize: 15, color: Colors.black),
                             angle: 270,
                           ),
                           pointColorMapper: (data, _) => Colors.transparent,
@@ -519,7 +519,7 @@ class _KeskmiseHinnaAluselTundideValimineState
                           xValueMapper: (data, _) => data[0],
                           yValueMapper: (data, _) => data[1],
                           dataLabelMapper: (data, _) => data[1] < 0
-                              ? (((data[1] + hindAVG) * pow(10.0, 2))
+                              ? (((data[1] + hindAVG + 10) * pow(10.0, 2))
                                           .round()
                                           .toDouble() /
                                       pow(10.0, 2))
@@ -556,7 +556,7 @@ class _KeskmiseHinnaAluselTundideValimineState
                           xValueMapper: (data, _) => data[0],
                           yValueMapper: (data, _) => data[1],
                           dataLabelMapper: (data, _) => data[1] > 0
-                              ? (((data[1] + hindAVG) * pow(10.0, 2))
+                              ? (((data[1] + hindAVG - 10) * pow(10.0, 2))
                                           .round()
                                           .toDouble() /
                                       pow(10.0, 2))
@@ -587,7 +587,6 @@ class _KeskmiseHinnaAluselTundideValimineState
             ],
           ),
         ),
-
         bottomNavigationBar: BottomNavigationBar(
             backgroundColor: Color.fromARGB(255, 115, 162, 195),
             fixedColor: Color.fromARGB(255, 157, 214, 171),
@@ -596,12 +595,18 @@ class _KeskmiseHinnaAluselTundideValimineState
             unselectedIconTheme: IconThemeData(size: 30),
             items: const <BottomNavigationBarItem>[
               BottomNavigationBarItem(
-                label: 'Tagasi',
-                icon: Icon(Icons.arrow_back),
+                label: 'Seadmed',
+                icon: Icon(
+                  Icons.list_outlined,
+                  size: 40,
+                ),
               ),
               BottomNavigationBarItem(
                 label: 'Kinnita',
-                icon: Icon(Icons.check_circle_outlined),
+                icon: Icon(
+                  Icons.check_circle_outlined,
+                  size: 40,
+                ),
               ),
             ],
             currentIndex: koduindex,
@@ -612,13 +617,17 @@ class _KeskmiseHinnaAluselTundideValimineState
                   Navigator.push(
                     //Kui vajutatakse Hinnagraafiku ikooni peale, siis viiakse Hinnagraafiku lehele
                     context,
-                    MaterialPageRoute(builder: (context) => MinuSeadmed()),
+                    MaterialPageRoute(
+                        builder: (context) => const SeadmeteListValimine()),
                   );
                 } else if (koduindex == 1) {
                   Navigator.push(
                     //Kui vajutatakse Teie seade ikooni peale, siis viiakse Seadmetelisamine lehele
                     context,
-                    MaterialPageRoute(builder: (context) => const KoduLeht()),
+                    MaterialPageRoute(
+                        builder: (context) => DynaamilenieKoduLeht(
+                              i: 1,
+                            )),
                   );
                 }
               });
@@ -656,7 +665,8 @@ keskmineHindArvutaus(Map<int, dynamic> lulitus) {
 
 KeskHindString(Map<int, dynamic> keskHind, double hindAVG) {
   hindAVG = ((hindAVG * pow(10.0, 2)).round().toDouble() / pow(10.0, 2));
-  String summa = 'Paeva Keskmine $hindAVG';
+
+  String summa = 'Keskmine $hindAVG';
   keskHind[0][2] = summa;
   return keskHind;
 }
@@ -667,7 +677,7 @@ LulitusMapVasakVaartustamine(
     double hind = lulitus1[key][1];
 
     if (hind <= hindAVG) {
-      lulitus2[key][1] = hind - hindAVG;
+      lulitus2[key][1] = hind - hindAVG - 10;
     }
   }
 
@@ -680,7 +690,7 @@ LulitusParemVaartustamine(
     double hind = lulitus1[key][1];
 
     if (hind >= hindAVG) {
-      lulitus3[key][1] = hind - hindAVG;
+      lulitus3[key][1] = hind - hindAVG + 10;
       ;
     }
   }
