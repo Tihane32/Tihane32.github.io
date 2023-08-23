@@ -1,25 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:testuus4/funktsioonid/graafikGen1.dart';
-import 'package:testuus4/lehed/AbiLeht.dart';
+import 'package:testuus4/funktsioonid/maksumusSeadmeKohta.dart';
 import 'package:testuus4/lehed/SeadmeGraafikLeht.dart';
 import 'package:testuus4/lehed/SeadmeTarbimisLeht.dart';
 import 'SeadmeYldInfo.dart';
-import 'seadmeteList.dart';
-import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:testuus4/lehed/seadmedKontoltNim.dart';
-import 'koduleht.dart';
-import 'hinnaPiiriAluselTunideValimine.dart';
-import 'dart:math';
-import 'package:testuus4/lehed/kaksTabelit.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:testuus4/main.dart';
-import 'package:testuus4/funktsioonid/Elering.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'dart:convert';
-import 'package:http/http.dart' as http;
-import 'package:testuus4/funktsioonid/lulitamine.dart';
+import 'package:intl/intl.dart';
 
 class TarbimisLeht extends StatefulWidget {
   const TarbimisLeht(
@@ -55,6 +43,7 @@ class _TarbimisLehtState extends State<TarbimisLeht> {
 
   @override
   void initState() {
+    seadmeMaksumus(SeadmeteMap[seadmeNimi]![1]);
     super.initState();
   }
 
@@ -168,7 +157,8 @@ class _TarbimisLehtState extends State<TarbimisLeht> {
                       color: Colors.black,
                     ),
                   ),
-                  SizedBox(height: vahe),
+                  SizedBox(height: vahe / 4),
+
                   /* Center(
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -388,10 +378,213 @@ class _TarbimisLehtState extends State<TarbimisLeht> {
                   Center(
                     child: EGraafik(value: SeadmeteMap[seadmeNimi]![1]),
                   ),
+                  Center(
+                    child: MGraafik(value: SeadmeteMap[seadmeNimi]![1]),
+                  )
                 ],
               ),
             ),
           ],
         ));
+  }
+}
+
+class MGraafik extends StatefulWidget {
+  final String value;
+
+  MGraafik({required this.value});
+  @override
+  _MGraafikState createState() => _MGraafikState();
+}
+
+class _MGraafikState extends State<MGraafik> {
+  Map<DateTime, double> temp = {};
+
+  bool graafik = false;
+  String total = '';
+  fetchData(value) async{
+    temp = await seadmeMaksumus(value);
+  }
+
+  getTotal() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    total = prefs.getString('hind')!;
+    print('$total osososadasdasdsad');
+    return total;
+  }
+  
+  late TooltipBehavior _tooltipBehavior;
+  @override
+  void initState() {
+    _tooltipBehavior = TooltipBehavior(enable: true, header: 'Maksumus:');
+    
+    fetchData(widget.value);
+    total = getTotal().toString();
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Align(
+          child: Container(
+            alignment: Alignment.center,
+
+            //width: sinineKastLaius,
+            //height: sinineKastKorgus,
+            child: RichText(
+              textAlign: TextAlign.center,
+              text: TextSpan(
+                style: font,
+                children: [
+                  TextSpan(text: 'Seadme maksumus', style: fontSuur),
+                ],
+              ),
+            ),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
+          child: Container(
+            height: 1,
+            width: double.infinity,
+            color: Colors.black,
+          ),
+        ),
+        Center(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [],
+          ),
+        ),
+        Align(
+          child: Visibility(
+              visible: graafik,
+              child: GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      graafik = !graafik;
+                    });
+                  },
+                  child: Container(
+                    alignment: Alignment.centerRight,
+                    child: Padding(
+                      padding: const EdgeInsets.only(right: 8.0),
+                      child: Icon(
+                        Icons.show_chart_rounded,
+                        size: 30,
+                      ),
+                    ),
+                  ))),
+        ),
+        Align(
+          child: Visibility(
+              visible: !graafik,
+              child: GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      graafik = !graafik;
+                    });
+                  },
+                  child: Container(
+                    alignment: Alignment.centerRight,
+                    child: Padding(
+                      padding: const EdgeInsets.only(right: 8.0),
+                      child: Icon(
+                        Icons.bar_chart,
+                        size: 30,
+                      ),
+                    ),
+                  ))),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(right: 12.0),
+          child: FutureBuilder<void>(
+            future: fetchData(widget.value),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.done) {
+                return Center(
+                  child: Column(children: [
+                    Align(
+                      child: Container(
+                        alignment: Alignment.center,
+
+                        //width: sinineKastLaius,
+                        //height: sinineKastKorgus,
+                        child: RichText(
+                          textAlign: TextAlign.center,
+                          text: TextSpan(
+                            style: font,
+                            children: [
+                              TextSpan(text: 'Kokku: $total Eurot', style: font),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                    Visibility(
+                      visible: !graafik,
+                      child: Container(
+                        child: SfCartesianChart(
+                          primaryXAxis: DateTimeAxis(
+                            
+                            
+                           
+                              labelStyle: fontVaike,
+                              dateFormat: DateFormat('dd.MM'),
+                              minimum: temp.entries.first.key,
+
+                           
+                          ),
+                           primaryYAxis: NumericAxis(
+                              title: AxisTitle(
+                                text: 'Eurot',
+                                textStyle: fontVaike,
+                              ),
+                              labelStyle: fontVaike,
+                              /*labelFormat: 'Wh',
+                              labelRotation: 90,*/
+                            ),
+                            tooltipBehavior: _tooltipBehavior,
+                          series: <ChartSeries>[
+                            ColumnSeries<MapEntry<DateTime, double>, DateTime>(
+                              //splineType: SplineType.monotonic,
+                              dataSource: temp.entries.toList(),
+                              xValueMapper: (entry, _) => entry.key,
+                              yValueMapper: (entry, _) => entry.value,
+                              enableTooltip: true,
+                              dataLabelSettings: DataLabelSettings(
+                                 offset: Offset(0, 15),
+                                  isVisible: true,
+                                  labelAlignment: ChartDataLabelAlignment.outer,
+                                  textStyle: fontVaike,
+                                  angle: 270,
+                                ),
+                                 dataLabelMapper: (entry,_) {
+                                  // Display the data label only if the consumption is not 0
+                                  if (entry.value == 0) {
+                                    return ''; // Customize this as needed
+                                  }
+                                },
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ]),
+                );
+              } else {
+                return Center(
+                    child: Padding(
+                  padding: const EdgeInsets.only(top: 100.0),
+                  child: CircularProgressIndicator(),
+                ));
+              }
+            },
+          ),
+        ),
+      ],
+    );
   }
 }

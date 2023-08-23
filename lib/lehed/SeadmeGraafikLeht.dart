@@ -166,18 +166,20 @@ class _SeadmeGraafikuLehtState extends State<SeadmeGraafikuLeht> {
       lulitusTana[i][1] = data[i]['price'];
     }
 
-    if (date.hour >
+    if (date.hour >=
         15) //Kui kell on vähem, kui 15 või on saadetud String 'täna'
     {
       var data = await getElering('homme');
       for (var i = 0; i < 24; i++) {
         lulitusHomme[i][1] = data[i]['price'];
       }
+      print('lulitushommeeeee');
+      print(lulitusHomme);
     }
     lulitusHomme = await graafik(SeadmeteMap, seadmeNimi, lulitusHomme);
     setState(() {
-      hommeNahtav = true; //TODO: testimise jaoks
-      if (date.hour > 15) {
+      //hommeNahtav = true; //TODO: testimise jaoks
+      if (date.hour >= 15) {
         hommeNahtav = true;
       }
       lulitus = lulitusTana;
@@ -348,8 +350,10 @@ class _SeadmeGraafikuLehtState extends State<SeadmeGraafikuLeht> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) =>
-                              TarbimisLeht(seadmeNimi: seadmeNimi, SeadmeteMap: SeadmeteMap,)),
+                          builder: (context) => TarbimisLeht(
+                                seadmeNimi: seadmeNimi,
+                                SeadmeteMap: SeadmeteMap,
+                              )),
                     );
                   } else if (selectedPage == 'Üldinfo') {
                     Navigator.push(
