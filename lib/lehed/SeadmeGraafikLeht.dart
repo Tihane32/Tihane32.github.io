@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:testuus4/funktsioonid/graafikGen1.dart';
 import 'package:testuus4/lehed/AbiLeht.dart';
 import 'package:testuus4/lehed/SeadmeTarbimisLeht.dart';
+import 'package:testuus4/lehed/TarbimisLeht.dart';
 import 'SeadmeYldInfo.dart';
 import 'seadmeteList.dart';
 import 'package:flutter/services.dart';
@@ -348,7 +349,7 @@ class _SeadmeGraafikuLehtState extends State<SeadmeGraafikuLeht> {
                       context,
                       MaterialPageRoute(
                           builder: (context) =>
-                              SeadmeTarbimineLeht(seadmeNimi: seadmeNimi)),
+                              TarbimisLeht(seadmeNimi: seadmeNimi, SeadmeteMap: SeadmeteMap,)),
                     );
                   } else if (selectedPage == 'Üldinfo') {
                     Navigator.push(
@@ -925,7 +926,7 @@ class _SeadmeGraafikuLehtState extends State<SeadmeGraafikuLeht> {
                   textAlign: TextAlign.center,
                   text: TextSpan(
                     children: [
-                      TextSpan(text: 'Kinnita', style: font),
+                      TextSpan(text: 'Kinnita', style: fontSuur),
                     ],
                   ),
                 ),

@@ -13,7 +13,10 @@ import 'package:testuus4/funktsioonid/maksumus.dart';
 import 'package:testuus4/lehed/koduleht.dart';
 import '../funktsioonid/hetke_hind.dart';
 import 'package:testuus4/main.dart';
-
+import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:syncfusion_flutter_charts/charts.dart';
+import 'package:testuus4/main.dart';
 import 'SeadmeYldInfo.dart';
 
 class SeadmeTarbimineLeht extends StatefulWidget {
@@ -34,7 +37,7 @@ class _SeadmeTarbimineLehtState extends State<SeadmeTarbimineLeht> {
   int selectedRowIndex = -1;
   late double hindAVG;
   String paevNupp = 'Täna';
-  String selectedPage = 'Tarbimis graafik';
+  String selectedPage = 'Tarbimisgraafik';
 
   String onoffNupp = 'Shelly ON';
 
@@ -205,7 +208,7 @@ class _SeadmeTarbimineLehtState extends State<SeadmeTarbimineLeht> {
                     setState(() {
                       selectedPage = newValue!;
                     });
-                    if (selectedPage == 'Tarbimis graafik') {
+                    if (selectedPage == 'Tarbimisgraafik') {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -223,8 +226,8 @@ class _SeadmeTarbimineLehtState extends State<SeadmeTarbimineLeht> {
                   },
                   underline: Container(), // or SizedBox.shrink()
                   items: <String>[
-                    'Lülitus graafik',
-                    'Tarbimis graafik',
+                    'Lülitusgraafik',
+                    'Tarbimisgraafik',
                     'Üldinfo'
                   ].map((String value) {
                     return DropdownMenuItem<String>(
@@ -594,8 +597,8 @@ class _EGraafikState extends State<EGraafik> {
       'id': value,
       'channel': '0',
       'date_range': 'custom',
-      'date_from': '2023-04-01 00:00:00',
-      'date_to': '2023-04-30 23:59:59',
+      'date_from': '2023-08-01 00:00:00',
+      'date_to': '2023-08-31 23:59:59',
     };
 
     var url = Uri.parse(
@@ -623,22 +626,29 @@ class _EGraafikState extends State<EGraafik> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 10),
+      padding: const EdgeInsets.only(right:12.0),
       child: FutureBuilder<void>(
         future: fetchData(widget.value),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
             return Center(
               child: SfCartesianChart(
-                primaryXAxis: DateTimeAxis(title: AxisTitle(text: 'Kuupäev')),
+                primaryXAxis: DateTimeAxis(
+                  labelStyle: fontVaike,
+                  title: AxisTitle(text: 'Kuupäev',textStyle: fontVaike,),
+                  dateFormat: DateFormat('dd.MM'),
+                ),
                 primaryYAxis: NumericAxis(
-                  labelFormat: '{value} Wh',
-                  labelRotation: 45,
+                  title: AxisTitle(text: 'Wh',textStyle: fontVaike,),
+                     labelStyle: fontVaike,
+                  /*labelFormat: 'Wh',
+                  labelRotation: 90,*/
                 ),
                 tooltipBehavior: _tooltipBehavior,
                 series: <ChartSeries<_ChartData, DateTime>>[
                   SplineSeries<_ChartData, DateTime>(
-                    splineType: SplineType.monotonic,
+                   
+                    splineType: SplineType.cardinal,
                     dataSource: chartData,
                     xValueMapper: (_ChartData data, _) => data.date,
                     yValueMapper: (_ChartData data, _) => data.consumption,
