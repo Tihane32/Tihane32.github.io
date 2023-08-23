@@ -100,31 +100,15 @@ class _SeadmeteListValimineState extends State<SeadmeteListValimine> {
     return Scaffold(
       backgroundColor: backround,
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         backgroundColor: appbar,
         title: Text(
-          'Shelly App',
+          'Graafikuse seadmetevalimine',
           style: GoogleFonts.roboto(
             textStyle: const TextStyle(fontSize: 25),
           ),
         ),
-        actions: [
-          Builder(
-            builder: (BuildContext context) {
-              return IconButton(
-                padding: EdgeInsets.only(right: 20),
-                icon: Icon(
-                  Icons.menu,
-                  size: 30,
-                ),
-                onPressed: () {
-                  Scaffold.of(context).openEndDrawer();
-                },
-              );
-            },
-          ),
-        ],
       ),
-      endDrawer: drawer(),
       body: GridView.builder(
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 1,
@@ -147,87 +131,95 @@ class _SeadmeteListValimineState extends State<SeadmeteListValimine> {
               });
               print(ValitudSeadmed[seade]);
             },
-            child: Container(
-              width: double.infinity,
-              height: double.infinity,
-              decoration: BoxDecoration(
-                border: Border.all(
-                  color: ValitudSeadmed[seade] == true
-                      ? Colors.green
-                      : Colors.grey,
-                  width: 8,
+            child: Padding(
+              padding: const EdgeInsets.all(1),
+              child: Container(
+                decoration: BoxDecoration(
+                  border: border,
                 ),
-              ),
-              child: Stack(
-                children: [
-                  Center(
-                    child: AspectRatio(
-                      aspectRatio: 1,
-                      child: ClipRRect(
-                        child: Image.asset(
-                          pilt,
-                          fit: BoxFit.cover,
-                        ),
-                      ),
+                child: Container(
+                  width: double.infinity,
+                  height: double.infinity,
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      color: ValitudSeadmed[seade] == true
+                          ? Colors.green
+                          : Colors.grey,
+                      width: 8,
                     ),
                   ),
-                  Positioned(
-                    top: 4,
-                    right: 8,
-                    child: Visibility(
-                      visible: staatus == 'off',
-                      child: IconButton(
-                        iconSize: 60,
-                        icon: Icon(
-                          Icons.warning_amber_rounded,
-                          size: 80,
-                          color: Colors.amber,
-                        ),
-                        color: Colors.blue,
-                        onPressed: () {
-                          showDialog(
-                              context: context,
-                              builder: (context) => AlertDialog(
-                                    title: Text("  Seadmel graafik puudub"),
-                                  ));
-                        },
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    top: 8,
-                    left: 8,
-                    child: Visibility(
-                      visible: staatus == 'offline',
-                      child: Container(
-                        child: Icon(
-                          Icons.wifi_off_outlined,
-                          size: 60,
-                          color: Colors.amber,
-                        ),
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    bottom: 0,
-                    left: 0,
-                    right: 0,
-                    child: Container(
-                      color: Colors.blue.withOpacity(0.6),
-                      padding: EdgeInsets.symmetric(vertical: 8),
-                      child: Center(
-                        child: Text(
-                          seade,
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
+                  child: Stack(
+                    children: [
+                      Center(
+                        child: AspectRatio(
+                          aspectRatio: 1,
+                          child: ClipRRect(
+                            child: Image.asset(
+                              pilt,
+                              fit: BoxFit.cover,
+                            ),
                           ),
                         ),
                       ),
-                    ),
+                      Positioned(
+                        top: 4,
+                        right: 8,
+                        child: Visibility(
+                          visible: staatus == 'off',
+                          child: IconButton(
+                            iconSize: 60,
+                            icon: Icon(
+                              Icons.warning_amber_rounded,
+                              size: 80,
+                              color: Colors.amber,
+                            ),
+                            color: Colors.blue,
+                            onPressed: () {
+                              showDialog(
+                                  context: context,
+                                  builder: (context) => AlertDialog(
+                                        title: Text("  Seadmel graafik puudub"),
+                                      ));
+                            },
+                          ),
+                        ),
+                      ),
+                      Positioned(
+                        top: 8,
+                        left: 8,
+                        child: Visibility(
+                          visible: staatus == 'offline',
+                          child: Container(
+                            child: Icon(
+                              Icons.wifi_off_outlined,
+                              size: 60,
+                              color: Colors.amber,
+                            ),
+                          ),
+                        ),
+                      ),
+                      Positioned(
+                        bottom: 0,
+                        left: 0,
+                        right: 0,
+                        child: Container(
+                          color: Colors.blue.withOpacity(0.6),
+                          padding: EdgeInsets.symmetric(vertical: 8),
+                          child: Center(
+                            child: Text(
+                              seade,
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                ],
+                ),
               ),
             ),
           );
@@ -264,7 +256,7 @@ class _SeadmeteListValimineState extends State<SeadmeteListValimine> {
                   context,
                   MaterialPageRoute(
                       builder: (context) =>
-                          const KeskmiseHinnaAluselTundideValimine()),
+                          KeskmiseHinnaAluselTundideValimine()),
                 );
               }
             });

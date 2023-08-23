@@ -215,11 +215,12 @@ class _HinnaPiiriAluselTundideValimineState
       padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
       child: Scaffold(
         appBar: AppBar(
+          automaticallyImplyLeading: false,
           backgroundColor: Color.fromARGB(255, 115, 162, 195),
           title: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text('Tunndide valik'),
+              Text('Tundide valimine'),
             ],
           ),
           actions: [
@@ -369,7 +370,7 @@ class _HinnaPiiriAluselTundideValimineState
                 child: RichText(
                   text: TextSpan(
                     style: TextStyle(
-                      fontSize: 18,
+                      fontSize: 20,
                       color: Colors.black,
                     ),
                     children: [
@@ -382,11 +383,10 @@ class _HinnaPiiriAluselTundideValimineState
                         ),
                       ),
                       WidgetSpan(
-                        alignment: PlaceholderAlignment.baseline,
-                        baseline: TextBaseline.alphabetic,
+                        alignment: PlaceholderAlignment.middle,
                         child: Container(
-                          height: 25,
-                          width: 70,
+                          height: 30,
+                          width: 80,
                           decoration: BoxDecoration(
                             border: Border.all(
                               color: Colors.grey,
@@ -412,6 +412,8 @@ class _HinnaPiiriAluselTundideValimineState
                                 border: InputBorder.none,
                                 isDense: true,
                                 hintText: '36.87',
+                                contentPadding:
+                                    EdgeInsets.symmetric(vertical: 3.0),
                               ),
                               style: GoogleFonts.openSans(
                                 textStyle: TextStyle(
