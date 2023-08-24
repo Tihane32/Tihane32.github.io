@@ -142,7 +142,7 @@ class _TulpDiagrammState extends State<TulpDiagramm> {
       lulitusTana[i][1] = data[i]['price'];
     }
 
-    if (date.hour >
+    if (date.hour >=
         15) //Kui kell on vähem, kui 15 või on saadetud String 'täna'
     {
       var data = await getElering('homme');
@@ -152,7 +152,7 @@ class _TulpDiagrammState extends State<TulpDiagramm> {
     }
 
     setState(() {
-      if (date.hour > 15) {
+      if (date.hour >= 15) {
         hommeNahtav = true;
       }
       lulitus = lulitusTana;
