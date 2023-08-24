@@ -401,14 +401,49 @@ class _MGraafikState extends State<MGraafik> {
   Map<DateTime, double> temp = {};
 
   bool graafik = false;
-  double abi = 0;
+
   String total = '';
   fetchData(value) async {
-    temp = await seadmeMaksumus(value);
-    temp.values.forEach((value) {
-      abi = abi + value;
+    DateTime currentDateTime = DateTime.now();
+
+    // Calculate the first day of the current month
+    DateTime firstDayOfMonth =
+        DateTime(currentDateTime.year, currentDateTime.month);
+
+    // Calculate the last day of the current month
+    DateTime lastDayOfMonth =
+        DateTime(currentDateTime.year, currentDateTime.month + 1, 0);
+
+    // Create the map with dates and initial values of 0
+    //Map<DateTime, double> temp = {};
+    setState(() {
+      for (DateTime date = firstDayOfMonth;
+          date.isBefore(lastDayOfMonth);
+          date = date.add(Duration(days: 1))) {
+        temp[date] = 0.0;
+      }
     });
-    total = abi.toString();
+
+    double abi = 0;
+    temp = await seadmeMaksumus(value);
+    for (DateTime date = firstDayOfMonth;
+        date.isBefore(lastDayOfMonth);
+        date = date.add(Duration(days: 1))) {
+      if (!temp.containsKey(date)) {
+        temp[date] = 0.0;
+      }
+    }
+
+    setState(() {
+      temp = temp.map((key, value) =>
+          MapEntry(key, double.parse(value.toStringAsFixed(3))));
+      temp.values.forEach((value) {
+        abi = abi + value;
+        print("abi");
+        print(abi);
+      });
+      total = abi.toStringAsFixed(3);
+    });
   }
 
   /*getTotal() async {
@@ -430,162 +465,168 @@ class _MGraafikState extends State<MGraafik> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Align(
-          child: Container(
-            alignment: Alignment.center,
+    return Column(children: [
+      Align(
+        child: Container(
+          alignment: Alignment.center,
 
-            //width: sinineKastLaius,
-            //height: sinineKastKorgus,
-            child: RichText(
-              textAlign: TextAlign.center,
-              text: TextSpan(
-                style: font,
-                children: [
-                  TextSpan(text: 'Seadme maksumus', style: fontSuur),
-                ],
-              ),
+          //width: sinineKastLaius,
+          //height: sinineKastKorgus,
+          child: RichText(
+            textAlign: TextAlign.center,
+            text: TextSpan(
+              style: font,
+              children: [
+                TextSpan(text: 'Seadme maksumus', style: fontSuur),
+              ],
             ),
           ),
         ),
-        Padding(
-          padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
-          child: Container(
-            height: 1,
-            width: double.infinity,
-            color: Colors.black,
-          ),
+      ),
+      Padding(
+        padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
+        child: Container(
+          height: 1,
+          width: double.infinity,
+          color: Colors.black,
         ),
-        Center(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [],
-          ),
+      ),
+      Center(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: const [],
         ),
-        Align(
-          child: Visibility(
-              visible: graafik,
-              child: GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      graafik = !graafik;
-                    });
-                  },
-                  child: Container(
-                    alignment: Alignment.centerRight,
-                    child: Padding(
-                      padding: const EdgeInsets.only(right: 8.0),
-                      child: Icon(
-                        Icons.show_chart_rounded,
-                        size: 30,
-                      ),
+      ),
+      Align(
+        child: Visibility(
+            visible: graafik,
+            child: GestureDetector(
+                onTap: () {
+                  setState(() {
+                    graafik = !graafik;
+                  });
+                },
+                child: Container(
+                  alignment: Alignment.centerRight,
+                  child: Padding(
+                    padding: const EdgeInsets.only(right: 8.0),
+                    child: Icon(
+                      Icons.bar_chart,
+                      size: 30,
                     ),
-                  ))),
-        ),
-        Align(
-          child: Visibility(
-              visible: !graafik,
-              child: GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      graafik = !graafik;
-                    });
-                  },
-                  child: Container(
-                    alignment: Alignment.centerRight,
-                    child: Padding(
-                      padding: const EdgeInsets.only(right: 8.0),
-                      child: Icon(
-                        Icons.bar_chart,
-                        size: 30,
-                      ),
+                  ),
+                ))),
+      ),
+      Align(
+        child: Visibility(
+            visible: !graafik,
+            child: GestureDetector(
+                onTap: () {
+                  setState(() {
+                    graafik = !graafik;
+                  });
+                },
+                child: Container(
+                  alignment: Alignment.centerRight,
+                  child: Padding(
+                    padding: const EdgeInsets.only(right: 8.0),
+                    child: Icon(
+                      Icons.table_rows_outlined,
+                      size: 30,
                     ),
-                  ))),
-        ),
-        Padding(
+                  ),
+                ))),
+      ),
+      Padding(
           padding: const EdgeInsets.only(right: 12.0),
-          child: FutureBuilder<void>(
-            future: fetchData(widget.value),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.done) {
-                return Center(
-                  child: Column(children: [
-                    Align(
-                      child: Container(
-                        alignment: Alignment.center,
+          child: Center(
+            child: Column(children: [
+              Align(
+                child: Container(
+                  alignment: Alignment.center,
 
-                        //width: sinineKastLaius,
-                        //height: sinineKastKorgus,
-                        child: RichText(
-                          textAlign: TextAlign.center,
-                          text: TextSpan(
-                            style: font,
-                            children: [
-                              TextSpan(
-                                  text: 'Kokku: $total Eurot', style: font),
-                            ],
-                          ),
-                        ),
-                      ),
+                  //width: sinineKastLaius,
+                  //height: sinineKastKorgus,
+                  child: RichText(
+                    textAlign: TextAlign.center,
+                    text: TextSpan(
+                      style: font,
+                      children: [
+                        TextSpan(text: 'Kokku: $total Eurot', style: font),
+                      ],
                     ),
-                    Visibility(
-                      visible: !graafik,
-                      child: Container(
-                        child: SfCartesianChart(
-                          primaryXAxis: DateTimeAxis(
-                            labelStyle: fontVaike,
-                            dateFormat: DateFormat('dd.MM'),
-                            minimum: temp.entries.first.key,
-                          ),
-                          primaryYAxis: NumericAxis(
-                            title: AxisTitle(
-                              text: 'Eurot',
-                              textStyle: fontVaike,
-                            ),
-                            labelStyle: fontVaike,
-                            /*labelFormat: 'Wh',
+                  ),
+                ),
+              ),
+              Visibility(
+                visible: !graafik,
+                child: Container(
+                  child: SfCartesianChart(
+                    primaryXAxis: DateTimeAxis(
+                      labelStyle: fontVaike,
+                      dateFormat: DateFormat('dd.MM'),
+                      minimum: temp.entries.first.key,
+                    ),
+                    primaryYAxis: NumericAxis(
+                      title: AxisTitle(
+                        text: 'Eurot',
+                        textStyle: fontVaike,
+                      ),
+                      labelStyle: fontVaike,
+                      /*labelFormat: 'Wh',
                               labelRotation: 90,*/
-                          ),
-                          tooltipBehavior: _tooltipBehavior,
-                          series: <ChartSeries>[
-                            ColumnSeries<MapEntry<DateTime, double>, DateTime>(
-                              //splineType: SplineType.monotonic,
-                              dataSource: temp.entries.toList(),
-                              xValueMapper: (entry, _) => entry.key,
-                              yValueMapper: (entry, _) => entry.value,
-                              enableTooltip: true,
-                              dataLabelSettings: DataLabelSettings(
-                                offset: Offset(0, 15),
-                                isVisible: true,
-                                labelAlignment: ChartDataLabelAlignment.outer,
-                                textStyle: fontVaike,
-                                angle: 270,
-                              ),
-                              dataLabelMapper: (entry, _) {
-                                // Display the data label only if the consumption is not 0
-                                if (entry.value == 0) {
-                                  return ''; // Customize this as needed
-                                }
-                              },
-                            ),
-                          ],
-                        ),
-                      ),
                     ),
-                  ]),
-                );
-              } else {
-                return Center(
-                    child: Padding(
-                  padding: const EdgeInsets.only(top: 100.0),
-                  child: CircularProgressIndicator(),
-                ));
-              }
-            },
-          ),
-        ),
-      ],
-    );
+                    tooltipBehavior: _tooltipBehavior,
+                    series: <ChartSeries>[
+                      ColumnSeries<MapEntry<DateTime, double>, DateTime>(
+                        //splineType: SplineType.monotonic,
+                        dataSource: temp.entries.toList(),
+                        xValueMapper: (entry, _) => entry.key,
+                        yValueMapper: (entry, _) => entry.value,
+                        enableTooltip: true,
+                        dataLabelSettings: DataLabelSettings(
+                          offset: Offset(0, 5),
+                          isVisible: true,
+                          labelAlignment: ChartDataLabelAlignment.outer,
+                          textStyle: fontVaike,
+                          angle: 270,
+                        ),
+                        dataLabelMapper: (entry, _) {
+                          // Display the data label only if the consumption is not 0
+                          if (entry.value == 0) {
+                            return ''; // Customize this as needed
+                          }
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              Visibility(
+                  visible: graafik,
+                  child: Center(
+                    child: DataTable(
+                      
+                      dataRowHeight: 20,
+                      decoration: BoxDecoration(),
+                      columns: const [
+                        DataColumn(label: Text('Kuupäev')),
+                        DataColumn(label: Text('Eurot')),
+                      ],
+                      rows: temp.entries.map((entry) {
+                        final formattedDate = DateFormat('yyyy.MM.dd')
+                            .format(entry.key); // Format the date
+                        return DataRow(
+                          cells: [
+                            DataCell(Text(formattedDate)),
+                            DataCell(Text(entry.value.toString())),
+                          ],
+                        );
+                      }).toList(),
+                    ),
+                  )),
+            ]),
+          ))
+    ]);
   }
 }

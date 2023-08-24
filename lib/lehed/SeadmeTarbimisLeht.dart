@@ -571,6 +571,26 @@ class _EGraafikState extends State<EGraafik> {
   bool graafik = false;
   String total = '';
   Future<void> fetchData(value) async {
+    DateTime currentDateTime = DateTime.now();
+
+    // Calculate the first day of the current month
+    DateTime firstDayOfMonth =
+        DateTime(currentDateTime.year, currentDateTime.month);
+
+    // Calculate the last day of the current month
+    DateTime lastDayOfMonth =
+        DateTime(currentDateTime.year, currentDateTime.month + 1, 0);
+
+    // Create the list of _ChartData objects with dates and initial consumption values of 0
+    setState(() {
+      total = '';
+      for (DateTime date = firstDayOfMonth;
+          date.isBefore(lastDayOfMonth);
+          date = date.add(Duration(days: 1))) {
+        chartData.add(_ChartData(date, 0.0));
+      }
+    });
+
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? ajutineKasutajanimi = prefs.getString('Kasutajanimi');
     String? sha1Hash = prefs.getString('Kasutajaparool');
@@ -610,27 +630,26 @@ class _EGraafikState extends State<EGraafik> {
     final jsonData = json.decode(res.body);
     final historyData = jsonData['data']['history'] as List<dynamic>;
     print(historyData);
-    chartData = historyData
-        .map((history) => _ChartData(DateTime.parse(history['datetime']),
-            history['consumption'].toDouble()))
-        .toList();
+    setState(() {
+      chartData = historyData
+          .map((history) => _ChartData(DateTime.parse(history['datetime']),
+              history['consumption'].toDouble()))
+          .toList(); 
+          total = jsonData['data']['total'].toString();
+    });
+
     print(chartData);
     print('total');
     print(jsonData['data']);
     print(jsonData['data']['total']);
 
-    total = jsonData['data']['total'].toString();
+   
     prefs.setString('total', total);
 
     print('$total ososo');
   }
 
-  getTotal() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    total = prefs.getString('total')!;
-    print('$total osososadasdasdsad');
-    return total;
-  }
+  
 
   late TooltipBehavior _tooltipBehavior;
   @override
@@ -638,215 +657,195 @@ class _EGraafikState extends State<EGraafik> {
     _tooltipBehavior = TooltipBehavior(enable: true, header: 'Tarbitud:');
 
     fetchData(widget.value);
-    total = getTotal().toString();
+   
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Align(
-          child: Container(
-            alignment: Alignment.center,
+    return Column(children: [
+      Align(
+        child: Container(
+          alignment: Alignment.center,
 
-            //width: sinineKastLaius,
-            //height: sinineKastKorgus,
-            child: RichText(
-              textAlign: TextAlign.center,
-              text: TextSpan(
-                style: font,
-                children: [
-                  TextSpan(text: 'Seadme tarbimine', style: fontSuur),
-                ],
-              ),
+          //width: sinineKastLaius,
+          //height: sinineKastKorgus,
+          child: RichText(
+            textAlign: TextAlign.center,
+            text: TextSpan(
+              style: font,
+              children: [
+                TextSpan(text: 'Seadme tarbimine', style: fontSuur),
+              ],
             ),
           ),
         ),
-        Padding(
-          padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
-          child: Container(
-            height: 1,
-            width: double.infinity,
-            color: Colors.black,
-          ),
+      ),
+      Padding(
+        padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
+        child: Container(
+          height: 1,
+          width: double.infinity,
+          color: Colors.black,
         ),
-        Center(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [],
-          ),
+      ),
+      Center(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [],
         ),
-        Align(
-          child: Visibility(
-              visible: graafik,
-              child: GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      graafik = !graafik;
-                    });
-                  },
-                  child: Container(
-                    alignment: Alignment.centerRight,
-                    child: Padding(
-                      padding: const EdgeInsets.only(right: 8.0),
-                      child: Icon(
-                        Icons.show_chart_rounded,
-                        size: 30,
-                      ),
+      ),
+      Align(
+        child: Visibility(
+            visible: graafik,
+            child: GestureDetector(
+                onTap: () {
+                  setState(() {
+                    graafik = !graafik;
+                  });
+                },
+                child: Container(
+                  alignment: Alignment.centerRight,
+                  child: Padding(
+                    padding: const EdgeInsets.only(right: 8.0),
+                    child: Icon(
+                      Icons.show_chart_rounded,
+                      size: 30,
                     ),
-                  ))),
-        ),
-        Align(
-          child: Visibility(
-              visible: !graafik,
-              child: GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      graafik = !graafik;
-                    });
-                  },
-                  child: Container(
-                    alignment: Alignment.centerRight,
-                    child: Padding(
-                      padding: const EdgeInsets.only(right: 8.0),
-                      child: Icon(
-                        Icons.bar_chart,
-                        size: 30,
-                      ),
+                  ),
+                ))),
+      ),
+      Align(
+        child: Visibility(
+            visible: !graafik,
+            child: GestureDetector(
+                onTap: () {
+                  setState(() {
+                    graafik = !graafik;
+                  });
+                },
+                child: Container(
+                  alignment: Alignment.centerRight,
+                  child: Padding(
+                    padding: const EdgeInsets.only(right: 8.0),
+                    child: Icon(
+                      Icons.bar_chart,
+                      size: 30,
                     ),
-                  ))),
-        ),
-        Padding(
+                  ),
+                ))),
+      ),
+      Padding(
           padding: const EdgeInsets.only(right: 12.0),
-          child: FutureBuilder<void>(
-            future: fetchData(widget.value),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.done) {
-                return Center(
-                  child: Column(
-                    children: [
-                      Align(
-                        child: Container(
-                          alignment: Alignment.center,
+          child: Center(
+            child: Column(children: [
+              Align(
+                child: Container(
+                  alignment: Alignment.center,
 
-                          //width: sinineKastLaius,
-                          //height: sinineKastKorgus,
-                          child: RichText(
-                            textAlign: TextAlign.center,
-                            text: TextSpan(
-                              style: font,
-                              children: [
-                                TextSpan(text: 'Kokku: $total Wh', style: font),
-                              ],
-                            ),
-                          ),
-                        ),
+                  //width: sinineKastLaius,
+                  //height: sinineKastKorgus,
+                  child: RichText(
+                    textAlign: TextAlign.center,
+                    text: TextSpan(
+                      style: font,
+                      children: [
+                        TextSpan(text: 'Kokku: $total Wh', style: font),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              Visibility(
+                visible: !graafik,
+                child: Container(
+                  height: MediaQuery.of(context).size.height *
+                      chartData.length *
+                      0.0115,
+                  child: SfCartesianChart(
+                    primaryXAxis: DateTimeAxis(
+                      minimum: chartData.first.date,
+                      maximum: chartData.last.date,
+                      labelStyle: fontVaike,
+                      dateFormat: DateFormat('dd.MM'),
+                    ),
+                    primaryYAxis: NumericAxis(
+                      title: AxisTitle(
+                        text: 'Wh',
+                        textStyle: fontVaike,
                       ),
-                      Visibility(
-                        visible: !graafik,
-                        child: Container(
-                          height: MediaQuery.of(context).size.height *
-                              chartData.length *
-                              0.0115,
-                          child: SfCartesianChart(
-                            primaryXAxis: DateTimeAxis(
-                              minimum: chartData.first.date,
-                              maximum: chartData.last.date,
-                              labelStyle: fontVaike,
-                              dateFormat: DateFormat('dd.MM'),
-                            ),
-                            primaryYAxis: NumericAxis(
-                              title: AxisTitle(
-                                text: 'Wh',
-                                textStyle: fontVaike,
-                              ),
-                              labelStyle: fontVaike,
-                              /*labelFormat: 'Wh',
+                      labelStyle: fontVaike,
+                      /*labelFormat: 'Wh',
                               labelRotation: 90,*/
-                            ),
-                            tooltipBehavior: _tooltipBehavior,
-                            series: <ChartSeries<_ChartData, DateTime>>[
-                              SplineSeries<_ChartData, DateTime>(
-                                splineType: SplineType.cardinal,
-                                dataSource: chartData,
-                                xValueMapper: (_ChartData data, _) => data.date,
-                                yValueMapper: (_ChartData data, _) =>
-                                    data.consumption,
-                                enableTooltip: true,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      Visibility(
-                        visible: graafik,
-                        child: Container(
-                          height: MediaQuery.of(context).size.height *
-                              chartData.length *
-                              0.0115,
-                          child: SfCartesianChart(
-                            primaryXAxis: DateTimeAxis(
-                                labelStyle: fontVaike,
-                                /*title: AxisTitle(
-                                  text: 'Kuupäev',
-                                  textStyle: fontVaike,
-                                ),*/
-                                dateFormat: DateFormat('dd.MM'),
-                                //interval: 5,
-
-                                //maximumLabels: 5,
-                                maximum: chartData.last.date,
-                                minimum: chartData.first.date),
-                            primaryYAxis: NumericAxis(
-                              title: AxisTitle(
-                                text: 'Wh',
-                                textStyle: fontVaike,
-                              ),
-                              labelStyle: fontVaike,
-                              isVisible: true,
-                            ),
-                            tooltipBehavior: _tooltipBehavior,
-                            series: <ChartSeries<_ChartData, DateTime>>[
-                              ColumnSeries<_ChartData, DateTime>(
-                                dataSource: chartData,
-                                xValueMapper: (_ChartData data, _) => data.date,
-                                yValueMapper: (_ChartData data, _) =>
-                                    data.consumption,
-                                enableTooltip: true,
-                                dataLabelSettings: DataLabelSettings(
-                                  offset: Offset(0, 5),
-                                  isVisible: true,
-                                  labelAlignment: ChartDataLabelAlignment.outer,
-                                  textStyle: fontVaike,
-                                  angle: 270,
-                                ),
-                                dataLabelMapper: (_ChartData data, _) {
-                                  // Display the data label only if the consumption is not 0
-                                  if (data.consumption == 0) {
-                                    return ''; // Customize this as needed
-                                  }
-                                },
-                              ),
-                            ],
-                          ),
-                        ),
+                    ),
+                    tooltipBehavior: _tooltipBehavior,
+                    series: <ChartSeries<_ChartData, DateTime>>[
+                      SplineSeries<_ChartData, DateTime>(
+                        splineType: SplineType.cardinal,
+                        dataSource: chartData,
+                        xValueMapper: (_ChartData data, _) => data.date,
+                        yValueMapper: (_ChartData data, _) => data.consumption,
+                        enableTooltip: true,
                       ),
                     ],
                   ),
-                );
-              } else {
-                return Center(
-                    child: Padding(
-                  padding: const EdgeInsets.only(top: 100.0),
-                  child: CircularProgressIndicator(),
-                ));
-              }
-            },
-          ),
-        ),
-      ],
-    );
+                ),
+              ),
+              Visibility(
+                visible: graafik,
+                child: Container(
+                  height: MediaQuery.of(context).size.height *
+                      chartData.length *
+                      0.0115,
+                  child: SfCartesianChart(
+                    primaryXAxis: DateTimeAxis(
+                        labelStyle: fontVaike,
+                        /*title: AxisTitle(
+                                  text: 'Kuupäev',
+                                  textStyle: fontVaike,
+                                ),*/
+                        dateFormat: DateFormat('dd.MM'),
+                        //interval: 5,
+
+                        //maximumLabels: 5,
+                        maximum: chartData.last.date,
+                        minimum: chartData.first.date),
+                    primaryYAxis: NumericAxis(
+                      title: AxisTitle(
+                        text: 'Wh',
+                        textStyle: fontVaike,
+                      ),
+                      labelStyle: fontVaike,
+                      isVisible: true,
+                    ),
+                    tooltipBehavior: _tooltipBehavior,
+                    series: <ChartSeries<_ChartData, DateTime>>[
+                      ColumnSeries<_ChartData, DateTime>(
+                        dataSource: chartData,
+                        xValueMapper: (_ChartData data, _) => data.date,
+                        yValueMapper: (_ChartData data, _) => data.consumption,
+                        enableTooltip: true,
+                        dataLabelSettings: DataLabelSettings(
+                          offset: Offset(0, 5),
+                          isVisible: true,
+                          labelAlignment: ChartDataLabelAlignment.outer,
+                          textStyle: fontVaike,
+                          angle: 270,
+                        ),
+                        dataLabelMapper: (_ChartData data, _) {
+                          // Display the data label only if the consumption is not 0
+                          if (data.consumption == 0) {
+                            return ''; // Customize this as needed
+                          }
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ]),
+          ))
+    ]);
   }
 }
 

@@ -781,9 +781,7 @@ class _SeadmeGraafikuLehtState extends State<SeadmeGraafikuLeht> {
                           Align(
                             child: Container(
                               alignment: Alignment.center,
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                              ),
+                              
                               //width: sinineKastLaius,
                               //height: sinineKastKorgus,
                               child: RichText(

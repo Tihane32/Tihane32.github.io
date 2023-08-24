@@ -115,10 +115,6 @@ seadmeMaksumus(String value) async {
   }
   u++;
 
-  num n = num.parse(hind.toStringAsFixed(5));
-  hind = n as double;
-  print('maksumus:');
-  print(hind);
-  prefs.setString('hind', hind.toString());
+  
   return maksumusSeade;
 }
