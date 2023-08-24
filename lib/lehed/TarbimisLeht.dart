@@ -401,25 +401,30 @@ class _MGraafikState extends State<MGraafik> {
   Map<DateTime, double> temp = {};
 
   bool graafik = false;
+  double abi = 0;
   String total = '';
-  fetchData(value) async{
+  fetchData(value) async {
     temp = await seadmeMaksumus(value);
+    temp.values.forEach((value) {
+      abi = abi + value;
+    });
+    total = abi.toString();
   }
 
-  getTotal() async {
+  /*getTotal() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     total = prefs.getString('hind')!;
     print('$total osososadasdasdsad');
     return total;
-  }
-  
+  }*/
+
   late TooltipBehavior _tooltipBehavior;
   @override
   void initState() {
     _tooltipBehavior = TooltipBehavior(enable: true, header: 'Maksumus:');
-    
+
     fetchData(widget.value);
-    total = getTotal().toString();
+    //total = getTotal().toString();
     super.initState();
   }
 
@@ -517,7 +522,8 @@ class _MGraafikState extends State<MGraafik> {
                           text: TextSpan(
                             style: font,
                             children: [
-                              TextSpan(text: 'Kokku: $total Eurot', style: font),
+                              TextSpan(
+                                  text: 'Kokku: $total Eurot', style: font),
                             ],
                           ),
                         ),
@@ -528,25 +534,20 @@ class _MGraafikState extends State<MGraafik> {
                       child: Container(
                         child: SfCartesianChart(
                           primaryXAxis: DateTimeAxis(
-                            
-                            
-                           
-                              labelStyle: fontVaike,
-                              dateFormat: DateFormat('dd.MM'),
-                              minimum: temp.entries.first.key,
-
-                           
+                            labelStyle: fontVaike,
+                            dateFormat: DateFormat('dd.MM'),
+                            minimum: temp.entries.first.key,
                           ),
-                           primaryYAxis: NumericAxis(
-                              title: AxisTitle(
-                                text: 'Eurot',
-                                textStyle: fontVaike,
-                              ),
-                              labelStyle: fontVaike,
-                              /*labelFormat: 'Wh',
-                              labelRotation: 90,*/
+                          primaryYAxis: NumericAxis(
+                            title: AxisTitle(
+                              text: 'Eurot',
+                              textStyle: fontVaike,
                             ),
-                            tooltipBehavior: _tooltipBehavior,
+                            labelStyle: fontVaike,
+                            /*labelFormat: 'Wh',
+                              labelRotation: 90,*/
+                          ),
+                          tooltipBehavior: _tooltipBehavior,
                           series: <ChartSeries>[
                             ColumnSeries<MapEntry<DateTime, double>, DateTime>(
                               //splineType: SplineType.monotonic,
@@ -555,18 +556,18 @@ class _MGraafikState extends State<MGraafik> {
                               yValueMapper: (entry, _) => entry.value,
                               enableTooltip: true,
                               dataLabelSettings: DataLabelSettings(
-                                 offset: Offset(0, 15),
-                                  isVisible: true,
-                                  labelAlignment: ChartDataLabelAlignment.outer,
-                                  textStyle: fontVaike,
-                                  angle: 270,
-                                ),
-                                 dataLabelMapper: (entry,_) {
-                                  // Display the data label only if the consumption is not 0
-                                  if (entry.value == 0) {
-                                    return ''; // Customize this as needed
-                                  }
-                                },
+                                offset: Offset(0, 15),
+                                isVisible: true,
+                                labelAlignment: ChartDataLabelAlignment.outer,
+                                textStyle: fontVaike,
+                                angle: 270,
+                              ),
+                              dataLabelMapper: (entry, _) {
+                                // Display the data label only if the consumption is not 0
+                                if (entry.value == 0) {
+                                  return ''; // Customize this as needed
+                                }
+                              },
                             ),
                           ],
                         ),
