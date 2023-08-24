@@ -161,15 +161,23 @@ class _SeadmeteListState extends State<SeadmeteList> {
                                 builder: (context) =>
                                     DynaamilenieKoduLeht(i: 2)));
                       },
-                      child: Container(
-                        width: double.infinity,
-                        height: double.infinity,
-                        color: Colors.grey[300],
-                        child: Center(
-                          child: Icon(
-                            Icons.add,
-                            size: 48,
-                            color: Colors.black,
+                      child: Padding(
+                        padding: const EdgeInsets.all(1),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            border: border,
+                          ),
+                          child: Container(
+                            width: double.infinity,
+                            height: double.infinity,
+                            color: Colors.grey[300],
+                            child: Center(
+                              child: Icon(
+                                Icons.add,
+                                size: 48,
+                                color: Colors.black,
+                              ),
+                            ),
                           ),
                         ),
                       ),
@@ -228,7 +236,11 @@ class _SeadmeteListState extends State<SeadmeteList> {
                                   width: 80,
                                   height: 80,
                                   decoration: BoxDecoration(
-                                    color: Colors.blue.withOpacity(0.6),
+                                    color: staatus == 'on'
+                                        ? Colors.green.withOpacity(0.6)
+                                        : staatus == 'off'
+                                            ? Colors.red.withOpacity(0.6)
+                                            : Colors.grey.withOpacity(0.6),
                                     shape: BoxShape.circle,
                                   ),
                                   child: staatus == 'Offline'
