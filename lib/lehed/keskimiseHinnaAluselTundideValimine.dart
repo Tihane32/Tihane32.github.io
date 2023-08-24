@@ -216,6 +216,7 @@ class _KeskmiseHinnaAluselTundideValimineState
       padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
       child: Scaffold(
         appBar: AppBar(
+          automaticallyImplyLeading: false,
           backgroundColor: Color.fromARGB(255, 115, 162, 195),
           title: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -370,7 +371,7 @@ class _KeskmiseHinnaAluselTundideValimineState
                 child: RichText(
                   text: TextSpan(
                     style: TextStyle(
-                      fontSize: 18,
+                      fontSize: 20,
                       color: Colors.black,
                     ),
                     children: [
@@ -383,10 +384,9 @@ class _KeskmiseHinnaAluselTundideValimineState
                         ),
                       ),
                       WidgetSpan(
-                        alignment: PlaceholderAlignment.baseline,
-                        baseline: TextBaseline.alphabetic,
+                        alignment: PlaceholderAlignment.middle,
                         child: Container(
-                          height: 25,
+                          height: 30,
                           width: 45,
                           decoration: BoxDecoration(
                             border: Border.all(
@@ -417,6 +417,8 @@ class _KeskmiseHinnaAluselTundideValimineState
                                 border: InputBorder.none,
                                 isDense: true,
                                 hintText: '12',
+                                contentPadding:
+                                    EdgeInsets.symmetric(vertical: 3.0),
                               ),
                               style: GoogleFonts.openSans(
                                 textStyle: TextStyle(

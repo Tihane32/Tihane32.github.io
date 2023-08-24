@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:testuus4/funktsioonid/lulitamine.dart';
 import 'dart:async';
@@ -38,6 +39,7 @@ class SeadmeteList extends StatefulWidget {
 }
 
 class _SeadmeteListState extends State<SeadmeteList> {
+  bool isLoading = true;
   late Map<String, List<String>> minuSeadmedK = {};
   String onoffNupp = 'Shelly ON';
   void initState() {
@@ -89,7 +91,7 @@ class _SeadmeteListState extends State<SeadmeteList> {
     }
     setState(() {
       SeadmeteMap = minuSeadmedK;
-      //isLoading = false;
+      isLoading = false;
     });
   }
 
@@ -114,132 +116,164 @@ class _SeadmeteListState extends State<SeadmeteList> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: backround,
-      body: GridView.builder(
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-        ),
-        itemCount: SeadmeteMap.length + 1,
-        itemBuilder: (context, index) {
-          if (index == SeadmeteMap.length) {
-            return GestureDetector(
-              onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => DynaamilenieKoduLeht(i: 2)));
-              },
-              child: Container(
-                width: double.infinity,
-                height: double.infinity,
-                color: Colors.grey[300],
-                child: Center(
-                  child: Icon(
-                    Icons.add,
-                    size: 48,
-                    color: Colors.black,
-                  ),
-                ),
-              ),
-            );
-          }
-
-          final seade = SeadmeteMap.keys.elementAt(index);
-          final pilt = SaaSeadmePilt(SeadmeteMap, seade);
-          final staatus = SaaSeadmeolek(SeadmeteMap, seade);
-          return GestureDetector(
-            onTap: () {
-              Navigator.push(
+      body: GestureDetector(
+        onHorizontalDragUpdate: (details) {
+          int tundlikus = 8;
+          if (details.delta.dx > tundlikus) {
+            Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => SeadmeGraafikuLeht(
-                    seadmeNimi: SeadmeteMap.keys.elementAt(index),
-                    SeadmeteMap: SeadmeteMap,
-                  ),
+                    builder: (context) => DynaamilenieKoduLeht(i: 0)));
+            // Right Swipe
+          } else if (details.delta.dx < -tundlikus) {
+            Navigator.push(
+              context,
+              CupertinoPageRoute(builder: (context) => SeadmeteValmisPage()),
+            );
+            //Left Swipe
+          }
+        },
+        onVerticalDragUpdate: (details) {
+          int sensitivity = 8;
+          if (details.delta.dy > sensitivity) {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => DynaamilenieKoduLeht(i: 1)));
+            // alla lohistamisel v2rskenda
+          }
+        },
+        child: isLoading
+            ? Center(child: CircularProgressIndicator())
+            : GridView.builder(
+                physics: BouncingScrollPhysics(),
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
                 ),
-              );
-            },
-            child: Padding(
-              padding: const EdgeInsets.all(1),
-              child: Container(
-                decoration: BoxDecoration(
-                  border: border,
-                ),
-                child: Container(
-                  width: double.infinity,
-                  height: double.infinity,
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: staatus == 'on'
-                          ? Colors.green
-                          : staatus == 'off'
-                              ? Colors.red
-                              : Colors.grey,
-                      width: 8,
-                    ),
-                  ),
-                  child: Stack(
-                    children: [
-                      AspectRatio(
-                        aspectRatio: 1,
-                        child: ClipRRect(
-                          child: Image.asset(
-                            pilt,
-                            fit: BoxFit.cover,
+                itemCount: SeadmeteMap.length + 1,
+                itemBuilder: (context, index) {
+                  if (index == SeadmeteMap.length) {
+                    return GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    DynaamilenieKoduLeht(i: 2)));
+                      },
+                      child: Container(
+                        width: double.infinity,
+                        height: double.infinity,
+                        color: Colors.grey[300],
+                        child: Center(
+                          child: Icon(
+                            Icons.add,
+                            size: 48,
+                            color: Colors.black,
                           ),
                         ),
                       ),
-                      Positioned(
-                        top: 8,
-                        right: 8,
+                    );
+                  }
+
+                  final seade = SeadmeteMap.keys.elementAt(index);
+                  final pilt = SaaSeadmePilt(SeadmeteMap, seade);
+                  final staatus = SaaSeadmeolek(SeadmeteMap, seade);
+                  return GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => SeadmeGraafikuLeht(
+                            seadmeNimi: SeadmeteMap.keys.elementAt(index),
+                            SeadmeteMap: SeadmeteMap,
+                          ),
+                        ),
+                      );
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.all(1),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          border: border,
+                        ),
                         child: Container(
-                          width: 80,
-                          height: 80,
+                          width: double.infinity,
+                          height: double.infinity,
                           decoration: BoxDecoration(
-                            color: Colors.blue.withOpacity(0.6),
-                            shape: BoxShape.circle,
-                          ),
-                          child: staatus == 'Offline'
-                              ? Icon(
-                                  Icons.wifi_off_outlined,
-                                  size: 60,
-                                  color: Colors.amber,
-                                )
-                              : IconButton(
-                                  iconSize: 60,
-                                  icon: Icon(Icons.power_settings_new),
-                                  color: Colors.white,
-                                  onPressed: () {
-                                    _handleButtonPress(seade);
-                                  },
-                                ),
-                        ),
-                      ),
-                      Positioned(
-                        bottom: 0,
-                        left: 0,
-                        right: 0,
-                        child: Container(
-                          color: Colors.blue.withOpacity(0.6),
-                          padding: EdgeInsets.symmetric(vertical: 8),
-                          child: Center(
-                            child: Text(
-                              seade,
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                              ),
+                            border: Border.all(
+                              color: staatus == 'on'
+                                  ? Colors.green
+                                  : staatus == 'off'
+                                      ? Colors.red
+                                      : Colors.grey,
+                              width: 8,
                             ),
                           ),
+                          child: Stack(
+                            children: [
+                              AspectRatio(
+                                aspectRatio: 1,
+                                child: ClipRRect(
+                                  child: Image.asset(
+                                    pilt,
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                              ),
+                              Positioned(
+                                top: 8,
+                                right: 8,
+                                child: Container(
+                                  width: 80,
+                                  height: 80,
+                                  decoration: BoxDecoration(
+                                    color: Colors.blue.withOpacity(0.6),
+                                    shape: BoxShape.circle,
+                                  ),
+                                  child: staatus == 'Offline'
+                                      ? Icon(
+                                          Icons.wifi_off_outlined,
+                                          size: 60,
+                                          color: Colors.amber,
+                                        )
+                                      : IconButton(
+                                          iconSize: 60,
+                                          icon: Icon(Icons.power_settings_new),
+                                          color: Colors.white,
+                                          onPressed: () {
+                                            _handleButtonPress(seade);
+                                          },
+                                        ),
+                                ),
+                              ),
+                              Positioned(
+                                bottom: 0,
+                                left: 0,
+                                right: 0,
+                                child: Container(
+                                  color: Colors.blue.withOpacity(0.6),
+                                  padding: EdgeInsets.symmetric(vertical: 8),
+                                  child: Center(
+                                    child: Text(
+                                      seade,
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
-                    ],
-                  ),
-                ),
+                    ),
+                  );
+                },
               ),
-            ),
-          );
-        },
       ),
     );
   }
