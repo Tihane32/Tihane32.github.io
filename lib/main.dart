@@ -11,8 +11,9 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'lehed/seadmeteList.dart';
 import 'package:get/get.dart';
-//Maini käivitamine, home on koduleht.
 
+//Maini käivitamine, home on koduleht.
+//bool graafikuNahtavus = true;
 double navBarHeight = 55;
 Color sinineKast = const Color.fromARGB(255, 143, 209, 238);
 Color backround = const Color.fromARGB(255, 255, 255, 255);

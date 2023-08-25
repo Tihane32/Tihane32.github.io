@@ -634,22 +634,22 @@ class _EGraafikState extends State<EGraafik> {
       chartData = historyData
           .map((history) => _ChartData(DateTime.parse(history['datetime']),
               history['consumption'].toDouble()))
-          .toList(); 
-          total = jsonData['data']['total'].toString();
+          .toList();
+      total = jsonData['data']['total'].toString();
     });
 
     print(chartData);
     print('total');
-    print(jsonData['data']);
+    print(jsonData['data']['history'][1]['consumption']);
     print(jsonData['data']['total']);
-
-   
+    String dataString = jsonEncode(jsonData['data']['history']);
+    prefs.setString('consumption', dataString);
     prefs.setString('total', total);
 
     print('$total ososo');
+    print(prefs.getString('consumption'));
+    
   }
-
-  
 
   late TooltipBehavior _tooltipBehavior;
   @override
@@ -657,7 +657,7 @@ class _EGraafikState extends State<EGraafik> {
     _tooltipBehavior = TooltipBehavior(enable: true, header: 'Tarbitud:');
 
     fetchData(widget.value);
-   
+
     super.initState();
   }
 
@@ -667,7 +667,7 @@ class _EGraafikState extends State<EGraafik> {
       Align(
         child: Container(
           alignment: Alignment.center,
-
+    
           //width: sinineKastLaius,
           //height: sinineKastKorgus,
           child: RichText(
@@ -742,7 +742,7 @@ class _EGraafikState extends State<EGraafik> {
               Align(
                 child: Container(
                   alignment: Alignment.center,
-
+    
                   //width: sinineKastLaius,
                   //height: sinineKastKorgus,
                   child: RichText(
@@ -806,7 +806,7 @@ class _EGraafikState extends State<EGraafik> {
                                 ),*/
                         dateFormat: DateFormat('dd.MM'),
                         //interval: 5,
-
+    
                         //maximumLabels: 5,
                         maximum: chartData.last.date,
                         minimum: chartData.first.date),

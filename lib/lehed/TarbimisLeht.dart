@@ -8,6 +8,7 @@ import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:testuus4/main.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:intl/intl.dart';
+import 'dart:convert';
 
 class TarbimisLeht extends StatefulWidget {
   const TarbimisLeht(
@@ -31,7 +32,7 @@ class _TarbimisLehtState extends State<TarbimisLeht> {
   late Map<int, dynamic> lulitusMap;
   int selectedRowIndex = -1;
   late double hindAVG = 0;
-
+bool graafikuNahtavus = true;
   String selectedPage = 'Tarbimisgraafik';
   double vahe = 10;
   Color boxColor = sinineKast;
@@ -376,10 +377,13 @@ class _TarbimisLehtState extends State<TarbimisLeht> {
               ),
               SizedBox(height: vahe * 2),*/
                   Center(
-                    child: EGraafik(value: SeadmeteMap[seadmeNimi]![1]),
-                  ),
-                  Center(
                     child: MGraafik(value: SeadmeteMap[seadmeNimi]![1]),
+                  ),
+                  Visibility(
+                    visible: graafikuNahtavus,
+                    child: Center(
+                      child: EGraafik(value: SeadmeteMap[seadmeNimi]![1]),
+                    ),
                   )
                 ],
               ),
@@ -399,7 +403,7 @@ class MGraafik extends StatefulWidget {
 
 class _MGraafikState extends State<MGraafik> {
   Map<DateTime, double> temp = {};
-
+  Map<dynamic, dynamic> consumption = {};
   bool graafik = false;
 
   String total = '';
@@ -412,8 +416,9 @@ class _MGraafikState extends State<MGraafik> {
 
     // Calculate the last day of the current month
     DateTime lastDayOfMonth =
-        DateTime(currentDateTime.year, currentDateTime.month + 1, 0);
-
+        DateTime(currentDateTime.year, currentDateTime.month + 1, 1);
+    print('lastday');
+    print(lastDayOfMonth);
     // Create the map with dates and initial values of 0
     //Map<DateTime, double> temp = {};
     setState(() {
@@ -423,7 +428,19 @@ class _MGraafikState extends State<MGraafik> {
         temp[date] = 0.0;
       }
     });
-
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String jsonData = prefs.getString('consumption') ?? '[]';
+    List<dynamic> decodedList = jsonDecode(jsonData);
+    print('jeeseeseses');
+    print(decodedList.length);
+    for (var j = 0; j < decodedList.length; j++) {
+      dynamic i = 0;
+      String k = '';
+      i = decodedList[j]['consumption'];
+      k = i.toStringAsFixed(2);
+      consumption[j] = k;
+    }
+    print(consumption);
     double abi = 0;
     temp = await seadmeMaksumus(value);
     for (DateTime date = firstDayOfMonth;
@@ -504,6 +521,7 @@ class _MGraafikState extends State<MGraafik> {
                 onTap: () {
                   setState(() {
                     graafik = !graafik;
+                    //graafikuNahtavus = !graafikuNahtavus;
                   });
                 },
                 child: Container(
@@ -524,6 +542,7 @@ class _MGraafikState extends State<MGraafik> {
                 onTap: () {
                   setState(() {
                     graafik = !graafik;
+                    //graafikuNahtavus = !graafikuNahtavus;
                   });
                 },
                 child: Container(
@@ -604,26 +623,46 @@ class _MGraafikState extends State<MGraafik> {
               ),
               Visibility(
                   visible: graafik,
-                  child: Center(
-                    child: DataTable(
-                      
-                      dataRowHeight: 20,
-                      decoration: BoxDecoration(),
-                      columns: const [
-                        DataColumn(label: Text('Kuupäev')),
-                        DataColumn(label: Text('Eurot')),
-                      ],
-                      rows: temp.entries.map((entry) {
-                        final formattedDate = DateFormat('yyyy.MM.dd')
-                            .format(entry.key); // Format the date
-                        return DataRow(
-                          cells: [
-                            DataCell(Text(formattedDate)),
-                            DataCell(Text(entry.value.toString())),
+                  child: Row(
+                    children: [
+                      Center(
+                        child: DataTable(
+                          dataRowHeight: 20,
+                          decoration: BoxDecoration(),
+                          columns: const [
+                            DataColumn(label: Text('Kuupäev')),
+                            DataColumn(label: Text('Eurot')),
                           ],
-                        );
-                      }).toList(),
-                    ),
+                          rows: temp.entries.map((entry) {
+                            final formattedDate = DateFormat('yyyy.MM.dd')
+                                .format(entry.key); // Format the date
+                            return DataRow(
+                              cells: [
+                                DataCell(Text(formattedDate)),
+                                DataCell(Text(entry.value.toString())),
+                              ],
+                            );
+                          }).toList(),
+                        ),
+                      ),
+                      Center(
+                        child: DataTable(
+                          dataRowHeight: 20,
+                          decoration: BoxDecoration(),
+                          columns: const [
+                            DataColumn(label: Text('Wh')),
+                          ],
+                          rows: consumption.entries.map((entry) {
+                            // Format the date
+                            return DataRow(
+                              cells: [
+                                DataCell(Text(entry.value.toString())),
+                              ],
+                            );
+                          }).toList(),
+                        ),
+                      ),
+                    ],
                   )),
             ]),
           ))
