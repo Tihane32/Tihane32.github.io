@@ -9,6 +9,7 @@ import 'package:testuus4/main.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:intl/intl.dart';
 import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 class TarbimisLeht extends StatefulWidget {
   const TarbimisLeht(
@@ -32,7 +33,7 @@ class _TarbimisLehtState extends State<TarbimisLeht> {
   late Map<int, dynamic> lulitusMap;
   int selectedRowIndex = -1;
   late double hindAVG = 0;
-bool graafikuNahtavus = true;
+  bool graafikuNahtavus = true;
   String selectedPage = 'Tarbimisgraafik';
   double vahe = 10;
   Color boxColor = sinineKast;
@@ -376,11 +377,14 @@ bool graafikuNahtavus = true;
                 ),
               ),
               SizedBox(height: vahe * 2),*/
-                  Center(
-                    child: MGraafik(value: SeadmeteMap[seadmeNimi]![1]),
-                  ),
                   Visibility(
                     visible: graafikuNahtavus,
+                    child: Center(
+                      child: MGraafik(value: SeadmeteMap[seadmeNimi]![1]),
+                    ),
+                  ),
+                  Visibility(
+                    visible: !graafikuNahtavus,
                     child: Center(
                       child: EGraafik(value: SeadmeteMap[seadmeNimi]![1]),
                     ),
@@ -402,10 +406,11 @@ class MGraafik extends StatefulWidget {
 }
 
 class _MGraafikState extends State<MGraafik> {
+  List<_ChartData> chartData = [];
   Map<DateTime, double> temp = {};
   Map<dynamic, dynamic> consumption = {};
   bool graafik = false;
-
+  int asi = 40;
   String total = '';
   fetchData(value) async {
     DateTime currentDateTime = DateTime.now();
@@ -469,12 +474,91 @@ class _MGraafikState extends State<MGraafik> {
     print('$total osososadasdasdsad');
     return total;
   }*/
+  Future<void> fetchData2(value) async {
+    DateTime currentDateTime = DateTime.now();
+
+    // Calculate the first day of the current month
+    DateTime firstDayOfMonth =
+        DateTime(currentDateTime.year, currentDateTime.month);
+
+    // Calculate the last day of the current month
+    DateTime lastDayOfMonth =
+        DateTime(currentDateTime.year, currentDateTime.month + 1, 0);
+
+    // Create the list of _ChartData objects with dates and initial consumption values of 0
+    setState(() {
+      total = '';
+      for (DateTime date = firstDayOfMonth;
+          date.isBefore(lastDayOfMonth);
+          date = date.add(Duration(days: 1))) {
+        chartData.add(_ChartData(date, 0.0));
+      }
+    });
+
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? ajutineKasutajanimi = prefs.getString('Kasutajanimi');
+    String? sha1Hash = prefs.getString('Kasutajaparool');
+
+    var headers1 = {
+      'Content-Type': 'application/x-www-form-urlencoded',
+    };
+
+    var kasutajaAndmed = {
+      'email': ajutineKasutajanimi,
+      'password': sha1Hash,
+      'var': '2',
+    };
+    var sisselogimiseUrl = Uri.parse('https://api.shelly.cloud/auth/login');
+    var sisselogimiseVastus = await http.post(sisselogimiseUrl,
+        headers: headers1, body: kasutajaAndmed);
+    var vastusJSON =
+        json.decode(sisselogimiseVastus.body) as Map<String, dynamic>;
+    var token = vastusJSON['data']['token'];
+    //Todo peab lisama beareri saamise
+    var headers = {
+      'Authorization': 'Bearer $token',
+    };
+    var data = {
+      'id': value,
+      'channel': '0',
+      'date_range': 'custom',
+      'date_from': '2023-08-01 00:00:00',
+      'date_to': '2023-08-31 23:59:59',
+    };
+
+    var url = Uri.parse(
+        'https://shelly-64-eu.shelly.cloud/statistics/relay/consumption');
+    var res = await http.post(url, headers: headers, body: data);
+    if (res.statusCode != 200)
+      throw Exception('http.post error: statusCode= ${res.statusCode}');
+    final jsonData = json.decode(res.body);
+    final historyData = jsonData['data']['history'] as List<dynamic>;
+    print(historyData);
+    setState(() {
+      chartData = historyData
+          .map((history) => _ChartData(DateTime.parse(history['datetime']),
+              history['consumption'].toDouble()))
+          .toList();
+      total = jsonData['data']['total'].toString();
+    });
+
+    print(chartData);
+    print('total');
+    print(jsonData['data']['history'][1]['consumption']);
+    print(jsonData['data']['total']);
+    String dataString = jsonEncode(jsonData['data']['history']);
+    prefs.setString('consumption', dataString);
+    prefs.setString('total', total);
+
+    print('$total ososo');
+    print(prefs.getString('consumption'));
+  }
 
   late TooltipBehavior _tooltipBehavior;
   @override
   void initState() {
     _tooltipBehavior = TooltipBehavior(enable: true, header: 'Maksumus:');
-
+    fetchData2(widget.value);
     fetchData(widget.value);
     //total = getTotal().toString();
     super.initState();
@@ -580,44 +664,116 @@ class _MGraafikState extends State<MGraafik> {
               Visibility(
                 visible: !graafik,
                 child: Container(
-                  child: SfCartesianChart(
-                    primaryXAxis: DateTimeAxis(
-                      labelStyle: fontVaike,
-                      dateFormat: DateFormat('dd.MM'),
-                      minimum: temp.entries.first.key,
-                    ),
-                    primaryYAxis: NumericAxis(
-                      title: AxisTitle(
-                        text: 'Eurot',
-                        textStyle: fontVaike,
-                      ),
-                      labelStyle: fontVaike,
-                      /*labelFormat: 'Wh',
-                              labelRotation: 90,*/
-                    ),
-                    tooltipBehavior: _tooltipBehavior,
-                    series: <ChartSeries>[
-                      ColumnSeries<MapEntry<DateTime, double>, DateTime>(
-                        //splineType: SplineType.monotonic,
-                        dataSource: temp.entries.toList(),
-                        xValueMapper: (entry, _) => entry.key,
-                        yValueMapper: (entry, _) => entry.value,
-                        enableTooltip: true,
-                        dataLabelSettings: DataLabelSettings(
-                          offset: Offset(0, 5),
-                          isVisible: true,
-                          labelAlignment: ChartDataLabelAlignment.outer,
-                          textStyle: fontVaike,
-                          angle: 270,
+                  height: MediaQuery.of(context).size.height * 2,
+                  child: RotatedBox(
+                    quarterTurns: 1,
+                    child: SfCartesianChart(
+                      axes: [
+                        NumericAxis(
+                          name: 'firstAxis',
+                          isVisible: false,
+                          title: AxisTitle(
+                            text: 'Eurot',
+                            textStyle: fontVaike,
+                          ),
+                          labelStyle: fontVaike,
+                          /*labelFormat: 'Wh',
+                                labelRotation: 90,*/
                         ),
-                        dataLabelMapper: (entry, _) {
-                          // Display the data label only if the consumption is not 0
-                          if (entry.value == 0) {
-                            return ''; // Customize this as needed
-                          }
-                        },
+                        NumericAxis(
+                          name: 'secondAxis',
+                          isVisible: false,
+                          title: AxisTitle(
+                            text: 'test',
+                            textStyle: fontVaike,
+                          ),
+                        ),
+                      ],
+                      primaryYAxis: NumericAxis(
+                        isVisible: false,
+                        title: AxisTitle(
+                          text: 'test',
+                          textStyle: fontVaike,
+                        ),
                       ),
-                    ],
+                      primaryXAxis: DateTimeAxis(
+                        interval: 1,
+                        labelRotation: 270,
+                        labelStyle: fontVaike,
+                        dateFormat: DateFormat('dd.MM'),
+                        minimum: temp.entries.first.key,
+                      ),
+                      tooltipBehavior: _tooltipBehavior,
+                      series: <ChartSeries>[
+                        StackedColumnSeries<MapEntry<DateTime, double>,
+                            DateTime>(
+                          color: Colors.green,
+                          width: 0.9,
+                          groupName: 'A',
+                          //splineType: SplineType.monotonic,
+                          borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(20),
+                              topRight: Radius.circular(20)),
+                          dataSource: temp.entries.toList(),
+                          yAxisName: 'firstAxis',
+                          xValueMapper: (entry, _) => entry.key,
+                          yValueMapper: (entry, _) => entry.value,
+                          enableTooltip: false,
+                          dataLabelSettings: DataLabelSettings(
+                            offset: Offset(0, -10),
+                            isVisible: true,
+                            labelAlignment: ChartDataLabelAlignment.outer,
+                            textStyle: fontVaike,
+                            angle: 270,
+                          ),
+                          dataLabelMapper: (entry, _) {
+                            // Display the data label only if the consumption is not 0
+                            if (entry.value == 0) {
+                              return ''; // Customize this as needed
+                            } else {
+                              String temp3 = entry.value.toString();
+                              return '$temp3€';
+                            }
+                          },
+                        ),
+                        StackedColumnSeries<_ChartData, DateTime>(
+                          color: Colors.blue,
+                          width: 0.9,
+                          borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(20),
+                              topRight: Radius.circular(20)),
+                          dataSource: chartData,
+                          yAxisName: 'secondAxis',
+                          xValueMapper: (_ChartData data, _) => data.date,
+                          yValueMapper: (_ChartData data, _) {
+                            final yValue = data.consumption;
+                            return yValue == 0
+                                ? 0
+                                : yValue < asi
+                                    ? asi
+                                    : yValue;
+                          },
+                          enableTooltip: false,
+                          dataLabelSettings: DataLabelSettings(
+                            offset: Offset(0, -20),
+                            isVisible: true,
+                            labelAlignment: ChartDataLabelAlignment.outer,
+                            textStyle: fontVaike,
+                            angle: 270,
+                          ),
+                          dataLabelMapper: (_ChartData data, _) {
+                            // Display the data label only if the consumption is not 0
+                            if (data.consumption == 0) {
+                              return ''; // Customize this as needed
+                            } else {
+                              String temp3 =
+                                  data.consumption.toStringAsFixed(2);
+                              return '${temp3}Wh';
+                            }
+                          },
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -668,4 +824,11 @@ class _MGraafikState extends State<MGraafik> {
           ))
     ]);
   }
+}
+
+class _ChartData {
+  _ChartData(this.date, this.consumption);
+
+  final DateTime date;
+  final double consumption;
 }
