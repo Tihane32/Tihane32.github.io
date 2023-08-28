@@ -2,22 +2,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:testuus4/funktsioonid/lulitamine.dart';
 import 'dart:async';
-
-import 'package:testuus4/lehed/Login.dart';
 import 'package:testuus4/lehed/SeadmeGraafikLeht.dart';
-import 'package:testuus4/lehed/abiLeht.dart';
-import 'package:testuus4/lehed/drawer.dart';
-import 'package:testuus4/lehed/kasutajaSeaded.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:testuus4/lehed/rakenduseSeaded.dart';
 import 'GraafikusseSeadmeteValik.dart';
 import 'dynamicKoduLeht.dart';
-import 'kaksTabelit.dart';
 import 'dart:convert';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:testuus4/funktsioonid/seisukord.dart';
-import 'hindJoonise.dart';
-import 'navigationBar.dart';
 import 'package:testuus4/main.dart';
 
 import 'package:get/get.dart';
@@ -47,7 +37,6 @@ class _SeadmeteListState extends State<SeadmeteList> {
     //seisukord();
     _submitForm();
     super.initState();
-    
   }
 
   int koduindex = 1;
@@ -69,7 +58,7 @@ class _SeadmeteListState extends State<SeadmeteList> {
     minuSeadmedK.clear();
     SharedPreferences prefs = await SharedPreferences.getInstance();
     //await prefs.clear();
-    
+
     String? storedJsonMap = prefs.getString('seadmed');
     print(storedJsonMap);
     if (storedJsonMap != null) {
@@ -79,7 +68,6 @@ class _SeadmeteListState extends State<SeadmeteList> {
       await Future.delayed(const Duration(seconds: 3));
       var i = 0;
       for (String Seade in storedMap.keys) {
-        
         var id = storedMap['Seade$i']['Seadme_ID'];
         var name = storedMap['Seade$i']['Seadme_nimi'];
         var pistik = storedMap['Seade$i']['Seadme_pistik'];

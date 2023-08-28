@@ -10,6 +10,7 @@ import 'dart:math';
 import 'package:testuus4/lehed/kaksTabelit.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'keskimiseHinnaAluselTundideValimine.dart';
+import 'kopeeeriGraafikTundideValimine.dart';
 
 class LylitusValimisLeht2 extends StatelessWidget {
   @override
@@ -251,7 +252,8 @@ class _HinnaPiiriAluselTundideValimineState
                     } else if (selectedPage == 'Kopeeri graafik') {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => AbiLeht()),
+                        MaterialPageRoute(
+                            builder: (context) => KopeeriGraafikTundideValik()),
                       );
                     }
                   },
