@@ -39,60 +39,48 @@ class _SeadmeteListValimineState extends State<SeadmeteListValimine> {
       '123456',
       'off',
       'Shelly plug S',
+      'jah',
     ],
     'Veranda lamp': [
       'assets/verandaLamp1.png',
       '123456',
       'offline',
       'Shelly plug S',
-    ],
-    'veranda lamp': [
-      'assets/verandaLamp1.png',
-      '123456',
-      'on',
-      'Shelly plug S',
+      'ei',
     ],
     'Keldri pump': [
       'assets/pump1.jpg',
       '123456',
       'on',
       'Shelly plug S',
+      'jah',
     ],
     'Garaazi pump': [
       'assets/pump1.jpg',
       '123456',
       'offline',
       'Shelly plug S',
+      'jah',
     ],
     'Main boiler': [
       'assets/boiler1.jpg',
       '123456',
       'on',
       'Shelly plug S',
+      'jah',
     ],
     'Sauna boiler': [
       'assets/boiler1.jpg',
       '123456',
       'off',
       'Shelly plug S',
+      'ei',
     ],
   };
 
   void initState() {
     super.initState();
     ValitudSeadmed = valitudSeadmeteNullimine(SeadmeteMap);
-  }
-
-  Set<String> selectedPictures = Set<String>();
-
-  void toggleSelection(String pictureName) {
-    setState(() {
-      if (selectedPictures.contains(pictureName)) {
-        selectedPictures.remove(pictureName);
-      } else {
-        selectedPictures.add(pictureName);
-      }
-    });
   }
 
   @override
@@ -120,16 +108,26 @@ class _SeadmeteListValimineState extends State<SeadmeteListValimine> {
           final seade = SeadmeteMap.keys.elementAt(index);
           final pilt = SaaSeadmePilt(SeadmeteMap, seade);
           final staatus = SaaSeadmeolek(SeadmeteMap, seade);
+          final graafik = SaaSeadmegraafik(SeadmeteMap, seade);
           return GestureDetector(
             onTap: () {
-              setState(() {
-                if (ValitudSeadmed[seade] == false) {
-                  ValitudSeadmed[seade] = true;
-                } else {
-                  ValitudSeadmed[seade] = false;
-                }
-              });
-              print(ValitudSeadmed[seade]);
+              if (SeadmeteMap[seade]![2] != 'offline') {
+                setState(() {
+                  if (ValitudSeadmed[seade] == false) {
+                    ValitudSeadmed[seade] = true;
+                  } else {
+                    ValitudSeadmed[seade] = false;
+                  }
+                });
+                print(ValitudSeadmed[seade]);
+              } else {
+                showDialog(
+                    context: context,
+                    builder: (context) => AlertDialog(
+                          title: Text(
+                              "  Seadmel puudub võrgu ühendus, mistõttu ei ole teda võimalik graafikusse kaasata"),
+                        ));
+              }
             },
             child: Padding(
               padding: const EdgeInsets.all(1),
@@ -150,6 +148,10 @@ class _SeadmeteListValimineState extends State<SeadmeteListValimine> {
                   ),
                   child: Stack(
                     children: [
+                      Container(
+                          color: ValitudSeadmed[seade] == true
+                              ? Color.fromARGB(255, 177, 245, 180)
+                              : Color.fromARGB(255, 236, 228, 228)),
                       Center(
                         child: AspectRatio(
                           aspectRatio: 1,
@@ -162,41 +164,59 @@ class _SeadmeteListValimineState extends State<SeadmeteListValimine> {
                         ),
                       ),
                       Positioned(
-                        top: 4,
+                        top: 8,
                         right: 8,
-                        child: Visibility(
-                          visible: staatus == 'off',
-                          child: IconButton(
-                            iconSize: 60,
-                            icon: Icon(
-                              Icons.warning_amber_rounded,
-                              size: 80,
-                              color: Colors.amber,
-                            ),
-                            color: Colors.blue,
-                            onPressed: () {
-                              showDialog(
-                                  context: context,
-                                  builder: (context) => AlertDialog(
-                                        title: Text("  Seadmel graafik puudub"),
-                                      ));
-                            },
-                          ),
-                        ),
+                        child: graafik == 'ei'
+                            ? IconButton(
+                                iconSize: 60,
+                                icon: Icon(
+                                  Icons.warning_amber_rounded,
+                                  size: 80,
+                                  color: Colors.amber,
+                                ),
+                                color: Colors.blue,
+                                onPressed: () {
+                                  showDialog(
+                                      context: context,
+                                      builder: (context) => AlertDialog(
+                                            title:
+                                                Text("  $seade graafik puudub"),
+                                          ));
+                                },
+                              )
+                            : IconButton(
+                                iconSize: 60,
+                                icon: Icon(
+                                  Icons.fact_check_outlined,
+                                  size: 80,
+                                  color: Colors.blue,
+                                ),
+                                color: Colors.blue,
+                                onPressed: () {
+                                  showDialog(
+                                      context: context,
+                                      builder: (context) => AlertDialog(
+                                            title: Text(
+                                                "  $seade graafik: \n \t 00.00 on \n \t 00.10 on \n \t 00.20 on \n \t 03.00 off \n \t ..."),
+                                          ));
+                                },
+                              ),
                       ),
                       Positioned(
-                        top: 8,
+                        top: 25,
                         left: 8,
-                        child: Visibility(
-                          visible: staatus == 'offline',
-                          child: Container(
-                            child: Icon(
-                              Icons.wifi_off_outlined,
-                              size: 60,
-                              color: Colors.amber,
-                            ),
-                          ),
-                        ),
+                        child: Container(
+                            child: staatus == 'offline'
+                                ? Icon(
+                                    Icons.wifi_off_outlined,
+                                    size: 60,
+                                    color: Colors.amber,
+                                  )
+                                : Icon(
+                                    Icons.wifi,
+                                    size: 60,
+                                    color: Colors.blue,
+                                  )),
                       ),
                       Positioned(
                         bottom: 0,
@@ -309,4 +329,13 @@ Map<String, bool> valitudSeadmeteNullimine(
   print('ValitudSeadmed :');
   print(ValitudSeadmed);
   return ValitudSeadmed;
+}
+
+SaaSeadmegraafik(Map<String, List<String>> SeadmeteMap, SeadmeNimi) {
+  List<String>? deviceInfo = SeadmeteMap[SeadmeNimi];
+  if (deviceInfo != null) {
+    String graafik = deviceInfo[4];
+    return graafik;
+  }
+  return null; // Device key not found in the map
 }
