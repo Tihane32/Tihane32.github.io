@@ -93,7 +93,8 @@ seadmeMaksumus(String value) async {
     var ajutine = entryList[1].value;
     var ajutine2 = ajutine.entries.toList();
     var hinnagraafik = ajutine2[0].value;
-
+    print('tunnid');
+    print(resJson);
     for (var i = 0; i < 24; i++) {
       //print(resJson['data']['units']['consumption']);
       var ajutineTarb;
@@ -108,17 +109,12 @@ seadmeMaksumus(String value) async {
       hind = hind + (ajutineTarb * hinnagraafik[i]['price']);
       print('$hind $i');
     }
-    
+
     maksumusSeade[DateTime.parse(abi)] = temp;
     print('yesseseseese');
     print(maksumusSeade);
   }
   u++;
 
-  num n = num.parse(hind.toStringAsFixed(5));
-  hind = n as double;
-  print('maksumus:');
-  print(hind);
-  prefs.setString('hind', hind.toString());
   return maksumusSeade;
 }
