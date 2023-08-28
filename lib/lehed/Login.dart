@@ -56,7 +56,7 @@ class _LoginPageState extends State<LoginPage> {
       await prefs.setString('Kasutajaparool', sha1Hash);
 
       // Navigate to another page after 5 seconds.
-      Future.delayed(Duration(seconds: 3), () {
+      Future.delayed(Duration(seconds: 6), () {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => MinuSeadmed()),
@@ -139,6 +139,8 @@ class _LoginPageState extends State<LoginPage> {
       await prefs.setString('seadmed', seadmedMap);
       String keyMap = json.encode(keyVastusJSON['data']['key']);
       await prefs.setString('key', keyMap);
+      seisukord();
+      showCustomAlertDialog(context, seadmedMap,i);
     } else {
       var seadmed = new Map<String, dynamic>();
       i = 0;
@@ -163,6 +165,9 @@ class _LoginPageState extends State<LoginPage> {
       String keyMap = json.encode(keyVastusJSON['data']['key']);
       await prefs.setString('key', keyMap);
       print(seadmedMap);
+      seisukord();
+      
+      showCustomAlertDialog(context, seadmedMap, i);
     }
 
     /* Näide kuidas võtta mälust seadmete map
@@ -186,7 +191,6 @@ class _LoginPageState extends State<LoginPage> {
       print(storedKeyString);
     }
     */
-    seisukord();
   }
 
   @override
@@ -277,4 +281,24 @@ class _LoginPageState extends State<LoginPage> {
           ),
         ));
   }
+}
+
+void showCustomAlertDialog(BuildContext context, String test, int i) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: Text('Alert'),
+        content: Text('$i'),
+        actions: <Widget>[
+          TextButton(
+            child: Text('OK'),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+        ],
+      );
+    },
+  );
 }

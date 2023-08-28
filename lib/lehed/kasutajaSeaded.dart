@@ -19,7 +19,7 @@ import 'hindJoonise.dart';
 import '../funktsioonid/hetke_hind.dart';
 import 'package:testuus4/main.dart';
 import 'minuPakett.dart';
-
+import 'package:shared_preferences/shared_preferences.dart';
 import 'navigationBar.dart';
 
 class KasutajaSeaded extends StatefulWidget {
@@ -283,6 +283,7 @@ class _KasutajaSeadedState extends State<KasutajaSeaded> {
                         builder: (context) => AlertDialog(
                               title: Text("Lisada Shelly Cloud key siia"),
                             ));
+                           
                   },
                   child: Align(
                     alignment: Alignment.centerLeft,
@@ -319,6 +320,50 @@ class _KasutajaSeadedState extends State<KasutajaSeaded> {
                 ),
                 SizedBox(
                     height: vahe), // Add some spacing between the two widgets
+                GestureDetector(
+                  onTap: () {
+                    showDialog(
+                        context: context,
+                        builder: (context) => AlertDialog(
+                              title: Text("Lisada Shelly Cloud key siia"),
+                            ));
+                             maluClear();
+                  },
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: Container(
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        color: sinineKast,
+                        borderRadius: borderRadius,
+                        border: border,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.2),
+                            spreadRadius: 2,
+                            blurRadius: 5,
+                            offset: const Offset(3, 3),
+                          ),
+                        ],
+                      ),
+                      width: sinineKastLaius,
+                      height: sinineKastKorgus,
+                      child: RichText(
+                        text: TextSpan(
+                          style: const TextStyle(
+                            fontSize: 20,
+                            color: Colors.black,
+                          ),
+                          children: [
+                            TextSpan(text: 'Kustuta mälu', style: font),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                    height: vahe), // Add some spacing between the two widgets
               ],
             ),
           ),
@@ -326,4 +371,9 @@ class _KasutajaSeadedState extends State<KasutajaSeaded> {
       ),
     );
   }
+}
+
+maluClear() async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  prefs.clear();
 }

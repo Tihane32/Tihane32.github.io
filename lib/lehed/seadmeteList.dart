@@ -42,9 +42,12 @@ class _SeadmeteListState extends State<SeadmeteList> {
   bool isLoading = true;
   late Map<String, List<String>> minuSeadmedK = {};
   String onoffNupp = 'Shelly ON';
+  @override
   void initState() {
-    super.initState();
+    //seisukord();
     _submitForm();
+    super.initState();
+    
   }
 
   int koduindex = 1;
@@ -66,14 +69,17 @@ class _SeadmeteListState extends State<SeadmeteList> {
     minuSeadmedK.clear();
     SharedPreferences prefs = await SharedPreferences.getInstance();
     //await prefs.clear();
+    
     String? storedJsonMap = prefs.getString('seadmed');
     print(storedJsonMap);
     if (storedJsonMap != null) {
-      Map<String, dynamic> storedMap = json.decode(storedJsonMap);
+      await seisukord();
+      storedJsonMap = prefs.getString('seadmed');
+      Map<String, dynamic> storedMap = json.decode(storedJsonMap!);
       await Future.delayed(const Duration(seconds: 3));
       var i = 0;
       for (String Seade in storedMap.keys) {
-        seisukord();
+        
         var id = storedMap['Seade$i']['Seadme_ID'];
         var name = storedMap['Seade$i']['Seadme_nimi'];
         var pistik = storedMap['Seade$i']['Seadme_pistik'];
