@@ -4,6 +4,7 @@ import 'package:testuus4/funktsioonid/graafikGen1.dart';
 import 'package:testuus4/lehed/AbiLeht.dart';
 import 'package:testuus4/lehed/SeadmeTarbimisLeht.dart';
 import 'package:testuus4/lehed/TarbimisLeht.dart';
+import 'package:testuus4/lehed/dynamicKoduLeht.dart';
 import 'SeadmeYldInfo.dart';
 import 'seadmeteList.dart';
 import 'package:flutter/services.dart';
@@ -320,10 +321,22 @@ class _SeadmeGraafikuLehtState extends State<SeadmeGraafikuLeht> {
       //backgroundColor: Color.fromARGB(255, 189, 216, 225), //TaustavÃ¤rv
 
       appBar: AppBar(
+        
+        automaticallyImplyLeading: false,
         backgroundColor: Color.fromARGB(255, 115, 162, 195),
         title: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
+            GestureDetector(onTap: () {
+              Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => DynaamilenieKoduLeht(i:1)
+                    ),
+                  );
+            },
+              child: Icon(Icons.arrow_back)),
+              SizedBox(width: 24,),
             Text(
               seadmeNimi,
               style: GoogleFonts.roboto(
@@ -781,7 +794,7 @@ class _SeadmeGraafikuLehtState extends State<SeadmeGraafikuLeht> {
                           Align(
                             child: Container(
                               alignment: Alignment.center,
-                              
+
                               //width: sinineKastLaius,
                               //height: sinineKastKorgus,
                               child: RichText(
@@ -915,21 +928,61 @@ class _SeadmeGraafikuLehtState extends State<SeadmeGraafikuLeht> {
                   gen1GraafikLoomine(
                       lulitus, 'homme', SeadmeteMap[seadmeNimi]![1]);
                 }
+                showDialog(
+                    context: context,
+                    builder: (context) => AlertDialog(
+                          content: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  // Add some spacing between icon and text
+                                  Text("Kinnitatud", style: fontSuur),
+                                  SizedBox(width: 8),
+                                  Icon(Icons.check_circle_outline_outlined,size: 35,),
+                                ],
+                              ),
+                              // Add other content of the dialog if needed
+                            ],
+                          ),
+                        ));
                 HapticFeedback.vibrate();
+                Future.delayed(Duration(seconds: 5), () {
+                  Navigator.of(context).pop(); // Close the AlertDialog
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => SeadmeGraafikuLeht(
+                        seadmeNimi: seadmeNimi,
+                        SeadmeteMap: SeadmeteMap,
+                      ),
+                    ),
+                  );
+                });
               },
-              child: Container(
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                  color: sinineKast,
-                ),
-                width: sinineKastLaius,
-                height: sinineKastKorgus,
-                child: RichText(
-                  textAlign: TextAlign.center,
-                  text: TextSpan(
-                    children: [
-                      TextSpan(text: 'Kinnita', style: fontSuur),
-                    ],
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Container(
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    color: sinineKast,
+                    borderRadius: BorderRadius.all(Radius.circular(20)),
+                    border: Border.all(
+  color: Color.fromARGB(41, 0, 0, 0),
+  width: 2,
+)
+                  ),
+                  
+                  width: 200,
+                  height: sinineKastKorgus,
+                  child: RichText(
+                    textAlign: TextAlign.center,
+                    text: TextSpan(
+                      children: [
+                        TextSpan(text: 'Kinnita', style: fontSuur),
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -1127,7 +1180,8 @@ Future graafik(
         //Kui post läheb läbi siis:
 
         final httpPackageJson = json.decode(res.body) as Map<String, dynamic>;
-
+        print(res);
+        print(httpPackageJson);
         var scheduleRules1 = httpPackageJson['data']['device_settings']
             ['relays'][0]['schedule_rules'];
         for (String item in scheduleRules1) {
