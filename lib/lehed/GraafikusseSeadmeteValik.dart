@@ -1,4 +1,7 @@
+import 'dart:async';
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:testuus4/lehed/Login.dart';
 import 'package:testuus4/lehed/SeadmeGraafikLeht.dart';
 import 'package:testuus4/lehed/abiLeht.dart';
@@ -7,9 +10,15 @@ import 'package:testuus4/lehed/kasutajaSeaded.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:testuus4/lehed/keskimiseHinnaAluselTundideValimine.dart';
 import 'package:testuus4/lehed/seadmeteList.dart';
+import '../funktsioonid/seisukord.dart';
 import 'dynamicKoduLeht.dart';
 import 'navigationBar.dart';
 import 'package:testuus4/main.dart';
+import 'package:flutter/material.dart';
+import '../funktsioonid/graafikGen2.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SeadmeteValmisPage extends StatelessWidget {
   @override
@@ -28,59 +37,83 @@ class SeadmeteListValimine extends StatefulWidget {
 }
 
 class _SeadmeteListValimineState extends State<SeadmeteListValimine> {
-  String onoffNupp = 'Shelly ON';
+  Map<String, bool> ValitudSeadmed = {};
+  bool isLoading = true;
+  late Map<String, List<String>> minuSeadmedK = {};
+  dynamic seadmeGraafik;
+  @override
+  void initState() {
+    //seisukord();
+    _submitForm();
+    super.initState();
+    ValitudSeadmed = valitudSeadmeteNullimine(SeadmeteMap);
+  }
 
   int koduindex = 1;
 
-  Map<String, bool> ValitudSeadmed = {};
-  Map<String, List<String>> SeadmeteMap = {
-    'Keldri boiler': [
-      'assets/boiler1.jpg',
-      '123456',
-      'off',
-      'Shelly plug S',
-      'jah',
-    ],
-    'Veranda lamp': [
-      'assets/verandaLamp1.png',
-      '123456',
-      'offline',
-      'Shelly plug S',
-      'ei',
-    ],
-    'Keldri pump': [
-      'assets/pump1.jpg',
-      '123456',
-      'on',
-      'Shelly plug S',
-      'jah',
-    ],
-    'Garaazi pump': [
-      'assets/pump1.jpg',
-      '123456',
-      'offline',
-      'Shelly plug S',
-      'jah',
-    ],
-    'Main boiler': [
-      'assets/boiler1.jpg',
-      '123456',
-      'on',
-      'Shelly plug S',
-      'jah',
-    ],
-    'Sauna boiler': [
-      'assets/boiler1.jpg',
-      '123456',
-      'off',
-      'Shelly plug S',
-      'ei',
-    ],
-  };
+  Map<String, List<String>> SeadmeteMap = {};
+  Set<String> selectedPictures = Set<String>();
 
-  void initState() {
-    super.initState();
-    ValitudSeadmed = valitudSeadmeteNullimine(SeadmeteMap);
+  void toggleSelection(String pictureName) {
+    setState(() {
+      if (selectedPictures.contains(pictureName)) {
+        selectedPictures.remove(pictureName);
+      } else {
+        selectedPictures.add(pictureName);
+      }
+    });
+  }
+
+  Future _submitForm() async {
+    minuSeadmedK.clear();
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    //await prefs.clear();
+
+    String? storedJsonMap = prefs.getString('seadmed');
+    print(storedJsonMap);
+    if (storedJsonMap != null) {
+      await seisukord();
+      storedJsonMap = prefs.getString('seadmed');
+      Map<String, dynamic> storedMap = json.decode(storedJsonMap!);
+      await Future.delayed(const Duration(seconds: 3));
+      var i = 0;
+      for (String Seade in storedMap.keys) {
+        var id = storedMap['Seade$i']['Seadme_ID'];
+        var name = storedMap['Seade$i']['Seadme_nimi'];
+        var pistik = storedMap['Seade$i']['Seadme_pistik'];
+        var olek = storedMap['Seade$i']['Seadme_olek'];
+        print('olek: $olek');
+        Map<String, List<String>> ajutineMap = {
+          name: ['assets/boiler1.jpg', '$id', '$olek', '$pistik', 'jah'],
+        };
+        minuSeadmedK.addAll(ajutineMap);
+        i++;
+      }
+      print('seadmed');
+      print(minuSeadmedK);
+      print(SeadmeteMap);
+    }
+    setState(() {
+      SeadmeteMap = minuSeadmedK;
+      isLoading = false;
+    });
+  }
+
+  bool canPressButton = true;
+
+  void _handleButtonPress(seade) {
+    if (!canPressButton) return;
+
+    setState(() {
+      canPressButton = false;
+      SeadmeteMap = muudaSeadmeOlek(SeadmeteMap, seade);
+    });
+
+    Timer(Duration(seconds: 3), () {
+      setState(() {
+        canPressButton = true;
+      });
+    });
   }
 
   @override
@@ -97,153 +130,161 @@ class _SeadmeteListValimineState extends State<SeadmeteListValimine> {
           ),
         ),
       ),
-      body: GridView.builder(
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 1,
-          childAspectRatio: MediaQuery.of(context).size.width /
-              (MediaQuery.of(context).size.height / 5),
-        ),
-        itemCount: SeadmeteMap.length,
-        itemBuilder: (context, index) {
-          final seade = SeadmeteMap.keys.elementAt(index);
-          final pilt = SaaSeadmePilt(SeadmeteMap, seade);
-          final staatus = SaaSeadmeolek(SeadmeteMap, seade);
-          final graafik = SaaSeadmegraafik(SeadmeteMap, seade);
-          return GestureDetector(
-            onTap: () {
-              if (SeadmeteMap[seade]![2] != 'offline') {
-                setState(() {
-                  if (ValitudSeadmed[seade] == false) {
-                    ValitudSeadmed[seade] = true;
-                  } else {
-                    ValitudSeadmed[seade] = false;
-                  }
-                });
-                print(ValitudSeadmed[seade]);
-              } else {
-                showDialog(
-                    context: context,
-                    builder: (context) => AlertDialog(
-                          title: Text(
-                              "  Seadmel puudub võrgu ühendus, mistõttu ei ole teda võimalik graafikusse kaasata"),
-                        ));
-              }
-            },
-            child: Padding(
-              padding: const EdgeInsets.all(1),
-              child: Container(
-                decoration: BoxDecoration(
-                  border: border,
+      body: GestureDetector(
+        child: isLoading
+            ? Center(child: CircularProgressIndicator())
+            : GridView.builder(
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 1,
+                  childAspectRatio: MediaQuery.of(context).size.width /
+                      (MediaQuery.of(context).size.height / 5),
                 ),
-                child: Container(
-                  width: double.infinity,
-                  height: double.infinity,
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: ValitudSeadmed[seade] == true
-                          ? Colors.green
-                          : Colors.grey,
-                      width: 8,
+                itemCount: SeadmeteMap.length,
+                itemBuilder: (context, index) {
+                  final seade = SeadmeteMap.keys.elementAt(index);
+                  final pilt = SaaSeadmePilt(SeadmeteMap, seade);
+                  final staatus = SaaSeadmeolek(SeadmeteMap, seade);
+                  final graafik = SaaSeadmegraafik(SeadmeteMap, seade);
+                  return GestureDetector(
+                    onTap: () {
+                      if (SeadmeteMap[seade]![2] != 'offline') {
+                        setState(() {
+                          if (ValitudSeadmed[seade] == false) {
+                            ValitudSeadmed[seade] = true;
+                          } else {
+                            ValitudSeadmed[seade] = false;
+                          }
+                        });
+                        print(ValitudSeadmed[seade]);
+                      } else {
+                        showDialog(
+                            context: context,
+                            builder: (context) => AlertDialog(
+                                  title: Text(
+                                      "  Seadmel puudub võrgu ühendus, mistõttu ei ole teda võimalik graafikusse kaasata"),
+                                ));
+                      }
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.all(1),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          border: border,
+                        ),
+                        child: Container(
+                          width: double.infinity,
+                          height: double.infinity,
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                              color: ValitudSeadmed[seade] == true
+                                  ? Colors.green
+                                  : Colors.grey,
+                              width: 8,
+                            ),
+                          ),
+                          child: Stack(
+                            children: [
+                              Container(
+                                  color: ValitudSeadmed[seade] == true
+                                      ? Color.fromARGB(255, 177, 245, 180)
+                                      : Color.fromARGB(255, 236, 228, 228)),
+                              Center(
+                                child: AspectRatio(
+                                  aspectRatio: 1,
+                                  child: ClipRRect(
+                                    child: Image.asset(
+                                      pilt,
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Positioned(
+                                top: 8,
+                                right: 8,
+                                child: graafik == 'ei'
+                                    ? IconButton(
+                                        iconSize: 60,
+                                        icon: Icon(
+                                          Icons.warning_amber_rounded,
+                                          size: 80,
+                                          color: Colors.amber,
+                                        ),
+                                        onPressed: () {
+                                          showDialog(
+                                              context: context,
+                                              builder: (context) => AlertDialog(
+                                                    title: Text(
+                                                        "  $seade graafik puudub"),
+                                                  ));
+                                        },
+                                      )
+                                    : IconButton(
+                                        iconSize: 60,
+                                        icon: Icon(
+                                          Icons.fact_check_outlined,
+                                          size: 80,
+                                          color: Colors.blue,
+                                        ),
+                                        onPressed: () {
+                                          if (SeadmeteMap[seade]![2] !=
+                                              'Offline') {
+                                            seadmeGraafik =
+                                                SeadmeGraafikKoostamine(
+                                                    SeadmeteMap[seade]![2]);
+                                            setState(() {});
+                                          }
+                                          showDialog(
+                                              context: context,
+                                              builder: (context) => AlertDialog(
+                                                    title: Text(seadmeGraafik),
+                                                  ));
+                                        },
+                                      ),
+                              ),
+                              Positioned(
+                                top: 25,
+                                left: 8,
+                                child: Container(
+                                    child: staatus == 'offline'
+                                        ? Icon(
+                                            Icons.wifi_off_outlined,
+                                            size: 60,
+                                            color: Colors.amber,
+                                          )
+                                        : Icon(
+                                            Icons.wifi,
+                                            size: 60,
+                                            color: Colors.blue,
+                                          )),
+                              ),
+                              Positioned(
+                                bottom: 0,
+                                left: 0,
+                                right: 0,
+                                child: Container(
+                                  color: Colors.blue.withOpacity(0.6),
+                                  padding: EdgeInsets.symmetric(vertical: 8),
+                                  child: Center(
+                                    child: Text(
+                                      seade,
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
                     ),
-                  ),
-                  child: Stack(
-                    children: [
-                      Container(
-                          color: ValitudSeadmed[seade] == true
-                              ? Color.fromARGB(255, 177, 245, 180)
-                              : Color.fromARGB(255, 236, 228, 228)),
-                      Center(
-                        child: AspectRatio(
-                          aspectRatio: 1,
-                          child: ClipRRect(
-                            child: Image.asset(
-                              pilt,
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                        ),
-                      ),
-                      Positioned(
-                        top: 8,
-                        right: 8,
-                        child: graafik == 'ei'
-                            ? IconButton(
-                                iconSize: 60,
-                                icon: Icon(
-                                  Icons.warning_amber_rounded,
-                                  size: 80,
-                                  color: Colors.amber,
-                                ),
-                                color: Colors.blue,
-                                onPressed: () {
-                                  showDialog(
-                                      context: context,
-                                      builder: (context) => AlertDialog(
-                                            title:
-                                                Text("  $seade graafik puudub"),
-                                          ));
-                                },
-                              )
-                            : IconButton(
-                                iconSize: 60,
-                                icon: Icon(
-                                  Icons.fact_check_outlined,
-                                  size: 80,
-                                  color: Colors.blue,
-                                ),
-                                color: Colors.blue,
-                                onPressed: () {
-                                  showDialog(
-                                      context: context,
-                                      builder: (context) => AlertDialog(
-                                            title: Text(
-                                                "  $seade graafik: \n \t 00.00 on \n \t 00.10 on \n \t 00.20 on \n \t 03.00 off \n \t ..."),
-                                          ));
-                                },
-                              ),
-                      ),
-                      Positioned(
-                        top: 25,
-                        left: 8,
-                        child: Container(
-                            child: staatus == 'offline'
-                                ? Icon(
-                                    Icons.wifi_off_outlined,
-                                    size: 60,
-                                    color: Colors.amber,
-                                  )
-                                : Icon(
-                                    Icons.wifi,
-                                    size: 60,
-                                    color: Colors.blue,
-                                  )),
-                      ),
-                      Positioned(
-                        bottom: 0,
-                        left: 0,
-                        right: 0,
-                        child: Container(
-                          color: Colors.blue.withOpacity(0.6),
-                          padding: EdgeInsets.symmetric(vertical: 8),
-                          child: Center(
-                            child: Text(
-                              seade,
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+                  );
+                },
               ),
-            ),
-          );
-        },
       ),
       bottomNavigationBar: BottomNavigationBar(
           backgroundColor: Color.fromARGB(255, 115, 162, 195),
@@ -338,4 +379,33 @@ SaaSeadmegraafik(Map<String, List<String>> SeadmeteMap, SeadmeNimi) {
     return graafik;
   }
   return null; // Device key not found in the map
+}
+
+SeadmeGraafikKoostamine(String value) async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  String? storedKey = prefs.getString('key');
+  String storedKeyString = jsonDecode(storedKey!);
+  var headers = {
+    'Content-Type': 'application/x-www-form-urlencoded',
+  };
+
+  var data = {
+    'channel': '0',
+    'id': value,
+    'auth_key': storedKeyString,
+  };
+
+  var url = Uri.parse('https://shelly-64-eu.shelly.cloud/device/settings');
+  print('laetud');
+  var res = await http.post(url, headers: headers, body: data);
+
+  //await Future.delayed(const Duration(seconds: 2));
+  //Kui post läheb läbi siis:
+  List<String> newList = [];
+  final httpPackageJson = json.decode(res.body) as Map<String, dynamic>;
+  print(httpPackageJson);
+  var seadmeGraafik1 =
+      httpPackageJson['data']['device_settings']['relays'][0]['schedule_rules'];
+
+  return seadmeGraafik1;
 }

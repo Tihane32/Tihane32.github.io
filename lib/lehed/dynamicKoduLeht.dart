@@ -323,7 +323,7 @@ class _DynaamilenieKoduLehtState extends State<DynaamilenieKoduLeht> {
                                   context,
                                   CupertinoPageRoute(
                                       builder: (context) =>
-                                          SeadmeteValmisPage()),
+                                          SeadmeteListValimine()),
                                 );
                               },
                               child: Padding(

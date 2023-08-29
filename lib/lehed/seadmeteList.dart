@@ -31,7 +31,7 @@ class SeadmeteList extends StatefulWidget {
 class _SeadmeteListState extends State<SeadmeteList> {
   bool isLoading = true;
   late Map<String, List<String>> minuSeadmedK = {};
-  String onoffNupp = 'Shelly ON';
+  //String onoffNupp = 'Shelly ON';
   @override
   void initState() {
     //seisukord();
@@ -122,7 +122,7 @@ class _SeadmeteListState extends State<SeadmeteList> {
           } else if (details.delta.dx < -tundlikus) {
             Navigator.push(
               context,
-              CupertinoPageRoute(builder: (context) => SeadmeteValmisPage()),
+              CupertinoPageRoute(builder: (context) => SeadmeteListValimine()),
             );
             //Left Swipe
           }

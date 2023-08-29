@@ -316,7 +316,7 @@ class _KopeeriGraafikTundideValikState
                     //Kui vajutatakse Hinnagraafiku ikooni peale, siis viiakse Hinnagraafiku lehele
                     context,
                     MaterialPageRoute(
-                        builder: (context) => const SeadmeteListValimine()),
+                        builder: (context) => SeadmeteListValimine()),
                   );
                 } else if (koduindex == 1) {
                   Navigator.push(

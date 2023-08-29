@@ -128,11 +128,13 @@ class AppNavigationBar extends StatelessWidget {
                         label: 'Graafiku koostamine',
                         icon: GestureDetector(
                           onTap: () {
+                            /*
                             Navigator.push(
                               context,
                               CupertinoPageRoute(
-                                  builder: (context) => SeadmeteValmisPage()),
+                                  builder: (context) => SeadmeteValmisPage(laeb: true)),
                             );
+                          */
                           },
                           child: Padding(
                             padding: const EdgeInsets.only(bottom: 0.0),
