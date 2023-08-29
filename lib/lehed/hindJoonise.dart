@@ -513,29 +513,61 @@ class _TulpDiagrammState extends State<TulpDiagramm> {
                 ),
               ),
               SizedBox(height: vahe * 2),
-              Center(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              IntrinsicHeight(
+                child: Stack(
+                  clipBehavior: Clip.none,
                   children: [
                     Align(
-                      child: Container(
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                        ),
-                        //width: sinineKastLaius,
-                        //height: sinineKastKorgus,
-                        child: RichText(
-                          textAlign: TextAlign.center,
-                          text: TextSpan(
-                            style: fontVaike,
-                            children: [
-                              TextSpan(text: 'EUR / MWh', style: fontVaike),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
+                        child: Text(
+                      'EUR/MWh',
+                      style: fontVaike,
+                    )),
+                    Positioned(
+  right: 0,
+  child: GestureDetector(
+    onTap: () {
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: Text("Hinna kujunemine"),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              CheckboxListTile(
+                title: Text("Marginaal"),
+                value: true,
+                onChanged: (newValue) {
+                  setState(() {
+                    
+                  });
+                },
+              ),
+              CheckboxListTile(
+                title: Text("Kahetariifne"),
+                value: false,
+                onChanged: (newValue) {
+                  setState(() {
+                    
+                  });
+                },
+              ),
+              // Add more CheckboxListTile widgets as needed
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context); // Close the dialog
+              },
+              child: Text("Close"),
+            ),
+          ],
+        ),
+      );
+    },
+    child: Icon(Icons.settings),
+  ),
+),
                   ],
                 ),
               ),

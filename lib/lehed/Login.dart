@@ -28,7 +28,7 @@ class _LoginPageState extends State<LoginPage> {
   Future<void> _submitForm() async {
     String ajutineParool = parool.text as String;
     String ajutineKastuajanimi = kasutajanimi.text as String;
-
+    int uuedSeadmed = 0;
     String sha1Hash = sha1.convert(ajutineParool.codeUnits).toString();
 
     var headers = {
@@ -43,6 +43,7 @@ class _LoginPageState extends State<LoginPage> {
     var sisselogimiseUrl = Uri.parse('https://api.shelly.cloud/auth/login');
     var sisselogimiseVastus = await http.post(sisselogimiseUrl,
         headers: headers, body: kasutajaAndmed);
+
     if (sisselogimiseVastus.statusCode == 200) {
       _scaffoldMessengerKey.currentState?.showSnackBar(
         SnackBar(
@@ -90,6 +91,7 @@ class _LoginPageState extends State<LoginPage> {
 
     var i = 0;
     SharedPreferences prefs = await SharedPreferences.getInstance();
+    print(prefs.get('seadmed'));
     var storedJsonMap = prefs.getString('seadmed');
 
     if (storedJsonMap != null) {
@@ -126,6 +128,7 @@ class _LoginPageState extends State<LoginPage> {
           seade['Seadme_pistik'] = device['name'];
           seade['Seadme_generatsioon'] = device['gen'];
           seadmed['Seade$i'] = seade;
+          uuedSeadmed++;
         }
 
         i++;
@@ -140,7 +143,7 @@ class _LoginPageState extends State<LoginPage> {
       String keyMap = json.encode(keyVastusJSON['data']['key']);
       await prefs.setString('key', keyMap);
       seisukord();
-      showCustomAlertDialog(context, seadmedMap,i);
+      showCustomAlertDialog(context, seadmedMap, uuedSeadmed);
     } else {
       var seadmed = new Map<String, dynamic>();
       i = 0;
@@ -154,6 +157,7 @@ class _LoginPageState extends State<LoginPage> {
         print(seade['Seadme_generatsioon']);
         seadmed['Seade$i'] = seade;
         i++;
+        uuedSeadmed++;
       }
       var keySaamiseUrl =
           Uri.parse('https://shelly-64-eu.shelly.cloud/user/get_user_key');
@@ -166,8 +170,8 @@ class _LoginPageState extends State<LoginPage> {
       await prefs.setString('key', keyMap);
       print(seadmedMap);
       seisukord();
-      
-      showCustomAlertDialog(context, seadmedMap, i);
+
+      showCustomAlertDialog(context, seadmedMap, uuedSeadmed);
     }
 
     /* Näide kuidas võtta mälust seadmete map
@@ -288,16 +292,7 @@ void showCustomAlertDialog(BuildContext context, String test, int i) {
     context: context,
     builder: (BuildContext context) {
       return AlertDialog(
-        title: Text('Alert'),
-        content: Text('$i'),
-        actions: <Widget>[
-          TextButton(
-            child: Text('OK'),
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-          ),
-        ],
+        content: Text('Uued seadmed: $i'),
       );
     },
   );
