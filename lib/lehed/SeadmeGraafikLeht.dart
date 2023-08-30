@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:testuus4/funktsioonid/genMaaramine.dart';
 import 'package:testuus4/funktsioonid/graafikGen1.dart';
+import 'package:testuus4/funktsioonid/graafikGen2.dart';
 import 'package:testuus4/lehed/AbiLeht.dart';
 import 'package:testuus4/lehed/SeadmeTarbimisLeht.dart';
 import 'package:testuus4/lehed/TarbimisLeht.dart';
@@ -21,6 +23,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:testuus4/funktsioonid/lulitamine.dart';
+import 'package:testuus4/funktsioonid/token.dart';
 
 class SeadmeGraafikuLeht extends StatefulWidget {
   const SeadmeGraafikuLeht(
@@ -206,7 +209,7 @@ class _SeadmeGraafikuLehtState extends State<SeadmeGraafikuLeht> {
     Map<String, dynamic> storedMap = json.decode(seadmedJSONmap!);
 
     String? storedKey = prefs.getString('key');
-
+    int gen = 1;
     String storedKeyString = jsonDecode(storedKey!);
     var j = 0;
     var authKey = storedKeyString;
@@ -216,6 +219,7 @@ class _SeadmeGraafikuLehtState extends State<SeadmeGraafikuLeht> {
         var seadeGen = storedMap['Seade$j']['Seadme_generatsioon'] as int;
 
         if (seadeGen == 1) {
+          gen = 1;
           DateTime now = DateTime.now();
           int tana = now.weekday - 1;
 
@@ -265,6 +269,7 @@ class _SeadmeGraafikuLehtState extends State<SeadmeGraafikuLeht> {
           var i = 0;
 
           setState(() {
+            gen = 1;
             i = filteredRules.length;
             var u = 0;
 
@@ -299,6 +304,13 @@ class _SeadmeGraafikuLehtState extends State<SeadmeGraafikuLeht> {
               }
             }
           });
+        } else {
+          var graafikud = await gen2GraafikSaamine(value, lulitus);
+          
+          setState(() {
+            gen = 2;
+            lulitus = graafikud;
+          });
         }
         break;
       }
@@ -321,22 +333,23 @@ class _SeadmeGraafikuLehtState extends State<SeadmeGraafikuLeht> {
       //backgroundColor: Color.fromARGB(255, 189, 216, 225), //TaustavÃ¤rv
 
       appBar: AppBar(
-        
         automaticallyImplyLeading: false,
         backgroundColor: Color.fromARGB(255, 115, 162, 195),
         title: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            GestureDetector(onTap: () {
-              Navigator.push(
+            GestureDetector(
+                onTap: () {
+                  Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => DynaamilenieKoduLeht(i:1)
-                    ),
+                        builder: (context) => DynaamilenieKoduLeht(i: 1)),
                   );
-            },
-              child: Icon(Icons.arrow_back)),
-              SizedBox(width: 24,),
+                },
+                child: Icon(Icons.arrow_back)),
+            SizedBox(
+              width: 24,
+            ),
             Text(
               seadmeNimi,
               style: GoogleFonts.roboto(
@@ -922,12 +935,11 @@ class _SeadmeGraafikuLehtState extends State<SeadmeGraafikuLeht> {
             child: GestureDetector(
               onTap: () {
                 if (tana == green) {
-                  gen1GraafikLoomine(
-                      lulitus, 'täna', SeadmeteMap[seadmeNimi]![1]);
+                  genMaaramine(lulitus, 'täna', SeadmeteMap, seadmeNimi);
                 } else {
-                  gen1GraafikLoomine(
-                      lulitus, 'homme', SeadmeteMap[seadmeNimi]![1]);
+                  genMaaramine(lulitus, 'homme', SeadmeteMap, seadmeNimi);
                 }
+                
                 showDialog(
                     context: context,
                     builder: (context) => AlertDialog(
@@ -940,7 +952,10 @@ class _SeadmeGraafikuLehtState extends State<SeadmeGraafikuLeht> {
                                   // Add some spacing between icon and text
                                   Text("Kinnitatud", style: fontSuur),
                                   SizedBox(width: 8),
-                                  Icon(Icons.check_circle_outline_outlined,size: 35,),
+                                  Icon(
+                                    Icons.check_circle_outline_outlined,
+                                    size: 35,
+                                  ),
                                 ],
                               ),
                               // Add other content of the dialog if needed
@@ -966,14 +981,12 @@ class _SeadmeGraafikuLehtState extends State<SeadmeGraafikuLeht> {
                 child: Container(
                   alignment: Alignment.center,
                   decoration: BoxDecoration(
-                    color: sinineKast,
-                    borderRadius: BorderRadius.all(Radius.circular(20)),
-                    border: Border.all(
-  color: Color.fromARGB(41, 0, 0, 0),
-  width: 2,
-)
-                  ),
-                  
+                      color: sinineKast,
+                      borderRadius: BorderRadius.all(Radius.circular(20)),
+                      border: Border.all(
+                        color: Color.fromARGB(41, 0, 0, 0),
+                        width: 2,
+                      )),
                   width: 200,
                   height: sinineKastKorgus,
                   child: RichText(

@@ -187,7 +187,7 @@ class _LulitusGraafikState extends State<_LulitusGraafik> {
           bool k = false;
           var graafikud = Map<String, dynamic>();
 
-          await graafikuteSaamine(graafikud, value);
+          //await graafikuteSaamine(graafikud, value);
           var elering = await getElering('täna');
           setState(() {
             j = 0;
