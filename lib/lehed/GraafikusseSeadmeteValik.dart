@@ -226,13 +226,16 @@ class _SeadmeteListValimineState extends State<SeadmeteListValimine> {
                                           size: 80,
                                           color: Colors.blue,
                                         ),
-                                        onPressed: () {
+                                        onPressed: () async {
                                           if (SeadmeteMap[seade]![2] !=
                                               'Offline') {
-                                            seadmeGraafik =
-                                                SeadmeGraafikKoostamine(
+                                            var temp =
+                                                await SeadmeGraafikKoostamine(
                                                     SeadmeteMap[seade]![2]);
-                                            setState(() {});
+
+                                            setState(() {
+                                              seadmeGraafik = temp;
+                                            });
                                           }
                                           showDialog(
                                               context: context,
@@ -391,21 +394,51 @@ SeadmeGraafikKoostamine(String value) async {
 
   var data = {
     'channel': '0',
-    'id': value,
+    'id': '80646f81ad9a',
     'auth_key': storedKeyString,
   };
 
   var url = Uri.parse('https://shelly-64-eu.shelly.cloud/device/settings');
-  print('laetud');
+
   var res = await http.post(url, headers: headers, body: data);
 
-  //await Future.delayed(const Duration(seconds: 2));
+  await Future.delayed(const Duration(seconds: 2));
   //Kui post läheb läbi siis:
-  List<String> newList = [];
+
   final httpPackageJson = json.decode(res.body) as Map<String, dynamic>;
-  print(httpPackageJson);
+
   var seadmeGraafik1 =
       httpPackageJson['data']['device_settings']['relays'][0]['schedule_rules'];
 
-  return seadmeGraafik1;
+  print('seadme graafik enne tootlemist');
+  print(seadmeGraafik1);
+
+  Map<int, String> map = {};
+
+  for (var item in seadmeGraafik1) {
+    var parts = item.split('-');
+    var time = int.parse(parts[0]);
+    var status = parts[2];
+    map[time] = status;
+  }
+
+  String? lastStatus;
+  List<String> output = [];
+
+  for (int i = 0; i <= 2300; i += 100) {
+    if (map.containsKey(i)) {
+      lastStatus = map[i];
+    } else if (lastStatus != null) {
+      map[i] = lastStatus;
+    }
+
+    if (lastStatus != null) {
+      output.add("${i.toString().padLeft(4, '0')}-2-$lastStatus");
+    }
+  }
+
+  print('seadme graafik enne tootlemist');
+  print(output);
+
+  return seadmeGraafik1.toString();
 }
