@@ -89,6 +89,8 @@ class _SeadmeteListValimineState extends State<SeadmeteListValimine> {
         minuSeadmedK.addAll(ajutineMap);
         i++;
       }
+      //TODO: eemalda j'rgmine rida kui gen2 tgraafik tootab
+      minuSeadmedK['Shelly Pro PM']![4] = 'ei';
       print('seadmed');
       print(minuSeadmedK);
       print(SeadmeteMap);
@@ -230,7 +232,7 @@ class _SeadmeteListValimineState extends State<SeadmeteListValimine> {
                                           if (SeadmeteMap[seade]![2] !=
                                               'Offline') {
                                             var temp =
-                                                await SeadmeGraafikKoostamine(
+                                                await SeadmeGraafikKoostamineGen1(
                                                     SeadmeteMap[seade]![2]);
 
                                             setState(() {
@@ -240,7 +242,9 @@ class _SeadmeteListValimineState extends State<SeadmeteListValimine> {
                                           showDialog(
                                               context: context,
                                               builder: (context) => AlertDialog(
-                                                    title: Text(seadmeGraafik),
+                                                    title: Text(
+                                                        '$seade graafik: \n' +
+                                                            seadmeGraafik),
                                                   ));
                                         },
                                       ),
@@ -384,7 +388,7 @@ SaaSeadmegraafik(Map<String, List<String>> SeadmeteMap, SeadmeNimi) {
   return null; // Device key not found in the map
 }
 
-SeadmeGraafikKoostamine(String value) async {
+SeadmeGraafikKoostamineGen1(String value) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   String? storedKey = prefs.getString('key');
   String storedKeyString = jsonDecode(storedKey!);
@@ -423,7 +427,7 @@ SeadmeGraafikKoostamine(String value) async {
   }
 
   String? lastStatus;
-  List<String> output = [];
+  List<String> seadmeGraafik2 = [];
 
   for (int i = 0; i <= 2300; i += 100) {
     if (map.containsKey(i)) {
@@ -433,12 +437,19 @@ SeadmeGraafikKoostamine(String value) async {
     }
 
     if (lastStatus != null) {
-      output.add("${i.toString().padLeft(4, '0')}-2-$lastStatus");
+      seadmeGraafik2
+          .add("${i.toString().padLeft(4, '0')}: \t \t \t \t $lastStatus \n");
     }
   }
 
-  print('seadme graafik enne tootlemist');
-  print(output);
+  String seadmeGraafik3 = '';
 
-  return seadmeGraafik1.toString();
+  for (var item in seadmeGraafik2) {
+    seadmeGraafik3 += item;
+  }
+
+  print('seadme graafik peale tootlemist');
+  print(seadmeGraafik3);
+
+  return seadmeGraafik3.toString();
 }
