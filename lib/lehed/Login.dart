@@ -3,14 +3,18 @@ import 'dart:convert';
 import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:testuus4/lehed/dynamicKoduLeht.dart';
 import 'package:testuus4/lehed/kaksTabelit.dart';
+import 'package:testuus4/lehed/lisaSeade.dart';
 //import '/SeadmeSeaded.dart';
 import 'package:testuus4/lehed/seadmeSeaded.dart';
+import 'package:testuus4/lehed/uuedSeadmed.dart';
 import 'package:testuus4/main.dart';
 import 'energiaGraafik.dart';
 import 'package:testuus4/funktsioonid/seisukord.dart';
 import 'package:testuus4/lehed/koduleht.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'uuedSeadmed.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -26,9 +30,9 @@ class _LoginPageState extends State<LoginPage> {
   Future<void> _submitForm() async {
     String ajutineParool = parool.text as String;
     String ajutineKastuajanimi = kasutajanimi.text as String;
-
+    Map<String, dynamic> seadmed;
     String sha1Hash = sha1.convert(ajutineParool.codeUnits).toString();
-
+    List<String> uuedSeadmedString = [];
     var headers = {
       'Content-Type': 'application/x-www-form-urlencoded',
     };
@@ -41,6 +45,7 @@ class _LoginPageState extends State<LoginPage> {
     var sisselogimiseUrl = Uri.parse('https://api.shelly.cloud/auth/login');
     var sisselogimiseVastus = await http.post(sisselogimiseUrl,
         headers: headers, body: kasutajaAndmed);
+
     if (sisselogimiseVastus.statusCode == 200) {
       _scaffoldMessengerKey.currentState?.showSnackBar(
         SnackBar(
@@ -54,12 +59,6 @@ class _LoginPageState extends State<LoginPage> {
       await prefs.setString('Kasutajaparool', sha1Hash);
 
       // Navigate to another page after 5 seconds.
-      Future.delayed(Duration(seconds: 3), () {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => MinuSeadmed()),
-        );
-      });
     } else {
       _scaffoldMessengerKey.currentState?.showSnackBar(
         SnackBar(
@@ -91,39 +90,24 @@ class _LoginPageState extends State<LoginPage> {
     var storedJsonMap = prefs.getString('seadmed');
 
     if (storedJsonMap != null) {
-      print('korras');
-
-      Map<String, dynamic> seadmed = json.decode(storedJsonMap);
+      seadmed = json.decode(storedJsonMap);
 
       var j = 0;
 
       for (var device in seadmeteMap.values) {
         var seade = new Map<String, dynamic>();
         seade['Seadme_ID'] = device['id'];
-        print('alg');
-        print(seade['Seadme_ID']);
-        print(seadmed['Seade$i']['Seadme_ID']);
-        print('lõpp');
         for (var test = seadmed.keys.length; j < test; j++) {
-          print('pikkus');
-          print(seadmed['Seade$i']['Seadme_ID']);
-          print(seadmed['Seade$j']['Seadme_ID']);
-          print('pikkus');
-
-          print(j);
-          print(seadmed);
-
           if (seade['Seadme_ID'] == seadmed['Seade$j']['Seadme_ID']) {
-            print('break');
             j++;
             break;
           }
-          print('no break $j');
 
           seade['Seadme_nimi'] = device['name'];
           seade['Seadme_pistik'] = device['name'];
           seade['Seadme_generatsioon'] = device['gen'];
           seadmed['Seade$i'] = seade;
+          uuedSeadmedString.add(device['name']);
         }
 
         i++;
@@ -134,34 +118,50 @@ class _LoginPageState extends State<LoginPage> {
       var keyVastusJSON = json.decode(keyVastus.body);
 
       String seadmedMap = json.encode(seadmed);
-      await prefs.setString('seadmed', seadmedMap);
+     // await prefs.setString('seadmed', seadmedMap);
       String keyMap = json.encode(keyVastusJSON['data']['key']);
       await prefs.setString('key', keyMap);
+     // seisukord();
+
+      //showCustomAlertDialog(
+      //  context, seadmedMap, uuedSeadmed, uuedSeadmedString);
     } else {
-      var seadmed = new Map<String, dynamic>();
+      seadmed = new Map<String, dynamic>();
       i = 0;
       for (var device in seadmeteMap.values) {
-        print('uus device: $device');
         var seade = new Map<String, dynamic>();
         seade['Seadme_ID'] = device['id'];
         seade['Seadme_nimi'] = device['name'];
         seade['Seadme_pistik'] = device['name'];
         seade['Seadme_generatsioon'] = device['gen'];
-        print(seade['Seadme_generatsioon']);
         seadmed['Seade$i'] = seade;
         i++;
+
+        uuedSeadmedString.add(device['name']);
       }
       var keySaamiseUrl =
           Uri.parse('https://shelly-64-eu.shelly.cloud/user/get_user_key');
       var keyVastus = await http.post(keySaamiseUrl, headers: headers1);
       var keyVastusJSON = json.decode(keyVastus.body);
-
+      print(seadmed);
       String seadmedMap = json.encode(seadmed);
-      await prefs.setString('seadmed', seadmedMap);
+     // await prefs.setString('seadmed', seadmedMap);
       String keyMap = json.encode(keyVastusJSON['data']['key']);
       await prefs.setString('key', keyMap);
-      print(seadmedMap);
+
+      //showCustomAlertDialog(
+      //  context, seadmedMap, uuedSeadmed, uuedSeadmedString);
     }
+    print('siiiin2');
+      //seisukord();
+      print('siiiin');
+      Future.delayed(Duration(seconds: 3), () {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+              builder: (context) => uuedSeadmed(uuedSeadmedString: seadmed)),
+        );
+      });
 
     /* Näide kuidas võtta mälust seadmete map
     String? storedJsonMap = prefs.getString('seadmed');
@@ -184,7 +184,6 @@ class _LoginPageState extends State<LoginPage> {
       print(storedKeyString);
     }
     */
-    seisukord();
   }
 
   @override
@@ -192,19 +191,6 @@ class _LoginPageState extends State<LoginPage> {
     return ScaffoldMessenger(
         key: _scaffoldMessengerKey,
         child: Scaffold(
-          appBar: AppBar(
-            title: Text('Login',
-            style: GoogleFonts.roboto(
-              textStyle: const TextStyle(fontSize: 25),
-            ),),
-            backgroundColor: appbar,
-            leading: IconButton(
-              icon: Icon(Icons.arrow_back),
-              onPressed: () {
-                Navigator.pop(context);
-              },
-            ),
-          ),
           body: Padding(
             padding: const EdgeInsets.all(16.0),
             child: Form(
@@ -215,7 +201,8 @@ class _LoginPageState extends State<LoginPage> {
                   TextFormField(
                     style: font,
                     controller: kasutajanimi,
-                    decoration: InputDecoration(labelText: 'Shelly kasutajanimi'),
+                    decoration:
+                        InputDecoration(labelText: 'Shelly kasutajanimi'),
                     validator: (value) {
                       if (value!.trim().isEmpty) {
                         return 'Kasutajanime on vaja!';
@@ -238,21 +225,17 @@ class _LoginPageState extends State<LoginPage> {
                   SizedBox(height: 20.0),
                   Container(
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(5.0),
-                      border: Border.all(
-    color: const Color.fromARGB(255, 0, 0, 0),
-    width: 2,
-  )
-                    ),
+                        borderRadius: BorderRadius.circular(5.0),
+                        border: Border.all(
+                          color: Color.fromARGB(0, 0, 0, 0),
+                          width: 2,
+                        )),
                     width: sinineKastLaius,
                     height: sinineKastKorgus,
-                    
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                         backgroundColor: roheline,
-                         
-                         
-                          ),
+                        backgroundColor: roheline,
+                      ),
                       onPressed: () {
                         if (_formKey.currentState!.validate()) {
                           _submitForm();
@@ -261,10 +244,46 @@ class _LoginPageState extends State<LoginPage> {
                       child: Text('Login', style: font),
                     ),
                   ),
+                  SizedBox(height: 20.0),
+                  Container(
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(5.0),
+                        border: Border.all(
+                          color: Color.fromARGB(0, 0, 0, 0),
+                          width: 2,
+                        )),
+                    width: sinineKastLaius,
+                    height: sinineKastKorgus,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: sinineKast,
+                      ),
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    DynaamilenieKoduLeht(i: 5)));
+                      },
+                      child: Text('Lisa seade manuaalselt', style: font),
+                    ),
+                  ),
                 ],
               ),
             ),
           ),
         ));
   }
+}
+
+void showCustomAlertDialog(
+    BuildContext context, String test, int i, List<String> uuedSeadmedString) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        content: Text('Uusi seadmed: $i \n ${uuedSeadmedString.toString()}'),
+      );
+    },
+  );
 }

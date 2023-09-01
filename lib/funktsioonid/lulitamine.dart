@@ -54,6 +54,7 @@ void lulitamine(String seade) async {
           Uri.parse('https://shelly-64-eu.shelly.cloud/device/relay/control');
       var res = await http.post(url, headers: headers, body: data);
       print(res.body);
+      print(storedKeyString);
     }
 
     j++;

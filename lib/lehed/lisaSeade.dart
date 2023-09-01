@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:testuus4/lehed/Login.dart';
+import 'package:testuus4/lehed/dynamicKoduLeht.dart';
 import 'package:testuus4/lehed/kaksTabelit.dart';
 //import '/SeadmeSeaded.dart';
 import 'package:testuus4/lehed/seadmeSeaded.dart';
@@ -24,12 +26,11 @@ class _LisaSeadeState extends State<LisaSeade> {
   final GlobalKey<ScaffoldMessengerState> _scaffoldMessengerKey =
       GlobalKey<ScaffoldMessengerState>();
 
- //TODO: Lisada seadme salvestamine mälusse     
+  //TODO: Lisada seadme salvestamine mälusse
   Future<void> _submitForm() async {
     String ajutineParool = parool.text;
     String ajutineKastuajanimi = kasutajanimi.text;
 
-   
     var entryList;
     var headers = {
       'Content-Type': 'application/x-www-form-urlencoded',
@@ -73,7 +74,6 @@ class _LisaSeadeState extends State<LisaSeade> {
       );
       return;
     }
-    
   }
 
   @override
@@ -81,21 +81,6 @@ class _LisaSeadeState extends State<LisaSeade> {
     return ScaffoldMessenger(
         key: _scaffoldMessengerKey,
         child: Scaffold(
-          appBar: AppBar(
-            title: Text(
-              'Shelly seadme lisamine',
-              style: GoogleFonts.roboto(
-                textStyle: const TextStyle(fontSize: 25),
-              ),
-            ),
-            backgroundColor: appbar,
-            leading: IconButton(
-              icon: Icon(Icons.arrow_back),
-              onPressed: () {
-                Navigator.pop(context);
-              },
-            ),
-          ),
           body: Padding(
             padding: const EdgeInsets.all(16.0),
             child: Form(
@@ -131,7 +116,7 @@ class _LisaSeadeState extends State<LisaSeade> {
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(5.0),
                         border: Border.all(
-                          color: const Color.fromARGB(255, 0, 0, 0),
+                          color: Color.fromARGB(0, 0, 0, 0),
                           width: 2,
                         )),
                     width: sinineKastLaius,
@@ -146,6 +131,30 @@ class _LisaSeadeState extends State<LisaSeade> {
                         }
                       },
                       child: Text('Lisa seade', style: font),
+                    ),
+                  ),
+                  SizedBox(height: 20.0),
+                  Container(
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(5.0),
+                        border: Border.all(
+                          color: Color.fromARGB(0, 0, 0, 0),
+                          width: 2,
+                        )),
+                    width: sinineKastLaius,
+                    height: sinineKastKorgus,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: sinineKast,
+                      ),
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    DynaamilenieKoduLeht(i: 2)));
+                      },
+                      child: Text('Lisa seade Shelly kontoga', style: font),
                     ),
                   ),
                 ],
