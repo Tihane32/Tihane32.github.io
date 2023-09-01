@@ -12,7 +12,9 @@ genMaaramine(
   Map<String, List<String>> seadmeteMap,
   String seadmeNimi,
 ) {
-  if (seadmeteMap[seadmeNimi]![4] == 1) {
+  print('generatsiooon');
+  print(seadmeteMap[seadmeNimi]![4]);
+  if (seadmeteMap[seadmeNimi]![4] == '1') {
     gen1GraafikLoomine(lulitus, paev, seadmeteMap[seadmeNimi]![1]);
   } else {
     gen2GraafikuLoomine(lulitus, paev, seadmeteMap[seadmeNimi]![1]);

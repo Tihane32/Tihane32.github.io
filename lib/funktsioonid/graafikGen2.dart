@@ -315,7 +315,7 @@ Future<Map<int, dynamic>> gen2GraafikSaamine(
 
 delete(value, List temp) async {
   for (var i = 0; i < temp.length; i++) {
-    String token = await getToken();
+    String token = await getToken2();
 
     var headers = {
       'Authorization': 'Bearer $token',

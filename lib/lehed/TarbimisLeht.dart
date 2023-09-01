@@ -522,8 +522,8 @@ class _MGraafikState extends State<MGraafik> {
       'id': value,
       'channel': '0',
       'date_range': 'custom',
-      'date_from': '2023-08-01 00:00:00',
-      'date_to': '2023-08-31 23:59:59',
+      'date_from': '2023-09-01 00:00:00',
+      'date_to': '2023-09-30 23:59:59',
     };
 
     var url = Uri.parse(
@@ -697,11 +697,13 @@ class _MGraafikState extends State<MGraafik> {
                         ),
                       ),
                       primaryXAxis: DateTimeAxis(
+                        //edgeLabelPlacement: EdgeLabelPlacement.hide,
+                       //visibleMinimum: DateTime(2023, 8,31),
                         interval: 1,
                         labelRotation: 270,
                         labelStyle: fontVaike,
                         dateFormat: DateFormat('dd.MM'),
-                        minimum: temp.entries.first.key,
+                        //minimum: temp.entries.first.key,
                       ),
                       tooltipBehavior: _tooltipBehavior,
                       series: <ChartSeries>[
