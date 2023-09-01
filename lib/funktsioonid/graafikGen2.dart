@@ -5,17 +5,18 @@ import 'token.dart';
 
 //TODO: peab tegema nii, et topelt graafikut ei laseks panna
 gen2GraafikuLoomine(var selected, var valitudPaev, String value) async {
-  print(selected);
-  print(valitudPaev);
   var graafikud = Map<String, dynamic>();
-  await graafikuteSaamine(graafikud, value);
-  print('vana: $graafikud');
-  await graafikuKustutamine(graafikud, value);
-  print('uus: $graafikud');
+  List temp = List.empty(growable: true);
+  await graafikuteSaamine(graafikud, value, temp);
+  print(temp);
+
   await graafikuloomine(graafikud, selected, valitudPaev, value);
+
+  await delete(value, temp);
 }
 
-graafikuteSaamine(Map<String, dynamic> graafikud, String value) async {
+graafikuteSaamine(
+    Map<String, dynamic> graafikud, String value, List temp) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   String? ajutineKasutajanimi = prefs.getString('Kasutajanimi');
   String? sha1Hash = prefs.getString('Kasutajaparool');
@@ -34,7 +35,6 @@ graafikuteSaamine(Map<String, dynamic> graafikud, String value) async {
       'https://shelly-64-eu.shelly.cloud/fast/device/gen2_generic_command');
   var res = await http.post(url, headers: headers, body: data);
   if (res.statusCode == 200) {
-    print(res.body);
     var resJSON = jsonDecode(res.body) as Map<String, dynamic>;
     if (resJSON == null) {
       return; // stop the function if resJSON is null
@@ -45,8 +45,10 @@ graafikuteSaamine(Map<String, dynamic> graafikud, String value) async {
       return;
     }
     jobs = resJSON['data']['jobs'] as List<dynamic>;
+    int k = 0;
     for (var job in jobs) {
       var id = job['id'] as int;
+      temp.add(id);
       var timespec = job['timespec'] as String;
       var calls = job['calls'] as List<dynamic>;
       var graafik = Map<String, dynamic>();
@@ -57,6 +59,7 @@ graafikuteSaamine(Map<String, dynamic> graafikud, String value) async {
         graafik['On/Off'] = params;
         graafikud['$id'] = graafik;
       }
+      k++;
     }
   }
 }
@@ -64,47 +67,35 @@ graafikuteSaamine(Map<String, dynamic> graafikud, String value) async {
 graafikuloomine(
     Map<String, dynamic> graafikud, selected, valitudPaev, String value) async {
   var j = 1;
-  for (var i in graafikud.keys) {
-    print(i);
-    print(graafikud['$j']);
-    j++;
-  }
+
   var i = 0;
   bool lulitus;
   String tund;
   for (i = 0; i < 24; i++) {
-    if (selected[i] == true) {
+    if (selected[i][2] == true) {
       if (i == 0) {
         lulitus = true;
         tund = '$i';
-        print(lulitus);
-        print(i);
         graafikuSaatmine(lulitus, tund, valitudPaev, value);
       } else {
-        if (selected[i] != selected[i - 1]) {
+        if (selected[i][2] != selected[i - 1][2]) {
           lulitus = true;
           tund = '$i';
-          print(lulitus);
-          print(i);
           graafikuSaatmine(lulitus, tund, valitudPaev, value);
         }
       }
     }
   }
   for (i = 0; i < 24; i++) {
-    if (selected[i] == false) {
+    if (selected[i][2] == false) {
       if (i == 0) {
         lulitus = false;
         tund = '$i';
-        print(lulitus);
-        print(i);
         graafikuSaatmine(lulitus, tund, valitudPaev, value);
       } else {
-        if (selected[i] != selected[i - 1]) {
+        if (selected[i - 1][2] == true) {
           lulitus = false;
           tund = '$i';
-          print(lulitus);
-          print(i);
           graafikuSaatmine(lulitus, tund, valitudPaev, value);
         }
       }
@@ -113,9 +104,7 @@ graafikuloomine(
 }
 
 graafikuSaatmine(bool lulitus, String tund, valitudPaev, String value) async {
-  print(valitudPaev);
   DateTime now = DateTime.now();
-  print(now.weekday);
   var nadalapaev;
   if (valitudPaev == 'täna') {
     nadalapaev = now.weekday;
@@ -159,19 +148,15 @@ graafikuSaatmine(bool lulitus, String tund, valitudPaev, String value) async {
     'params':
         '{"enable":true,"timespec":"0 0 $tund * * $nadalapaev","calls":[{"method":"Switch.Set","params":{"id":0,"on":$lulitus}}]}',
   };
-  print(data);
   var url = Uri.parse(
       'https://shelly-64-eu.shelly.cloud/fast/device/gen2_generic_command');
   var res = await http.post(url, headers: headers, body: data);
   if (res.statusCode != 200)
     throw Exception('http.post error: statusCode= ${res.statusCode}');
-  print('lopp');
-  print(res.body);
 }
 
 graafikuKustutamine(Map<String, dynamic> graafikud, String value) async {
   DateTime now = DateTime.now();
-  print(now.weekday);
   var nadalapaev;
   var nadalapaevhomme;
 
@@ -222,18 +207,13 @@ graafikuKustutamine(Map<String, dynamic> graafikud, String value) async {
   if (nadalapaevhomme == 7) {
     nadalapaevhomme = 'SUN';
   }
-  print(nadalapaevhomme);
-  print(nadalapaev);
   var j = 1;
   for (var i in graafikud.keys) {
     var k = 0;
-    print(i);
-    print(graafikud['$j'].toString());
     if (graafikud['$j'].toString().contains('$nadalapaev') ||
         graafikud['$j'].toString().contains('$nadalapaevhomme')) {
       k = 1;
     } else {
-      print("delete $j");
       String token = await getToken();
       var headers = {
         'Authorization': 'Bearer $token',
@@ -251,9 +231,108 @@ graafikuKustutamine(Map<String, dynamic> graafikud, String value) async {
       var res = await http.post(url, headers: headers, body: data);
       if (res.statusCode != 200)
         throw Exception('http.post error: statusCode= ${res.statusCode}');
-      print(res.body);
     }
 
     j++;
+  }
+}
+
+Future<Map<int, dynamic>> gen2GraafikSaamine(
+    String value, Map<int, dynamic> onOff) async {
+  String token = await getToken();
+  var graafikud = Map<int, dynamic>();
+  var headers = {
+    'Authorization': 'Bearer $token',
+  };
+
+  var data = {
+    'id': value,
+    'method': 'schedule.list',
+  };
+
+  var url = Uri.parse(
+      'https://shelly-64-eu.shelly.cloud/fast/device/gen2_generic_command');
+  var res = await http.post(url, headers: headers, body: data);
+  if (res.statusCode == 200) {
+    var resJSON = jsonDecode(res.body) as Map<String, dynamic>;
+
+    var jobs = resJSON['data']['jobs'];
+
+    jobs = resJSON['data']['jobs'] as List<dynamic>;
+    int k = 0;
+    for (var job in jobs) {
+      var id = job['id'] as int;
+      var timespec = job['timespec'] as String;
+      var calls = job['calls'] as List<dynamic>;
+      var graafik = Map<String, dynamic>();
+
+      for (var call in calls) {
+        var params = call['params']['on'];
+
+        graafik['Timespec'] = timespec;
+        graafik['On/Off'] = params;
+      }
+      graafikud[k] = graafik;
+      k++;
+    }
+    List abi = List.empty(growable: true);
+    for (var i = 0; i < graafikud.length; i++) {
+      var temp = graafikud[i]['Timespec'];
+      // print(temp);
+      int hour = int.parse(temp.split(" ")[2]);
+
+      // Update boolean value in hourDataMap if the hour exists
+      if (onOff.containsKey(hour)) {
+        abi.add(hour);
+        onOff[hour][2] = graafikud[i]["On/Off"];
+      }
+    }
+    abi.sort();
+    print('object');
+    print(onOff);
+    for (var i = 0; i < abi.length - 1; i++) {
+      //print(onOff);
+      int j = abi[i];
+
+      int o = abi[i + 1];
+      for (j; j < o; j++) {
+        onOff[j][2] = onOff[abi[i]][2];
+
+        print('$i ${abi[i]} $j $o ${onOff[j][2]} ${onOff[i][2]}');
+        print(onOff[7][2]);
+        //print('$onOff $i');
+      }
+      //print(onOff);
+    }
+
+    print(abi);
+    print('lulitus $onOff');
+    return onOff;
+  } else {
+    return onOff;
+  }
+}
+
+delete(value, List temp) async {
+  for (var i = 0; i < temp.length; i++) {
+    String token = await getToken2();
+
+    var headers = {
+      'Authorization': 'Bearer $token',
+      'Content-Type': 'application/x-www-form-urlencoded',
+    };
+
+    var data = {
+      'id': value,
+      'method': 'schedule.delete',
+      'params': '{"id":${temp[i]}}',
+    };
+
+    var url = Uri.parse(
+        'https://shelly-64-eu.shelly.cloud/fast/device/gen2_generic_command');
+    var res1 = await http.post(url, headers: headers, body: data);
+    
+    print(data);
+    print(res1.body);
   }
 }

@@ -46,6 +46,7 @@ Border border = Border.all(
   width: 2,
 );
 void main() {
+  
   runApp(MaterialApp(
     theme: ThemeData(brightness: Brightness.light),
     home: DynaamilenieKoduLeht(i: 1), //Alustab appi kodulehest

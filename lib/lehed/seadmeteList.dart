@@ -72,9 +72,10 @@ class _SeadmeteListState extends State<SeadmeteList> {
         var name = storedMap['Seade$i']['Seadme_nimi'];
         var pistik = storedMap['Seade$i']['Seadme_pistik'];
         var olek = storedMap['Seade$i']['Seadme_olek'];
+        var gen = storedMap['Seade$i']['Seadme_generatsioon'];
         print('olek: $olek');
         Map<String, List<String>> ajutineMap = {
-          name: ['assets/boiler1.jpg', '$id', '$olek', '$pistik'],
+          name: ['assets/boiler1.jpg', '$id', '$olek', '$pistik', '$gen'],
         };
         minuSeadmedK.addAll(ajutineMap);
         i++;
@@ -85,6 +86,7 @@ class _SeadmeteListState extends State<SeadmeteList> {
     }
     setState(() {
       SeadmeteMap = minuSeadmedK;
+      print(SeadmeteMap);
       isLoading = false;
     });
   }
