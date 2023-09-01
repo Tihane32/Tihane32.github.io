@@ -87,7 +87,7 @@ class _SeadmeteListValimineBodyState extends State<SeadmeteListValimineBody> {
                 final graafik = SaaSeadmegraafik(SeadmeteMap, seade);
                 return GestureDetector(
                   onTap: () {
-                    if (SeadmeteMap[seade]![2] != 'offline') {
+                    if (SeadmeteMap[seade]![2] != 'Offline') {
                       setState(() {
                         if (ValitudSeadmed[seade] == false) {
                           ValitudSeadmed[seade] = true;
@@ -182,7 +182,7 @@ class _SeadmeteListValimineBodyState extends State<SeadmeteListValimineBody> {
                               top: 25,
                               left: 8,
                               child: Container(
-                                  child: staatus == 'offline'
+                                  child: staatus == 'Offline'
                                       ? Icon(
                                           Icons.wifi_off_outlined,
                                           size: 60,
