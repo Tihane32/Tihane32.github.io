@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../main.dart';
 import 'AbiLeht.dart';
+import 'GraafikusseSeadmeteValik.dart';
+import 'dynamicKoduLeht.dart';
 import 'koduleht.dart';
 import 'dart:math';
 import 'package:testuus4/lehed/kaksTabelit.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'keskimiseHinnaAluselTundideValimine.dart';
+import 'kopeeeriGraafikTundideValimine.dart';
 
 class LylitusValimisLeht2 extends StatelessWidget {
   @override
@@ -26,6 +30,13 @@ class HinnaPiiriAluselTundideValimine extends StatefulWidget {
 }
 
 int koduindex = 1;
+Color valge = Colors.white;
+Color green = Colors.green;
+Color homme = valge;
+Color tana = green;
+TextStyle hommeFont = font;
+TextStyle tanaFont = fontValge;
+int? tappedIndex;
 
 class _HinnaPiiriAluselTundideValimineState
     extends State<HinnaPiiriAluselTundideValimine> {
@@ -38,6 +49,9 @@ class _HinnaPiiriAluselTundideValimineState
   double vahe = 10;
   int valitudTunnid = 10;
   Color boxColor = sinineKast;
+  late Map<int, dynamic> lulitus;
+  late Map<int, dynamic> lulitusTana;
+  late Map<int, dynamic> lulitusHomme;
 
   Map<int, dynamic> hindPiirMap = {
     0: ['00.00', 0, false],
@@ -68,7 +82,62 @@ class _HinnaPiiriAluselTundideValimineState
     25: ['23.00', 0, false],
   };
 
-  Map<int, dynamic> lulitusMap2 = {
+  Map<int, dynamic> hind = {
+    0: ['', 0, ''],
+    1: ['00.00', 0, ''],
+    2: ['01.00', 0, ''],
+    3: ['02.00', 0, ''],
+    4: ['03.00', 0, ''],
+    5: ['04.00', 0, ''],
+    6: ['05.00', 0, ''],
+    7: ['06.00', 0, ''],
+    8: ['07.00', 0, ''],
+    9: ['08.00', 0, ''],
+    10: ['09.00', 0, ''],
+    11: ['10.00', 0, ''],
+    12: ['11.00', 0, ''],
+    13: ['12.00', 0, ''],
+    14: ['13.00', 0, ''],
+    15: ['14.00', 0, ''],
+    16: ['15.00', 0, ''],
+    17: ['16.00', 0, ''],
+    18: ['17.00', 0, ''],
+    19: ['18.00', 0, ''],
+    20: ['19.00', 0, ''],
+    21: ['20.00', 0, ''],
+    22: ['21.00', 0, ''],
+    23: ['22.00', 0, ''],
+    24: ['23.00', 0, ''],
+  };
+
+  Map<int, dynamic> lulitusMapVasak = {
+    0: ['00.00', 0, false, 0],
+    1: ['01.00', 0, false, 0],
+    2: ['02.00', 0, true, 0],
+    3: ['03.00', 0, false, 0],
+    4: ['04.00', 0, true, 0],
+    5: ['05.00', 0, true, 0],
+    6: ['06.00', 0, false, 0],
+    7: ['07.00', 0, true, 0],
+    8: ['08.00', 0, false, 0],
+    9: ['09.00', 0, true, 0],
+    10: ['10.00', 0, false, 0],
+    11: ['11.00', 0, true, 0],
+    12: ['12.00', 0, true, 0],
+    13: ['13.00', 0, true, 0],
+    14: ['14.00', 0, true, 0],
+    15: ['15.00', 0, true, 0],
+    16: ['16.00', 0, true, 0],
+    17: ['17.00', 0, true, 0],
+    18: ['18.00', 0, false, 0],
+    19: ['19.00', 0, true, 0],
+    20: ['20.00', 0, false, 0],
+    21: ['21.00', 0, true, 0],
+    22: ['22.00', 0, false, 0],
+    23: ['23.00', 0, false, 0],
+  };
+
+  Map<int, dynamic> lulitusMapParem = {
     0: ['00.00', 0, false, 0],
     1: ['01.00', 0, false, 0],
     2: ['02.00', 0, true, 0],
@@ -126,8 +195,12 @@ class _HinnaPiiriAluselTundideValimineState
 
       hindAVG = keskmineHindArvutaus(lulitusMap);
 
-      lulitusMap2 =
-          LulitusMap2Vaartustamine(hinnaPiir, lulitusMap, lulitusMap2);
+      hind = KeskHindString(hind, hindAVG);
+
+      lulitusMapVasak =
+          LulitusMapVasakVaartustamine(hinnaPiir, lulitusMap, lulitusMapVasak);
+      lulitusMapParem =
+          LulitusMapParemVaartustamine(hinnaPiir, lulitusMap, lulitusMapParem);
     });
   }
 
@@ -142,14 +215,13 @@ class _HinnaPiiriAluselTundideValimineState
     return Padding(
       padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
       child: Scaffold(
-        backgroundColor: Color.fromARGB(255, 189, 216, 225), //TaustavÃ¤rv
-
         appBar: AppBar(
+          automaticallyImplyLeading: false,
           backgroundColor: Color.fromARGB(255, 115, 162, 195),
           title: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text('Tunndide valik'),
+              Text('Tundide valimine'),
             ],
           ),
           actions: [
@@ -180,7 +252,8 @@ class _HinnaPiiriAluselTundideValimineState
                     } else if (selectedPage == 'Kopeeri graafik') {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => AbiLeht()),
+                        MaterialPageRoute(
+                            builder: (context) => KopeeriGraafikTundideValik()),
                       );
                     }
                   },
@@ -208,223 +281,189 @@ class _HinnaPiiriAluselTundideValimineState
           child: Column(
             children: [
               SizedBox(height: vahe),
-              Align(
-                alignment: Alignment.centerLeft,
-                child: Container(
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    color: boxColor,
-                    borderRadius: borderRadius,
-                    border: border,
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.2),
-                        spreadRadius: 2,
-                        blurRadius: 5,
-                        offset: const Offset(3, 3),
-                      ),
-                    ],
-                  ),
-                  width: sinineKastLaius,
-                  height: sinineKastKorgus,
-                  child: Row(
-                    children: [
-                      RichText(
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Center(
+                      child: GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        if (tana == valge) {
+                          lulitus = lulitusTana;
+                          tana = green;
+                          tanaFont = fontValge;
+                          homme = valge;
+                          hommeFont = font;
+                          HapticFeedback.vibrate();
+                        } /*else {
+                              lulitus = lulitusHomme;
+                              tana = valge;
+                              tanaFont = font;
+                              homme = green;
+                              hommeFont = fontValge;
+                            }*/
+                      });
+                    },
+                    child: Container(
+                      width: 100,
+                      height: 30,
+                      decoration: BoxDecoration(
+                          color: tana,
+                          borderRadius: BorderRadius.circular(20.0),
+                          border: Border.all(
+                            color: Colors.green,
+                            width: 3,
+                          )),
+                      child: Center(
+                          child: RichText(
                         text: TextSpan(
-                          style: const TextStyle(
-                            fontSize: 20,
-                            color: Colors.black,
-                          ),
-                          children: [
-                            TextSpan(text: '  Kuvatav päev: ', style: font),
-                          ],
+                          text: 'Täna',
+                          style: tanaFont,
                         ),
-                      ),
-                      SizedBox(width: 20),
-                      Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: paevNupp == 'Täna'
-                              ? Colors.blue
-                              : Color.fromARGB(0, 171, 161, 161),
-                          border: paevNupp == 'Homme'
-                              ? Border.all(color: Colors.blue, width: 2)
-                              : null,
+                        textAlign: TextAlign.center,
+                      )),
+                    ),
+                  )),
+                  Center(
+                      child: GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        if (homme == valge) {
+                          lulitus = lulitusHomme;
+                          homme = green;
+                          hommeFont = fontValge;
+                          tana = valge;
+                          tanaFont = font;
+                          HapticFeedback.vibrate();
+                        } /*else {
+                                lulitus = lulitusTana;
+                                homme = valge;
+                                hommeFont = font;
+                                tana = green;
+                                tanaFont = fontValge;
+                              }*/
+                      });
+                    },
+                    child: Container(
+                      width: 100,
+                      height: 30,
+                      decoration: BoxDecoration(
+                          color: homme,
+                          borderRadius: BorderRadius.circular(30.0),
+                          border: Border.all(
+                            color: Colors.green,
+                            width: 3,
+                          )),
+                      child: Center(
+                          child: RichText(
+                        text: TextSpan(
+                          text: 'Homme',
+                          style: hommeFont,
                         ),
-                        child: TextButton(
-                          onPressed: () {
-                            setState(() {
-                              paevNupp = paevaMuutmine(paevNupp);
-                            });
-                          },
-                          style: ButtonStyle(
-                            foregroundColor:
-                                MaterialStateProperty.all<Color>(Colors.white),
-                            textStyle: MaterialStateProperty.all<TextStyle>(
-                              TextStyle(fontSize: 20),
-                            ),
-                          ),
-                          child: Text('Täna'),
-                        ),
-                      ),
-                      SizedBox(width: 40),
-                      Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: paevNupp == 'Homme'
-                              ? Colors.blue
-                              : Color.fromARGB(0, 171, 161, 161),
-                          border: paevNupp == 'Täna'
-                              ? Border.all(color: Colors.blue, width: 2)
-                              : null,
-                        ),
-                        child: TextButton(
-                          onPressed: () {
-                            setState(() {
-                              paevNupp = paevaMuutmine(paevNupp);
-                            });
-                          },
-                          style: ButtonStyle(
-                            foregroundColor:
-                                MaterialStateProperty.all<Color>(Colors.white),
-                            textStyle: MaterialStateProperty.all<TextStyle>(
-                              TextStyle(fontSize: 20),
-                            ),
-                          ),
-                          child: Text('Homme'),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+                        textAlign: TextAlign.center,
+                      )),
+                    ),
+                  ))
+                ],
               ),
-              SizedBox(height: vahe),
-              Align(
-                alignment: Alignment.centerLeft,
-                child: Container(
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    color: boxColor,
-                    borderRadius: borderRadius,
-                    border: border,
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.2),
-                        spreadRadius: 2,
-                        blurRadius: 5,
-                        offset: const Offset(3, 3),
-                      ),
-                    ],
-                  ),
-                  width: sinineKastLaius,
-                  height: sinineKastKorgus,
-                  child: RichText(
-                    text: TextSpan(
-                      style: TextStyle(
-                        fontSize: 18,
-                        color: Colors.black,
-                      ),
-                      children: [
-                        TextSpan(
-                          text: ' Sisesta hinnapiir:  ',
-                          style: GoogleFonts.openSans(
-                            textStyle: TextStyle(
-                              fontWeight: FontWeight.w500,
-                            ),
+              Container(
+                height: 40,
+                alignment: Alignment.center,
+                child: RichText(
+                  text: TextSpan(
+                    style: TextStyle(
+                      fontSize: 20,
+                      color: Colors.black,
+                    ),
+                    children: [
+                      TextSpan(
+                        text: ' Sisesta hinnapiir:  ',
+                        style: GoogleFonts.openSans(
+                          textStyle: TextStyle(
+                            fontWeight: FontWeight.w500,
                           ),
                         ),
-                        WidgetSpan(
-                          child: Container(
-                            height: 25,
-                            width: 70,
-                            decoration: BoxDecoration(
-                              border: Border.all(
-                                color: Colors.grey,
-                                width: 1.0,
-                              ),
-                              borderRadius: BorderRadius.circular(4.0),
+                      ),
+                      WidgetSpan(
+                        alignment: PlaceholderAlignment.middle,
+                        child: Container(
+                          height: 30,
+                          width: 80,
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                              color: Colors.grey,
+                              width: 1.0,
                             ),
-                            child: Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 8.0),
-                              child: TextField(
-                                keyboardType: TextInputType.number,
-                                onSubmitted: (value) {
-                                  setState(() {
-                                    hinnaPiir = double.tryParse(value) ?? 0;
-                                    lulitusMap2 = LulitusMap2Vaartustamine(
-                                        hinnaPiir, lulitusMap, lulitusMap2);
-                                    print(hinnaPiir);
-                                  });
-                                },
-                                decoration: InputDecoration(
-                                  border: InputBorder.none,
-                                  isDense: true,
-                                  hintText: '36.87',
-                                ),
-                                style: GoogleFonts.openSans(
-                                  textStyle: TextStyle(
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 20,
-                                    color: Colors.black,
-                                  ),
+                            borderRadius: BorderRadius.circular(4.0),
+                          ),
+                          child: Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 8.0),
+                            child: TextField(
+                              keyboardType: TextInputType.number,
+                              onSubmitted: (value) {
+                                setState(() {
+                                  hinnaPiir = double.tryParse(value) ?? 0;
+                                  lulitusMapVasak =
+                                      LulitusMapVasakVaartustamine(hinnaPiir,
+                                          lulitusMap, lulitusMapVasak);
+                                  print(hinnaPiir);
+                                });
+                              },
+                              decoration: InputDecoration(
+                                border: InputBorder.none,
+                                isDense: true,
+                                hintText: '36.87',
+                                contentPadding:
+                                    EdgeInsets.symmetric(vertical: 3.0),
+                              ),
+                              style: GoogleFonts.openSans(
+                                textStyle: TextStyle(
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 20,
+                                  color: Colors.black,
                                 ),
                               ),
                             ),
                           ),
                         ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(height: vahe),
-              Align(
-                alignment: Alignment.centerLeft,
-                child: Container(
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    color: boxColor,
-                    borderRadius: borderRadius,
-                    border: border,
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.2),
-                        spreadRadius: 2,
-                        blurRadius: 5,
-                        offset: const Offset(3, 3),
                       ),
                     ],
                   ),
-                  width: sinineKastLaius,
-                  height: sinineKastKorgus,
-                  child: RichText(
-                    text: TextSpan(
-                      style: const TextStyle(
-                        fontSize: 20,
-                        color: Colors.black,
-                      ),
-                      children: [
-                        TextSpan(text: '  Päeva keskmine: ', style: font),
-                        TextSpan(
-                          text: ((hindAVG * pow(10.0, 2)).round().toDouble() /
-                                      pow(10.0, 2))
-                                  .toString() +
-                              '€/MWh',
-                          style: GoogleFonts.openSans(
-                            textStyle: TextStyle(
-                              fontWeight: FontWeight.w500,
-                              fontSize: 20,
-                              color: Colors.black,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
                 ),
               ),
+              Container(
+                height: 1,
+                width: double.infinity,
+                color: Colors.black,
+              ),
               SizedBox(height: vahe),
+              Center(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Align(
+                      child: Container(
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                        ),
+                        //width: sinineKastLaius,
+                        //height: sinineKastKorgus,
+                        child: RichText(
+                          textAlign: TextAlign.center,
+                          text: TextSpan(
+                            style: fontVaike,
+                            children: [
+                              TextSpan(text: 'EUR / MWh', style: fontVaike),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
               Container(
                 height: MediaQuery.of(context).size.height * 0.791,
                 child: Center(
@@ -434,6 +473,7 @@ class _HinnaPiiriAluselTundideValimineState
                     width: double.infinity,
                     height: double.infinity,
                     child: SfCartesianChart(
+                      enableSideBySideSeriesPlacement: false,
                       primaryXAxis: CategoryAxis(
                         interval: 1,
                         labelRotation: 270,
@@ -444,24 +484,81 @@ class _HinnaPiiriAluselTundideValimineState
                         title: AxisTitle(text: ' €/kWh'),
                       ),
                       series: <ChartSeries>[
+                        SplineSeries(
+                          dataSource: hind.values.toList(),
+                          xValueMapper: (inf, _) => inf[0],
+                          yValueMapper: (inf, _) => inf[1],
+                          dataLabelMapper: (data, _) => data[2],
+                          dataLabelSettings: DataLabelSettings(
+                            isVisible: true,
+                            labelAlignment: ChartDataLabelAlignment.middle,
+                            textStyle:
+                                TextStyle(fontSize: 15, color: Colors.black),
+                            angle: 270,
+                          ),
+                          pointColorMapper: (data, _) => Colors.transparent,
+                        ),
                         ColumnSeries(
                           width: 0.9,
                           onPointTap: (pointInteractionDetails) {
                             int? rowIndex = pointInteractionDetails.pointIndex;
                             print('Row Index: $rowIndex');
                             setState(() {
-                              lulitusMap2 =
-                                  TunniVarviMuutus(rowIndex, lulitusMap2);
+                              lulitusMapVasak =
+                                  TunniVarviMuutus(rowIndex, lulitusMapVasak);
+                              lulitusMapParem =
+                                  TunniVarviMuutus(rowIndex, lulitusMapParem);
                             });
                           },
-                          dataSource: lulitusMap2.values.toList(),
+                          borderRadius: BorderRadius.only(
+                              bottomLeft: Radius.circular(20),
+                              bottomRight: Radius.circular(20)),
+                          dataSource: lulitusMapVasak.values.toList(),
                           xValueMapper: (data, _) => data[0],
                           yValueMapper: (data, _) => data[1],
-                          dataLabelMapper: (data, _) =>
-                              ((data[3] * pow(10.0, 2)).round().toDouble() /
+                          dataLabelMapper: (data, _) => data[1] < 0
+                              ? (((data[1] + hinnaPiir + 10) * pow(10.0, 2))
+                                          .round()
+                                          .toDouble() /
                                       pow(10.0, 2))
-                                  .toString() +
-                              '€/MWh',
+                                  .toString()
+                              : '',
+                          pointColorMapper: (data, _) => data[2]
+                              ? Colors.green
+                              : Color.fromARGB(255, 164, 159, 159),
+                          dataLabelSettings: DataLabelSettings(
+                            isVisible: true,
+                            labelAlignment: ChartDataLabelAlignment.outer,
+                            textStyle:
+                                TextStyle(fontSize: 15, color: Colors.black),
+                            angle: 270,
+                          ),
+                        ),
+                        ColumnSeries(
+                          width: 0.9,
+                          onPointTap: (pointInteractionDetails) {
+                            int? rowIndex = pointInteractionDetails.pointIndex;
+                            print('Row Index: $rowIndex');
+                            setState(() {
+                              lulitusMapParem =
+                                  TunniVarviMuutus(rowIndex, lulitusMapParem);
+                              lulitusMapVasak =
+                                  TunniVarviMuutus(rowIndex, lulitusMapVasak);
+                            });
+                          },
+                          borderRadius: BorderRadius.only(
+                              topRight: Radius.circular(20),
+                              topLeft: Radius.circular(20)),
+                          dataSource: lulitusMapParem.values.toList(),
+                          xValueMapper: (data, _) => data[0],
+                          yValueMapper: (data, _) => data[1],
+                          dataLabelMapper: (data, _) => data[1] > 0
+                              ? (((data[1] + hinnaPiir - 10) * pow(10.0, 2))
+                                          .round()
+                                          .toDouble() /
+                                      pow(10.0, 2))
+                                  .toString()
+                              : '',
                           pointColorMapper: (data, _) => data[2]
                               ? Colors.green
                               : Color.fromARGB(255, 164, 159, 159),
@@ -487,7 +584,6 @@ class _HinnaPiiriAluselTundideValimineState
             ],
           ),
         ),
-
         bottomNavigationBar: BottomNavigationBar(
             backgroundColor: Color.fromARGB(255, 115, 162, 195),
             fixedColor: Color.fromARGB(255, 157, 214, 171),
@@ -496,12 +592,18 @@ class _HinnaPiiriAluselTundideValimineState
             unselectedIconTheme: IconThemeData(size: 30),
             items: const <BottomNavigationBarItem>[
               BottomNavigationBarItem(
-                label: 'Tagasi',
-                icon: Icon(Icons.arrow_back),
+                label: 'Seadmed',
+                icon: Icon(
+                  Icons.list_outlined,
+                  size: 40,
+                ),
               ),
               BottomNavigationBarItem(
                 label: 'Kinnita',
-                icon: Icon(Icons.check_circle_outlined),
+                icon: Icon(
+                  Icons.check_circle_outlined,
+                  size: 40,
+                ),
               ),
             ],
             currentIndex: koduindex,
@@ -512,13 +614,17 @@ class _HinnaPiiriAluselTundideValimineState
                   Navigator.push(
                     //Kui vajutatakse Hinnagraafiku ikooni peale, siis viiakse Hinnagraafiku lehele
                     context,
-                    MaterialPageRoute(builder: (context) => MinuSeadmed()),
+                    MaterialPageRoute(
+                        builder: (context) => SeadmeteListValimine()),
                   );
                 } else if (koduindex == 1) {
                   Navigator.push(
                     //Kui vajutatakse Teie seade ikooni peale, siis viiakse Seadmetelisamine lehele
                     context,
-                    MaterialPageRoute(builder: (context) => const KoduLeht()),
+                    MaterialPageRoute(
+                        builder: (context) => DynaamilenieKoduLeht(
+                              i: 1,
+                            )),
                   );
                 }
               });
@@ -554,27 +660,50 @@ keskmineHindArvutaus(Map<int, dynamic> lulitus) {
   }
 }
 
-LulitusMap2Vaartustamine(
+LulitusMapVasakVaartustamine(
     double hinnaPiir, Map<int, dynamic> lulitus1, Map<int, dynamic> lulitus2) {
   for (int key in lulitus1.keys) {
     double secondValue = lulitus1[key][1];
 
     lulitus2[key][3] = lulitus1[key][1];
 
-    if (secondValue <= hinnaPiir) {
+    if (secondValue < hinnaPiir) {
       lulitus2[key][2] = true;
+      lulitus2[key][1] = secondValue - hinnaPiir - 10;
     } else {
       lulitus2[key][2] = false;
-    }
-
-    if (secondValue <= hinnaPiir) {
-      lulitus2[key][1] = (hinnaPiir - secondValue) * (-1);
-    } else {
-      lulitus2[key][1] = secondValue - hinnaPiir;
+      lulitus2[key][1] = 0;
     }
   }
 
-  print('lylitus 2 hinnapiir:');
+  print('lylitus vasak hinnapiir:');
+  print('**************************');
+
+  lulitus2.forEach((key, value) {
+    print('$key: $value');
+  });
+
+  print('**************************');
+  return lulitus2;
+}
+
+LulitusMapParemVaartustamine(
+    double hinnaPiir, Map<int, dynamic> lulitus1, Map<int, dynamic> lulitus2) {
+  for (int key in lulitus1.keys) {
+    double secondValue = lulitus1[key][1];
+
+    lulitus2[key][3] = lulitus1[key][1];
+
+    if (secondValue >= hinnaPiir) {
+      lulitus2[key][2] = false;
+      lulitus2[key][1] = secondValue - hinnaPiir + 10;
+    } else {
+      lulitus2[key][2] = true;
+      lulitus2[key][1] = 0;
+    }
+  }
+
+  print('lylitus parem hinnapiir:');
   print('**************************');
 
   lulitus2.forEach((key, value) {
@@ -598,11 +727,10 @@ TunniVarviMuutus(int? rowIndex, Map<int, dynamic> lulitusMap2) {
   return lulitusMap2;
 }
 
-paevaMuutmine(String paevNupp) {
-  if (paevNupp == 'Täna') {
-    paevNupp = 'Homme';
-  } else if (paevNupp == 'Homme') {
-    paevNupp = 'Täna';
-  }
-  return paevNupp;
+KeskHindString(Map<int, dynamic> keskHind, double hindAVG) {
+  hindAVG = ((hindAVG * pow(10.0, 2)).round().toDouble() / pow(10.0, 2));
+
+  String summa = 'Keskmine $hindAVG';
+  keskHind[0][2] = summa;
+  return keskHind;
 }

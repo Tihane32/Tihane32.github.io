@@ -5,6 +5,7 @@ import 'package:testuus4/funktsioonid/Elering.dart';
 import 'package:flutter/services.dart';
 import 'Login.dart';
 import 'package:vibration/vibration.dart';
+import 'SeadmeGraafikLeht.dart';
 import 'koduleht.dart';
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -147,13 +148,13 @@ class _TulpDiagrammState extends State<TulpDiagramm> {
     }
 
     if (date.hour >
-          15) //Kui kell on vähem, kui 15 või on saadetud String 'täna'
-      {
-        var data = await getElering('homme');
-    for (var i = 0; i < 24; i++) {
-      lulitusHomme[i][1] = data[i]['price'];
-    }
+        15) //Kui kell on vähem, kui 15 või on saadetud String 'täna'
+    {
+      var data = await getElering('homme');
+      for (var i = 0; i < 24; i++) {
+        lulitusHomme[i][1] = data[i]['price'];
       }
+    }
     setState(() {
       if (date.hour >
           15) //Kui kell on vähem, kui 15 või on saadetud String 'täna'
@@ -182,116 +183,6 @@ class _TulpDiagrammState extends State<TulpDiagramm> {
 
   @override
   Widget build(BuildContext context) {
-<<<<<<< HEAD
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
-      child: Scaffold(
-        //backgroundColor: Color.fromARGB(255, 189, 216, 225), //Taustavärv
-        appBar: AppBar(
-          backgroundColor: Color.fromARGB(255, 115, 162, 195),
-          title: Text('Keskmine hind: $hindAVG €/MWh'),
-          actions: [
-            TextButton(
-              style: TextButton.styleFrom(
-                textStyle: const TextStyle(fontSize: 20),
-              ),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => LoginApp()),
-                );
-              },
-              child: const Text('Log in'),
-            ),
-          ],
-        ),
-
-        body: Center(
-            child: RotatedBox(
-          quarterTurns: 1,
-          child: Container(
-            width: double.infinity,
-            height: double.infinity,
-            child: SfCartesianChart(
-              primaryXAxis: CategoryAxis(
-                  labelRotation: 270, visibleMinimum: 0, visibleMaximum: 23),
-              primaryYAxis: NumericAxis(
-                labelRotation: 270,
-                minimum: 0,
-              ),
-              series: <ChartSeries>[
-                ColumnSeries(
-                  dataSource: lulitus.values.toList(),
-                  xValueMapper: (data, _) => data[0],
-                  yValueMapper: (data, _) => data[1],
-                  dataLabelMapper: (data, _) => data[1].toString() + '€/MWh',
-                  pointColorMapper: (data, _) => Colors.green,
-                  dataLabelSettings: DataLabelSettings(
-                    isVisible: true,
-                    labelAlignment: ChartDataLabelAlignment.middle,
-                    textStyle: TextStyle(fontSize: 15, color: Colors.black),
-                    angle: 270,
-                  ),
-                ),
-                LineSeries(
-                  dataSource: keskHind.values.toList(),
-                  xValueMapper: (inf, _) => inf[0],
-                  yValueMapper: (inf, _) => inf[1],
-                  width: 1,
-                  color: Color.fromARGB(255, 197, 44, 33),
-                ),
-              ],
-            ),
-          ),
-        )),
-
-        bottomNavigationBar: BottomNavigationBar(
-            backgroundColor: Color.fromARGB(255, 115, 162, 195),
-            fixedColor: Color.fromARGB(255, 77, 245, 170),
-            unselectedItemColor: Colors.black,
-            selectedIconTheme: IconThemeData(size: 30),
-            unselectedIconTheme: IconThemeData(size: 22),
-            items: const <BottomNavigationBarItem>[
-              BottomNavigationBarItem(
-                label: 'Seadmed',
-                icon: Icon(Icons.electrical_services_rounded),
-              ),
-              BottomNavigationBarItem(
-                label: 'Kodu',
-                icon: Icon(Icons.home),
-              ),
-              BottomNavigationBarItem(
-                label: 'Hinnagraafik',
-                icon: Icon(Icons.table_rows_outlined),
-              ),
-            ],
-            currentIndex: koduindex,
-            onTap: (int kodu) {
-              setState(() {
-                koduindex = kodu;
-
-                if (koduindex == 2) {
-                  Navigator.push(
-                    //Kui vajutatakse Hinnagraafiku ikooni peale, siis viiakse Hinnagraafiku lehele
-
-                    context,
-
-                    MaterialPageRoute(builder: (context) => TulpDiagramm()),
-                  );
-                } else if (koduindex == 1) {
-                  Navigator.push(
-                    //Kui vajutatakse Teie seade ikooni peale, siis viiakse Seadmetelisamine lehele
-
-                    context,
-
-                    MaterialPageRoute(builder: (context) => const KoduLeht()),
-                  );
-                }
-              });
-            }),
-      ),
-    );
-=======
     return Scaffold(
         backgroundColor: Color.fromARGB(255, 255, 255, 255),
         appBar: AppBar(
@@ -384,10 +275,9 @@ class _TulpDiagrammState extends State<TulpDiagramm> {
                                 tana = valge;
                                 tanaFont = font;
                                 hindMax = maxLeidmine(lulitus);
-                              hindMin = minLeidmine(lulitus);
-                              hindAVG = keskmineHindArvutaus(lulitus);
+                                hindMin = minLeidmine(lulitus);
+                                hindAVG = keskmineHindArvutaus(lulitus);
                                 HapticFeedback.vibrate();
-
                               } /*else {
                                 lulitus = lulitusTana;
                                 homme = valge;
@@ -768,7 +658,6 @@ class _TulpDiagrammState extends State<TulpDiagramm> {
           ),
         ),
         bottomNavigationBar: AppNavigationBar(i: 3));
->>>>>>> 9f30e28169e0a249539fc75ab362c4ff08fb4d30
   }
 }
 
@@ -785,26 +674,15 @@ keskmineHindArvutaus(Map<int, dynamic> lulitus) {
     hindNr++;
   });
 
-<<<<<<< HEAD
-  if (hindNr > 0) {
-    return summa / hindNr;
-=======
   AVG = summa / hindNr;
 
   if (hindNr > 0) {
     return ((AVG * mod).round().toDouble() / mod);
->>>>>>> 9f30e28169e0a249539fc75ab362c4ff08fb4d30
   } else {
     return 0;
   }
 }
 
-<<<<<<< HEAD
-keskmineHindMapVaartustamine(var hindAVG, Map<int, dynamic> keskHind) {
-  String kell = '';
-  print('+++++++++++++');
-  for (int i = 0; i < 24; i++) {
-=======
 keskmineHindMapVaartustamine(
     var hindAVG, Map<int, dynamic> keskHind, Map<int, dynamic> lulitus) {
   String kell = '00';
@@ -824,7 +702,6 @@ keskmineHindMapVaartustamine(
   keskHind[0] = [kell + '.00', hindAVG, 'Keskmine hind'];
 
   for (int i = 1; i < 24; i++) {
->>>>>>> 9f30e28169e0a249539fc75ab362c4ff08fb4d30
     if (i < 10) {
       kell = '0$i';
     } else {
@@ -836,18 +713,6 @@ keskmineHindMapVaartustamine(
     if (tund == i) {
       keskHind[tund] = [kell + '.00', hindAVG, ''];
     }
-<<<<<<< HEAD
-    keskHind[i] = [kell + '.00', hindAVG];
-  }
-
-  keskHind.forEach((key, value) {
-    print('$key: $value');
-  });
-
-  print('+++++++++++++');
-
-  return keskHind;
-=======
   }
 
   kell = '24.00';
@@ -891,5 +756,4 @@ minLeidmine(Map<int, dynamic> map) {
 
   print('Lowest double: $highest');
   return highest;
->>>>>>> 9f30e28169e0a249539fc75ab362c4ff08fb4d30
 }
