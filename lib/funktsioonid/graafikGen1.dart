@@ -37,7 +37,7 @@ gen1GraafikLoomine(
     } else {
       paev = now.weekday;
     }
-    teinePaev=now.weekday - 1;
+    teinePaev = now.weekday - 1;
   }
 
   for (int i = 0; i < 24; i++) {
@@ -62,7 +62,6 @@ gen1GraafikLoomine(
       graafik.add(temp);
     }
   }
-  
 
   var headers = {
     'Content-Type': 'application/x-www-form-urlencoded',
@@ -95,7 +94,6 @@ gen1GraafikLoomine(
       newList.add(item);
     }
   }
-  
 
   RegExp regExp = RegExp("-$teinePaev-");
 
@@ -104,7 +102,7 @@ gen1GraafikLoomine(
       graafik.add(rule);
     }
   }
-String graafikString = graafik.join(',');
+  String graafikString = graafik.join(',');
   var headers1 = {
     'Content-Type': 'application/x-www-form-urlencoded',
   };
@@ -120,7 +118,6 @@ String graafikString = graafik.join(',');
   var url1 = Uri.parse(
       'https://shelly-64-eu.shelly.cloud/device/relay/settings/schedule_rules');
   var res1 = await http.post(url1, headers: headers1, body: data1);
-
 
   for (int i = 0; i < 24; i++) {
     String temp = selected[i][2];

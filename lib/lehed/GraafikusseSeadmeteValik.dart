@@ -101,23 +101,6 @@ class _SeadmeteListValimineState extends State<SeadmeteListValimine> {
     });
   }
 
-  bool canPressButton = true;
-
-  void _handleButtonPress(seade) {
-    if (!canPressButton) return;
-
-    setState(() {
-      canPressButton = false;
-      SeadmeteMap = muudaSeadmeOlek(SeadmeteMap, seade);
-    });
-
-    Timer(Duration(seconds: 3), () {
-      setState(() {
-        canPressButton = true;
-      });
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
