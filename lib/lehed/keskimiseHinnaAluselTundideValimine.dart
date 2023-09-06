@@ -13,10 +13,6 @@ import 'package:syncfusion_flutter_charts/charts.dart';
 
 import 'kopeeeriGraafikTundideValimine.dart';
 
-void main() {
-  runApp(LylitusValimisLeht1());
-}
-
 class LylitusValimisLeht1 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -217,68 +213,6 @@ class _KeskmiseHinnaAluselTundideValimineState
     return Padding(
       padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
       child: Scaffold(
-        appBar: AppBar(
-          automaticallyImplyLeading: false,
-          backgroundColor: Color.fromARGB(255, 115, 162, 195),
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text('Tundide valimine'),
-            ],
-          ),
-          actions: [
-            Center(
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: Colors.blue,
-                ),
-                padding: EdgeInsets.symmetric(horizontal: 10),
-                child: DropdownButton<String>(
-                  value: selectedPage,
-                  onChanged: (String? newValue) {
-                    setState(() {
-                      selectedPage = newValue!;
-                    });
-                    if (selectedPage == 'Hinnapiir') {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => LylitusValimisLeht2()),
-                      );
-                    } else if (selectedPage == 'Minu eelistused') {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => AbiLeht()),
-                      );
-                    } else if (selectedPage == 'Kopeeri graafik') {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => KopeeriGraafikTundideValik()),
-                      );
-                    }
-                  },
-                  underline: Container(), // or SizedBox.shrink()
-                  items: <String>[
-                    'Keskmine hind',
-                    'Hinnapiir',
-                    'Minu eelistused',
-                    'Kopeeri graafik'
-                  ].map((String value) {
-                    return DropdownMenuItem<String>(
-                      value: value,
-                      child: Text(
-                        value,
-                        style: TextStyle(color: Colors.black),
-                      ),
-                    );
-                  }).toList(),
-                ),
-              ),
-            ),
-          ],
-        ),
         body: SingleChildScrollView(
           child: Column(
             children: [
@@ -592,51 +526,6 @@ class _KeskmiseHinnaAluselTundideValimineState
             ],
           ),
         ),
-        bottomNavigationBar: BottomNavigationBar(
-            backgroundColor: Color.fromARGB(255, 115, 162, 195),
-            fixedColor: Color.fromARGB(255, 157, 214, 171),
-            unselectedItemColor: Colors.white,
-            selectedIconTheme: IconThemeData(size: 40),
-            unselectedIconTheme: IconThemeData(size: 30),
-            items: const <BottomNavigationBarItem>[
-              BottomNavigationBarItem(
-                label: 'Seadmed',
-                icon: Icon(
-                  Icons.list_outlined,
-                  size: 40,
-                ),
-              ),
-              BottomNavigationBarItem(
-                label: 'Kinnita',
-                icon: Icon(
-                  Icons.check_circle_outlined,
-                  size: 40,
-                ),
-              ),
-            ],
-            currentIndex: koduindex,
-            onTap: (int kodu) {
-              setState(() {
-                koduindex = kodu;
-                if (koduindex == 0) {
-                  Navigator.push(
-                    //Kui vajutatakse Hinnagraafiku ikooni peale, siis viiakse Hinnagraafiku lehele
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => SeadmeteListValimine()),
-                  );
-                } else if (koduindex == 1) {
-                  Navigator.push(
-                    //Kui vajutatakse Teie seade ikooni peale, siis viiakse Seadmetelisamine lehele
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => DynaamilenieKoduLeht(
-                              i: 1,
-                            )),
-                  );
-                }
-              });
-            }),
       ),
     );
   }

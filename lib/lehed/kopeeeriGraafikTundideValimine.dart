@@ -9,9 +9,19 @@ import '../funktsioonid/seisukord.dart';
 import '../main.dart';
 import 'AbiLeht.dart';
 import 'hinnaPiiriAluselTunideValimine.dart';
+import 'package:http/http.dart' as http;
+
+class LylitusValimisLeht3 extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: KopeeriGraafikTundideValik(),
+    );
+  }
+}
 
 class KopeeriGraafikTundideValik extends StatefulWidget {
-  const KopeeriGraafikTundideValik({Key? key}) : super(key: key);
+  KopeeriGraafikTundideValik({Key? key}) : super(key: key);
 
   @override
   _KopeeriGraafikTundideValikState createState() =>
@@ -93,68 +103,6 @@ class _KopeeriGraafikTundideValikState
     return Padding(
       padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
       child: Scaffold(
-        appBar: AppBar(
-          automaticallyImplyLeading: false,
-          backgroundColor: Color.fromARGB(255, 115, 162, 195),
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text('Graafiku valimine'),
-            ],
-          ),
-          actions: [
-            Center(
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: Colors.blue,
-                ),
-                padding: EdgeInsets.symmetric(horizontal: 10),
-                child: DropdownButton<String>(
-                  value: selectedPage,
-                  onChanged: (String? newValue) {
-                    setState(() {
-                      selectedPage = newValue!;
-                    });
-                    if (selectedPage == 'Hinnapiir') {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => LylitusValimisLeht2()),
-                      );
-                    } else if (selectedPage == 'Minu eelistused') {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => AbiLeht()),
-                      );
-                    } else if (selectedPage == 'Keskmine hind') {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => LylitusValimisLeht1()),
-                      );
-                    }
-                  },
-                  underline: Container(), // or SizedBox.shrink()
-                  items: <String>[
-                    'Keskmine hind',
-                    'Hinnapiir',
-                    'Minu eelistused',
-                    'Kopeeri graafik'
-                  ].map((String value) {
-                    return DropdownMenuItem<String>(
-                      value: value,
-                      child: Text(
-                        value,
-                        style: TextStyle(color: Colors.black),
-                      ),
-                    );
-                  }).toList(),
-                ),
-              ),
-            ),
-          ],
-        ),
         body: GestureDetector(
           child: isLoading
               ? Center(child: CircularProgressIndicator())
@@ -250,13 +198,24 @@ class _KopeeriGraafikTundideValikState
                                             size: 80,
                                             color: Colors.blue,
                                           ),
-                                          onPressed: () {
+                                          onPressed: () async {
+                                            if (SeadmeteMap[seade]![2] !=
+                                                'Offline') {
+                                              var temp =
+                                                  await SeadmeGraafikKoostamineGen1(
+                                                      SeadmeteMap[seade]![2]);
+
+                                              setState(() {
+                                                seadmeGraafik = temp;
+                                              });
+                                            }
                                             showDialog(
                                                 context: context,
                                                 builder: (context) =>
                                                     AlertDialog(
                                                       title: Text(
-                                                          "  $seade graafik: \n \t 00.00 on \n \t 00.10 on \n \t 00.20 on \n \t 03.00 off \n \t ..."),
+                                                          '$seade graafik: \n' +
+                                                              seadmeGraafik),
                                                     ));
                                           },
                                         ),
@@ -289,51 +248,6 @@ class _KopeeriGraafikTundideValikState
                   },
                 ),
         ),
-        bottomNavigationBar: BottomNavigationBar(
-            backgroundColor: Color.fromARGB(255, 115, 162, 195),
-            fixedColor: Color.fromARGB(255, 157, 214, 171),
-            unselectedItemColor: Colors.white,
-            //selectedIconTheme: IconThemeData(size: 40),
-            //unselectedIconTheme: IconThemeData(size: 30),
-            items: const <BottomNavigationBarItem>[
-              BottomNavigationBarItem(
-                label: 'Seadmed',
-                icon: Icon(
-                  Icons.list_outlined,
-                  size: 40,
-                ),
-              ),
-              BottomNavigationBarItem(
-                label: 'Kinnita',
-                icon: Icon(
-                  Icons.check_circle_outlined,
-                  size: 40,
-                ),
-              ),
-            ],
-            currentIndex: koduindex,
-            onTap: (int kodu) {
-              setState(() {
-                koduindex = kodu;
-                if (koduindex == 0) {
-                  Navigator.push(
-                    //Kui vajutatakse Hinnagraafiku ikooni peale, siis viiakse Hinnagraafiku lehele
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => SeadmeteListValimine()),
-                  );
-                } else if (koduindex == 1) {
-                  Navigator.push(
-                    //Kui vajutatakse Teie seade ikooni peale, siis viiakse Seadmetelisamine lehele
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => DynaamilenieKoduLeht(
-                              i: 1,
-                            )),
-                  );
-                }
-              });
-            }),
       ),
     );
   }
@@ -392,4 +306,70 @@ SaaSeadmegraafik(Map<String, List<String>> SeadmeteMap, SeadmeNimi) {
     return graafik;
   }
   return null; // Device key not found in the map
+}
+
+SeadmeGraafikKoostamineGen1(String value) async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  String? storedKey = prefs.getString('key');
+  String storedKeyString = jsonDecode(storedKey!);
+  var headers = {
+    'Content-Type': 'application/x-www-form-urlencoded',
+  };
+
+  var data = {
+    'channel': '0',
+    'id': '80646f81ad9a',
+    'auth_key': storedKeyString,
+  };
+
+  var url = Uri.parse('https://shelly-64-eu.shelly.cloud/device/settings');
+
+  var res = await http.post(url, headers: headers, body: data);
+
+  await Future.delayed(const Duration(seconds: 2));
+  //Kui post läheb läbi siis:
+
+  final httpPackageJson = json.decode(res.body) as Map<String, dynamic>;
+
+  var seadmeGraafik1 =
+      httpPackageJson['data']['device_settings']['relays'][0]['schedule_rules'];
+
+  print('seadme graafik enne tootlemist');
+  print(seadmeGraafik1);
+
+  Map<int, String> map = {};
+
+  for (var item in seadmeGraafik1) {
+    var parts = item.split('-');
+    var time = int.parse(parts[0]);
+    var status = parts[2];
+    map[time] = status;
+  }
+
+  String? lastStatus;
+  List<String> seadmeGraafik2 = [];
+
+  for (int i = 0; i <= 2300; i += 100) {
+    if (map.containsKey(i)) {
+      lastStatus = map[i];
+    } else if (lastStatus != null) {
+      map[i] = lastStatus;
+    }
+
+    if (lastStatus != null) {
+      seadmeGraafik2
+          .add("${i.toString().padLeft(4, '0')}: \t \t \t \t $lastStatus \n");
+    }
+  }
+
+  String seadmeGraafik3 = '';
+
+  for (var item in seadmeGraafik2) {
+    seadmeGraafik3 += item;
+  }
+
+  print('seadme graafik peale tootlemist');
+  print(seadmeGraafik3);
+
+  return seadmeGraafik3.toString();
 }
