@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:testuus4/lehed/GraafikusseSeadmeteValik.dart';
 import 'package:testuus4/lehed/dynamicKoduLeht.dart';
+import '../funktsioonid/genMaaramine.dart';
 import '../main.dart';
 import 'AbiLeht.dart';
 import 'keskimiseHinnaAluselTundideValimine.dart';
@@ -136,14 +137,40 @@ class _DynamilineTundideValimineState extends State<DynamilineTundideValimine> {
                         builder: (context) => SeadmeteListValimine()),
                   );
                 } else if (koduindex == 1) {
-                  Navigator.push(
-                    //Kui vajutatakse Teie seade ikooni peale, siis viiakse Seadmetelisamine lehele
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => DynaamilenieKoduLeht(
-                              i: 1,
-                            )),
-                  );
+                  showDialog(
+                      context: context,
+                      builder: (context) => AlertDialog(
+                            content: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    // Add some spacing between icon and text
+                                    Text("Kinnitatud", style: fontSuur),
+                                    SizedBox(width: 8),
+                                    Icon(
+                                      Icons.check_circle_outline_outlined,
+                                      size: 35,
+                                    ),
+                                  ],
+                                ),
+                                // Add other content of the dialog if needed
+                              ],
+                            ),
+                          ));
+                  HapticFeedback.vibrate();
+                  Future.delayed(Duration(seconds: 5), () {
+                    Navigator.of(context).pop(); // Close the AlertDialog
+                    Navigator.push(
+                      //Kui vajutatakse Teie seade ikooni peale, siis viiakse Seadmetelisamine lehele
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => DynaamilenieKoduLeht(
+                                i: 1,
+                              )),
+                    );
+                  });
                 }
               });
             }),

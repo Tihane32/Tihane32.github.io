@@ -47,7 +47,7 @@ class _KeskmiseHinnaAluselTundideValimineState
   String paevNupp = 'Täna';
   String selectedPage = 'Keskmine hind';
   double vahe = 10;
-  int valitudTunnid = 10;
+  int valitudTunnid = 12;
   Color boxColor = sinineKast;
   int tund = 0;
   late Map<int, dynamic> lulitus;
@@ -250,6 +250,8 @@ class _KeskmiseHinnaAluselTundideValimineState
 
       keskHind = keskmineHindMapVaartustamine(hindAVG, keskHind, lulitus);
 
+      lulitus = OdavimadTunnidOn(lulitus, valitudTunnid);
+
       lulitusMapVasak =
           LulitusMapVasakVaartustamine(hindAVG, lulitus, lulitusMapVasak);
       lulitusMapParem =
@@ -291,6 +293,8 @@ class _KeskmiseHinnaAluselTundideValimineState
                               hind = KeskHindString(hind, hindAVG);
                               keskHind = keskmineHindMapVaartustamine(
                                   hindAVG, keskHind, lulitus);
+                              lulitus =
+                                  OdavimadTunnidOn(lulitus, valitudTunnid);
                               lulitusMapVasak = LulitusMapVasakVaartustamine(
                                   hindAVG, lulitus, lulitusMapVasak);
                               lulitusMapParem = LulitusParemVaartustamine(
@@ -340,6 +344,8 @@ class _KeskmiseHinnaAluselTundideValimineState
                                 hind = KeskHindString(hind, hindAVG);
                                 keskHind = keskmineHindMapVaartustamine(
                                     hindAVG, keskHind, lulitus);
+                                lulitus =
+                                    OdavimadTunnidOn(lulitus, valitudTunnid);
                                 lulitusMapVasak = LulitusMapVasakVaartustamine(
                                     hindAVG, lulitus, lulitusMapVasak);
                                 lulitusMapParem = LulitusParemVaartustamine(
@@ -423,12 +429,19 @@ class _KeskmiseHinnaAluselTundideValimineState
                                     }
                                     valitudTunnid = parsedValue;
                                     print(valitudTunnid);
+                                    lulitus = OdavimadTunnidOn(
+                                        lulitus, valitudTunnid);
+                                    lulitusMapVasak =
+                                        LulitusMapVasakVaartustamine(
+                                            hindAVG, lulitus, lulitusMapVasak);
+                                    lulitusMapParem = LulitusParemVaartustamine(
+                                        hindAVG, lulitus, lulitusMapParem);
                                   });
                                 },
                                 decoration: InputDecoration(
                                   border: InputBorder.none,
                                   isDense: true,
-                                  hintText: '12',
+                                  hintText: valitudTunnid.toString(),
                                   contentPadding:
                                       EdgeInsets.symmetric(vertical: 3.0),
                                 ),
@@ -492,6 +505,7 @@ class _KeskmiseHinnaAluselTundideValimineState
                         primaryXAxis: CategoryAxis(
                           interval: 1,
                           labelRotation: 270,
+                          visibleMaximum: 24,
                         ),
                         primaryYAxis: NumericAxis(
                           isVisible: false,
@@ -686,6 +700,32 @@ KeskHindString(Map<int, dynamic> keskHind, double hindAVG) {
   return keskHind;
 }
 
+OdavimadTunnidOn(Map<int, dynamic> lulitus, int tunnid) {
+  print('lulitus enne:');
+  print(lulitus);
+
+// Convert the map to a list of entries and sort it by the price
+  var sortedEntries = lulitus.entries.toList()
+    ..sort((a, b) => a.value[1].compareTo(b.value[1]));
+
+  // Update the first 12 to true
+  for (int i = 0; i < tunnid; i++) {
+    var key = sortedEntries[i].key;
+    lulitus[key][2] = true;
+  }
+
+  // Update the rest to false
+  for (int i = tunnid; i < sortedEntries.length; i++) {
+    var key = sortedEntries[i].key;
+    lulitus[key][2] = false;
+  }
+
+  print('lulitus parast:');
+  print(lulitus);
+
+  return lulitus;
+}
+
 LulitusMapVasakVaartustamine(
     var hindAVG, Map<int, dynamic> lulitus1, Map<int, dynamic> lulitus2) {
   for (int key in lulitus1.keys) {
@@ -694,6 +734,7 @@ LulitusMapVasakVaartustamine(
     if (hind <= hindAVG) {
       lulitus2[key][1] = hind - hindAVG - 10;
     }
+    lulitus2[key][2] = lulitus1[key][2];
   }
 
   return lulitus2;
@@ -707,6 +748,7 @@ LulitusParemVaartustamine(
     if (hind >= hindAVG) {
       lulitus3[key][1] = hind - hindAVG + 10;
     }
+    lulitus3[key][2] = lulitus1[key][2];
   }
 
   return lulitus3;
