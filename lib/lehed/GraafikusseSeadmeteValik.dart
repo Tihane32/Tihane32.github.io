@@ -11,6 +11,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:testuus4/lehed/keskimiseHinnaAluselTundideValimine.dart';
 import 'package:testuus4/lehed/seadmeteList.dart';
 import '../funktsioonid/seisukord.dart';
+import 'DynaamilineTundideValimine.dart';
 import 'dynamicKoduLeht.dart';
 import 'navigationBar.dart';
 import 'package:testuus4/main.dart';
@@ -306,8 +307,7 @@ class _SeadmeteListValimineState extends State<SeadmeteListValimine> {
                   //Kui vajutatakse Teie seade ikooni peale, siis viiakse Seadmetelisamine lehele
                   context,
                   MaterialPageRoute(
-                      builder: (context) =>
-                          KeskmiseHinnaAluselTundideValimine()),
+                      builder: (context) => LylitusValimisLehtBoss()),
                 );
               }
             });
