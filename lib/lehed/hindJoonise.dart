@@ -241,58 +241,84 @@ class _TulpDiagrammState extends State<TulpDiagramm> {
                       )),
                     ),
                   )),
-                  if (hommeNahtav)
-                    Center(
-                        child: GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          if (homme == valge) {
-                            lulitus = lulitusHomme;
-                            homme = green;
-                            hommeFont = fontValge;
-                            tana = valge;
-                            tanaFont = font;
-                            hindMax = maxLeidmine(lulitus);
-                            hindMin = minLeidmine(lulitus);
-                            hindAVG = keskmineHindArvutaus(lulitus);
-                            keskHind = keskmineHindMapVaartustamine(
-                                hindAVG, keskHind, lulitus);
-                            temp = hindAVG / 4;
-                            if (temp < 40 && hindAVG > 40) {
-                              temp = 40;
-                            } else if (hindAVG < 40) {
-                              temp = hindAVG / 2;
-                            }
-                            HapticFeedback.vibrate();
-                          } /*else {
+                  Center(
+                      child: hommeNahtav
+                          ? GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  if (homme == valge) {
+                                    lulitus = lulitusHomme;
+                                    homme = green;
+                                    hommeFont = fontValge;
+                                    tana = valge;
+                                    tanaFont = font;
+                                    hindMax = maxLeidmine(lulitus);
+                                    hindMin = minLeidmine(lulitus);
+                                    hindAVG = keskmineHindArvutaus(lulitus);
+                                    keskHind = keskmineHindMapVaartustamine(
+                                        hindAVG, keskHind, lulitus);
+                                    temp = hindAVG / 4;
+                                    if (temp < 40 && hindAVG > 40) {
+                                      temp = 40;
+                                    } else if (hindAVG < 40) {
+                                      temp = hindAVG / 2;
+                                    }
+                                    HapticFeedback.vibrate();
+                                  } /*else {
                                 lulitus = lulitusTana;
                                 homme = valge;
                                 hommeFont = font;
                                 tana = green;
                                 tanaFont = fontValge;
                               }*/
-                        });
-                      },
-                      child: Container(
-                        width: 100,
-                        height: 30,
-                        decoration: BoxDecoration(
-                            color: homme,
-                            borderRadius: BorderRadius.circular(30.0),
-                            border: Border.all(
-                              color: Colors.green,
-                              width: 3,
-                            )),
-                        child: Center(
-                            child: RichText(
-                          text: TextSpan(
-                            text: 'Homme',
-                            style: hommeFont,
-                          ),
-                          textAlign: TextAlign.center,
-                        )),
-                      ),
-                    ))
+                                });
+                              },
+                              child: Container(
+                                width: 100,
+                                height: 30,
+                                decoration: BoxDecoration(
+                                    color: homme,
+                                    borderRadius: BorderRadius.circular(30.0),
+                                    border: Border.all(
+                                      color: Colors.green,
+                                      width: 3,
+                                    )),
+                                child: Center(
+                                    child: RichText(
+                                  text: TextSpan(
+                                    text: 'Homme',
+                                    style: hommeFont,
+                                  ),
+                                  textAlign: TextAlign.center,
+                                )),
+                              ),
+                            )
+                          : GestureDetector(
+                              onTap: () {
+                                showDialog(
+                                    context: context,
+                                    builder: (context) => AlertDialog(
+                                          title: Text(
+                                              'Homne graafik ei ole hetkel kättesaadav \n Proovige uuesti kell 15.00'),
+                                        ));
+                              },
+                              child: Container(
+                                width: 100,
+                                height: 30,
+                                decoration: BoxDecoration(
+                                    color: Color.fromARGB(255, 209, 205, 205),
+                                    borderRadius: BorderRadius.circular(30.0),
+                                    border: Border.all(
+                                      color: Color.fromARGB(255, 12, 12, 12),
+                                      width: 3,
+                                    )),
+                                child: Center(
+                                    child: RichText(
+                                  text: TextSpan(text: 'Homme', style: font),
+                                  textAlign: TextAlign.center,
+                                )),
+                              ),
+                            ))
                 ],
               ),
             ),

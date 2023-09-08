@@ -489,7 +489,7 @@ class _HinnaPiiriAluselTundideValimineState
                           visibleMaximum: 24,
                         ),
                         primaryYAxis: NumericAxis(
-                          isVisible: false,
+                          //isVisible: false,
                           labelRotation: 270,
                           title: AxisTitle(text: ' €/kWh'),
                         ),
