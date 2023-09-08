@@ -183,7 +183,7 @@ class _SeadmeGraafikuLehtState extends State<SeadmeGraafikuLeht> {
 
     setState(() {
       //hommeNahtav = true; //TODO: testimise jaoks
-      if (date.hour <= 15) {
+      if (date.hour >= 15) {
         hommeNahtav = true;
       }
       lulitus = lulitusTana;
@@ -307,7 +307,8 @@ class _SeadmeGraafikuLehtState extends State<SeadmeGraafikuLeht> {
           });
         } else {
           var graafikud = await gen2GraafikSaamine(value, lulitus, "tana");
-          var graafikud1 = await gen2GraafikSaamine(value, lulitusHomme, "homme");
+          var graafikud1 =
+              await gen2GraafikSaamine(value, lulitusHomme, "homme");
           setState(() {
             gen = 2;
             lulitus = graafikud;
@@ -409,69 +410,101 @@ class _SeadmeGraafikuLehtState extends State<SeadmeGraafikuLeht> {
         ],
       ),
       body: Stack(children: [
-        SingleChildScrollView(
-          child: Column(
-            children: [
-              SizedBox(height: vahe),
-              Align(
-                alignment: Alignment.center,
+       
+        Padding(
+          padding: const EdgeInsets.only(top: 60),
+          child: SingleChildScrollView(
+            child: Container(
+              decoration: BoxDecoration(color: Colors.white),
+              height: MediaQuery.of(context).size.height,
+              child: Center(
+                  child: RotatedBox(
+                quarterTurns: 1,
                 child: Container(
-                  alignment: Alignment.center,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      RichText(
-                        text: TextSpan(
-                          style: const TextStyle(
-                            fontSize: 20,
-                            color: Colors.black,
-                          ),
-                          children: [
-                            TextSpan(text: 'Seadme olek:    ', style: font),
-                            TextSpan(
-                                text: SeadmeteMap[seadmeNimi]![2], style: font),
-                          ],
+                  //width: double.infinity,
+                  //height: double.infinity,
+                  child: SfCartesianChart(
+                    margin: EdgeInsets.all(0),
+                    primaryXAxis: CategoryAxis(
+                      majorGridLines: const MajorGridLines(width: 0),
+                      interval: 1,
+                      labelRotation: 270,
+                      visibleMinimum: -0.35,
+                      maximum: 23.5,
+                    ),
+                    primaryYAxis: NumericAxis(
+                      anchorRangeToVisiblePoints: true,
+                      axisLine: AxisLine(width: 0),
+                      isVisible: true,
+                      labelRotation: 270,
+                      /* title: AxisTitle(
+                                //text: 'EUR/MWh',
+                                textStyle: fontVaike,
+                                alignment: ChartAlignment.center),*/
+                      labelStyle: TextStyle(fontSize: 0),
+                    ),
+                    series: <ChartSeries>[
+                      ColumnSeries(
+                        width: 0.9,
+                        spacing: 0.1,
+                        onPointTap: (pointInteractionDetails) {
+                          int rowIndex = pointInteractionDetails.pointIndex!;
+                          kinnitusNahtav = true;
+                          setState(() {
+                            lulitus[rowIndex][2] = !lulitus[rowIndex][2];
+                          });
+                        },
+                        borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(20),
+                            topRight: Radius.circular(20)),
+                        dataSource: lulitus.values.toList(),
+                        xValueMapper: (data, _) => data[0],
+                        yValueMapper: (data, _) {
+                          final yValue = data[1];
+                          return yValue < temp ? temp : yValue;
+                        },
+                        dataLabelMapper: (data, _) => data[1].toString(),
+                        pointColorMapper: (data, _) => data[2]
+                            ? Colors.green
+                            : Color.fromARGB(255, 164, 159, 159),
+                        dataLabelSettings: DataLabelSettings(
+                          isVisible: true,
+                          labelAlignment: ChartDataLabelAlignment.bottom,
+                          textStyle: fontVaike,
+                          angle: 270,
                         ),
                       ),
-                      Container(
-                        decoration: BoxDecoration(
-                          color: Colors.blue.withOpacity(0.6),
-                          shape: BoxShape.circle,
-                        ),
-                        child: IconButton(
-                          iconSize: 40,
-                          onPressed: () {
-                            setState(() {
-                              SeadmeteMap =
-                                  muudaSeadmeOlek(SeadmeteMap, seadmeNimi);
-                            });
-                          },
-                          icon: loeSeadmeOlek(SeadmeteMap, seadmeNimi) ==
-                                  'offline'
-                              ? Icon(Icons.wifi_off_outlined)
-                              : loeSeadmeOlek(SeadmeteMap, seadmeNimi) == 'on'
-                                  ? Icon(
-                                      Icons.power_settings_new_rounded,
-                                      color: Color.fromARGB(255, 77, 152, 81),
-                                    )
-                                  : Icon(
-                                      Icons.power_settings_new_rounded,
-                                      color: Colors.red,
-                                    ),
+                      LineSeries(
+                        dataSource: keskHind.values.toList(),
+                        xValueMapper: (inf, _) => inf[0],
+                        yValueMapper: (inf, _) => inf[1],
+                        dataLabelMapper: (inf, _) => inf[2],
+                        color: Colors.red,
+                        dashArray: [20, 22],
+                        dataLabelSettings: DataLabelSettings(
+                          offset: Offset(-20, 0),
+                          isVisible: true,
+                          labelAlignment: ChartDataLabelAlignment.middle,
+                          textStyle: TextStyle(
+                              fontSize: 15,
+                              color: Color.fromARGB(255, 231, 17, 17)),
+                          angle: 270,
+                          alignment: ChartAlignment.center,
                         ),
                       ),
                     ],
                   ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
-                child: Container(
-                  height: 1,
-                  width: double.infinity,
-                  color: Colors.black,
-                ),
-              ),
+              )),
+            ),
+          ),
+        ),
+        Container(
+          decoration: BoxDecoration(color: Colors.white),
+          height: 65,
+          child: Column(
+            children: [
+             SizedBox(height: vahe / 2),
               Center(
                 child: Column(
                   children: [
@@ -530,296 +563,115 @@ class _SeadmeGraafikuLehtState extends State<SeadmeGraafikuLeht> {
                               )),
                             ),
                           )),
-                          if (hommeNahtav)
-                            Center(
-                                child: GestureDetector(
-                              onTap: () {
-                                setState(() {
-                                  if (homme == valge) {
-                                    lulitus = lulitusHomme;
-                                    homme = green;
-                                    hommeFont = fontValge;
-                                    tana = valge;
-                                    tanaFont = font;
-                                    hindMax = maxLeidmine(lulitus);
-                                    hindMin = minLeidmine(lulitus);
-                                    hindAVG = keskmineHindArvutaus(lulitus);
-                                    keskHind = keskmineHindMapVaartustamine(
-                                        hindAVG, keskHind, lulitus);
-                                    temp = hindAVG / 4;
-                                    if (temp < 40 && hindAVG > 40) {
-                                      temp = 40;
-                                    } else if (hindAVG < 40) {
-                                      temp = hindAVG / 2;
-                                    }
-                                    HapticFeedback.vibrate();
-                                  } /*else {
+                          Center(
+                              child: hommeNahtav
+                                  ? GestureDetector(
+                                      onTap: () {
+                                        setState(() {
+                                          if (homme == valge) {
+                                            lulitus = lulitusHomme;
+                                            homme = green;
+                                            hommeFont = fontValge;
+                                            tana = valge;
+                                            tanaFont = font;
+                                            hindMax = maxLeidmine(lulitus);
+                                            hindMin = minLeidmine(lulitus);
+                                            hindAVG =
+                                                keskmineHindArvutaus(lulitus);
+                                            keskHind =
+                                                keskmineHindMapVaartustamine(
+                                                    hindAVG, keskHind, lulitus);
+                                            temp = hindAVG / 4;
+                                            if (temp < 40 && hindAVG > 40) {
+                                              temp = 40;
+                                            } else if (hindAVG < 40) {
+                                              temp = hindAVG / 2;
+                                            }
+                                            HapticFeedback.vibrate();
+                                          } /*else {
                                 lulitus = lulitusTana;
                                 homme = valge;
                                 hommeFont = font;
                                 tana = green;
                                 tanaFont = fontValge;
                               }*/
-                                });
-                              },
-                              child: Container(
-                                width: 100,
-                                height: 30,
-                                decoration: BoxDecoration(
-                                    color: homme,
-                                    borderRadius: BorderRadius.circular(30.0),
-                                    border: Border.all(
-                                      color: Colors.green,
-                                      width: 3,
-                                    )),
-                                child: Center(
-                                    child: RichText(
-                                  text: TextSpan(
-                                    text: 'Homme',
-                                    style: hommeFont,
-                                  ),
-                                  textAlign: TextAlign.center,
-                                )),
-                              ),
-                            ))
+                                        });
+                                      },
+                                      child: Container(
+                                        width: 100,
+                                        height: 30,
+                                        decoration: BoxDecoration(
+                                            color: homme,
+                                            borderRadius:
+                                                BorderRadius.circular(30.0),
+                                            border: Border.all(
+                                              color: Colors.green,
+                                              width: 3,
+                                            )),
+                                        child: Center(
+                                            child: RichText(
+                                          text: TextSpan(
+                                            text: 'Homme',
+                                            style: hommeFont,
+                                          ),
+                                          textAlign: TextAlign.center,
+                                        )),
+                                      ),
+                                    )
+                                  : GestureDetector(
+                                      onTap: () {
+                                        showDialog(
+                                            context: context,
+                                            builder: (context) => AlertDialog(
+                                                  title: Text(
+                                                      'Homne graafik ei ole hetkel kättesaadav\nProovige uuesti kell 15.00'),
+                                                ));
+                                      },
+                                      child: Container(
+                                        width: 100,
+                                        height: 30,
+                                        decoration: BoxDecoration(
+                                            color: Color.fromARGB(
+                                                255, 209, 205, 205),
+                                            borderRadius:
+                                                BorderRadius.circular(30.0),
+                                            border: Border.all(
+                                              color: Color.fromARGB(
+                                                  255, 12, 12, 12),
+                                              width: 3,
+                                            )),
+                                        child: Center(
+                                            child: RichText(
+                                          text: TextSpan(
+                                              text: 'Homme', style: font),
+                                          textAlign: TextAlign.center,
+                                        )),
+                                      ),
+                                    ))
                         ],
                       ),
                     ),
                     SizedBox(height: vahe),
-                    /* Center(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Align(
-                      alignment: Alignment.center,
-                      child: Container(
-                        alignment: Alignment.center,
-                        //width: 200,
-                        child: Center(
-                          child: Column(
-                            children: [
-                              Align(
-                                child: Container(
-                                  alignment: Alignment.center,
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                  ),
-                                  //width: sinineKastLaius,
-                                  //height: sinineKastKorgus,
-                                  child: RichText(
-                                    text: TextSpan(
-                                      style: fontVaike,
-                                      children: [
-                                        TextSpan(
-                                            text: 'Päeva keskmine:',
-                                            style: fontVaike),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              Align(
-                                child: Container(
-                                  alignment: Alignment.center,
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                  ),
-                                  //width: sinineKastLaius,
-                                  //height: sinineKastKorgus,
-                                  child: RichText(
-                                    text: TextSpan(
-                                      style: fontVaike,
-                                      children: [
-                                        TextSpan(text: '$hindAVG', style: font),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              Align(
-                                child: Container(
-                                  alignment: Alignment.center,
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                  ),
-                                  //width: sinineKastLaius,
-                                  //height: sinineKastKorgus,
-                                  child: RichText(
-                                    text: TextSpan(
-                                      style: fontVaike,
-                                      children: [
-                                        TextSpan(
-                                            text: 'EUR/MWh', style: fontVaike),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                    Align(
-                      alignment: Alignment.center,
-                      child: Container(
-                        //width: 200,
-                        child: Column(
-                          children: [
-                            Align(
-                              child: Container(
-                                alignment: Alignment.center,
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                ),
-                                //width: sinineKastLaius,
-                                //height: sinineKastKorgus,
-                                child: RichText(
-                                  textAlign: TextAlign.center,
-                                  text: TextSpan(
-                                    style: fontVaike,
-                                    children: [
-                                      TextSpan(
-                                          text: '   Päeva miinimum:',
-                                          style: fontVaike),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Align(
-                              child: Container(
-                                alignment: Alignment.center,
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                ),
-                                //width: sinineKastLaius,
-                                //height: sinineKastKorgus,
-                                child: RichText(
-                                  textAlign: TextAlign.center,
-                                  text: TextSpan(
-                                    style: fontVaike,
-                                    children: [
-                                      TextSpan(
-                                          text: '   $hindMin', style: font),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Align(
-                              child: Container(
-                                alignment: Alignment.center,
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                ),
-                                //width: sinineKastLaius,
-                                //height: sinineKastKorgus,
-                                child: RichText(
-                                  textAlign: TextAlign.center,
-                                  text: TextSpan(
-                                    style: fontVaike,
-                                    children: [
-                                      TextSpan(
-                                          text: '   EUR/MWh', style: fontVaike),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    Align(
-                      alignment: Alignment.center,
-                      child: Container(
-                        //width: 200,
-                        child: Column(
-                          children: [
-                            Align(
-                              child: Container(
-                                alignment: Alignment.center,
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                ),
-                                //width: sinineKastLaius,
-                                //height: sinineKastKorgus,
-                                child: RichText(
-                                  text: TextSpan(
-                                    style: fontVaike,
-                                    children: [
-                                      TextSpan(
-                                          text: 'Päeva maksimum:',
-                                          style: fontVaike),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Align(
-                              child: Container(
-                                alignment: Alignment.center,
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                ),
-                                //width: sinineKastLaius,
-                                //height: sinineKastKorgus,
-                                child: RichText(
-                                  text: TextSpan(
-                                    style: fontVaike,
-                                    children: [
-                                      TextSpan(text: '$hindMax', style: font),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Align(
-                              child: Container(
-                                alignment: Alignment.center,
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                ),
-                                //width: sinineKastLaius,
-                                //height: sinineKastKorgus,
-                                child: RichText(
-                                  text: TextSpan(
-                                    style: fontVaike,
-                                    children: [
-                                      TextSpan(
-                                          text: 'EUR/MWh', style: fontVaike),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(height: vahe * 2),*/
                     Center(
                       child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           Align(
                             child: Container(
                               alignment: Alignment.center,
-
+                                  
                               //width: sinineKastLaius,
                               //height: sinineKastKorgus,
-                              child: RichText(
-                                textAlign: TextAlign.center,
-                                text: TextSpan(
-                                  style: fontVaike,
-                                  children: [
-                                    TextSpan(
-                                        text: 'EUR / MWh', style: fontVaike),
-                                  ],
+                              child: Padding(
+                               padding: const EdgeInsets.only(left: 5.0),
+                                child: RichText(
+                                  textAlign: TextAlign.center,
+                                  text: TextSpan(
+                                    style: fontVaike,
+                                    children: [
+                                      TextSpan(text: '€/MWh', style: fontVaike),
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),
@@ -827,104 +679,7 @@ class _SeadmeGraafikuLehtState extends State<SeadmeGraafikuLeht> {
                         ],
                       ),
                     ),
-                    Container(
-                      height: MediaQuery.of(context).size.height,
-                      child: Center(
-                          child: RotatedBox(
-                        quarterTurns: 1,
-                        child: Container(
-                          //width: double.infinity,
-                          //height: double.infinity,
-                          child: SfCartesianChart(
-                            primaryXAxis: CategoryAxis(
-                              majorGridLines: const MajorGridLines(width: 0),
-                              interval: 1,
-                              labelRotation: 270,
-                              visibleMinimum: -0.35,
-                              maximum: 23.5,
-                            ),
-                            primaryYAxis: NumericAxis(
-                              anchorRangeToVisiblePoints: true,
-                              axisLine: AxisLine(width: 0),
-                              isVisible: true,
-                              labelRotation: 270,
-                              /* title: AxisTitle(
-                              //text: 'EUR/MWh',
-                              textStyle: fontVaike,
-                              alignment: ChartAlignment.center),*/
-                              labelStyle: TextStyle(fontSize: 0),
-                            ),
-                            series: <ChartSeries>[
-                              ColumnSeries(
-                                width: 0.9,
-                                spacing: 0.1,
-                                onPointTap: (pointInteractionDetails) {
-                                  int rowIndex =
-                                      pointInteractionDetails.pointIndex!;
-                                  kinnitusNahtav = true;
-                                  setState(() {
-                                    lulitus[rowIndex][2] =
-                                        !lulitus[rowIndex][2];
-                                  });
-                                },
-                                borderRadius: BorderRadius.only(
-                                    topLeft: Radius.circular(20),
-                                    topRight: Radius.circular(20)),
-                                dataSource: lulitus.values.toList(),
-                                xValueMapper: (data, _) => data[0],
-                                yValueMapper: (data, _) {
-                                  final yValue = data[1];
-                                  return yValue < temp ? temp : yValue;
-                                },
-                                dataLabelMapper: (data, _) =>
-                                    data[1].toString(),
-                                pointColorMapper: (data, _) => data[2]
-                                    ? Colors.green
-                                    : Color.fromARGB(255, 164, 159, 159),
-                                dataLabelSettings: DataLabelSettings(
-                                  isVisible: true,
-                                  labelAlignment:
-                                      ChartDataLabelAlignment.bottom,
-                                  textStyle: fontVaike,
-                                  angle: 270,
-                                ),
-                              ),
-                              LineSeries(
-                                dataSource: keskHind.values.toList(),
-                                xValueMapper: (inf, _) => inf[0],
-                                yValueMapper: (inf, _) => inf[1],
-                                dataLabelMapper: (inf, _) => inf[2],
-                                color: Colors.red,
-                                dashArray: [20, 22],
-                                dataLabelSettings: DataLabelSettings(
-                                  offset: Offset(-20, 0),
-                                  isVisible: true,
-                                  labelAlignment:
-                                      ChartDataLabelAlignment.middle,
-                                  textStyle: TextStyle(
-                                      fontSize: 15,
-                                      color: Color.fromARGB(255, 231, 17, 17)),
-                                  angle: 270,
-                                  alignment: ChartAlignment.center,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      )),
-                    ),
                   ],
-                ),
-              ),
-              Visibility(
-                visible: kinnitusNahtav,
-                child: Align(
-                  alignment: Alignment.bottomCenter,
-                  child: Container(
-                    alignment: Alignment.center,
-                    width: sinineKastLaius,
-                    height: sinineKastKorgus,
-                  ),
                 ),
               ),
             ],
