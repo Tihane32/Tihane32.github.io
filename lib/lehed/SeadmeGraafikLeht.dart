@@ -307,10 +307,11 @@ class _SeadmeGraafikuLehtState extends State<SeadmeGraafikuLeht> {
           });
         } else {
           var graafikud = await gen2GraafikSaamine(value, lulitus, "tana");
-          var graafikud1 = await gen2GraafikSaamine(value, lulitus, "homme");
+          var graafikud1 = await gen2GraafikSaamine(value, lulitusHomme, "homme");
           setState(() {
             gen = 2;
             lulitus = graafikud;
+            lulitusHomme = graafikud1;
           });
         }
         break;

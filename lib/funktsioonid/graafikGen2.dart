@@ -2,12 +2,13 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'token.dart';
+import 'package:intl/intl.dart';
 
 //TODO: peab tegema nii, et topelt graafikut ei laseks panna
 gen2GraafikuLoomine(var selected, var valitudPaev, String value) async {
   var graafikud = Map<String, dynamic>();
   List temp = List.empty(growable: true);
-  await graafikuteSaamine(graafikud, value, temp);
+  await graafikuteSaamine(graafikud, value, temp, valitudPaev);
   print(temp);
 
   await graafikuloomine(graafikud, selected, valitudPaev, value);
@@ -15,8 +16,8 @@ gen2GraafikuLoomine(var selected, var valitudPaev, String value) async {
   await delete(value, temp);
 }
 
-graafikuteSaamine(
-    Map<String, dynamic> graafikud, String value, List temp) async {
+graafikuteSaamine(Map<String, dynamic> graafikud, String value, List temp,
+    valitudPaev) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   String? ajutineKasutajanimi = prefs.getString('Kasutajanimi');
   String? sha1Hash = prefs.getString('Kasutajaparool');
@@ -47,17 +48,35 @@ graafikuteSaamine(
     jobs = resJSON['data']['jobs'] as List<dynamic>;
     int k = 0;
     for (var job in jobs) {
-      var id = job['id'] as int;
-      temp.add(id);
-      var timespec = job['timespec'] as String;
-      var calls = job['calls'] as List<dynamic>;
-      var graafik = Map<String, dynamic>();
-      for (var call in calls) {
-        var params = call['params']['on'];
+      DateTime now = DateTime.now();
+      if (valitudPaev == 'homme') {
+        now = now.add(Duration(days: 1));
+      }
 
-        graafik['Timespec'] = timespec;
-        graafik['On/Off'] = params;
-        graafikud['$id'] = graafik;
+      // Create a DateFormat instance to format the date
+      DateFormat dateFormat =
+          DateFormat('EEE'); // 'EEE' gives the abbreviated weekday name
+
+      // Format the current date to get the weekday abbreviation (e.g., "MON," "TUE," etc.)
+      String formattedWeekday = dateFormat.format(now);
+      formattedWeekday = formattedWeekday.toUpperCase();
+      print("Today's weekday is: $formattedWeekday");
+
+      String date = job['timespec'].split(" ")[5];
+      if (date == formattedWeekday) {
+        var id = job['id'] as int;
+        var timespec = job['timespec'] as String;
+        temp.add(id);
+
+        var calls = job['calls'] as List<dynamic>;
+        var graafik = Map<String, dynamic>();
+        for (var call in calls) {
+          var params = call['params']['on'];
+
+          graafik['Timespec'] = timespec;
+          graafik['On/Off'] = params;
+          graafikud['$id'] = graafik;
+        }
       }
       k++;
     }
@@ -238,7 +257,7 @@ graafikuKustutamine(Map<String, dynamic> graafikud, String value) async {
 }
 
 Future<Map<int, dynamic>> gen2GraafikSaamine(
-    String value, Map<int, dynamic> onOff, String s) async {
+    String value, Map<int, dynamic> onOff, String paev) async {
   String token = await getToken();
   var graafikud = Map<int, dynamic>();
   var headers = {
@@ -276,16 +295,34 @@ Future<Map<int, dynamic>> gen2GraafikSaamine(
       k++;
     }
     List abi = List.empty(growable: true);
+    DateTime now = DateTime.now();
+    if (paev == 'homme') {
+      now = now.add(Duration(days: 1));
+    }
+
+    // Create a DateFormat instance to format the date
+    DateFormat dateFormat =
+        DateFormat('EEE'); // 'EEE' gives the abbreviated weekday name
+
+    // Format the current date to get the weekday abbreviation (e.g., "MON," "TUE," etc.)
+    String formattedWeekday = dateFormat.format(now);
+    formattedWeekday = formattedWeekday.toUpperCase();
+    print("Today's weekday is: $formattedWeekday");
     for (var i = 0; i < graafikud.length; i++) {
       var temp = graafikud[i]['Timespec'];
       // print(temp);
       int hour = int.parse(temp.split(" ")[2]);
       print('siiiin ${graafikud[i]}');
-
+      String date = temp.split(" ")[5];
+      print(date);
+      print(formattedWeekday);
       // Update boolean value in hourDataMap if the hour exists
       if (onOff.containsKey(hour)) {
-        abi.add(hour);
-        onOff[hour][2] = graafikud[i]["On/Off"];
+        if (formattedWeekday == date) {
+          print("yessssss");
+          abi.add(hour);
+          onOff[hour][2] = graafikud[i]["On/Off"];
+        }
       }
     }
     abi.sort();
