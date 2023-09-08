@@ -185,7 +185,7 @@ class _TulpDiagrammState extends State<TulpDiagramm> {
         preferredSize: const Size.fromHeight(85),
         child: Column(
           children: [
-            SizedBox(height: vahe),
+            SizedBox(height: vahe/2),
             Center(
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -299,7 +299,7 @@ class _TulpDiagrammState extends State<TulpDiagramm> {
                                     context: context,
                                     builder: (context) => AlertDialog(
                                           title: Text(
-                                              'Homne graafik ei ole hetkel kättesaadav \n Proovige uuesti kell 15.00'),
+                                              'Homne graafik ei ole hetkel kättesaadav\nProovige uuesti kell 15.00'),
                                         ));
                               },
                               child: Container(
@@ -548,7 +548,7 @@ class _TulpDiagrammState extends State<TulpDiagramm> {
                       child: Padding(
                         padding: const EdgeInsets.only(left: 8.0),
                         child: Text(
-                          'EUR/MWh',
+                          '€/MWh',
                           style: fontVaike,
                         ),
                       )),
@@ -602,112 +602,112 @@ class _TulpDiagrammState extends State<TulpDiagramm> {
         ),
       ),
       body: SingleChildScrollView(
-        child: Center(
-          child: Column(
-            children: [
-              SizedBox(
-                height: MediaQuery.of(context).size.height,
-                child: Center(
-                    child: RotatedBox(
-                  quarterTurns: 1,
-                  child: Container(
-                    //width: double.infinity,
-                    //height: double.infinity,
-                    child: SfCartesianChart(
-                      primaryXAxis: CategoryAxis(
-                        majorGridLines: const MajorGridLines(width: 0),
-                        interval: 1,
-                        labelRotation: 270,
-                        visibleMinimum: -0.35,
-                        maximum: 23.5,
-                      ),
-                      primaryYAxis: NumericAxis(
-                        anchorRangeToVisiblePoints: true,
-                        axisLine: AxisLine(width: 0),
-                        isVisible: true,
-                        labelRotation: 270,
-                        /* title: AxisTitle(
-                              //text: 'EUR/MWh',
-                              textStyle: fontVaike,
-                              alignment: ChartAlignment.center),*/
-                        labelStyle: TextStyle(fontSize: 0),
-                      ),
-                      series: <ChartSeries>[
-                        ColumnSeries(
-                          width: 0.9,
-                          spacing: 0.1,
-                          onPointTap: (pointInteractionDetails) {
-                            int rowIndex = pointInteractionDetails.pointIndex!;
-                            setState(() {
-                              tappedIndex = rowIndex;
-                            });
-                            showDialog(
-                              context: context,
-                              builder: (context) => AlertDialog(
-                                title: Text(
-                                  "Kell $rowIndex töötavad seadmed: main boiler, veranda lamp",
-                                ),
-                              ),
-                            ).then((value) {
-                              // Dialog dismissed
-                              setState(() {
-                                tappedIndex = null; // Reset tappedIndex to null
-                              });
-                            });
-                          },
-                          borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(20),
-                              topRight: Radius.circular(20)),
-                          dataSource: lulitus.values.toList(),
-                          xValueMapper: (data, _) => data[0],
-                          yValueMapper: (data, _) {
-                            final yValue = data[1];
-                            return yValue < temp ? temp : yValue;
-                          },
-                          dataLabelMapper: (data, _) => data[1].toString(),
-                          pointColorMapper: (data, index) {
-                            if (tappedIndex == index) {
-                              return Colors
-                                  .blue; // Set the color to blue if tapped
-                            } else if (tund == index && tana == green) {
-                              return Colors
-                                  .yellow; // Set the color to yellow if it corresponds to "tund" value
-                            } else {
-                              return Colors.green;
-                            }
-                          },
-                          dataLabelSettings: DataLabelSettings(
-                            isVisible: true,
-                            labelAlignment: ChartDataLabelAlignment.bottom,
-                            textStyle: fontVaike,
-                            angle: 270,
-                          ),
-                        ),
-                        LineSeries(
-                          dataSource: keskHind.values.toList(),
-                          xValueMapper: (inf, _) => inf[0],
-                          yValueMapper: (inf, _) => inf[1],
-                          dataLabelMapper: (inf, _) => inf[2],
-                          color: Colors.red,
-                          dashArray: [20, 22],
-                          dataLabelSettings: DataLabelSettings(
-                            offset: Offset(-20, 0),
-                            isVisible: true,
-                            labelAlignment: ChartDataLabelAlignment.middle,
-                            textStyle: TextStyle(
-                                fontSize: 15,
-                                color: Color.fromARGB(255, 231, 17, 17)),
-                            angle: 270,
-                            alignment: ChartAlignment.center,
-                          ),
-                        ),
-                      ],
+        child: Column(
+          
+          children: [
+            SizedBox(
+              height: MediaQuery.of(context).size.height,
+              child: Center(
+                  child: RotatedBox(
+                quarterTurns: 1,
+                child: Container(
+                  //width: double.infinity,
+                  //height: double.infinity,
+                  child: SfCartesianChart(
+                    margin: EdgeInsets.all(0),
+                    primaryXAxis: CategoryAxis(
+                      majorGridLines: const MajorGridLines(width: 0),
+                      interval: 1,
+                      labelRotation: 270,
+                      visibleMinimum: -0.35,
+                      maximum: 23.5,
                     ),
+                    primaryYAxis: NumericAxis(
+                      anchorRangeToVisiblePoints: true,
+                      axisLine: AxisLine(width: 0),
+                      isVisible: true,
+                      labelRotation: 270,
+                      /* title: AxisTitle(
+                            //text: 'EUR/MWh',
+                            textStyle: fontVaike,
+                            alignment: ChartAlignment.center),*/
+                      labelStyle: TextStyle(fontSize: 0),
+                    ),
+                    series: <ChartSeries>[
+                      ColumnSeries(
+                        width: 0.9,
+                        spacing: 0.1,
+                        onPointTap: (pointInteractionDetails) {
+                          int rowIndex = pointInteractionDetails.pointIndex!;
+                          setState(() {
+                            tappedIndex = rowIndex;
+                          });
+                          showDialog(
+                            context: context,
+                            builder: (context) => AlertDialog(
+                              title: Text(
+                                "Kell $rowIndex töötavad seadmed: main boiler, veranda lamp",
+                              ),
+                            ),
+                          ).then((value) {
+                            // Dialog dismissed
+                            setState(() {
+                              tappedIndex = null; // Reset tappedIndex to null
+                            });
+                          });
+                        },
+                        borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(20),
+                            topRight: Radius.circular(20)),
+                        dataSource: lulitus.values.toList(),
+                        xValueMapper: (data, _) => data[0],
+                        yValueMapper: (data, _) {
+                          final yValue = data[1];
+                          return yValue < temp ? temp : yValue;
+                        },
+                        dataLabelMapper: (data, _) => data[1].toString(),
+                        pointColorMapper: (data, index) {
+                          if (tappedIndex == index) {
+                            return Colors
+                                .blue; // Set the color to blue if tapped
+                          } else if (tund == index && tana == green) {
+                            return Colors
+                                .yellow; // Set the color to yellow if it corresponds to "tund" value
+                          } else {
+                            return Colors.green;
+                          }
+                        },
+                        dataLabelSettings: DataLabelSettings(
+                          isVisible: true,
+                          labelAlignment: ChartDataLabelAlignment.bottom,
+                          textStyle: fontVaike,
+                          angle: 270,
+                        ),
+                      ),
+                      LineSeries(
+                        dataSource: keskHind.values.toList(),
+                        xValueMapper: (inf, _) => inf[0],
+                        yValueMapper: (inf, _) => inf[1],
+                        dataLabelMapper: (inf, _) => inf[2],
+                        color: Colors.red,
+                        dashArray: [20, 22],
+                        dataLabelSettings: DataLabelSettings(
+                          offset: Offset(-20, 0),
+                          isVisible: true,
+                          labelAlignment: ChartDataLabelAlignment.middle,
+                          textStyle: TextStyle(
+                              fontSize: 15,
+                              color: Color.fromARGB(255, 231, 17, 17)),
+                          angle: 270,
+                          alignment: ChartAlignment.center,
+                        ),
+                      ),
+                    ],
                   ),
-                )),
-              ),
-            ],
-          ),
+                ),
+              )),
+            ),
+          ],
         ),
       ),
     );
@@ -754,7 +754,7 @@ keskmineHindMapVaartustamine(
     }
   }
 
-  keskHind[0] = [kell + '.00', hindAVG, 'Keskmine hind'];
+  keskHind[0] = [kell + '.00', hindAVG, 'Keskmine hind $hindAVG'];
 
   for (int i = 1; i < 24; i++) {
     if (i < 10) {
