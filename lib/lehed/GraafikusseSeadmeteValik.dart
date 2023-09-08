@@ -38,18 +38,11 @@ class SeadmeteListValimine extends StatefulWidget {
 }
 
 class _SeadmeteListValimineState extends State<SeadmeteListValimine> {
-  Map<String, bool> ValitudSeadmed = {};
+  Map<int, bool> ValitudSeadmed = {};
   bool isLoading = true;
   late Map<String, List<String>> minuSeadmedK = {};
   dynamic seadmeGraafik;
   @override
-  void initState() {
-    //seisukord();
-    _submitForm();
-    super.initState();
-    ValitudSeadmed = valitudSeadmeteNullimine(SeadmeteMap);
-  }
-
   int koduindex = 1;
 
   Map<String, List<String>> SeadmeteMap = {};
@@ -98,8 +91,17 @@ class _SeadmeteListValimineState extends State<SeadmeteListValimine> {
     }
     setState(() {
       SeadmeteMap = minuSeadmedK;
+
+      ValitudSeadmed = valitudSeadmeteNullimine(SeadmeteMap);
       isLoading = false;
     });
+  }
+
+  @override
+  void initState() {
+    //seisukord();
+    _submitForm();
+    super.initState();
   }
 
   @override
@@ -135,13 +137,15 @@ class _SeadmeteListValimineState extends State<SeadmeteListValimine> {
                     onTap: () {
                       if (SeadmeteMap[seade]![2] != 'Offline') {
                         setState(() {
-                          if (ValitudSeadmed[seade] == false) {
-                            ValitudSeadmed[seade] = true;
+                          if (ValitudSeadmed[index] == false) {
+                            ValitudSeadmed[index] = true;
                           } else {
-                            ValitudSeadmed[seade] = false;
+                            ValitudSeadmed[index] = false;
                           }
                         });
-                        print(ValitudSeadmed[seade]);
+                        print(ValitudSeadmed);
+                        print(ValitudSeadmed[0]);
+                       
                       } else {
                         showDialog(
                             context: context,
@@ -162,7 +166,7 @@ class _SeadmeteListValimineState extends State<SeadmeteListValimine> {
                           height: double.infinity,
                           decoration: BoxDecoration(
                             border: Border.all(
-                              color: ValitudSeadmed[seade] == true
+                              color: ValitudSeadmed[index] == true
                                   ? Colors.green
                                   : Colors.grey,
                               width: 8,
@@ -171,7 +175,7 @@ class _SeadmeteListValimineState extends State<SeadmeteListValimine> {
                           child: Stack(
                             children: [
                               Container(
-                                  color: ValitudSeadmed[seade] == true
+                                  color: ValitudSeadmed[index] == true
                                       ? Color.fromARGB(255, 177, 245, 180)
                                       : Color.fromARGB(255, 236, 228, 228)),
                               Center(
@@ -307,7 +311,7 @@ class _SeadmeteListValimineState extends State<SeadmeteListValimine> {
                   //Kui vajutatakse Teie seade ikooni peale, siis viiakse Seadmetelisamine lehele
                   context,
                   MaterialPageRoute(
-                      builder: (context) => LylitusValimisLehtBoss()),
+                      builder: (context) => DynamilineTundideValimine(valitudSeadmed: ValitudSeadmed,)),
                 );
               }
             });
@@ -351,11 +355,13 @@ muudaSeadmeOlek(Map<String, List<String>> SeadmeteMap, SeadmeNimi) {
   return SeadmeteMap; // Device key not found in the map
 }
 
-Map<String, bool> valitudSeadmeteNullimine(
+Map<int, bool> valitudSeadmeteNullimine(
     Map<String, List<String>> SeadmeteMap) {
-  Map<String, bool> ValitudSeadmed = {};
+  Map<int, bool> ValitudSeadmed = {};
+  int i = 0;
   for (String seade in SeadmeteMap.keys) {
-    ValitudSeadmed[seade] = false;
+    ValitudSeadmed[i] = false;
+    i++;
   }
   print('ValitudSeadmed :');
   print(ValitudSeadmed);

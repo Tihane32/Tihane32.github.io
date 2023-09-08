@@ -9,26 +9,22 @@ import 'keskimiseHinnaAluselTundideValimine.dart';
 import 'hinnaPiiriAluselTunideValimine.dart';
 import 'kopeeeriGraafikTundideValimine.dart';
 
-class LylitusValimisLehtBoss extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: DynamilineTundideValimine(),
-    );
-  }
-}
-
 class DynamilineTundideValimine extends StatefulWidget {
-  const DynamilineTundideValimine({Key? key}) : super(key: key);
+  DynamilineTundideValimine({Key? key, required this.valitudSeadmed})
+      : super(key: key);
+
+  var valitudSeadmed;
 
   @override
   _DynamilineTundideValimineState createState() =>
-      _DynamilineTundideValimineState();
+      _DynamilineTundideValimineState(valitudSeadmed: valitudSeadmed);
 }
 
 int koduindex = 1;
 
 class _DynamilineTundideValimineState extends State<DynamilineTundideValimine> {
+  _DynamilineTundideValimineState({Key? key, required this.valitudSeadmed});
+  var valitudSeadmed;
   String selectedPage = 'Keskmine hind';
   double vahe = 10;
   int valitudTunnid = 10;
@@ -137,6 +133,7 @@ class _DynamilineTundideValimineState extends State<DynamilineTundideValimine> {
                         builder: (context) => SeadmeteListValimine()),
                   );
                 } else if (koduindex == 1) {
+                  graafikuteSaatmine(valitudSeadmed);
                   showDialog(
                       context: context,
                       builder: (context) => AlertDialog(
@@ -177,4 +174,8 @@ class _DynamilineTundideValimineState extends State<DynamilineTundideValimine> {
       ),
     );
   }
+}
+
+graafikuteSaatmine(var valitudSeadmed) {
+  print(valitudSeadmed);
 }
