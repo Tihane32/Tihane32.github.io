@@ -180,10 +180,10 @@ class _SeadmeGraafikuLehtState extends State<SeadmeGraafikuLeht> {
       print('lulitushommeeeee');
       print(lulitusHomme);
     }
-    lulitusHomme = await graafik(SeadmeteMap, seadmeNimi, lulitusHomme);
+
     setState(() {
       //hommeNahtav = true; //TODO: testimise jaoks
-      if (date.hour >= 15) {
+      if (date.hour <= 15) {
         hommeNahtav = true;
       }
       lulitus = lulitusTana;
@@ -219,6 +219,7 @@ class _SeadmeGraafikuLehtState extends State<SeadmeGraafikuLeht> {
         var seadeGen = storedMap['Seade$j']['Seadme_generatsioon'] as int;
 
         if (seadeGen == 1) {
+          lulitusHomme = await graafik(SeadmeteMap, seadmeNimi, lulitusHomme);
           gen = 1;
           DateTime now = DateTime.now();
           int tana = now.weekday - 1;
@@ -305,8 +306,8 @@ class _SeadmeGraafikuLehtState extends State<SeadmeGraafikuLeht> {
             }
           });
         } else {
-          var graafikud = await gen2GraafikSaamine(value, lulitus);
-          
+          var graafikud = await gen2GraafikSaamine(value, lulitus, "tana");
+          var graafikud1 = await gen2GraafikSaamine(value, lulitus, "homme");
           setState(() {
             gen = 2;
             lulitus = graafikud;
@@ -939,7 +940,7 @@ class _SeadmeGraafikuLehtState extends State<SeadmeGraafikuLeht> {
                 } else {
                   genMaaramine(lulitus, 'homme', SeadmeteMap, seadmeNimi);
                 }
-                
+
                 showDialog(
                     context: context,
                     builder: (context) => AlertDialog(

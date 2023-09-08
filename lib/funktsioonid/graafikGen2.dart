@@ -238,7 +238,7 @@ graafikuKustutamine(Map<String, dynamic> graafikud, String value) async {
 }
 
 Future<Map<int, dynamic>> gen2GraafikSaamine(
-    String value, Map<int, dynamic> onOff) async {
+    String value, Map<int, dynamic> onOff, String s) async {
   String token = await getToken();
   var graafikud = Map<int, dynamic>();
   var headers = {
@@ -280,6 +280,7 @@ Future<Map<int, dynamic>> gen2GraafikSaamine(
       var temp = graafikud[i]['Timespec'];
       // print(temp);
       int hour = int.parse(temp.split(" ")[2]);
+      print('siiiin ${graafikud[i]}');
 
       // Update boolean value in hourDataMap if the hour exists
       if (onOff.containsKey(hour)) {
@@ -331,7 +332,7 @@ delete(value, List temp) async {
     var url = Uri.parse(
         'https://shelly-64-eu.shelly.cloud/fast/device/gen2_generic_command');
     var res1 = await http.post(url, headers: headers, body: data);
-    
+
     print(data);
     print(res1.body);
   }
