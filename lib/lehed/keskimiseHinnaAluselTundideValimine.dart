@@ -329,57 +329,81 @@ class _KeskmiseHinnaAluselTundideValimineState
                           )),
                         ),
                       )),
-                      if (hommeNahtav)
-                        Center(
-                            child: GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              if (homme == valge) {
-                                lulitus = lulitusHomme;
-                                homme = green;
-                                hommeFont = fontValge;
-                                tana = valge;
-                                tanaFont = font;
-                                hindAVG = keskmineHindArvutaus(lulitus);
-                                hind = KeskHindString(hind, hindAVG);
-                                keskHind = keskmineHindMapVaartustamine(
-                                    hindAVG, keskHind, lulitus);
-                                lulitus =
-                                    OdavimadTunnidOn(lulitus, valitudTunnid);
-                                lulitusMapVasak = LulitusMapVasakVaartustamine(
-                                    hindAVG, lulitus, lulitusMapVasak);
-                                lulitusMapParem = LulitusParemVaartustamine(
-                                    hindAVG, lulitus, lulitusMapParem);
-                                HapticFeedback.vibrate();
-                              } /*else {
+                      Center(
+                          child: hommeNahtav
+                              ? GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      if (homme == valge) {
+                                        lulitus = lulitusHomme;
+                                        homme = green;
+                                        hommeFont = fontValge;
+                                        tana = valge;
+                                        tanaFont = font;
+                                        hindAVG = keskmineHindArvutaus(lulitus);
+                                        keskHind = keskmineHindMapVaartustamine(
+                                            hindAVG, keskHind, lulitus);
+                                        HapticFeedback.vibrate();
+                                      } /*else {
                                 lulitus = lulitusTana;
                                 homme = valge;
                                 hommeFont = font;
                                 tana = green;
                                 tanaFont = fontValge;
                               }*/
-                            });
-                          },
-                          child: Container(
-                            width: 100,
-                            height: 30,
-                            decoration: BoxDecoration(
-                                color: homme,
-                                borderRadius: BorderRadius.circular(30.0),
-                                border: Border.all(
-                                  color: Colors.green,
-                                  width: 3,
-                                )),
-                            child: Center(
-                                child: RichText(
-                              text: TextSpan(
-                                text: 'Homme',
-                                style: hommeFont,
-                              ),
-                              textAlign: TextAlign.center,
-                            )),
-                          ),
-                        ))
+                                    });
+                                  },
+                                  child: Container(
+                                    width: 100,
+                                    height: 30,
+                                    decoration: BoxDecoration(
+                                        color: homme,
+                                        borderRadius:
+                                            BorderRadius.circular(30.0),
+                                        border: Border.all(
+                                          color: Colors.green,
+                                          width: 3,
+                                        )),
+                                    child: Center(
+                                        child: RichText(
+                                      text: TextSpan(
+                                        text: 'Homme',
+                                        style: hommeFont,
+                                      ),
+                                      textAlign: TextAlign.center,
+                                    )),
+                                  ),
+                                )
+                              : GestureDetector(
+                                  onTap: () {
+                                    showDialog(
+                                        context: context,
+                                        builder: (context) => AlertDialog(
+                                              title: Text(
+                                                  'Homne graafik ei ole hetkel kättesaadav \n Proovige uuesti kell 15.00'),
+                                            ));
+                                  },
+                                  child: Container(
+                                    width: 100,
+                                    height: 30,
+                                    decoration: BoxDecoration(
+                                        color:
+                                            Color.fromARGB(255, 209, 205, 205),
+                                        borderRadius:
+                                            BorderRadius.circular(30.0),
+                                        border: Border.all(
+                                          color:
+                                              Color.fromARGB(255, 12, 12, 12),
+                                          width: 3,
+                                        )),
+                                    child: Center(
+                                        child: RichText(
+                                      text:
+                                          TextSpan(text: 'Homme', style: font),
+                                      textAlign: TextAlign.center,
+                                    )),
+                                  ),
+                                ))
                     ],
                   ),
                 ),
