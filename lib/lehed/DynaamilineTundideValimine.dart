@@ -1,5 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:testuus4/funktsioonid/graafikGen1.dart';
+import 'package:testuus4/funktsioonid/graafikGen2.dart';
 import 'package:testuus4/lehed/GraafikusseSeadmeteValik.dart';
 import 'package:testuus4/lehed/dynamicKoduLeht.dart';
 import '../funktsioonid/genMaaramine.dart';
@@ -21,6 +26,32 @@ class DynamilineTundideValimine extends StatefulWidget {
 }
 
 int koduindex = 1;
+Map<int, dynamic> lulitusMap = {
+  0: ['00.00', 0, false],
+  1: ['01.00', 0, false],
+  2: ['02.00', 0, false],
+  3: ['03.00', 0, false],
+  4: ['04.00', 0, false],
+  5: ['05.00', 0, false],
+  6: ['06.00', 0, false],
+  7: ['07.00', 0, false],
+  8: ['08.00', 0, false],
+  9: ['09.00', 0, false],
+  10: ['10.00', 0, false],
+  11: ['11.00', 0, false],
+  12: ['12.00', 0, false],
+  13: ['13.00', 0, false],
+  14: ['14.00', 0, false],
+  15: ['15.00', 0, false],
+  16: ['16.00', 0, false],
+  17: ['17.00', 0, false],
+  18: ['18.00', 0, false],
+  19: ['19.00', 0, false],
+  20: ['20.00', 0, false],
+  21: ['21.00', 0, false],
+  22: ['22.00', 0, false],
+  23: ['23.00', 0, false],
+};
 
 class _DynamilineTundideValimineState extends State<DynamilineTundideValimine> {
   _DynamilineTundideValimineState({Key? key, required this.valitudSeadmed});
@@ -30,12 +61,27 @@ class _DynamilineTundideValimineState extends State<DynamilineTundideValimine> {
   int valitudTunnid = 10;
   Color boxColor = sinineKast;
   int leht = 0;
-  final List<Widget> lehedMenu = [
-    LylitusValimisLeht1(),
-    LylitusValimisLeht2(),
-    LylitusValimisLeht3(),
-    AbiLeht(),
-  ];
+  late List<Widget> lehedMenu; // Declare the list
+
+  @override
+  void initState() {
+    super.initState();
+
+    // Initialize lehedMenu in initState
+    lehedMenu = [
+      KeskmiseHinnaAluselTundideValimine(
+          lulitusMap: lulitusMap, updateLulitusMap: updateLulitusMap),
+      LylitusValimisLeht2(),
+      LylitusValimisLeht3(),
+      AbiLeht(),
+    ];
+  }
+
+  updateLulitusMap(Map<int, dynamic> updatedMap) {
+    setState(() {
+      lulitusMap = updatedMap;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -133,7 +179,9 @@ class _DynamilineTundideValimineState extends State<DynamilineTundideValimine> {
                         builder: (context) => SeadmeteListValimine()),
                   );
                 } else if (koduindex == 1) {
-                  graafikuteSaatmine(valitudSeadmed);
+                  graafikuteSaatmine(valitudSeadmed, lulitusMap);
+                  print('final');
+                  print(lulitusMap);
                   showDialog(
                       context: context,
                       builder: (context) => AlertDialog(
@@ -176,6 +224,32 @@ class _DynamilineTundideValimineState extends State<DynamilineTundideValimine> {
   }
 }
 
-graafikuteSaatmine(var valitudSeadmed) {
+graafikuteSaatmine(var valitudSeadmed, Map<int, dynamic> lulitusMap) async {
   print(valitudSeadmed);
+  print('lulitusmap siiin');
+  print(lulitusMap);
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  var storedJsonMap = prefs.getString('seadmed');
+  print(storedJsonMap);
+  Map<String, dynamic> seadmed;
+  seadmed = json.decode(storedJsonMap!);
+  print('lenght');
+  print(seadmed.length);
+  for (int i = 0; i < seadmed.length; i++) {
+    if (valitudSeadmed[i] == true) {
+      print('i siin $i');
+      print(seadmed['Seade$i']["Seadme_generatsioon"]);
+      if (seadmed['Seade$i']["Seadme_generatsioon"] == 1) {
+        print('Korras 1');
+        print(lulitusMap);
+        await gen1GraafikLoomine(
+            lulitusMap, 'täna', seadmed['Seade$i']["Seadme_ID"]);
+      } else {
+        print('Korras 2');
+        print(lulitusMap);
+        await gen2GraafikuLoomine(
+            lulitusMap, 'täna', seadmed['Seade$i']["Seadme_ID"]);
+      }
+    }
+  }
 }

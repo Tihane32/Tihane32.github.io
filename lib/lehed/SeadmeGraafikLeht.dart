@@ -245,6 +245,7 @@ class _SeadmeGraafikuLehtState extends State<SeadmeGraafikuLeht> {
 
           var scheduleRules1 = httpPackageJson['data']['device_settings']
               ['relays'][0]['schedule_rules'];
+          print('vatsuss: $scheduleRules1');
           for (String item in scheduleRules1) {
             List<String> parts = item.split('-');
             if (parts[1].length > 1) {
@@ -410,7 +411,6 @@ class _SeadmeGraafikuLehtState extends State<SeadmeGraafikuLeht> {
         ],
       ),
       body: Stack(children: [
-       
         Padding(
           padding: const EdgeInsets.only(top: 60),
           child: SingleChildScrollView(
@@ -504,7 +504,7 @@ class _SeadmeGraafikuLehtState extends State<SeadmeGraafikuLeht> {
           height: 65,
           child: Column(
             children: [
-             SizedBox(height: vahe / 2),
+              SizedBox(height: vahe / 2),
               Center(
                 child: Column(
                   children: [
@@ -659,11 +659,11 @@ class _SeadmeGraafikuLehtState extends State<SeadmeGraafikuLeht> {
                           Align(
                             child: Container(
                               alignment: Alignment.center,
-                                  
+
                               //width: sinineKastLaius,
                               //height: sinineKastKorgus,
                               child: Padding(
-                               padding: const EdgeInsets.only(left: 5.0),
+                                padding: const EdgeInsets.only(left: 5.0),
                                 child: RichText(
                                   textAlign: TextAlign.center,
                                   text: TextSpan(

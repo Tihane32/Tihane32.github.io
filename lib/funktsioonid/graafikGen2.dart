@@ -170,6 +170,7 @@ graafikuSaatmine(bool lulitus, String tund, valitudPaev, String value) async {
   var url = Uri.parse(
       'https://shelly-64-eu.shelly.cloud/fast/device/gen2_generic_command');
   var res = await http.post(url, headers: headers, body: data);
+  print('vastusgen2 ${res.body}');
   if (res.statusCode != 200)
     throw Exception('http.post error: statusCode= ${res.statusCode}');
 }

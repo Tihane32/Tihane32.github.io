@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:testuus4/lehed/DynaamilineTundideValimine.dart';
 import 'package:testuus4/lehed/GraafikusseSeadmeteValik.dart';
 import 'package:testuus4/lehed/dynamicKoduLeht.dart';
 import '../funktsioonid/Elering.dart';
@@ -13,22 +14,20 @@ import 'package:testuus4/lehed/kaksTabelit.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 import 'kopeeeriGraafikTundideValimine.dart';
-
-class LylitusValimisLeht1 extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: KeskmiseHinnaAluselTundideValimine(),
-    );
-  }
-}
+import 'package:testuus4/lehed/DynaamilineTundideValimine.dart';
 
 class KeskmiseHinnaAluselTundideValimine extends StatefulWidget {
-  const KeskmiseHinnaAluselTundideValimine({Key? key}) : super(key: key);
+  final Function updateLulitusMap;
 
+  KeskmiseHinnaAluselTundideValimine(
+      {Key? key, required this.lulitusMap, required this.updateLulitusMap})
+      : super(key: key);
+
+  var lulitusMap;
   @override
   _KeskmiseHinnaAluselTundideValimineState createState() =>
-      _KeskmiseHinnaAluselTundideValimineState();
+      _KeskmiseHinnaAluselTundideValimineState(
+          lulitusMap: lulitusMap, updateLulitusMap: updateLulitusMap);
 }
 
 int koduindex = 1;
@@ -43,6 +42,10 @@ bool hommeNahtav = false;
 
 class _KeskmiseHinnaAluselTundideValimineState
     extends State<KeskmiseHinnaAluselTundideValimine> {
+  _KeskmiseHinnaAluselTundideValimineState(
+      {Key? key, required this.lulitusMap, required this.updateLulitusMap});
+  Function updateLulitusMap;
+  var lulitusMap;
   int selectedRowIndex = -1;
   String paevNupp = 'Täna';
   String selectedPage = 'Keskmine hind';
@@ -256,7 +259,10 @@ class _KeskmiseHinnaAluselTundideValimineState
           LulitusMapVasakVaartustamine(hindAVG, lulitus, lulitusMapVasak);
       lulitusMapParem =
           LulitusParemVaartustamine(hindAVG, lulitus, lulitusMapParem);
+      lulitusMap = lulitusMapParem;
+      
     });
+    updateLulitusMap(lulitusMap);
   }
 
   @override
@@ -563,7 +569,9 @@ class _KeskmiseHinnaAluselTundideValimineState
                                     TunniVarviMuutus(rowIndex, lulitusMapVasak);
                                 lulitusMapParem =
                                     TunniVarviMuutus(rowIndex, lulitusMapParem);
+                                lulitusMap = lulitusMapParem;
                               });
+                              updateLulitusMap(lulitusMap);
                             },
                             borderRadius: BorderRadius.only(
                                 bottomLeft: Radius.circular(20),
@@ -596,12 +604,19 @@ class _KeskmiseHinnaAluselTundideValimineState
                               int? rowIndex =
                                   pointInteractionDetails.pointIndex;
                               print('Row Index: $rowIndex');
+                              print(lulitus);
+
                               setState(() {
                                 lulitusMapVasak =
                                     TunniVarviMuutus(rowIndex, lulitusMapVasak);
                                 lulitusMapParem =
                                     TunniVarviMuutus(rowIndex, lulitusMapParem);
+                                lulitusMap = lulitusMapParem;
                               });
+                              updateLulitusMap(lulitusMap);
+                              print(lulitusMap);
+                              print(lulitusMapParem);
+                              print(lulitusMapVasak);
                             },
                             borderRadius: BorderRadius.only(
                                 topLeft: Radius.circular(20),
