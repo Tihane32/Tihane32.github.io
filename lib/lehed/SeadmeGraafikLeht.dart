@@ -412,7 +412,7 @@ class _SeadmeGraafikuLehtState extends State<SeadmeGraafikuLeht> {
       ),
       body: Stack(children: [
         Padding(
-          padding: const EdgeInsets.only(top: 60),
+          padding: const EdgeInsets.only(top: 75),
           child: SingleChildScrollView(
             child: Container(
               decoration: BoxDecoration(color: Colors.white),
@@ -501,7 +501,7 @@ class _SeadmeGraafikuLehtState extends State<SeadmeGraafikuLeht> {
         ),
         Container(
           decoration: BoxDecoration(color: Colors.white),
-          height: 65,
+          height: 80,
           child: Column(
             children: [
               SizedBox(height: vahe / 2),
@@ -650,7 +650,221 @@ class _SeadmeGraafikuLehtState extends State<SeadmeGraafikuLeht> {
                                     ))
                         ],
                       ),
+                    ),      Center(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Align(
+                    alignment: Alignment.center,
+                    child: Container(
+                      alignment: Alignment.center,
+                      //width: 200,
+                      child: Center(
+                        child: Column(
+                          children: [
+                            Align(
+                              child: Container(
+                                alignment: Alignment.center,
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                ),
+                                //width: sinineKastLaius,
+                                //height: sinineKastKorgus,
+                                child: RichText(
+                                  text: TextSpan(
+                                    style: fontVaike,
+                                    children: [
+                                      TextSpan(
+                                          text: 'Miinimum: $hindMin',
+                                          style: fontVaike),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                            /* Align(
+                                child: Container(
+                                  alignment: Alignment.center,
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                  ),
+                                  //width: sinineKastLaius,
+                                  //height: sinineKastKorgus,
+                                  child: RichText(
+                                    text: TextSpan(
+                                      style: fontVaike,
+                                      children: [
+                                        TextSpan(text: '$hindAVG', style: font),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Align(
+                                child: Container(
+                                  alignment: Alignment.center,
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                  ),
+                                  //width: sinineKastLaius,
+                                  //height: sinineKastKorgus,
+                                  child: RichText(
+                                    text: TextSpan(
+                                      style: fontVaike,
+                                      children: [
+                                        TextSpan(
+                                            text: 'EUR/MWh', style: fontVaike),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              )*/
+                          ],
+                        ),
+                      ),
                     ),
+                  ),
+                  Align(
+                    alignment: Alignment.center,
+                    child: Container(
+                      //width: 200,
+                      child: Column(
+                        children: [
+                          Align(
+                            child: Container(
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                              ),
+                              //width: sinineKastLaius,
+                              //height: sinineKastKorgus,
+                              child: RichText(
+                                textAlign: TextAlign.center,
+                                text: TextSpan(
+                                  style: fontVaike,
+                                  children: [
+                                    TextSpan(
+                                        text: 'Keskmine: $hindAVG',
+                                        style: fontVaike),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                          /* Align(
+                              child: Container(
+                                alignment: Alignment.center,
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                ),
+                                //width: sinineKastLaius,
+                                //height: sinineKastKorgus,
+                                child: RichText(
+                                  textAlign: TextAlign.center,
+                                  text: TextSpan(
+                                    style: fontVaike,
+                                    children: [
+                                      TextSpan(
+                                          text: '$hindMin', style: font),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Align(
+                              child: Container(
+                                alignment: Alignment.center,
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                ),
+                                //width: sinineKastLaius,
+                                //height: sinineKastKorgus,
+                                child: RichText(
+                                  textAlign: TextAlign.center,
+                                  text: TextSpan(
+                                    style: fontVaike,
+                                    children: [
+                                      TextSpan(
+                                          text: 'EUR/MWh', style: fontVaike),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),*/
+                        ],
+                      ),
+                    ),
+                  ),
+                  Align(
+                    alignment: Alignment.center,
+                    child: Container(
+                      //width: 200,
+                      child: Column(
+                        children: [
+                          Align(
+                            child: Container(
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                              ),
+                              //width: sinineKastLaius,
+                              //height: sinineKastKorgus,
+                              child: RichText(
+                                text: TextSpan(
+                                  style: fontVaike,
+                                  children: [
+                                    TextSpan(
+                                        text: 'Maksimum: $hindMax',
+                                        style: fontVaike),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                          /*Align(
+                              child: Container(
+                                alignment: Alignment.center,
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                ),
+                                //width: sinineKastLaius,
+                                //height: sinineKastKorgus,
+                                child: RichText(
+                                  text: TextSpan(
+                                    style: fontVaike,
+                                    children: [
+                                      TextSpan(text: '$hindMax', style: font),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Align(
+                              child: Container(
+                                alignment: Alignment.center,
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                ),
+                                //width: sinineKastLaius,
+                                //height: sinineKastKorgus,
+                                child: RichText(
+                                  text: TextSpan(
+                                    style: fontVaike,
+                                    children: [
+                                      TextSpan(
+                                          text: 'EUR/MWh', style: fontVaike),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            )*/
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
                     SizedBox(height: vahe),
                     Center(
                       child: Row(
