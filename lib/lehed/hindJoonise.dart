@@ -348,7 +348,7 @@ class _TulpDiagrammState extends State<TulpDiagramm> {
                                     style: fontVaike,
                                     children: [
                                       TextSpan(
-                                          text: 'Keskmine: $hindAVG',
+                                          text: 'Miinimum: $hindMin',
                                           style: fontVaike),
                                     ],
                                   ),
@@ -417,7 +417,7 @@ class _TulpDiagrammState extends State<TulpDiagramm> {
                                   style: fontVaike,
                                   children: [
                                     TextSpan(
-                                        text: 'Miinimum: $hindMin',
+                                        text: 'Keskmine: $hindAVG',
                                         style: fontVaike),
                                   ],
                                 ),

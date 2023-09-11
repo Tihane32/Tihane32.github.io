@@ -1,25 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:testuus4/lehed/AbiLeht.dart';
+import 'package:testuus4/lehed/SeadmeGraafikLeht.dart';
+import 'package:testuus4/lehed/TarbimisLeht.dart';
 import 'package:testuus4/lehed/seadmedKontoltNim.dart';
 import 'package:testuus4/main.dart';
 import 'SeadmeTarbimisLeht.dart';
 
 class SeadmeYldinfoLeht extends StatefulWidget {
-  const SeadmeYldinfoLeht({Key? key, required this.seadmeNimi})
+  const SeadmeYldinfoLeht(
+      {Key? key, required this.seadmeNimi, required this.SeadmeteMap})
       : super(key: key);
 
   final String seadmeNimi;
-
+  final Map<String, List<String>> SeadmeteMap;
   @override
   _SeadmeYldinfoLehtState createState() =>
-      _SeadmeYldinfoLehtState(seadmeNimi: seadmeNimi);
+      _SeadmeYldinfoLehtState(seadmeNimi: seadmeNimi, SeadmeteMap: SeadmeteMap);
 }
 
 class _SeadmeYldinfoLehtState extends State<SeadmeYldinfoLeht> {
-  _SeadmeYldinfoLehtState({Key? key, required this.seadmeNimi});
+  _SeadmeYldinfoLehtState(
+      {Key? key, required this.seadmeNimi, required this.SeadmeteMap});
   String seadmeNimi;
-
+  Map<String, List<String>> SeadmeteMap;
   late Map<int, dynamic> lulitusMap;
   int selectedRowIndex = -1;
   late double hindAVG;
@@ -64,183 +68,114 @@ class _SeadmeYldinfoLehtState extends State<SeadmeYldinfoLeht> {
     super.initState();
   }
 
-  Map<String, List<String>> SeadmeteMap = {
-    'Keldri boiler': [
-      'assets/boiler1.jpg',
-      '80646f81ad9a',
-      'off',
-      'Shelly plug S',
-    ],
-    'Veranda lamp': [
-      'assets/verandaLamp1.png',
-      '80646f81ad9a',
-      'offline',
-      'Shelly plug S',
-    ],
-    'veranda lamp': [
-      'assets/verandaLamp1.png',
-      '80646f81ad9a',
-      'on',
-      'Shelly plug S',
-    ],
-    'Keldri pump': [
-      'assets/pump1.jpg',
-      '80646f81ad9a',
-      'on',
-      'Shelly plug S',
-    ],
-    'Garaazi pump': [
-      'assets/pump1.jpg',
-      '80646f81ad9a',
-      'offline',
-      'Shelly plug S',
-    ],
-    'Main boiler': [
-      'assets/boiler1.jpg',
-      '80646f81ad9a',
-      'on',
-      'Shelly plug S',
-    ],
-    'Sauna boiler': [
-      'assets/boiler1.jpg',
-      '80646f81ad9a',
-      'off',
-      'Shelly plug S',
-    ],
-  };
-
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
-      child: Scaffold(
-        backgroundColor: Color.fromARGB(255, 189, 216, 225), //TaustavÃ¤rv
+    return Scaffold(
+      backgroundColor: Color.fromARGB(255, 255, 255, 255), //TaustavÃ¤rv
 
-        appBar: AppBar(
-          backgroundColor: Color.fromARGB(255, 115, 162, 195),
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(seadmeNimi),
-              Spacer(),
-            ],
-          ),
-          actions: [
-            Center(
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: Colors.blue,
-                ),
-                padding: EdgeInsets.symmetric(horizontal: 10),
-                child: DropdownButton<String>(
-                  value: selectedPage,
-                  onChanged: (String? newValue) {
-                    setState(() {
-                      selectedPage = newValue!;
-                    });
-                    if (selectedPage == 'Tarbimis graafik') {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) =>
-                                SeadmeTarbimineLeht(seadmeNimi: seadmeNimi)),
-                      );
-                    } else if (selectedPage == 'Üldinfo') {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => AbiLeht()),
-                      );
-                    }
-                  },
-                  underline: Container(), // or SizedBox.shrink()
-                  items: <String>[
-                    'Lülitus graafik',
-                    'Tarbimis graafik',
-                    'Üldinfo'
-                  ].map((String value) {
-                    return DropdownMenuItem<String>(
-                      value: value,
-                      child: Text(
-                        value,
-                        style: TextStyle(color: Colors.black),
-                      ),
-                    );
-                  }).toList(),
-                ),
+      appBar: AppBar(
+        backgroundColor: Color.fromARGB(255, 115, 162, 195),
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              seadmeNimi,
+              style: GoogleFonts.roboto(
+                textStyle: const TextStyle(fontSize: 25),
               ),
             ),
+            Spacer(),
           ],
         ),
-        body: Column(
+        actions: [
+          Center(
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                color: boxColor,
+              ),
+              padding: EdgeInsets.symmetric(horizontal: 10),
+              child: DropdownButton<String>(
+                icon: Icon(Icons.menu),
+                value: selectedPage,style: font ,
+                onChanged: (String? newValue) {
+                  setState(() {
+                    selectedPage = newValue!;
+                  });
+                  if (selectedPage == 'Tarbimisgraafik') {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => TarbimisLeht(
+                                seadmeNimi: seadmeNimi,
+                                SeadmeteMap: SeadmeteMap,
+                              )),
+                    );
+                  } else if (selectedPage == 'Lülitusgraafik') {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => SeadmeGraafikuLeht(
+                              seadmeNimi: seadmeNimi,
+                              SeadmeteMap: SeadmeteMap)),
+                    );
+                  }
+                },
+                underline: Container(), // or SizedBox.shrink()
+                items: <String>['Lülitusgraafik', 'Tarbimisgraafik', 'Üldinfo']
+                    .map((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(
+                      value,
+                      style: TextStyle(color: Colors.black),
+                    ),
+                  );
+                }).toList(),
+              ),
+            ),
+          ),
+        ],
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
           children: [
-            SizedBox(height: vahe),
             Align(
-              alignment: Alignment.centerLeft,
+              alignment: Alignment.center,
               child: Container(
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                  color: boxColor,
-                  borderRadius: borderRadius,
-                  border: border,
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.2),
-                      spreadRadius: 2,
-                      blurRadius: 5,
-                      offset: const Offset(3, 3),
-                    ),
-                  ],
-                ),
-                width: sinineKastLaius,
-                height: sinineKastKorgus + 20,
-                child: Row(
-                  children: [
-                    RichText(
-                      text: TextSpan(
-                        style: const TextStyle(
-                          fontSize: 20,
-                          color: Colors.black,
-                        ),
-                        children: [
-                          TextSpan(text: '  Seadme olek:    ', style: font),
-                          TextSpan(
-                            text: SeadmeteMap[seadmeNimi]![2],
-                          ),
-                        ],
-                      ),
-                    ),
-                    Spacer(),
-                    Container(
-                      decoration: BoxDecoration(
-                        color: Colors.blue.withOpacity(0.6),
-                        shape: BoxShape.circle,
-                      ),
-                      child: IconButton(
-                        iconSize: 40,
-                        onPressed: () {
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                      color: boxColor,
+                      borderRadius: BorderRadius.circular(5.0),
+                      border: Border.all(
+                        color: Color.fromARGB(0, 0, 0, 0),
+                        width: 2,
+                      )),
+                  width: sinineKastLaius,
+                  height: sinineKastKorgus,
+                  child: Align(
+                    alignment: Alignment.center,
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 8.0),
+                      child: TextField(
+                        // textAlignVertical: TextAlignVertical.center,
+                        //cursorWidth: 0,
+                        onSubmitted: (value) {
                           setState(() {
+                            uusNimi = value;
                             SeadmeteMap =
-                                muudaSeadmeOlek(SeadmeteMap, seadmeNimi);
+                                nimeMuutmine(seadmeNimi, SeadmeteMap, uusNimi);
+                            seadmeNimi = uusNimi;
                           });
                         },
-                        icon:
-                            loeSeadmeOlek(SeadmeteMap, seadmeNimi) == 'offline'
-                                ? Icon(Icons.wifi_off_outlined)
-                                : loeSeadmeOlek(SeadmeteMap, seadmeNimi) == 'on'
-                                    ? Icon(
-                                        Icons.power_settings_new_rounded,
-                                        color: Color.fromARGB(255, 77, 152, 81),
-                                      )
-                                    : Icon(
-                                        Icons.power_settings_new_rounded,
-                                        color: Colors.red,
-                                      ),
+                        decoration: InputDecoration(
+                            hintText: '$seadmeNimi',
+                            hintStyle: font,
+                            floatingLabelStyle: font),
                       ),
                     ),
-                  ],
-                ),
-              ),
+                  )),
             ),
             SizedBox(height: vahe),
             Align(
@@ -248,101 +183,25 @@ class _SeadmeYldinfoLehtState extends State<SeadmeYldinfoLeht> {
               child: Container(
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
-                  color: boxColor,
-                  borderRadius: borderRadius,
-                  border: border,
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.2),
-                      spreadRadius: 2,
-                      blurRadius: 5,
-                      offset: const Offset(3, 3),
-                    ),
-                  ],
-                ),
-                width: sinineKastLaius,
-                height: sinineKastKorgus,
-                child: RichText(
-                  text: TextSpan(
-                    style: TextStyle(
-                      fontSize: 18,
-                      color: Colors.black,
-                    ),
-                    children: [
-                      TextSpan(
-                        text: '  Seadme nimi:  ',
-                        style: GoogleFonts.openSans(
-                          textStyle: TextStyle(
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      ),
-                      WidgetSpan(
-                        child: Container(
-                          height: 25,
-                          width: 200,
-                          decoration: BoxDecoration(
-                            border: Border.all(
-                              color: Color.fromARGB(255, 4, 0, 0),
-                              width: 1.0,
-                            ),
-                            borderRadius: BorderRadius.circular(4.0),
-                          ),
-                          child: Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 8.0),
-                            child: TextField(
-                              onSubmitted: (value) {
-                                setState(() {
-                                  uusNimi = value;
-                                  SeadmeteMap = nimeMuutmine(
-                                      seadmeNimi, SeadmeteMap, uusNimi);
-                                  seadmeNimi = uusNimi;
-                                });
-                              },
-                              decoration: InputDecoration(
-                                labelText: '$seadmeNimi',
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-            SizedBox(height: vahe),
-            Align(
-              alignment: Alignment.centerLeft,
-              child: Container(
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                  color: boxColor,
-                  borderRadius: borderRadius,
-                  border: border,
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.2),
-                      spreadRadius: 2,
-                      blurRadius: 5,
-                      offset: const Offset(3, 3),
-                    ),
-                  ],
-                ),
+                    color: boxColor,
+                    borderRadius: BorderRadius.circular(5.0),
+                    border: Border.all(
+                      color: Color.fromARGB(0, 0, 0, 0),
+                      width: 2,
+                    )),
                 width: sinineKastLaius,
                 height: sinineKastKorgus,
                 child: Row(
                   children: [
-                    RichText(
-                      text: TextSpan(
-                        style: const TextStyle(
-                          fontSize: 20,
-                          color: Colors.black,
+                    Padding(
+                      padding: const EdgeInsets.only(left: 8.0),
+                      child: RichText(
+                        text: TextSpan(
+                          style: font,
+                          children: [
+                            TextSpan(text: 'Seadme pilt:', style: font),
+                          ],
                         ),
-                        children: [
-                          TextSpan(text: '  Seadme pilt: ', style: font),
-                        ],
                       ),
                     ),
                     Spacer(),
@@ -375,18 +234,12 @@ class _SeadmeYldinfoLehtState extends State<SeadmeYldinfoLeht> {
               child: Container(
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
-                  color: boxColor,
-                  borderRadius: borderRadius,
-                  border: border,
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.2),
-                      spreadRadius: 2,
-                      blurRadius: 5,
-                      offset: const Offset(3, 3),
-                    ),
-                  ],
-                ),
+                    color: boxColor,
+                    borderRadius: BorderRadius.circular(5.0),
+                    border: Border.all(
+                      color: Color.fromARGB(0, 0, 0, 0),
+                      width: 2,
+                    )),
                 width: sinineKastLaius,
                 height: sinineKastKorgus,
                 child: RichText(
@@ -396,10 +249,8 @@ class _SeadmeYldinfoLehtState extends State<SeadmeYldinfoLeht> {
                       color: Colors.black,
                     ),
                     children: [
-                      TextSpan(text: '  Seadme mudel: ', style: font),
-                      TextSpan(
-                          text: SeadmeteMap[seadmeNimi]![3],
-                          style: fontLaadimine()),
+                      TextSpan(text: 'Seadme mudel: ', style: font),
+                      TextSpan(text: SeadmeteMap[seadmeNimi]![3], style: font),
                     ],
                   ),
                 ),
@@ -412,18 +263,12 @@ class _SeadmeYldinfoLehtState extends State<SeadmeYldinfoLeht> {
               child: Container(
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
-                  color: boxColor,
-                  borderRadius: borderRadius,
-                  border: border,
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.2),
-                      spreadRadius: 2,
-                      blurRadius: 5,
-                      offset: const Offset(3, 3),
-                    ),
-                  ],
-                ),
+                    color: boxColor,
+                    borderRadius: BorderRadius.circular(5.0),
+                    border: Border.all(
+                      color: Color.fromARGB(0, 0, 0, 0),
+                      width: 2,
+                    )),
                 width: sinineKastLaius,
                 height: sinineKastKorgus,
                 child: RichText(
@@ -433,10 +278,8 @@ class _SeadmeYldinfoLehtState extends State<SeadmeYldinfoLeht> {
                       color: Colors.black,
                     ),
                     children: [
-                      TextSpan(text: '  Seadme ID: ', style: font),
-                      TextSpan(
-                          text: SeadmeteMap[seadmeNimi]![1],
-                          style: fontLaadimine()),
+                      TextSpan(text: 'Seadme ID: ', style: font),
+                      TextSpan(text: SeadmeteMap[seadmeNimi]![1], style: font),
                     ],
                   ),
                 ),

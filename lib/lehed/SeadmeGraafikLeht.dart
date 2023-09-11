@@ -390,7 +390,7 @@ class _SeadmeGraafikuLehtState extends State<SeadmeGraafikuLeht> {
                       context,
                       MaterialPageRoute(
                           builder: (context) =>
-                              SeadmeYldinfoLeht(seadmeNimi: seadmeNimi)),
+                              SeadmeYldinfoLeht(seadmeNimi: seadmeNimi,SeadmeteMap: SeadmeteMap)),
                     );
                   }
                 },
@@ -1018,7 +1018,7 @@ keskmineHindMapVaartustamine(
     }
   }
 
-  keskHind[0] = [kell + '.00', hindAVG, 'Keskmine hind'];
+  keskHind[0] = [kell + '.00', hindAVG, 'Keskmine hind: $hindAVG'];
 
   for (int i = 1; i < 24; i++) {
     if (i < 10) {
