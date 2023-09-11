@@ -11,6 +11,15 @@ import 'AbiLeht.dart';
 import 'hinnaPiiriAluselTunideValimine.dart';
 import 'package:http/http.dart' as http;
 
+class LylitusValimisLeht3 extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: KopeeriGraafikTundideValik(),
+    );
+  }
+}
+
 class KopeeriGraafikTundideValik extends StatefulWidget {
   KopeeriGraafikTundideValik({Key? key}) : super(key: key);
 
@@ -103,41 +112,9 @@ class _KopeeriGraafikTundideValikState
                     childAspectRatio: MediaQuery.of(context).size.width /
                         (MediaQuery.of(context).size.height / 5),
                   ),
-                  itemCount: SeadmeteMap.length + 1,
+                  itemCount: SeadmeteMap.length,
                   itemBuilder: (context, index) {
-                    if (index == 0) {
-                      return GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      DynaamilenieKoduLeht(i: 2)));
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.all(1),
-                          child: Container(
-                            decoration: BoxDecoration(
-                              border: border,
-                            ),
-                            child: Container(
-                              width: double.infinity,
-                              height: double.infinity,
-                              color: Colors.grey[300],
-                              child: Center(
-                                child: Icon(
-                                  Icons.add,
-                                  size: 48,
-                                  color: Colors.black,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      );
-                    }
-
-                    final seade = SeadmeteMap.keys.elementAt(index - 1);
+                    final seade = SeadmeteMap.keys.elementAt(index);
                     final pilt = SaaSeadmePilt(SeadmeteMap, seade);
                     final staatus = SaaSeadmeolek(SeadmeteMap, seade);
                     final graafik = SaaSeadmegraafik(SeadmeteMap, seade);

@@ -354,8 +354,19 @@ class _KeskmiseHinnaAluselTundideValimineState
                                         tana = valge;
                                         tanaFont = font;
                                         hindAVG = keskmineHindArvutaus(lulitus);
+                                        hind = KeskHindString(hind, hindAVG);
                                         keskHind = keskmineHindMapVaartustamine(
                                             hindAVG, keskHind, lulitus);
+                                        lulitus = OdavimadTunnidOn(
+                                            lulitus, valitudTunnid);
+                                        lulitusMapVasak =
+                                            LulitusMapVasakVaartustamine(
+                                                hindAVG,
+                                                lulitus,
+                                                lulitusMapVasak);
+                                        lulitusMapParem =
+                                            LulitusParemVaartustamine(hindAVG,
+                                                lulitus, lulitusMapParem);
                                         temp = hindAVG / 4;
                                         if (temp < 40 && hindAVG > 40) {
                                           temp = 40;
@@ -793,6 +804,8 @@ LulitusMapVasakVaartustamine(
 
     if (hind <= hindAVG) {
       lulitus2[key][1] = hind - hindAVG;
+    } else {
+      lulitus2[key][1] = 0;
     }
     lulitus2[key][2] = lulitus1[key][2];
   }
@@ -805,8 +818,10 @@ LulitusParemVaartustamine(
   for (int key in lulitus1.keys) {
     double hind = lulitus1[key][1];
 
-    if (hind >= hindAVG) {
+    if (hind > hindAVG) {
       lulitus3[key][1] = hind - hindAVG;
+    } else {
+      lulitus3[key][1] = 0;
     }
     lulitus3[key][2] = lulitus1[key][2];
   }
