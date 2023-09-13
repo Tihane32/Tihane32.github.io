@@ -1,10 +1,11 @@
 import 'dart:convert';
-
+import 'package:testuus4/main.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:testuus4/funktsioonid/maksumusSeadmeKohta.dart';
 import 'package:testuus4/main.dart';
+import 'koduleht.dart';
 
 class MaksumuseGraafik extends StatefulWidget {
   @override
@@ -13,6 +14,7 @@ class MaksumuseGraafik extends StatefulWidget {
 
 class _MaksumuseGraafikState extends State<MaksumuseGraafik> {
   List<ChartData> chartData = [];
+  double kokku= 0;
   @override
   void initState() {
     super.initState();
@@ -41,6 +43,7 @@ class _MaksumuseGraafikState extends State<MaksumuseGraafik> {
         data.values.forEach((value) {
           sum += value;
         });
+        kokku=sum;
         return sum;
       }
 
@@ -62,43 +65,102 @@ class _MaksumuseGraafikState extends State<MaksumuseGraafik> {
     print(maksumuseMap);
     setState(() {
       chartData = chartData;
+      kokku=kokku;
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: MediaQuery.of(context).size.height * chartData.length * 0.04,
-      //width: double.infinity,
-      child: RotatedBox(
-        quarterTurns: 1,
-        child: Container(
-          child: SfCartesianChart(
-            primaryXAxis: CategoryAxis(
-                labelRotation: 270, interval: 1, labelStyle: fontVaike),
-            primaryYAxis: NumericAxis(labelRotation: 270, isVisible: false),
-            series: <ChartSeries>[
-              // Renders spline chart
-              ColumnSeries<ChartData, String>(
-                //width: 0.9,
-                //spacing: 0.5,
-                borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(20),
-                    topRight: Radius.circular(20)),
-                dataSource: chartData,
-                xValueMapper: (ChartData data, _) => data.x,
-                yValueMapper: (ChartData data, _) => data.y,
-                dataLabelSettings: DataLabelSettings(
-                  isVisible: true,
-                  labelAlignment: ChartDataLabelAlignment.bottom,
-                  textStyle: fontValgeVaike,
-                  angle: 270,
+    return Column(
+      children: [
+        Center(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Align(
+                child: Container(
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                  ),
+                  //width: sinineKastLaius,
+                  //height: sinineKastKorgus,
+                  child: RichText(
+                    textAlign: TextAlign.center,
+                    text: TextSpan(
+                      style: font,
+                      children: [
+                        TextSpan(
+                            text: 'Kokku: $kokku €', style: font),
+                      ],
+                    ),
+                  ),
                 ),
               ),
             ],
           ),
         ),
-      ),
+        SizedBox(height: vahe / 2),
+        Center(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Align(
+                child: Container(
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                  ),
+                  //width: sinineKastLaius,
+                  //height: sinineKastKorgus,
+                  child: RichText(
+                    textAlign: TextAlign.center,
+                    text: TextSpan(
+                      style: font,
+                      children: [
+                        TextSpan(text: '€', style: fontVaike),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+        Container(
+          height: MediaQuery.of(context).size.height * chartData.length * 0.04,
+          //width: double.infinity,
+          child: RotatedBox(
+            quarterTurns: 1,
+            child: Container(
+              child: SfCartesianChart(
+                primaryXAxis: CategoryAxis(
+                    labelRotation: 270, interval: 1, labelStyle: fontVaike),
+                primaryYAxis: NumericAxis(labelRotation: 270, isVisible: false),
+                series: <ChartSeries>[
+                  // Renders spline chart
+                  ColumnSeries<ChartData, String>(
+                    //width: 0.9,
+                    //spacing: 0.5,
+                    borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(20),
+                        topRight: Radius.circular(20)),
+                    dataSource: chartData,
+                    xValueMapper: (ChartData data, _) => data.x,
+                    yValueMapper: (ChartData data, _) => data.y,
+                    dataLabelSettings: DataLabelSettings(
+                      isVisible: true,
+                      labelAlignment: ChartDataLabelAlignment.bottom,
+                      textStyle: fontValgeVaike,
+                      angle: 270,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

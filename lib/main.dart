@@ -14,6 +14,7 @@ import 'package:get/get.dart';
 
 //Maini käivitamine, home on koduleht.
 //bool graafikuNahtavus = true;
+double vahe = 20;
 double navBarHeight = 55;
 Color sinineKast = const Color.fromARGB(255, 143, 209, 238);
 Color backround = const Color.fromARGB(255, 255, 255, 255);
