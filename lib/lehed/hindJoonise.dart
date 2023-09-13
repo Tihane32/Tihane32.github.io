@@ -185,7 +185,7 @@ class _TulpDiagrammState extends State<TulpDiagramm> {
         preferredSize: const Size.fromHeight(85),
         child: Column(
           children: [
-            SizedBox(height: vahe/2),
+            SizedBox(height: vahe / 2),
             Center(
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -348,7 +348,7 @@ class _TulpDiagrammState extends State<TulpDiagramm> {
                                     style: fontVaike,
                                     children: [
                                       TextSpan(
-                                          text: 'Keskmine: $hindAVG',
+                                          text: 'Miinimum: $hindMin',
                                           style: fontVaike),
                                     ],
                                   ),
@@ -417,7 +417,7 @@ class _TulpDiagrammState extends State<TulpDiagramm> {
                                   style: fontVaike,
                                   children: [
                                     TextSpan(
-                                        text: 'Miinimum: $hindMin',
+                                        text: 'Keskmine: $hindAVG',
                                         style: fontVaike),
                                   ],
                                 ),
@@ -603,7 +603,6 @@ class _TulpDiagrammState extends State<TulpDiagramm> {
       ),
       body: SingleChildScrollView(
         child: Column(
-          
           children: [
             SizedBox(
               height: MediaQuery.of(context).size.height,

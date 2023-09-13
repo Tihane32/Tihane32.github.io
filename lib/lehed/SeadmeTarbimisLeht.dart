@@ -220,7 +220,7 @@ class _SeadmeTarbimineLehtState extends State<SeadmeTarbimineLeht> {
                         context,
                         MaterialPageRoute(
                             builder: (context) =>
-                                SeadmeYldinfoLeht(seadmeNimi: seadmeNimi)),
+                                SeadmeYldinfoLeht(seadmeNimi: seadmeNimi, SeadmeteMap: {},)),
                       );
                     }
                   },
