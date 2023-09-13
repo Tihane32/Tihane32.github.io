@@ -1,18 +1,33 @@
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
+import 'package:testuus4/lehed/koduleht.dart';
 import 'package:testuus4/main.dart';
 
-class TarbimiseGraafik extends StatelessWidget {
+class TarbimiseGraafik extends StatefulWidget {
+  final Map<String, dynamic> tarbimiseMap;
+
+  TarbimiseGraafik(this.tarbimiseMap, {Key? key}) : super(key: key);
+
+  @override
+  State<TarbimiseGraafik> createState() => _TarbimiseGraafikState(tarbimiseMap);
+}
+
+class _TarbimiseGraafikState extends State<TarbimiseGraafik> {
+final Map<String, dynamic> tarbimiseMap;
+ 
+  _TarbimiseGraafikState(this.tarbimiseMap);
+
+List<ChartData> getChartData() {
+    // Convert the tarbimiseMap data to a list of ChartData objects
+    List<ChartData> chartData = [];
+    tarbimiseMap.forEach((key, value) {
+      chartData.add(ChartData(key, value));
+    });
+    return chartData;
+  }
   @override
   Widget build(BuildContext context) {
-    final List<ChartData> chartData = [
-      ChartData('Seade 1', 35),
-      ChartData('Seade 2', 16),
-      ChartData('Seade 3', 24),
-      ChartData('Seade 4', 46),
-      ChartData('Seade 5', 9),
-      ChartData('Seade 6', 30),
-    ];
+    List<ChartData> chartData = getChartData(); // Get the chart data
     return Container(
       height: MediaQuery.of(context).size.height * chartData.length * 0.04,
       //width: double.infinity,

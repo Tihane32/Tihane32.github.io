@@ -37,14 +37,15 @@ class _KoduLehtState extends State<KoduLeht> {
 
   var kulu = '0';
   bool isLoading = false;
-  String selectedOption = 'Nädala';
+  String selectedOption = 'Kuu';
   List<String> dropdownOptions = ['Nädala', 'Kuu', 'Aasta'];
-  String selectedOption2 = 'Nädala';
+  String selectedOption2 = 'Kuu';
   List<String> dropdownOptions2 = [
     'Hetke',
     'Nädala',
     'Kuu',
   ];
+  Map<String, dynamic> tarbimiseMap = {};
   double vahe = 20;
 
   Color boxColor = sinineKast;
@@ -76,6 +77,12 @@ class _KoduLehtState extends State<KoduLeht> {
   //Lisab tundide arvule ühe juurde
 
   //Võtab Eleringi API-st hetke hinna
+  updateTarbimine(tarbimiseMap) {
+    setState(() {
+      tarbimiseMap = tarbimiseMap;
+      print("tarbimiseMap $tarbimiseMap");
+    });
+  }
 
   Future<void> _getCurrentPrice() async {
     getKeskmineHind(); //testimiseks
@@ -88,10 +95,10 @@ class _KoduLehtState extends State<KoduLeht> {
         await getCurrentPrice(); //Kutsub esile CurrentPrice funktsiooni
 
     //TODO: Lisada käibemaks ja võrguteenustasud
-    final test = await tarbimine();
+    double test = await tarbimine(tarbimiseMap, updateTarbimine);
     print(test);
     isLoading = false;
-
+    num k = num.parse(test.toStringAsFixed(4));
     //Võtab data Mapist 'price' väärtuse
 
     var ajutine = data.entries.toList();
@@ -110,7 +117,7 @@ class _KoduLehtState extends State<KoduLeht> {
       hetkeHind = price.toString();
       //Salvestab pricei hetke hinnaks
       hetkevoismus = hetkeW.toString();
-      ajatarbimine = test.toString();
+      ajatarbimine = k.toString();
     });
     final temp = await maksumus(selectedOption);
     setState(() {
@@ -150,150 +157,6 @@ class _KoduLehtState extends State<KoduLeht> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      /* Align(
-                        alignment: Alignment.centerLeft,
-                        child: Container(
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                            color: boxColor,
-                            borderRadius: borderRadius,
-                            border: border,
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withOpacity(0.2),
-                                spreadRadius: 2,
-                                blurRadius: 5,
-                                offset: const Offset(3, 3),
-                              ),
-                            ],
-                          ),
-                          width: sinineKastLaius,
-                          height: sinineKastKorgus,
-                          child: RichText(
-                            text: TextSpan(
-                              style: font,
-                              children: [
-                                TextSpan(text: 'Hetke hind: ', style: font),
-                                TextSpan(
-                                    text: '$hetkeHind €/kWh',
-                                    style: fontLaadimine()),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                          height: vahe),*/ // Add some spacing between the two widgets
-                      /*Align(
-                        alignment: Alignment.centerLeft,
-                        child: Padding(
-                          padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
-                          child: Container(
-                            alignment: Alignment.center,
-                            decoration: BoxDecoration(
-                              color: boxColor,
-                              borderRadius: borderRadius*3,
-                              border: border,
-                              /*boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black.withOpacity(0.2),
-                                  spreadRadius: 2,
-                                  blurRadius: 5,
-                                  offset: const Offset(3, 3),
-                                ),
-                              ],*/
-                            ),
-                            width: sinineKastLaius,
-                            height: sinineKastKorgus/1.5,
-                            child: RichText(
-                              text: TextSpan(
-                                style: font,
-                                children: [
-                                  TextSpan(
-                                      text: 'Seadmete hetke tarbimine: ',
-                                      style: font),
-                                  TextSpan(
-                                      text: '$hetkevoismus W',
-                                      style: fontLaadimine()),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                          height:
-                              vahe),*/ // Add some spacing between the two widgets
-                      /*Align(
-                        alignment: Alignment.centerLeft,
-                        child: Padding(
-                         padding: const EdgeInsets.fromLTRB(8,0,8,0),
-                          child: Container(
-                            alignment: Alignment.center,
-                            decoration: BoxDecoration(
-                              color: boxColor,
-                              borderRadius: borderRadius,
-                              border: border,
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black.withOpacity(0.2),
-                                  spreadRadius: 2,
-                                  blurRadius: 5,
-                                  offset: const Offset(3, 3),
-                                ),
-                              ],
-                            ),
-                            width: sinineKastLaius,
-                            height: sinineKastKorgus,
-                            child: RichText(
-                              text: TextSpan(
-                                style: const TextStyle(
-                                  fontSize: 20,
-                                  color: Colors.black,
-                                ),
-                                children: [
-                                  TextSpan(
-                                      text: '  Seadmete kuu tarbimine: ',
-                                      style: font),
-                                  TextSpan(
-                                      text: '$ajatarbimine kWh',
-                                      style: fontLaadimine()),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                          height: vahe), */ // Add some spacing between the two widgets
-
-                      /*Center(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            Align(
-                              child: Container(
-                                alignment: Alignment.center,
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                ),
-                                //width: sinineKastLaius,
-                                //height: sinineKastKorgus,
-                                child: RichText(
-                                  textAlign: TextAlign.center,
-                                  text: TextSpan(
-                                    style: font,
-                                    children: [
-                                      TextSpan(
-                                          text: 'Kuu tarbimine', style: fontSuur),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),*/
                       Center(
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -473,7 +336,8 @@ class _KoduLehtState extends State<KoduLeht> {
                       ),
                       // Add some spacing between the two widgets
                       Visibility(
-                          visible: tarbimineBool, child: TarbimiseGraafik()),
+                          visible: tarbimineBool,
+                          child: TarbimiseGraafik(tarbimiseMap)),
                       Visibility(
                           visible: !tarbimineBool,
                           child: TarbimiseGraafikSpline()),
@@ -585,77 +449,7 @@ class _KoduLehtState extends State<KoduLeht> {
                           ],
                         ),
                       ),
-                      /*Align(
-                        alignment: Alignment.centerLeft,
-                        child: Padding(
-                          padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
-                          child: Container(
-                            alignment: Alignment.center,
-                            decoration: BoxDecoration(
-                              color: boxColor,
-                              borderRadius: borderRadius,
-                              border: border,
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black.withOpacity(0.2),
-                                  spreadRadius: 2,
-                                  blurRadius: 5,
-                                  offset: const Offset(3, 3),
-                                ),
-                              ],
-                            ),
-                            width: sinineKastLaius,
-                            height: sinineKastKorgus,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                DropdownButton<String>(
-                                  underline: Container(
-                                    // Replace the default underline
-                                    height: 0,
-      
-                                    color: Colors
-                                        .black, // Customize the underline color
-                                  ),
-                                  dropdownColor: sinineKast,
-                                  borderRadius: borderRadius,
-                                  value: selectedOption,
-                                  icon: const Icon(
-                                      Icons.expand_circle_down_outlined,
-                                      color: Color.fromARGB(255, 0, 0, 0)),
-                                  onChanged: (String? newValue) async {
-                                    // Use an async function
-                                    setState(() {
-                                      selectedOption = newValue!;
-                                      isLoading =
-                                          true; // Show the loading animation
-      
-                                      // Call the async function and wait for the result
-                                      maksumus(selectedOption).then((result) {
-                                        setState(() {
-                                          kulu = result.toString();
-                                          isLoading =
-                                              false; // Hide the loading animation
-                                        });
-                                      });
-                                    });
-                                  },
-                                  items: dropdownOptions
-                                      .map<DropdownMenuItem<String>>(
-                                          (String value) {
-                                    return DropdownMenuItem<String>(
-                                      value: value,
-                                      child: Text('  ' + value + ' maksumus:',
-                                          style: font),
-                                    );
-                                  }).toList(),
-                                ),
-                                Text(" $kulu €", style: fontLaadimine()),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),*/
+
                       SizedBox(height: vahe / 2),
                       Center(
                         child: Row(
@@ -698,6 +492,7 @@ class _KoduLehtState extends State<KoduLeht> {
         ));
   }
 }
+
 /*
 class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
   final VoidCallback onMenuButtonTap;
@@ -725,3 +520,8 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Size get preferredSize => Size.fromHeight(kToolbarHeight);*/
+class ChartData {
+  ChartData(this.x, this.y);
+  final String x;
+  final double? y;
+}

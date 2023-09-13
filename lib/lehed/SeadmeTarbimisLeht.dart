@@ -100,7 +100,7 @@ class _SeadmeTarbimineLehtState extends State<SeadmeTarbimineLeht> {
         await getCurrentPrice(); //Kutsub esile CurrentPrice funktsiooni
 
     //TODO: Lisada käibemaks ja võrguteenustasud
-    final test = await tarbimine();
+    final test = 0;
     print(test);
     isLoading = false;
 
@@ -219,8 +219,10 @@ class _SeadmeTarbimineLehtState extends State<SeadmeTarbimineLeht> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) =>
-                                SeadmeYldinfoLeht(seadmeNimi: seadmeNimi, SeadmeteMap: {},)),
+                            builder: (context) => SeadmeYldinfoLeht(
+                                  seadmeNimi: seadmeNimi,
+                                  SeadmeteMap: {},
+                                )),
                       );
                     }
                   },
@@ -648,7 +650,6 @@ class _EGraafikState extends State<EGraafik> {
 
     print('$total ososo');
     print(prefs.getString('consumption'));
-    
   }
 
   late TooltipBehavior _tooltipBehavior;
@@ -667,7 +668,7 @@ class _EGraafikState extends State<EGraafik> {
       Align(
         child: Container(
           alignment: Alignment.center,
-    
+
           //width: sinineKastLaius,
           //height: sinineKastKorgus,
           child: RichText(
@@ -742,7 +743,7 @@ class _EGraafikState extends State<EGraafik> {
               Align(
                 child: Container(
                   alignment: Alignment.center,
-    
+
                   //width: sinineKastLaius,
                   //height: sinineKastKorgus,
                   child: RichText(
@@ -806,7 +807,7 @@ class _EGraafikState extends State<EGraafik> {
                                 ),*/
                         dateFormat: DateFormat('dd.MM'),
                         //interval: 5,
-    
+
                         //maximumLabels: 5,
                         maximum: chartData.last.date,
                         minimum: chartData.first.date),
