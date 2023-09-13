@@ -145,7 +145,6 @@ class _SeadmeteListValimineState extends State<SeadmeteListValimine> {
                         });
                         print(ValitudSeadmed);
                         print(ValitudSeadmed[0]);
-                       
                       } else {
                         showDialog(
                             context: context,
@@ -230,9 +229,37 @@ class _SeadmeteListValimineState extends State<SeadmeteListValimine> {
                                           showDialog(
                                               context: context,
                                               builder: (context) => AlertDialog(
-                                                    title: Text(
-                                                        '$seade graafik: \n' +
-                                                            seadmeGraafik),
+                                                    title:
+                                                        Text('$seade graafik:'),
+                                                    content: Container(
+                                                      height:
+                                                          300, // Adjust as needed
+                                                      width:
+                                                          300, // Adjust as needed
+                                                      child: ListView.builder(
+                                                        itemCount: seadmeGraafik
+                                                            .length,
+                                                        itemBuilder:
+                                                            (context, index) {
+                                                          var item =
+                                                              seadmeGraafik[
+                                                                  index];
+                                                          return Container(
+                                                            color: item == 'on'
+                                                                ? Colors.green
+                                                                : Colors.grey,
+                                                            child: ListTile(
+                                                              title: Text(
+                                                                  index.toString() +
+                                                                      ": \t \t \t \t $item",
+                                                                  style: TextStyle(
+                                                                      color: Colors
+                                                                          .black)),
+                                                            ),
+                                                          );
+                                                        },
+                                                      ),
+                                                    ),
                                                   ));
                                         },
                                       ),
@@ -311,7 +338,9 @@ class _SeadmeteListValimineState extends State<SeadmeteListValimine> {
                   //Kui vajutatakse Teie seade ikooni peale, siis viiakse Seadmetelisamine lehele
                   context,
                   MaterialPageRoute(
-                      builder: (context) => DynamilineTundideValimine(valitudSeadmed: ValitudSeadmed,)),
+                      builder: (context) => DynamilineTundideValimine(
+                            valitudSeadmed: ValitudSeadmed,
+                          )),
                 );
               }
             });
@@ -355,8 +384,7 @@ muudaSeadmeOlek(Map<String, List<String>> SeadmeteMap, SeadmeNimi) {
   return SeadmeteMap; // Device key not found in the map
 }
 
-Map<int, bool> valitudSeadmeteNullimine(
-    Map<String, List<String>> SeadmeteMap) {
+Map<int, bool> valitudSeadmeteNullimine(Map<String, List<String>> SeadmeteMap) {
   Map<int, bool> ValitudSeadmed = {};
   int i = 0;
   for (String seade in SeadmeteMap.keys) {
@@ -416,7 +444,6 @@ SeadmeGraafikKoostamineGen1(String value) async {
   }
 
   String? lastStatus;
-  List<String> seadmeGraafik2 = [];
 
   for (int i = 0; i <= 2300; i += 100) {
     if (map.containsKey(i)) {
@@ -424,21 +451,10 @@ SeadmeGraafikKoostamineGen1(String value) async {
     } else if (lastStatus != null) {
       map[i] = lastStatus;
     }
-
-    if (lastStatus != null) {
-      seadmeGraafik2
-          .add("${i.toString().padLeft(4, '0')}: \t \t \t \t $lastStatus \n");
-    }
-  }
-
-  String seadmeGraafik3 = '';
-
-  for (var item in seadmeGraafik2) {
-    seadmeGraafik3 += item;
   }
 
   print('seadme graafik peale tootlemist');
-  print(seadmeGraafik3);
+  print(map);
 
-  return seadmeGraafik3.toString();
+  return map;
 }

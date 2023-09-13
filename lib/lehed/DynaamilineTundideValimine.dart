@@ -71,8 +71,9 @@ class _DynamilineTundideValimineState extends State<DynamilineTundideValimine> {
     lehedMenu = [
       KeskmiseHinnaAluselTundideValimine(
           lulitusMap: lulitusMap, updateLulitusMap: updateLulitusMap),
-      LylitusValimisLeht2(),
-      LylitusValimisLeht3(),
+      HinnaPiiriAluselTundideValimine(
+          lulitusMap: lulitusMap, updateLulitusMap: updateLulitusMap),
+      KopeeriGraafikTundideValik(),
       AbiLeht(),
     ];
   }

@@ -57,6 +57,7 @@ class _KeskmiseHinnaAluselTundideValimineState
   late Map<int, dynamic> lulitusTana;
   late Map<int, dynamic> lulitusHomme;
   late double hindAVG;
+  late double temp = 0;
 
   Map<int, dynamic> keskHind = {
     0: ['00.00', 0, false],
@@ -248,6 +249,7 @@ class _KeskmiseHinnaAluselTundideValimineState
       tund = date.hour;
 
       hindAVG = keskmineHindArvutaus(lulitus);
+      temp = hindAVG / 4;
 
       hind = KeskHindString(hind, hindAVG);
 
@@ -260,7 +262,6 @@ class _KeskmiseHinnaAluselTundideValimineState
       lulitusMapParem =
           LulitusParemVaartustamine(hindAVG, lulitus, lulitusMapParem);
       lulitusMap = lulitusMapParem;
-      
     });
     updateLulitusMap(lulitusMap);
   }
@@ -305,6 +306,12 @@ class _KeskmiseHinnaAluselTundideValimineState
                                   hindAVG, lulitus, lulitusMapVasak);
                               lulitusMapParem = LulitusParemVaartustamine(
                                   hindAVG, lulitus, lulitusMapParem);
+                              temp = hindAVG / 4;
+                              if (temp < 40 && hindAVG > 40) {
+                                temp = 40;
+                              } else if (hindAVG < 40) {
+                                temp = hindAVG / 2;
+                              }
                               HapticFeedback.vibrate();
                             } /*else {
                               lulitus = lulitusHomme;
@@ -347,8 +354,25 @@ class _KeskmiseHinnaAluselTundideValimineState
                                         tana = valge;
                                         tanaFont = font;
                                         hindAVG = keskmineHindArvutaus(lulitus);
+                                        hind = KeskHindString(hind, hindAVG);
                                         keskHind = keskmineHindMapVaartustamine(
                                             hindAVG, keskHind, lulitus);
+                                        lulitus = OdavimadTunnidOn(
+                                            lulitus, valitudTunnid);
+                                        lulitusMapVasak =
+                                            LulitusMapVasakVaartustamine(
+                                                hindAVG,
+                                                lulitus,
+                                                lulitusMapVasak);
+                                        lulitusMapParem =
+                                            LulitusParemVaartustamine(hindAVG,
+                                                lulitus, lulitusMapParem);
+                                        temp = hindAVG / 4;
+                                        if (temp < 40 && hindAVG > 40) {
+                                          temp = 40;
+                                        } else if (hindAVG < 40) {
+                                          temp = hindAVG / 2;
+                                        }
                                         HapticFeedback.vibrate();
                                       } /*else {
                                 lulitus = lulitusTana;
@@ -578,9 +602,16 @@ class _KeskmiseHinnaAluselTundideValimineState
                                 bottomRight: Radius.circular(20)),
                             dataSource: lulitusMapVasak.values.toList(),
                             xValueMapper: (data, _) => data[0],
-                            yValueMapper: (data, _) => data[1],
+                            yValueMapper: (data, _) {
+                              final yValue = data[1];
+                              if (yValue != 0) {
+                                return yValue > -temp ? -temp : yValue;
+                              } else {
+                                return 0;
+                              }
+                            },
                             dataLabelMapper: (data, _) => data[1] < 0
-                                ? (((data[1] + hindAVG + 10) * pow(10.0, 2))
+                                ? (((data[1] + hindAVG) * pow(10.0, 2))
                                             .round()
                                             .toDouble() /
                                         pow(10.0, 2))
@@ -623,9 +654,16 @@ class _KeskmiseHinnaAluselTundideValimineState
                                 topRight: Radius.circular(20)),
                             dataSource: lulitusMapParem.values.toList(),
                             xValueMapper: (data, _) => data[0],
-                            yValueMapper: (data, _) => data[1],
+                            yValueMapper: (data, _) {
+                              final yValue = data[1];
+                              if (yValue != 0) {
+                                return yValue < temp ? temp : yValue;
+                              } else {
+                                return 0;
+                              }
+                            },
                             dataLabelMapper: (data, _) => data[1] > 0
-                                ? (((data[1] + hindAVG - 10) * pow(10.0, 2))
+                                ? (((data[1] + hindAVG) * pow(10.0, 2))
                                             .round()
                                             .toDouble() /
                                         pow(10.0, 2))
@@ -740,9 +778,6 @@ KeskHindString(Map<int, dynamic> keskHind, double hindAVG) {
 }
 
 OdavimadTunnidOn(Map<int, dynamic> lulitus, int tunnid) {
-  print('lulitus enne:');
-  print(lulitus);
-
 // Convert the map to a list of entries and sort it by the price
   var sortedEntries = lulitus.entries.toList()
     ..sort((a, b) => a.value[1].compareTo(b.value[1]));
@@ -759,9 +794,6 @@ OdavimadTunnidOn(Map<int, dynamic> lulitus, int tunnid) {
     lulitus[key][2] = false;
   }
 
-  print('lulitus parast:');
-  print(lulitus);
-
   return lulitus;
 }
 
@@ -771,7 +803,9 @@ LulitusMapVasakVaartustamine(
     double hind = lulitus1[key][1];
 
     if (hind <= hindAVG) {
-      lulitus2[key][1] = hind - hindAVG - 10;
+      lulitus2[key][1] = hind - hindAVG;
+    } else {
+      lulitus2[key][1] = 0;
     }
     lulitus2[key][2] = lulitus1[key][2];
   }
@@ -784,8 +818,10 @@ LulitusParemVaartustamine(
   for (int key in lulitus1.keys) {
     double hind = lulitus1[key][1];
 
-    if (hind >= hindAVG) {
-      lulitus3[key][1] = hind - hindAVG + 10;
+    if (hind > hindAVG) {
+      lulitus3[key][1] = hind - hindAVG;
+    } else {
+      lulitus3[key][1] = 0;
     }
     lulitus3[key][2] = lulitus1[key][2];
   }

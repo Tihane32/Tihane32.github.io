@@ -13,21 +13,16 @@ import 'package:syncfusion_flutter_charts/charts.dart';
 import 'keskimiseHinnaAluselTundideValimine.dart';
 import 'kopeeeriGraafikTundideValimine.dart';
 
-class LylitusValimisLeht2 extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: HinnaPiiriAluselTundideValimine(),
-    );
-  }
-}
-
 class HinnaPiiriAluselTundideValimine extends StatefulWidget {
-  const HinnaPiiriAluselTundideValimine({Key? key}) : super(key: key);
-
+  final Function updateLulitusMap;
+  HinnaPiiriAluselTundideValimine(
+      {Key? key, required this.lulitusMap, required this.updateLulitusMap})
+      : super(key: key);
+  var lulitusMap;
   @override
   _HinnaPiiriAluselTundideValimineState createState() =>
-      _HinnaPiiriAluselTundideValimineState();
+      _HinnaPiiriAluselTundideValimineState(
+          lulitusMap: lulitusMap, updateLulitusMap: updateLulitusMap);
 }
 
 int koduindex = 1;
@@ -42,18 +37,23 @@ bool hommeNahtav = false;
 
 class _HinnaPiiriAluselTundideValimineState
     extends State<HinnaPiiriAluselTundideValimine> {
+  _HinnaPiiriAluselTundideValimineState(
+      {Key? key, required this.lulitusMap, required this.updateLulitusMap});
+  Function updateLulitusMap;
+
+  var lulitusMap;
   int selectedRowIndex = -1;
   double hinnaPiir = 50.00;
   String paevNupp = 'Täna';
   String selectedPage = 'Hinnapiir';
   double vahe = 10;
+  late double temp = 0;
   Color boxColor = sinineKast;
   int tund = 0;
   late Map<int, dynamic> lulitus;
   late Map<int, dynamic> lulitusTana;
   late Map<int, dynamic> lulitusHomme;
   late double hindAVG;
-  Map<int, dynamic> lulitusLopplik = {};
 
   Map<int, dynamic> hindPiirMap = {
     0: ['00.00', 0, false],
@@ -248,16 +248,17 @@ class _HinnaPiiriAluselTundideValimineState
 
       hindAVG = keskmineHindArvutaus(lulitus);
 
+      temp = hindAVG / 4;
+
       hind = KeskHindString(hind, hindAVG);
 
       lulitusMapVasakHP =
           LulitusMapVasakVaartustamine(hinnaPiir, lulitus, lulitusMapVasakHP);
       lulitusMapParemHP =
           LulitusMapParemVaartustamine(hinnaPiir, lulitus, lulitusMapParemHP);
-
-      lulitusLopplik = LulitusLopplikKoostamine(
-          lulitusMapParemHP, lulitusMapVasakHP, lulitus);
+      lulitusMap = lulitusMapParemHP;
     });
+    updateLulitusMap(lulitusMap);
   }
 
   @override
@@ -296,6 +297,12 @@ class _HinnaPiiriAluselTundideValimineState
                                   hinnaPiir, lulitus, lulitusMapVasakHP);
                               lulitusMapParemHP = LulitusMapParemVaartustamine(
                                   hinnaPiir, lulitus, lulitusMapParemHP);
+                              temp = hindAVG / 4;
+                              if (temp < 40 && hindAVG > 40) {
+                                temp = 40;
+                              } else if (hindAVG < 40) {
+                                temp = hindAVG / 2;
+                              }
                               HapticFeedback.vibrate();
                             } /*else {
                               lulitus = lulitusHomme;
@@ -349,7 +356,12 @@ class _HinnaPiiriAluselTundideValimineState
                                                 hinnaPiir,
                                                 lulitus,
                                                 lulitusMapParemHP);
-
+                                        temp = hindAVG / 4;
+                                        if (temp < 40 && hindAVG > 40) {
+                                          temp = 40;
+                                        } else if (hindAVG < 40) {
+                                          temp = hindAVG / 2;
+                                        }
                                         HapticFeedback.vibrate();
                                       } /*else {
                                 lulitus = lulitusTana;
@@ -561,25 +573,25 @@ class _HinnaPiiriAluselTundideValimineState
                                     rowIndex, lulitusMapVasakHP);
                                 lulitusMapParemHP = TunniVarviMuutus(
                                     rowIndex, lulitusMapParemHP);
-                                lulitusLopplik = LulitusLopplikKoostamine(
-                                    lulitusMapParemHP,
-                                    lulitusMapVasakHP,
-                                    lulitus);
+                                lulitusMap = lulitusMapParemHP;
                               });
+                              updateLulitusMap(lulitusMap);
                             },
                             borderRadius: BorderRadius.only(
                                 bottomLeft: Radius.circular(20),
                                 bottomRight: Radius.circular(20)),
                             dataSource: lulitusMapVasakHP.values.toList(),
                             xValueMapper: (data, _) => data[0],
-                            yValueMapper: (data, _) => data[1],
-                            dataLabelMapper: (data, _) => data[1] < 0
-                                ? (((data[3]) * pow(10.0, 2))
-                                            .round()
-                                            .toDouble() /
-                                        pow(10.0, 2))
-                                    .toString()
-                                : '',
+                            yValueMapper: (data, _) {
+                              final yValue = data[1];
+                              if (yValue != 0) {
+                                return yValue > -temp ? -temp : yValue;
+                              } else {
+                                return 0;
+                              }
+                            },
+                            dataLabelMapper: (data, _) =>
+                                data[1] < 0 ? data[3].toString() : '',
                             pointColorMapper: (data, _) => data[2]
                                 ? Colors.green
                                 : Color.fromARGB(255, 164, 159, 159),
@@ -602,25 +614,25 @@ class _HinnaPiiriAluselTundideValimineState
                                     rowIndex, lulitusMapParemHP);
                                 lulitusMapVasakHP = TunniVarviMuutus(
                                     rowIndex, lulitusMapVasakHP);
-                                lulitusLopplik = LulitusLopplikKoostamine(
-                                    lulitusMapParemHP,
-                                    lulitusMapVasakHP,
-                                    lulitus);
+                                lulitusMap = lulitusMapParemHP;
                               });
+                              updateLulitusMap(lulitusMap);
                             },
                             borderRadius: BorderRadius.only(
                                 topRight: Radius.circular(20),
                                 topLeft: Radius.circular(20)),
                             dataSource: lulitusMapParemHP.values.toList(),
                             xValueMapper: (data, _) => data[0],
-                            yValueMapper: (data, _) => data[1],
-                            dataLabelMapper: (data, _) => data[1] > 0
-                                ? (((data[3]) * pow(10.0, 2))
-                                            .round()
-                                            .toDouble() /
-                                        pow(10.0, 2))
-                                    .toString()
-                                : '',
+                            yValueMapper: (data, _) {
+                              final yValue = data[1];
+                              if (yValue != 0) {
+                                return yValue < temp ? temp : yValue;
+                              } else {
+                                return 0;
+                              }
+                            },
+                            dataLabelMapper: (data, _) =>
+                                data[1] > 0 ? data[3].toString() : '',
                             pointColorMapper: (data, _) => data[2]
                                 ? Colors.green
                                 : Color.fromARGB(255, 164, 159, 159),
@@ -687,7 +699,7 @@ LulitusMapVasakVaartustamine(
 
     if (secondValue < hinnaPiir) {
       lulitus2[key][2] = true;
-      lulitus2[key][1] = secondValue - hinnaPiir - 10;
+      lulitus2[key][1] = secondValue - hinnaPiir;
     } else {
       lulitus2[key][2] = false;
       lulitus2[key][1] = 0;
@@ -714,7 +726,7 @@ LulitusMapParemVaartustamine(
 
     if (secondValue >= hinnaPiir) {
       lulitus2[key][2] = false;
-      lulitus2[key][1] = secondValue - hinnaPiir + 10;
+      lulitus2[key][1] = secondValue - hinnaPiir;
     } else {
       lulitus2[key][2] = true;
       lulitus2[key][1] = 0;
@@ -751,26 +763,4 @@ KeskHindString(Map<int, dynamic> keskHind, double hindAVG) {
   String summa = 'Keskmine $hindAVG';
   keskHind[0][2] = summa;
   return keskHind;
-}
-
-LulitusLopplikKoostamine(Map<int, dynamic> lulitusMapParemHP,
-    Map<int, dynamic> lulitusMapVasakHP, Map<int, dynamic> lulitus) {
-  for (int key in lulitus.keys) {
-    if (lulitusMapVasakHP[key][2] == true) {
-      lulitus[key][2] = true;
-    } else if (lulitusMapParemHP[key][2] == true) {
-      lulitus[key][2] = true;
-    } else {
-      lulitus[key][2] = false;
-    }
-  }
-  print('lylitus loplik');
-  print('**************************');
-
-  lulitus.forEach((key, value) {
-    print('$key: $value');
-  });
-
-  print('**************************');
-  return lulitus;
 }
