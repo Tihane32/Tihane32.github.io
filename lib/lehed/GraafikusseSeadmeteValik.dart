@@ -232,10 +232,8 @@ class _SeadmeteListValimineState extends State<SeadmeteListValimine> {
                                                     title:
                                                         Text('$seade graafik:'),
                                                     content: Container(
-                                                      height:
-                                                          300, // Adjust as needed
-                                                      width:
-                                                          300, // Adjust as needed
+                                                      height: 700,
+                                                      width: 300,
                                                       child: ListView.builder(
                                                         itemCount: seadmeGraafik
                                                             .length,
@@ -245,17 +243,16 @@ class _SeadmeteListValimineState extends State<SeadmeteListValimine> {
                                                               seadmeGraafik[
                                                                   index];
                                                           return Container(
+                                                            height: 20,
                                                             color: item == 'on'
                                                                 ? Colors.green
                                                                 : Colors.grey,
-                                                            child: ListTile(
-                                                              title: Text(
-                                                                  index.toString() +
-                                                                      ": \t \t \t \t $item",
-                                                                  style: TextStyle(
-                                                                      color: Colors
-                                                                          .black)),
-                                                            ),
+                                                            child: Text(
+                                                                index.toString() +
+                                                                    ":00 \t \t \t \t $item",
+                                                                style: TextStyle(
+                                                                    color: Colors
+                                                                        .black)),
                                                           );
                                                         },
                                                       ),
@@ -406,6 +403,8 @@ SaaSeadmegraafik(Map<String, List<String>> SeadmeteMap, SeadmeNimi) {
 }
 
 SeadmeGraafikKoostamineGen1(String value) async {
+  bool grafikOlems = true;
+  DateTime now = DateTime.now();
   SharedPreferences prefs = await SharedPreferences.getInstance();
   String? storedKey = prefs.getString('key');
   String storedKeyString = jsonDecode(storedKey!);
@@ -434,27 +433,66 @@ SeadmeGraafikKoostamineGen1(String value) async {
   print('seadme graafik enne tootlemist');
   print(seadmeGraafik1);
 
-  Map<int, String> map = {};
+  int paev = 0;
 
-  for (var item in seadmeGraafik1) {
-    var parts = item.split('-');
-    var time = int.parse(parts[0]);
-    var status = parts[2];
-    map[time] = status;
+  if (now.weekday == 7) {
+    paev = 0;
+  } else {
+    paev = now.weekday;
   }
 
-  String? lastStatus;
-
-  for (int i = 0; i <= 2300; i += 100) {
-    if (map.containsKey(i)) {
-      lastStatus = map[i];
-    } else if (lastStatus != null) {
-      map[i] = lastStatus;
+  for (var i = 0; i < seadmeGraafik1.length; i++) {
+    String mainString = seadmeGraafik1[i];
+    if (mainString.contains("-$paev-")) {
+      grafikOlems = true;
     }
   }
 
-  print('seadme graafik peale tootlemist');
-  print(map);
+  if (grafikOlems) {
+    List<String> filledTimes = [];
+    String? lastState;
 
-  return map;
+    for (var i = 0; i < seadmeGraafik1.length; i++) {
+      var parts = seadmeGraafik1[i].split('-');
+      var currentTime = int.parse(parts[0]);
+      var state = parts[2];
+
+      if (i == 0) {
+        filledTimes.add(seadmeGraafik1[i]);
+      } else {
+        var prevParts = seadmeGraafik1[i - 1].split('-');
+        var prevTime = int.parse(prevParts[0]);
+        var timeDiff = currentTime - prevTime;
+
+        // Fill the gap if there's a 100 interval difference
+        if (timeDiff > 100) {
+          for (var j = 1; j < timeDiff / 100; j++) {
+            filledTimes.add(
+                "${(prevTime + 100 * j).toString().padLeft(4, '0')}-0-$lastState");
+          }
+        }
+        filledTimes.add(seadmeGraafik1[i]);
+      }
+      lastState = state;
+    }
+
+    print('seadme graafik peale tootlemist 1');
+    print(filledTimes);
+
+    List<String> onOffStatus = [];
+
+    for (var timeEntry in filledTimes) {
+      var parts = timeEntry.split('-');
+      var status = parts[2];
+
+      if (status == "on" || status == "off") {
+        onOffStatus.add(status);
+      }
+    }
+
+    return onOffStatus;
+  } else {
+    List<String> tuhi = ['pole graafikut'];
+    return tuhi;
+  }
 }
