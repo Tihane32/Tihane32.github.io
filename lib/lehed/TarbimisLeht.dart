@@ -141,7 +141,7 @@ class _MGraafikState extends State<MGraafik> {
   bool graafik = false;
   int asi = 40;
   String total = '0';
-   String total2 = '0';
+  String total2 = '0';
   fetchData(value) async {
     DateTime currentDateTime = DateTime.now();
 
@@ -211,10 +211,11 @@ class _MGraafikState extends State<MGraafik> {
     DateTime firstDayOfMonth =
         DateTime(currentDateTime.year, currentDateTime.month);
 
+    print("first day: $firstDayOfMonth");
     // Calculate the last day of the current month
     DateTime lastDayOfMonth =
         DateTime(currentDateTime.year, currentDateTime.month + 1, 0);
-
+print("last day: $lastDayOfMonth");
     // Create the list of _ChartData objects with dates and initial consumption values of 0
     setState(() {
       total2 = '0';
@@ -252,8 +253,8 @@ class _MGraafikState extends State<MGraafik> {
       'id': value,
       'channel': '0',
       'date_range': 'custom',
-      'date_from': '2023-09-01 00:00:00',
-      'date_to': '2023-09-30 23:59:59',
+      'date_from': '$firstDayOfMonth',
+      'date_to': '$lastDayOfMonth',
     };
 
     var url = Uri.parse(

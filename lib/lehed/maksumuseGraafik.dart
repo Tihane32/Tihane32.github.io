@@ -1,18 +1,72 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
+import 'package:testuus4/funktsioonid/maksumusSeadmeKohta.dart';
 import 'package:testuus4/main.dart';
 
-class MaksumuseGraafik extends StatelessWidget {
+class MaksumuseGraafik extends StatefulWidget {
+  @override
+  State<MaksumuseGraafik> createState() => _MaksumuseGraafikState();
+}
+
+class _MaksumuseGraafikState extends State<MaksumuseGraafik> {
+  List<ChartData> chartData = [];
+  @override
+  void initState() {
+    super.initState();
+    function();
+  }
+
+  function() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    Map<String, dynamic> maksumuseMap = {};
+    //Võtab mälust 'users'-i asukohast väärtused
+    var seadmedJSONmap = prefs.getString('seadmed');
+
+    if (seadmedJSONmap == null) {
+      return 0;
+    }
+    Map<String, dynamic> storedMap = json.decode(seadmedJSONmap);
+    int j = 0;
+    for (var i in storedMap.values) {
+      String asendus = storedMap['Seade$j']['Seadme_ID'] as String;
+      String asendus1 = storedMap['Seade$j']['Seadme_nimi'] as String;
+      j++;
+
+      print("seadmemaksusmu ${await seadmeMaksumus(asendus)}");
+      double calculateSum(Map<DateTime, double> data) {
+        double sum = 0.0;
+        data.values.forEach((value) {
+          sum += value;
+        });
+        return sum;
+      }
+
+// Call seadmeMaksumus to get the map
+      Map<DateTime, double> dataMap = await seadmeMaksumus(asendus);
+
+// Calculate the sum of the double values in the map
+      double temp = calculateSum(dataMap);
+
+      maksumuseMap["$asendus1"] = temp;
+    }
+    chartData.clear();
+
+    for (var entry in maksumuseMap.entries) {
+      chartData.add(ChartData(entry.key, entry.value));
+    }
+    print("lõpp");
+    print(chartData);
+    print(maksumuseMap);
+    setState(() {
+      chartData = chartData;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    final List<ChartData> chartData = [
-      ChartData('Seade 1', 0.35),
-      ChartData('Seade 2', 0.13),
-      ChartData('Seade 3', 0.63),
-      ChartData('Seade 4', 0.57),
-      ChartData('Seade 5', 0.13),
-      ChartData('Seade 6', 0.93),
-    ];
     return Container(
       height: MediaQuery.of(context).size.height * chartData.length * 0.04,
       //width: double.infinity,
