@@ -5,12 +5,15 @@ import 'dart:async';
 import 'package:testuus4/lehed/SeadmeGraafikLeht.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'GraafikusseSeadmeteValik.dart';
+import 'SeadmeYldInfo.dart';
 import 'dynamicKoduLeht.dart';
 import 'dart:convert';
 import 'package:testuus4/funktsioonid/seisukord.dart';
 import 'package:testuus4/main.dart';
 
 import 'package:get/get.dart';
+
+import 'dynamicSeadmeInfo.dart';
 
 class SeadmeteListPage extends StatelessWidget {
   @override
@@ -60,7 +63,6 @@ class _SeadmeteListState extends State<SeadmeteList> {
     //await prefs.clear();
 
     String? storedJsonMap = prefs.getString('seadmed');
-    print(storedJsonMap);
     if (storedJsonMap != null) {
       await seisukord();
       storedJsonMap = prefs.getString('seadmed');
@@ -73,20 +75,15 @@ class _SeadmeteListState extends State<SeadmeteList> {
         var pistik = storedMap['Seade$i']['Seadme_pistik'];
         var olek = storedMap['Seade$i']['Seadme_olek'];
         var gen = storedMap['Seade$i']['Seadme_generatsioon'];
-        print('olek: $olek');
         Map<String, List<String>> ajutineMap = {
           name: ['assets/boiler1.jpg', '$id', '$olek', '$pistik', '$gen'],
         };
         minuSeadmedK.addAll(ajutineMap);
         i++;
       }
-      print('seadmed');
-      print(minuSeadmedK);
-      print(SeadmeteMap);
     }
     setState(() {
       SeadmeteMap = minuSeadmedK;
-      print(SeadmeteMap);
       isLoading = false;
     });
   }
@@ -188,9 +185,10 @@ class _SeadmeteListState extends State<SeadmeteList> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => SeadmeGraafikuLeht(
+                          builder: (context) => DunaamilineSeadmeLeht(
                             seadmeNimi: SeadmeteMap.keys.elementAt(index),
                             SeadmeteMap: SeadmeteMap,
+                            valitud: 0,
                           ),
                         ),
                       );
