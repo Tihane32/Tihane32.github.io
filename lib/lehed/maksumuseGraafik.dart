@@ -6,6 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:testuus4/funktsioonid/maksumusSeadmeKohta.dart';
 import 'package:testuus4/main.dart';
+import 'dynamicSeadmeInfo.dart';
 import 'koduleht.dart';
 
 class MaksumuseGraafik extends StatefulWidget {
@@ -186,9 +187,10 @@ class _MaksumuseGraafikState extends State<MaksumuseGraafik> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => TarbimisLeht(
+                          builder: (context) => DunaamilineSeadmeLeht(
                             seadmeNimi: SeadmeteMap.keys.elementAt(rowIndex!),
                             SeadmeteMap: SeadmeteMap,
+                            valitud: 1,
                           ),
                         ),
                       );
