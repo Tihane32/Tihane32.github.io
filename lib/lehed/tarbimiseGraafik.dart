@@ -5,6 +5,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 import 'package:testuus4/lehed/SeadmeGraafikLeht.dart';
+import 'package:testuus4/lehed/SeadmeTarbimisLeht.dart';
+import 'package:testuus4/lehed/TarbimisLeht.dart';
 import 'package:testuus4/lehed/koduleht.dart';
 import 'package:testuus4/main.dart';
 
@@ -78,7 +80,7 @@ class _TarbimiseGraafikState extends State<TarbimiseGraafik> {
   Widget build(BuildContext context) {
     List<ChartData> chartData = getChartData(); // Get the chart data
     return Container(
-      height: MediaQuery.of(context).size.height * chartData.length * 0.04,
+      height: MediaQuery.of(context).size.height * chartData.length * 0.06,
       //width: double.infinity,
       child: RotatedBox(
         quarterTurns: 1,
@@ -91,20 +93,20 @@ class _TarbimiseGraafikState extends State<TarbimiseGraafik> {
               // Renders spline chart
               ColumnSeries<ChartData, String>(
                 onPointTap: (pointInteractionDetails) {
-                   int? rowIndex =
-                                        pointInteractionDetails.pointIndex;
+                  int? rowIndex = pointInteractionDetails.pointIndex;
+                  print("rowindex $rowIndex");
+                  print(SeadmeteMap.keys.elementAt(rowIndex!));
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => SeadmeGraafikuLeht(
-                        seadmeNimi: SeadmeteMap.keys.elementAt(rowIndex!),
-                        SeadmeteMap: SeadmeteMap,
+                      builder: (context) => TarbimisLeht(
+                        seadmeNimi: SeadmeteMap.keys.elementAt(rowIndex!), SeadmeteMap: SeadmeteMap,
                       ),
                     ),
                   );
                 },
-                //width: 0.9,
-                //spacing: 0.5,
+                width: 1,
+                spacing: 0.3,
                 borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(20),
                     topRight: Radius.circular(20)),

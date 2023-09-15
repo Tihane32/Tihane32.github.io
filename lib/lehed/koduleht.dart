@@ -119,9 +119,9 @@ class _KoduLehtState extends State<KoduLeht> {
       hetkevoismus = hetkeW.toString();
       ajatarbimine = k.toString();
     });
-    final temp = await maksumus(selectedOption);
+   // final temp = await maksumus(selectedOption);
     setState(() {
-      kulu = temp.toString(); //Pärast hinna saamist laadimis animatsioon lõppeb
+     // kulu = temp.toString(); //Pärast hinna saamist laadimis animatsioon lõppeb
     });
   }
 
@@ -421,62 +421,7 @@ class _KoduLehtState extends State<KoduLeht> {
                       ),
                       SizedBox(height: vahe / 4),
 
-                      Center(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            Align(
-                              child: Container(
-                                alignment: Alignment.center,
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                ),
-                                //width: sinineKastLaius,
-                                //height: sinineKastKorgus,
-                                child: RichText(
-                                  textAlign: TextAlign.center,
-                                  text: TextSpan(
-                                    style: font,
-                                    children: [
-                                      TextSpan(
-                                          text: 'Kokku: $kulu €',
-                                          style: fontLaadimine()),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-
-                      SizedBox(height: vahe / 2),
-                      Center(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            Align(
-                              child: Container(
-                                alignment: Alignment.center,
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                ),
-                                //width: sinineKastLaius,
-                                //height: sinineKastKorgus,
-                                child: RichText(
-                                  textAlign: TextAlign.center,
-                                  text: TextSpan(
-                                    style: font,
-                                    children: [
-                                      TextSpan(text: '€', style: fontVaike),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
+                      
                       MaksumuseGraafik(),
                       Container(
                         height: 1,

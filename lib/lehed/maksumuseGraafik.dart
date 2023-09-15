@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:testuus4/lehed/TarbimisLeht.dart';
 import 'package:testuus4/main.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -13,12 +14,48 @@ class MaksumuseGraafik extends StatefulWidget {
 }
 
 class _MaksumuseGraafikState extends State<MaksumuseGraafik> {
+  Map<String, List<String>> SeadmeteMap = {};
   List<ChartData> chartData = [];
-  double kokku= 0;
+  num kokku = 0;
   @override
   void initState() {
     super.initState();
     function();
+    getSeadmeteMap(SeadmeteMap);
+  }
+
+  getSeadmeteMap(Map<String, List<String>> seadmeteMap) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    //await prefs.clear();
+
+    String? storedJsonMap = prefs.getString('seadmed');
+    print(storedJsonMap);
+    if (storedJsonMap != null) {
+      storedJsonMap = prefs.getString('seadmed');
+      Map<String, dynamic> storedMap = json.decode(storedJsonMap!);
+      await Future.delayed(const Duration(seconds: 3));
+      var i = 0;
+      for (String Seade in storedMap.keys) {
+        var id = storedMap['Seade$i']['Seadme_ID'];
+        var name = storedMap['Seade$i']['Seadme_nimi'];
+        var pistik = storedMap['Seade$i']['Seadme_pistik'];
+        var olek = storedMap['Seade$i']['Seadme_olek'];
+        var gen = storedMap['Seade$i']['Seadme_generatsioon'];
+        print('olek: $olek');
+        Map<String, List<String>> ajutineMap = {
+          name: ['assets/boiler1.jpg', '$id', '$olek', '$pistik', '$gen'],
+        };
+        seadmeteMap.addAll(ajutineMap);
+        i++;
+      }
+      print('seadmed');
+
+      print(SeadmeteMap);
+
+      setState(() {
+        SeadmeteMap = seadmeteMap;
+      });
+    }
   }
 
   function() async {
@@ -43,7 +80,7 @@ class _MaksumuseGraafikState extends State<MaksumuseGraafik> {
         data.values.forEach((value) {
           sum += value;
         });
-        kokku=sum;
+        kokku = sum;
         return sum;
       }
 
@@ -52,7 +89,8 @@ class _MaksumuseGraafikState extends State<MaksumuseGraafik> {
 
 // Calculate the sum of the double values in the map
       double temp = calculateSum(dataMap);
-
+      String abi = temp.toStringAsFixed(2);
+      temp = double.parse(abi);
       maksumuseMap["$asendus1"] = temp;
     }
     chartData.clear();
@@ -65,7 +103,7 @@ class _MaksumuseGraafikState extends State<MaksumuseGraafik> {
     print(maksumuseMap);
     setState(() {
       chartData = chartData;
-      kokku=kokku;
+      kokku = kokku;
     });
   }
 
@@ -91,7 +129,8 @@ class _MaksumuseGraafikState extends State<MaksumuseGraafik> {
                       style: font,
                       children: [
                         TextSpan(
-                            text: 'Kokku: $kokku €', style: font),
+                            text: 'Kokku: ${kokku.toStringAsFixed(2)} €',
+                            style: font),
                       ],
                     ),
                   ),
@@ -128,7 +167,7 @@ class _MaksumuseGraafikState extends State<MaksumuseGraafik> {
           ),
         ),
         Container(
-          height: MediaQuery.of(context).size.height * chartData.length * 0.04,
+          height: MediaQuery.of(context).size.height * chartData.length * 0.06,
           //width: double.infinity,
           child: RotatedBox(
             quarterTurns: 1,
@@ -140,8 +179,22 @@ class _MaksumuseGraafikState extends State<MaksumuseGraafik> {
                 series: <ChartSeries>[
                   // Renders spline chart
                   ColumnSeries<ChartData, String>(
-                    //width: 0.9,
-                    //spacing: 0.5,
+                    onPointTap: (pointInteractionDetails) {
+                      int? rowIndex = pointInteractionDetails.pointIndex;
+                      print("rowindex $rowIndex");
+                      print(SeadmeteMap.keys.elementAt(rowIndex!));
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => TarbimisLeht(
+                            seadmeNimi: SeadmeteMap.keys.elementAt(rowIndex!),
+                            SeadmeteMap: SeadmeteMap,
+                          ),
+                        ),
+                      );
+                    },
+                    width: 1,
+                    spacing: 0.3,
                     borderRadius: BorderRadius.only(
                         topLeft: Radius.circular(20),
                         topRight: Radius.circular(20)),
