@@ -93,7 +93,7 @@ class _DynamilineTundideValimineState extends State<DynamilineTundideValimine> {
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text('Tundide valimine'),
+            Text('Juhtimine'),
           ],
         ),
         actions: [
