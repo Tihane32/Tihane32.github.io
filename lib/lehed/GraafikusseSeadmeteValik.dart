@@ -257,19 +257,15 @@ class _SeadmeteListValimineState extends State<SeadmeteListValimine> {
                                                             width: 100,
                                                             child: index < 10
                                                                 ? Text(
-                                                                    " " +
+                                                                    "0" +
                                                                         index
                                                                             .toString() +
                                                                         ":00 \t \t \t \t \t \t \t \t \t \t \t \t $item",
-                                                                    style: TextStyle(
-                                                                        color: Colors
-                                                                            .black))
+                                                                    style: font)
                                                                 : Text(
                                                                     index.toString() +
                                                                         ":00 \t \t \t \t \t \t \t \t \t \t \t \t $item",
-                                                                    style: TextStyle(
-                                                                        color: Colors
-                                                                            .black)),
+                                                                    style: font),
                                                           );
                                                         },
                                                       ),
