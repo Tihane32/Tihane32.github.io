@@ -389,8 +389,9 @@ class _SeadmeGraafikuLehtState extends State<SeadmeGraafikuLeht> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) =>
-                              SeadmeYldinfoLeht(seadmeNimi: seadmeNimi,SeadmeteMap: SeadmeteMap)),
+                          builder: (context) => SeadmeYldinfoLeht(
+                              seadmeNimi: seadmeNimi,
+                              SeadmeteMap: SeadmeteMap)),
                     );
                   }
                 },
@@ -650,39 +651,40 @@ class _SeadmeGraafikuLehtState extends State<SeadmeGraafikuLeht> {
                                     ))
                         ],
                       ),
-                    ),      Center(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Align(
-                    alignment: Alignment.center,
-                    child: Container(
-                      alignment: Alignment.center,
-                      //width: 200,
-                      child: Center(
-                        child: Column(
-                          children: [
-                            Align(
-                              child: Container(
-                                alignment: Alignment.center,
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                ),
-                                //width: sinineKastLaius,
-                                //height: sinineKastKorgus,
-                                child: RichText(
-                                  text: TextSpan(
-                                    style: fontVaike,
-                                    children: [
-                                      TextSpan(
-                                          text: 'Miinimum: $hindMin',
-                                          style: fontVaike),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
-                            /* Align(
+                    ),
+                    Center(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Align(
+                            alignment: Alignment.center,
+                            child: Container(
+                              alignment: Alignment.center,
+                              //width: 200,
+                              child: Center(
+                                child: Column(
+                                  children: [
+                                    Align(
+                                      child: Container(
+                                        alignment: Alignment.center,
+                                        decoration: BoxDecoration(
+                                          color: Colors.white,
+                                        ),
+                                        //width: sinineKastLaius,
+                                        //height: sinineKastKorgus,
+                                        child: RichText(
+                                          text: TextSpan(
+                                            style: fontVaike,
+                                            children: [
+                                              TextSpan(
+                                                  text: 'Min: $hindMin',
+                                                  style: fontVaike),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    /* Align(
                                 child: Container(
                                   alignment: Alignment.center,
                                   decoration: BoxDecoration(
@@ -719,39 +721,39 @@ class _SeadmeGraafikuLehtState extends State<SeadmeGraafikuLeht> {
                                   ),
                                 ),
                               )*/
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                  Align(
-                    alignment: Alignment.center,
-                    child: Container(
-                      //width: 200,
-                      child: Column(
-                        children: [
-                          Align(
-                            child: Container(
-                              alignment: Alignment.center,
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                              ),
-                              //width: sinineKastLaius,
-                              //height: sinineKastKorgus,
-                              child: RichText(
-                                textAlign: TextAlign.center,
-                                text: TextSpan(
-                                  style: fontVaike,
-                                  children: [
-                                    TextSpan(
-                                        text: 'Keskmine: $hindAVG',
-                                        style: fontVaike),
                                   ],
                                 ),
                               ),
                             ),
                           ),
-                          /* Align(
+                          Align(
+                            alignment: Alignment.center,
+                            child: Container(
+                              //width: 200,
+                              child: Column(
+                                children: [
+                                  Align(
+                                    child: Container(
+                                      alignment: Alignment.center,
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                      ),
+                                      //width: sinineKastLaius,
+                                      //height: sinineKastKorgus,
+                                      child: RichText(
+                                        textAlign: TextAlign.center,
+                                        text: TextSpan(
+                                          style: fontVaike,
+                                          children: [
+                                            TextSpan(
+                                                text: 'Kesk: $hindAVG',
+                                                style: fontVaike),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  /* Align(
                               child: Container(
                                 alignment: Alignment.center,
                                 decoration: BoxDecoration(
@@ -791,37 +793,37 @@ class _SeadmeGraafikuLehtState extends State<SeadmeGraafikuLeht> {
                                 ),
                               ),
                             ),*/
-                        ],
-                      ),
-                    ),
-                  ),
-                  Align(
-                    alignment: Alignment.center,
-                    child: Container(
-                      //width: 200,
-                      child: Column(
-                        children: [
-                          Align(
-                            child: Container(
-                              alignment: Alignment.center,
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                              ),
-                              //width: sinineKastLaius,
-                              //height: sinineKastKorgus,
-                              child: RichText(
-                                text: TextSpan(
-                                  style: fontVaike,
-                                  children: [
-                                    TextSpan(
-                                        text: 'Maksimum: $hindMax',
-                                        style: fontVaike),
-                                  ],
-                                ),
+                                ],
                               ),
                             ),
                           ),
-                          /*Align(
+                          Align(
+                            alignment: Alignment.center,
+                            child: Container(
+                              //width: 200,
+                              child: Column(
+                                children: [
+                                  Align(
+                                    child: Container(
+                                      alignment: Alignment.center,
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                      ),
+                                      //width: sinineKastLaius,
+                                      //height: sinineKastKorgus,
+                                      child: RichText(
+                                        text: TextSpan(
+                                          style: fontVaike,
+                                          children: [
+                                            TextSpan(
+                                                text: 'Max: $hindMax',
+                                                style: fontVaike),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  /*Align(
                               child: Container(
                                 alignment: Alignment.center,
                                 decoration: BoxDecoration(
@@ -858,13 +860,13 @@ class _SeadmeGraafikuLehtState extends State<SeadmeGraafikuLeht> {
                                 ),
                               ),
                             )*/
+                                ],
+                              ),
+                            ),
+                          ),
                         ],
                       ),
                     ),
-                  ),
-                ],
-              ),
-            ),
                     SizedBox(height: vahe),
                     Center(
                       child: Row(

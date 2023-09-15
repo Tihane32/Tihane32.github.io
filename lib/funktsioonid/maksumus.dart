@@ -31,7 +31,7 @@ Future maksumus(String vahemik) async {
 
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    var token = await getToken();
+    var token = await getToken2();
     double katse = 0;
     double hind = 0;
     var k = 0;
@@ -139,7 +139,7 @@ Future maksumus(String vahemik) async {
 
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    var token = await getToken();
+    var token = await getToken2();
     double katse = 0;
     double hind = 0;
     var k = 0;
@@ -269,7 +269,7 @@ Future maksumus(String vahemik) async {
     var ajutine2 = ajutine.entries.toList();
     var hinnagraafik = ajutine2[0].value;
 
-    var token = await getToken();
+    var token = await getToken2();
     double katse = 0;
     double hind = 0;
     var k = 0;

@@ -142,6 +142,8 @@ class _MGraafikState extends State<MGraafik> {
   int asi = 40;
   String total = '0';
   String total2 = '0';
+  String total2Uhik = '';
+  double keskmine = 0;
   fetchData(value) async {
     DateTime currentDateTime = DateTime.now();
 
@@ -195,6 +197,7 @@ class _MGraafikState extends State<MGraafik> {
         print(abi);
       });
       total = abi.toStringAsFixed(3);
+      keskmine = double.parse(total) / double.parse(total2);
     });
   }
 
@@ -215,7 +218,7 @@ class _MGraafikState extends State<MGraafik> {
     // Calculate the last day of the current month
     DateTime lastDayOfMonth =
         DateTime(currentDateTime.year, currentDateTime.month + 1, 0);
-print("last day: $lastDayOfMonth");
+    print("last day: $lastDayOfMonth");
     // Create the list of _ChartData objects with dates and initial consumption values of 0
     setState(() {
       total2 = '0';
@@ -271,6 +274,7 @@ print("last day: $lastDayOfMonth");
               history['consumption'].toDouble()))
           .toList();
       total2 = jsonData['data']['total'].toString();
+      total2Uhik = jsonData['data']['units']['consumption'].toString();
     });
 
     print(chartData);
@@ -307,15 +311,28 @@ print("last day: $lastDayOfMonth");
             child: Stack(
               clipBehavior: Clip.none,
               children: [
-                Align(
-                    alignment: Alignment.center,
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 8.0),
-                      child: Text(
-                        'Kokku: $total € ja $total2 Wh',
-                        style: font,
-                      ),
-                    )),
+                Column(
+                  children: [
+                    Align(
+                        alignment: Alignment.center,
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 8.0),
+                          child: Text(
+                            'Kokku: $total € ja $total2 $total2Uhik',
+                            style: font,
+                          ),
+                        )),
+                    Align(
+                        alignment: Alignment.center,
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 8.0),
+                          child: Text(
+                            'Keskmiselt: ${keskmine.toStringAsFixed(2)} €/$total2Uhik',
+                            style: font,
+                          ),
+                        )),
+                  ],
+                ),
                 Positioned(
                   right: 0,
                   top: -5,
