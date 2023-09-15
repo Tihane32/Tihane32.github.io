@@ -232,8 +232,8 @@ class _SeadmeteListValimineState extends State<SeadmeteListValimine> {
                                                     title:
                                                         Text('$seade graafik:'),
                                                     content: Container(
-                                                      height: 700,
-                                                      width: 300,
+                                                      height: 500,
+                                                      width: 100,
                                                       child: ListView.builder(
                                                         itemCount: seadmeGraafik
                                                             .length,
@@ -243,16 +243,33 @@ class _SeadmeteListValimineState extends State<SeadmeteListValimine> {
                                                               seadmeGraafik[
                                                                   index];
                                                           return Container(
+                                                            decoration:
+                                                                BoxDecoration(
+                                                              color: item ==
+                                                                      'on'
+                                                                  ? Colors.green
+                                                                  : Colors.grey,
+                                                              border: Border.all(
+                                                                  color: Colors
+                                                                      .black),
+                                                            ),
                                                             height: 20,
-                                                            color: item == 'on'
-                                                                ? Colors.green
-                                                                : Colors.grey,
-                                                            child: Text(
-                                                                index.toString() +
-                                                                    ":00 \t \t \t \t $item",
-                                                                style: TextStyle(
-                                                                    color: Colors
-                                                                        .black)),
+                                                            width: 100,
+                                                            child: index < 10
+                                                                ? Text(
+                                                                    " " +
+                                                                        index
+                                                                            .toString() +
+                                                                        ":00 \t \t \t \t \t \t \t \t \t \t \t \t $item",
+                                                                    style: TextStyle(
+                                                                        color: Colors
+                                                                            .black))
+                                                                : Text(
+                                                                    index.toString() +
+                                                                        ":00 \t \t \t \t \t \t \t \t \t \t \t \t $item",
+                                                                    style: TextStyle(
+                                                                        color: Colors
+                                                                            .black)),
                                                           );
                                                         },
                                                       ),
@@ -438,7 +455,7 @@ SeadmeGraafikKoostamineGen1(String value) async {
   if (now.weekday == 7) {
     paev = 0;
   } else {
-    paev = now.weekday;
+    paev = now.weekday - 1;
   }
 
   for (var i = 0; i < seadmeGraafik1.length; i++) {
@@ -464,7 +481,6 @@ SeadmeGraafikKoostamineGen1(String value) async {
         var prevTime = int.parse(prevParts[0]);
         var timeDiff = currentTime - prevTime;
 
-        // Fill the gap if there's a 100 interval difference
         if (timeDiff > 100) {
           for (var j = 1; j < timeDiff / 100; j++) {
             filledTimes.add(
@@ -474,6 +490,14 @@ SeadmeGraafikKoostamineGen1(String value) async {
         filledTimes.add(seadmeGraafik1[i]);
       }
       lastState = state;
+    }
+
+    var lastParts = filledTimes.last.split('-');
+    var lastTime = int.parse(lastParts[0]);
+
+    while (lastTime < 2300) {
+      lastTime += 100;
+      filledTimes.add("${lastTime.toString().padLeft(4, '0')}-0-$lastState");
     }
 
     print('seadme graafik peale tootlemist 1');
