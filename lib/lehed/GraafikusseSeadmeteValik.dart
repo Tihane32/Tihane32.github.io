@@ -64,7 +64,6 @@ class _SeadmeteListValimineState extends State<SeadmeteListValimine> {
     //await prefs.clear();
 
     String? storedJsonMap = prefs.getString('seadmed');
-    print(storedJsonMap);
     if (storedJsonMap != null) {
       await seisukord();
       storedJsonMap = prefs.getString('seadmed');
@@ -76,7 +75,6 @@ class _SeadmeteListValimineState extends State<SeadmeteListValimine> {
         var name = storedMap['Seade$i']['Seadme_nimi'];
         var pistik = storedMap['Seade$i']['Seadme_pistik'];
         var olek = storedMap['Seade$i']['Seadme_olek'];
-        print('olek: $olek');
         Map<String, List<String>> ajutineMap = {
           name: ['assets/boiler1.jpg', '$id', '$olek', '$pistik', 'jah'],
         };
@@ -85,9 +83,6 @@ class _SeadmeteListValimineState extends State<SeadmeteListValimine> {
       }
       //TODO: eemalda j'rgmine rida kui gen2 tgraafik tootab
       minuSeadmedK['Shelly Pro PM']![4] = 'ei';
-      print('seadmed');
-      print(minuSeadmedK);
-      print(SeadmeteMap);
     }
     setState(() {
       SeadmeteMap = minuSeadmedK;
@@ -143,8 +138,6 @@ class _SeadmeteListValimineState extends State<SeadmeteListValimine> {
                             ValitudSeadmed[index] = false;
                           }
                         });
-                        print(ValitudSeadmed);
-                        print(ValitudSeadmed[0]);
                       } else {
                         showDialog(
                             context: context,
@@ -401,8 +394,6 @@ Map<int, bool> valitudSeadmeteNullimine(Map<String, List<String>> SeadmeteMap) {
     ValitudSeadmed[i] = false;
     i++;
   }
-  print('ValitudSeadmed :');
-  print(ValitudSeadmed);
   return ValitudSeadmed;
 }
 
@@ -443,8 +434,6 @@ SeadmeGraafikKoostamineGen1(String value) async {
   var seadmeGraafik1 =
       httpPackageJson['data']['device_settings']['relays'][0]['schedule_rules'];
 
-  print('seadme graafik enne tootlemist');
-  print(seadmeGraafik1);
 
   int paev = 0;
 
@@ -496,8 +485,6 @@ SeadmeGraafikKoostamineGen1(String value) async {
       filledTimes.add("${lastTime.toString().padLeft(4, '0')}-0-$lastState");
     }
 
-    print('seadme graafik peale tootlemist 1');
-    print(filledTimes);
 
     List<String> onOffStatus = [];
 

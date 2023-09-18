@@ -40,7 +40,6 @@ class _uuedSeadmedState extends State<uuedSeadmed> {
   @override
   void initState() {
     super.initState();
-    print(widget.uuedSeadmedString);
     // Initialize the list of checkbox values with default values
     checkboxValues =
         List.generate(widget.uuedSeadmedString.length, (index) => true);
@@ -107,7 +106,6 @@ class _uuedSeadmedState extends State<uuedSeadmed> {
           ),
           GestureDetector(
             onTap: () {
-              print(checkboxValues);
               sort(checkboxValues, widget.uuedSeadmedString);
               // Navigate to another page when the button is pressed
               Navigator.push(
@@ -171,7 +169,6 @@ Future<void> sort(
     i++;
   }
 
-  print(uuedSeadmedString);
   SharedPreferences prefs = await SharedPreferences.getInstance();
   var seadmedJSON = prefs.getString('seadmed');
   if (seadmedJSON != null) {
@@ -186,7 +183,6 @@ Future<void> sort(
 
       i++;
     }
-    print(seadmed);
     String seadmedMap = json.encode(seadmed);
     await prefs.setString('seadmed', seadmedMap);
     seisukord();

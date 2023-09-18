@@ -101,7 +101,6 @@ class _SeadmeTarbimineLehtState extends State<SeadmeTarbimineLeht> {
 
     //TODO: Lisada käibemaks ja võrguteenustasud
     final test = 0;
-    print(test);
     isLoading = false;
 
     //Võtab data Mapist 'price' väärtuse
@@ -111,12 +110,10 @@ class _SeadmeTarbimineLehtState extends State<SeadmeTarbimineLeht> {
     var ajutine1 = ajutine[1].value;
 
     double price = ajutine1[0]['price'];
-    print('price: $price');
     price = price / 1000.0;
 
     num n = num.parse(price.toStringAsFixed(4));
     price = n as double;
-    print('price: $price');
     setState(() {
       hetkeHind = price.toString();
       //Salvestab pricei hetke hinnaks
@@ -631,7 +628,6 @@ class _EGraafikState extends State<EGraafik> {
       throw Exception('http.post error: statusCode= ${res.statusCode}');
     final jsonData = json.decode(res.body);
     final historyData = jsonData['data']['history'] as List<dynamic>;
-    print(historyData);
     setState(() {
       chartData = historyData
           .map((history) => _ChartData(DateTime.parse(history['datetime']),
@@ -640,16 +636,10 @@ class _EGraafikState extends State<EGraafik> {
       total = jsonData['data']['total'].toString();
     });
 
-    print(chartData);
-    print('total');
-    print(jsonData['data']['history'][1]['consumption']);
-    print(jsonData['data']['total']);
     String dataString = jsonEncode(jsonData['data']['history']);
     prefs.setString('consumption', dataString);
     prefs.setString('total', total);
 
-    print('$total ososo');
-    print(prefs.getString('consumption'));
   }
 
   late TooltipBehavior _tooltipBehavior;

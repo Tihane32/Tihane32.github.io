@@ -143,7 +143,6 @@ class _LoginPageState extends State<LoginPage> {
           Uri.parse('https://shelly-64-eu.shelly.cloud/user/get_user_key');
       var keyVastus = await http.post(keySaamiseUrl, headers: headers1);
       var keyVastusJSON = json.decode(keyVastus.body);
-      print(seadmed);
       String seadmedMap = json.encode(seadmed);
      // await prefs.setString('seadmed', seadmedMap);
       String keyMap = json.encode(keyVastusJSON['data']['key']);
@@ -152,9 +151,7 @@ class _LoginPageState extends State<LoginPage> {
       //showCustomAlertDialog(
       //  context, seadmedMap, uuedSeadmed, uuedSeadmedString);
     }
-    print('siiiin2');
       //seisukord();
-      print('siiiin');
       Future.delayed(Duration(seconds: 3), () {
         Navigator.pushReplacement(
           context,

@@ -21,7 +21,6 @@ seisukord() async {
     throw Exception('http.post error: statusCode= ${res.statusCode}');
   var vastus = json.decode(res.body);
   vastus as Map<String, dynamic>;
-  print(vastus['data']['devices_status']);
   String? storedJsonMap = prefs.getString('seadmed');
   if (storedJsonMap != null) {
     Map<String, dynamic> storedMap = json.decode(storedJsonMap);
@@ -31,11 +30,9 @@ seisukord() async {
       var id = storedMap['Seade$i']['Seadme_ID'];
 
       if (vastus['data']['devices_status']['$id'] == null) {
-        print('$id offline');
         storedMap['Seade$i']['Seadme_olek'] = 'Offline';
 
         await prefs.setString('seadmed', json.encode(storedMap));
-        print(storedMap);
       } else {
         if (storedMap['Seade$i']['Seadme_generatsioon'] == 1) {
           var asendus = vastus['data']['devices_status']['$id']['relays'];
@@ -49,12 +46,10 @@ seisukord() async {
           storedMap['Seade$i']['Seadme_olek'] = olek;
 
           await prefs.setString('seadmed', json.encode(storedMap));
-          print(storedMap);
         } else {
           var asendus =
               vastus['data']['devices_status']['$id']['switch:0']['output'];
           String olek;
-          print(asendus);
           if (asendus == false) {
             olek = 'off';
           } else {
@@ -63,12 +58,11 @@ seisukord() async {
           storedMap['Seade$i']['Seadme_olek'] = olek;
 
           await prefs.setString('seadmed', json.encode(storedMap));
-          print(storedMap);
         }
       }
 
       i++;
     }
-  print(storedMap);}
+  }
 
 }

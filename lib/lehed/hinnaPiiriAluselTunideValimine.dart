@@ -464,7 +464,6 @@ class _HinnaPiiriAluselTundideValimineState
                                 onSubmitted: (value) {
                                   setState(() {
                                     hinnaPiir = double.tryParse(value) ?? 0;
-                                    print(hinnaPiir);
                                     lulitusMapParemHP =
                                         LulitusMapParemVaartustamine(hinnaPiir,
                                             lulitus, lulitusMapParemHP);
@@ -567,7 +566,6 @@ class _HinnaPiiriAluselTundideValimineState
                             onPointTap: (pointInteractionDetails) {
                               int? rowIndex =
                                   pointInteractionDetails.pointIndex;
-                              print('Row Index: $rowIndex');
                               setState(() {
                                 lulitusMapVasakHP = TunniVarviMuutus(
                                     rowIndex, lulitusMapVasakHP);
@@ -608,7 +606,6 @@ class _HinnaPiiriAluselTundideValimineState
                             onPointTap: (pointInteractionDetails) {
                               int? rowIndex =
                                   pointInteractionDetails.pointIndex;
-                              print('Row Index: $rowIndex');
                               setState(() {
                                 lulitusMapParemHP = TunniVarviMuutus(
                                     rowIndex, lulitusMapParemHP);
@@ -681,7 +678,6 @@ keskmineHindArvutaus(Map<int, dynamic> lulitus) {
 
   AVG = summa / hindNr;
 
-  print('Keskmine hind: $AVG');
 
   if (hindNr > 0) {
     return ((AVG * mod).round().toDouble() / mod);
@@ -706,14 +702,10 @@ LulitusMapVasakVaartustamine(
     }
   }
 
-  print('lylitus vasak hinnapiir:');
-  print('**************************');
 
   lulitus2.forEach((key, value) {
-    print('$key: $value');
   });
 
-  print('**************************');
   return lulitus2;
 }
 
@@ -733,27 +725,19 @@ LulitusMapParemVaartustamine(
     }
   }
 
-  print('lylitus parem hinnapiir:');
-  print('**************************');
 
   lulitus2.forEach((key, value) {
-    print('$key: $value');
   });
 
-  print('**************************');
   return lulitus2;
 }
 
 TunniVarviMuutus(int? rowIndex, Map<int, dynamic> lulitusMap2) {
-  print('vana');
-  print(lulitusMap2[rowIndex]);
   if (lulitusMap2[rowIndex][2] == false) {
     lulitusMap2[rowIndex][2] = true;
   } else {
     lulitusMap2[rowIndex][2] = false;
   }
-  print('uus');
-  print(lulitusMap2[rowIndex]);
   return lulitusMap2;
 }
 

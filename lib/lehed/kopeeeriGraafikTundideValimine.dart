@@ -67,7 +67,6 @@ class _KopeeriGraafikTundideValikState
     //await prefs.clear();
 
     String? storedJsonMap = prefs.getString('seadmed');
-    print(storedJsonMap);
     if (storedJsonMap != null) {
       await seisukord();
       storedJsonMap = prefs.getString('seadmed');
@@ -79,7 +78,6 @@ class _KopeeriGraafikTundideValikState
         var name = storedMap['Seade$i']['Seadme_nimi'];
         var pistik = storedMap['Seade$i']['Seadme_pistik'];
         var olek = storedMap['Seade$i']['Seadme_olek'];
-        print('olek: $olek');
         Map<String, List<String>> ajutineMap = {
           name: ['assets/boiler1.jpg', '$id', '$olek', '$pistik', 'jah'],
         };
@@ -88,9 +86,6 @@ class _KopeeriGraafikTundideValikState
       }
       //TODO: eemalda j'rgmine rida kui gen2 tgraafik tootab
       minuSeadmedK['Shelly Pro PM']![4] = 'ei';
-      print('seadmed');
-      print(minuSeadmedK);
-      print(SeadmeteMap);
     }
     setState(() {
       SeadmeteMap = minuSeadmedK;
@@ -294,8 +289,6 @@ Map<String, bool> valitudSeadmeteNullimine(
   for (String seade in SeadmeteMap.keys) {
     ValitudSeadmed[seade] = false;
   }
-  print('ValitudSeadmed :');
-  print(ValitudSeadmed);
   return ValitudSeadmed;
 }
 
@@ -334,8 +327,6 @@ SeadmeGraafikKoostamineGen1(String value) async {
   var seadmeGraafik1 =
       httpPackageJson['data']['device_settings']['relays'][0]['schedule_rules'];
 
-  print('seadme graafik enne tootlemist');
-  print(seadmeGraafik1);
 
   Map<int, String> map = {};
 
@@ -368,8 +359,6 @@ SeadmeGraafikKoostamineGen1(String value) async {
     seadmeGraafik3 += item;
   }
 
-  print('seadme graafik peale tootlemist');
-  print(seadmeGraafik3);
 
   return seadmeGraafik3.toString();
 }

@@ -187,8 +187,6 @@ class _DynamilineTundideValimineState extends State<DynamilineTundideValimine> {
                         );
                       } else if (koduindex == 1) {
                         graafikuteSaatmine(valitudSeadmed, lulitusMap);
-                        print('final');
-                        print(lulitusMap);
                         showDialog(
                             context: context,
                             builder: (context) => AlertDialog(
@@ -236,28 +234,16 @@ class _DynamilineTundideValimineState extends State<DynamilineTundideValimine> {
 }
 
 graafikuteSaatmine(var valitudSeadmed, Map<int, dynamic> lulitusMap) async {
-  print(valitudSeadmed);
-  print('lulitusmap siiin');
-  print(lulitusMap);
   SharedPreferences prefs = await SharedPreferences.getInstance();
   var storedJsonMap = prefs.getString('seadmed');
-  print(storedJsonMap);
   Map<String, dynamic> seadmed;
   seadmed = json.decode(storedJsonMap!);
-  print('lenght');
-  print(seadmed.length);
   for (int i = 0; i < seadmed.length; i++) {
     if (valitudSeadmed[i] == true) {
-      print('i siin $i');
-      print(seadmed['Seade$i']["Seadme_generatsioon"]);
       if (seadmed['Seade$i']["Seadme_generatsioon"] == 1) {
-        print('Korras 1');
-        print(lulitusMap);
         await gen1GraafikLoomine(
             lulitusMap, 'täna', seadmed['Seade$i']["Seadme_ID"]);
       } else {
-        print('Korras 2');
-        print(lulitusMap);
         await gen2GraafikuLoomine(
             lulitusMap, 'täna', seadmed['Seade$i']["Seadme_ID"]);
       }

@@ -51,7 +51,6 @@ Future voimus() async {
     //await energia();
     j++;
   }
-  print(voimsus);
   return voimsus;
 }
 

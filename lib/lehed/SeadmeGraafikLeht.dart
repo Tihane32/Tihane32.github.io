@@ -177,8 +177,6 @@ class _SeadmeGraafikuLehtState extends State<SeadmeGraafikuLeht> {
       for (var i = 0; i < 24; i++) {
         lulitusHomme[i][1] = data[i]['price'];
       }
-      print('lulitushommeeeee');
-      print(lulitusHomme);
     }
 
     setState(() {
@@ -197,8 +195,6 @@ class _SeadmeGraafikuLehtState extends State<SeadmeGraafikuLeht> {
       }
 
       keskHind = keskmineHindMapVaartustamine(hindAVG, keskHind, lulitus);
-      print('uuuuu');
-      print(keskHind);
     });
 
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -245,7 +241,6 @@ class _SeadmeGraafikuLehtState extends State<SeadmeGraafikuLeht> {
 
           var scheduleRules1 = httpPackageJson['data']['device_settings']
               ['relays'][0]['schedule_rules'];
-          print('vatsuss: $scheduleRules1');
           for (String item in scheduleRules1) {
             List<String> parts = item.split('-');
             if (parts[1].length > 1) {
@@ -1090,8 +1085,6 @@ Future graafik(
         //Kui post läheb läbi siis:
 
         final httpPackageJson = json.decode(res.body) as Map<String, dynamic>;
-        print(res);
-        print(httpPackageJson);
         var scheduleRules1 = httpPackageJson['data']['device_settings']
             ['relays'][0]['schedule_rules'];
         for (String item in scheduleRules1) {

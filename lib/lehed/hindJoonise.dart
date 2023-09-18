@@ -159,13 +159,11 @@ class _TulpDiagrammState extends State<TulpDiagramm> {
       tund = date.hour;
       hindMax = maxLeidmine(lulitusTana);
       hindMin = minLeidmine(lulitusTana);
-      print(lulitus);
       hindAVG = keskmineHindArvutaus(lulitus);
       temp = hindAVG / 4;
       keskHind = keskmineHindMapVaartustamine(hindAVG, keskHind, lulitus);
     });
 
-    print(data);
   }
 
   @override
@@ -793,7 +791,6 @@ maxLeidmine(Map<int, dynamic> map) {
     }
   });
 
-  print('Highest double: $highest');
   return highest;
 }
 
@@ -808,6 +805,5 @@ minLeidmine(Map<int, dynamic> map) {
     }
   });
 
-  print('Lowest double: $highest');
   return highest;
 }

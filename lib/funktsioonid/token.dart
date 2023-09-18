@@ -28,7 +28,6 @@ Future<String> getToken() async {
       json.decode(sisselogimiseVastus.body) as Map<String, dynamic>;
   token = vastusJSON['data']['token'];
   prefs.setString('token', token!);
-  print('token intrnetist');
 
   return token;
 }
@@ -59,7 +58,6 @@ Future<String> getToken2() async {
         json.decode(sisselogimiseVastus.body) as Map<String, dynamic>;
     token = vastusJSON['data']['token'];
     prefs.setString('token', token!);
-    print('token intrnetist');
   }
 
   return token;

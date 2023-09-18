@@ -80,7 +80,6 @@ seadmeMaksumus(String value) async {
     final historyData = jsonData['data']['history'] as List<dynamic>;
     var url1 = Uri.parse(
         'https://dashboard.elering.ee/api/nps/price?start=$formattedDate%3A59%3A59.999Z&end=$test%3A59%3A59.999Z');
-    print(url1);
     var res1 = await http.get(url1);
     if (res1.statusCode != 200)
       throw Exception('http.get error: statusCode= ${res1.statusCode}');
@@ -93,8 +92,6 @@ seadmeMaksumus(String value) async {
     var ajutine = entryList[1].value;
     var ajutine2 = ajutine.entries.toList();
     var hinnagraafik = ajutine2[0].value;
-    print('tunnid');
-    print(resJson);
     for (var i = 0; i < 24; i++) {
       //print(resJson['data']['units']['consumption']);
       var ajutineTarb;
@@ -107,12 +104,9 @@ seadmeMaksumus(String value) async {
       // print(historyData);
       temp = temp + ajutineTarb * hinnagraafik[i]['price'];
       hind = hind + (ajutineTarb * hinnagraafik[i]['price']);
-      print('$hind $i');
     }
 
     maksumusSeade[DateTime.parse(abi)] = temp;
-    print('yesseseseese');
-    print(maksumusSeade);
   }
   u++;
 

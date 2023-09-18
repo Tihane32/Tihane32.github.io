@@ -32,6 +32,5 @@ void onoff(String onoff) async {
     var url =
         Uri.parse('https://shelly-64-eu.shelly.cloud/device/relay/control');
     var res = await http.post(url, headers: headers, body: data);
-    print(res.body);
   }
 }

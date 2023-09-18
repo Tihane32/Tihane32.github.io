@@ -23,7 +23,6 @@ class Graafik extends StatelessWidget {
       : super(key: key);
 
   void sendDataToURL() async {
-    print('value: $value');
     int k = 0;
     DateTime now = DateTime.now();
     int tundtana = now.hour;
@@ -42,7 +41,6 @@ class Graafik extends StatelessWidget {
 
     []; //Võtab mälust 'users'-i asukohast väärtused
     var seadmedJSONmap = prefs.getString('seadmed');
-    print(seadmedJSONmap);
 
     Map<String, dynamic> storedMap = json.decode(seadmedJSONmap!);
 
@@ -63,7 +61,6 @@ class Graafik extends StatelessWidget {
 
         j++;
 
-        print('Gen on: $seadeGen');
         if (seadeGen == 1) {
           await Future.delayed(const Duration(seconds: 2));
 
@@ -186,9 +183,7 @@ class Graafik extends StatelessWidget {
           if (k == 1) {
             List<String> myList = graafik.split(',');
             List<dynamic> dynamicList = graafik.split(',');
-            print("dynamic: $dynamicList");
             prefs.setString('dynamicList$value', graafik);
-            print(graafik);
             List<String> filteredList = myList
                 .where(
                     (string) => int.parse(string.substring(0, 2)) >= tundtana)
@@ -196,7 +191,6 @@ class Graafik extends StatelessWidget {
 
             graafik = filteredList.join(',');
           }
-          print(graafik);
           await Future.delayed(const Duration(seconds: 2));
           var headers1 = {
             'Content-Type': 'application/x-www-form-urlencoded',
@@ -213,11 +207,8 @@ class Graafik extends StatelessWidget {
           var url1 = Uri.parse(
               'https://shelly-64-eu.shelly.cloud/device/relay/settings/schedule_rules');
           var res1 = await http.post(url1, headers: headers1, body: data1);
-          print(graafik);
 
-          print(res1.body);
           vastus.add(res1.body);
-          print(vastus);
           await Future.delayed(const Duration(seconds: 3));
           break;
         }
@@ -226,7 +217,6 @@ class Graafik extends StatelessWidget {
         break;
       }
     }
-    print(vastus);
     await prefs.setStringList('vastus', vastus);
     String asendus = now.toString();
     await prefs.setString('Aeg', now.toString());

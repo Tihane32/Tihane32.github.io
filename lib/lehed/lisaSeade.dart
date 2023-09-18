@@ -44,10 +44,8 @@ class _LisaSeadeState extends State<LisaSeade> {
 
     var url3 = Uri.parse('https://shelly-64-eu.shelly.cloud/device/settings');
     var res = await http.post(url3, headers: headers, body: data3);
-    print(res.body);
     final httpPackageJson3 = json.decode(res.body) as Map<String, dynamic>;
     entryList = httpPackageJson3.entries.toList();
-    print(entryList);
     if (res.statusCode == 200) {
       _scaffoldMessengerKey.currentState?.showSnackBar(
         SnackBar(

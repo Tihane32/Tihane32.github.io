@@ -87,8 +87,6 @@ class _MGraafikState extends State<MGraafik> {
     // Calculate the last day of the current month
     DateTime lastDayOfMonth =
         DateTime(currentDateTime.year, currentDateTime.month + 1, 1);
-    print('lastday');
-    print(lastDayOfMonth);
     // Create the map with dates and initial values of 0
     //Map<DateTime, double> temp = {};
     setState(() {
@@ -101,8 +99,6 @@ class _MGraafikState extends State<MGraafik> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String jsonData = prefs.getString('consumption') ?? '[]';
     List<dynamic> decodedList = jsonDecode(jsonData);
-    print('jeeseeseses');
-    print(decodedList.length);
     for (var j = 0; j < decodedList.length; j++) {
       dynamic i = 0;
       String k = '';
@@ -110,7 +106,6 @@ class _MGraafikState extends State<MGraafik> {
       k = i.toStringAsFixed(2);
       consumption[j] = k;
     }
-    print(consumption);
     double abi = 0;
     temp = await seadmeMaksumus(value);
     for (DateTime date = firstDayOfMonth;
@@ -126,8 +121,6 @@ class _MGraafikState extends State<MGraafik> {
           MapEntry(key, double.parse(value.toStringAsFixed(3))));
       temp.values.forEach((value) {
         abi = abi + value;
-        print("abi");
-        print(abi);
       });
       total = abi.toStringAsFixed(3);
       keskmine = double.parse(total) / double.parse(total2);
@@ -147,11 +140,9 @@ class _MGraafikState extends State<MGraafik> {
     DateTime firstDayOfMonth =
         DateTime(currentDateTime.year, currentDateTime.month);
 
-    print("first day: $firstDayOfMonth");
     // Calculate the last day of the current month
     DateTime lastDayOfMonth =
         DateTime(currentDateTime.year, currentDateTime.month + 1, 0);
-    print("last day: $lastDayOfMonth");
     // Create the list of _ChartData objects with dates and initial consumption values of 0
     setState(() {
       total2 = '0';
@@ -200,7 +191,6 @@ class _MGraafikState extends State<MGraafik> {
       throw Exception('http.post error: statusCode= ${res.statusCode}');
     final jsonData = json.decode(res.body);
     final historyData = jsonData['data']['history'] as List<dynamic>;
-    print(historyData);
     setState(() {
       chartData = historyData
           .map((history) => _ChartData(DateTime.parse(history['datetime']),
@@ -210,16 +200,10 @@ class _MGraafikState extends State<MGraafik> {
       total2Uhik = jsonData['data']['units']['consumption'].toString();
     });
 
-    print(chartData);
-    print('total');
-    print(jsonData['data']['history'][1]['consumption']);
-    print(jsonData['data']['total']);
     String dataString = jsonEncode(jsonData['data']['history']);
     prefs.setString('consumption', dataString);
     prefs.setString('total', total2);
 
-    print('$total2 ososo');
-    print(prefs.getString('consumption'));
   }
 
   late TooltipBehavior _tooltipBehavior;

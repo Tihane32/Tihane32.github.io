@@ -38,7 +38,6 @@ class _SeadmeteListValimineBodyState extends State<SeadmeteListValimineBody> {
     //await prefs.clear();
 
     String? storedJsonMap = prefs.getString('seadmed');
-    print(storedJsonMap);
     if (storedJsonMap != null) {
       await seisukord();
       storedJsonMap = prefs.getString('seadmed');
@@ -50,16 +49,12 @@ class _SeadmeteListValimineBodyState extends State<SeadmeteListValimineBody> {
         var name = storedMap['Seade$i']['Seadme_nimi'];
         var pistik = storedMap['Seade$i']['Seadme_pistik'];
         var olek = storedMap['Seade$i']['Seadme_olek'];
-        print('olek: $olek');
         Map<String, List<String>> ajutineMap = {
           name: ['assets/boiler1.jpg', '$id', '$olek', '$pistik', 'jah'],
         };
         minuSeadmedK.addAll(ajutineMap);
         i++;
       }
-      print('seadmed');
-      print(minuSeadmedK);
-      print(SeadmeteMap);
     }
     setState(() {
       SeadmeteMap = minuSeadmedK;
@@ -95,7 +90,6 @@ class _SeadmeteListValimineBodyState extends State<SeadmeteListValimineBody> {
                           ValitudSeadmed[seade] = false;
                         }
                       });
-                      print(ValitudSeadmed[seade]);
                     } else {
                       showDialog(
                           context: context,
@@ -266,8 +260,6 @@ Map<String, bool> valitudSeadmeteNullimine(
   for (String seade in SeadmeteMap.keys) {
     ValitudSeadmed[seade] = false;
   }
-  print('ValitudSeadmed :');
-  print(ValitudSeadmed);
   return ValitudSeadmed;
 }
 

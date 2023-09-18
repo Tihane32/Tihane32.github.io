@@ -40,7 +40,6 @@ class _TarbimiseGraafikState extends State<TarbimiseGraafik> {
     //await prefs.clear();
 
     String? storedJsonMap = prefs.getString('seadmed');
-    print(storedJsonMap);
     if (storedJsonMap != null) {
       storedJsonMap = prefs.getString('seadmed');
       Map<String, dynamic> storedMap = json.decode(storedJsonMap!);
@@ -52,16 +51,13 @@ class _TarbimiseGraafikState extends State<TarbimiseGraafik> {
         var pistik = storedMap['Seade$i']['Seadme_pistik'];
         var olek = storedMap['Seade$i']['Seadme_olek'];
         var gen = storedMap['Seade$i']['Seadme_generatsioon'];
-        print('olek: $olek');
         Map<String, List<String>> ajutineMap = {
           name: ['assets/boiler1.jpg', '$id', '$olek', '$pistik', '$gen'],
         };
         seadmeteMap.addAll(ajutineMap);
         i++;
       }
-      print('seadmed');
 
-      print(SeadmeteMap);
 
       setState(() {
         SeadmeteMap = seadmeteMap;
@@ -94,8 +90,6 @@ class _TarbimiseGraafikState extends State<TarbimiseGraafik> {
               ColumnSeries<ChartData, String>(
                 onPointTap: (pointInteractionDetails) {
                   int? rowIndex = pointInteractionDetails.pointIndex;
-                  print("rowindex $rowIndex");
-                  print(SeadmeteMap.keys.elementAt(rowIndex!));
                   Navigator.push(
                     context,
                     MaterialPageRoute(

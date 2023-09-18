@@ -31,14 +31,12 @@ class _EGraafikState extends State<EGraafik> {
     String? storedJsonMap = prefs.getString('seadmed');
     String? koht = prefs.getString('KohaNumber');
     Map<String, dynamic> storedMap = json.decode(storedJsonMap!);
-    print('map $storedMap');
-var token = await getToken();
+var token = await getToken2();
     var seade = storedMap['Seade$koht'];
     var id = seade['Seadme_ID'];
     var headers = {
       'Authorization': 'Bearer $token',
     };
-    print('siin');
     var data = {
       'id': '$id',
       'channel': '0',

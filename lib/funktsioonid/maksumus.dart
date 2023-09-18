@@ -84,7 +84,6 @@ Future maksumus(String vahemik) async {
         final historyData = jsonData['data']['history'] as List<dynamic>;
         var url1 = Uri.parse(
             'https://dashboard.elering.ee/api/nps/price?start=$formattedDate%3A59%3A59.999Z&end=$test%3A59%3A59.999Z');
-        print(url1);
         var res1 = await http.get(url1);
         if (res1.statusCode != 200)
           throw Exception('http.get error: statusCode= ${res1.statusCode}');
@@ -231,7 +230,6 @@ Future maksumus(String vahemik) async {
     DateTime startOfYear = DateTime(now.year, 1, 1);
     DateTime algus = startOfYear.subtract(Duration(days: 1));
     DateTime endOfDay = now;
-    print('algus');
     String algus1 = DateFormat('yyyy-MM-dd').format(algus);
     algus1 = algus1 + 'T20';
     List<DateTime> yearDates = [];
@@ -248,8 +246,6 @@ Future maksumus(String vahemik) async {
         yearDates.map((date) => formatter.format(date)).toList();
 
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    print('kuupäev');
-    print(formattedDates[formattedDates.length - 1]);
     String temp = formattedDates[0] as String;
     temp = temp + 'T20';
     String temp1 = formattedDates[formattedDates.length - 1] as String;
@@ -285,8 +281,6 @@ Future maksumus(String vahemik) async {
     var u = 0;
     int asi = 0;
     for (var i in storedMap.values) {
-      print('object');
-      print(asi);
       asi++;
       String asendus = storedMap['Seade$u']['Seadme_ID'] as String;
       k = 0;
@@ -338,11 +332,6 @@ Future maksumus(String vahemik) async {
 
           hind = hind + (ajutineTarb * hinnagraafik[o]['price']);
 
-          print(o);
-          print(ajutineTarb);
-          print(historyData[i]['consumption']);
-          print(hinnagraafik[o]['price']);
-          print(hind);
           o++;
         }
       }

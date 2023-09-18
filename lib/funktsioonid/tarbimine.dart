@@ -19,7 +19,6 @@ Future tarbimine(tarbimiseMap, Function updateTarbimine) async {
   DateTime firstDayOfMonth =
       DateTime(currentDateTime.year, currentDateTime.month);
 
-  print("first day: $firstDayOfMonth");
   // Calculate the last day of the current month
   DateTime lastDayOfMonth =
       DateTime(currentDateTime.year, currentDateTime.month + 1, 0);
@@ -48,10 +47,6 @@ Future tarbimine(tarbimiseMap, Function updateTarbimine) async {
     var res = await http.post(url, headers: headers, body: data);
     //print(res.body);
     var resJson = json.decode(res.body) as Map<String, dynamic>;
-    print("tarbimine vastus");
-    print(res.body);
-    print(resJson['data']['total']);
-    print(resJson['data']['units']['consumption']);
 
     if (resJson['data']['units']['consumption'] == 'Wh') {
       double ajutine = resJson['data']['total'] / 1000.0;
@@ -74,7 +69,6 @@ Future tarbimine(tarbimiseMap, Function updateTarbimine) async {
     //await energia();
     j++;
   }
-  print('lopp');
   updateTarbimine(tarbimiseMap);
 
   return tarbimine;

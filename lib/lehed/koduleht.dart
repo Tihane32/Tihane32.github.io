@@ -80,7 +80,6 @@ class _KoduLehtState extends State<KoduLeht> {
   updateTarbimine(tarbimiseMap) {
     setState(() {
       tarbimiseMap = tarbimiseMap;
-      print("tarbimiseMap $tarbimiseMap");
     });
   }
 
@@ -95,8 +94,7 @@ class _KoduLehtState extends State<KoduLeht> {
         await getCurrentPrice(); //Kutsub esile CurrentPrice funktsiooni
 
     //TODO: Lisada käibemaks ja võrguteenustasud
-    double test = await tarbimine(tarbimiseMap, updateTarbimine);
-    print(test);
+    double test = await tarbimine(tarbimiseMap, updateTarbimine) as double;
     isLoading = false;
     num k = num.parse(test.toStringAsFixed(4));
     //Võtab data Mapist 'price' väärtuse
@@ -106,13 +104,11 @@ class _KoduLehtState extends State<KoduLeht> {
     var ajutine1 = ajutine[1].value;
 
     double price = ajutine1[0]['price'];
-    print('price: $price');
     price = price / 1000.0;
     price = price * 1.2;
     num n = num.parse(price.toStringAsFixed(4));
     price = n as double;
 
-    print('price: $price');
     setState(() {
       hetkeHind = price.toString();
       //Salvestab pricei hetke hinnaks

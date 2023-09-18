@@ -30,7 +30,6 @@ class _MaksumuseGraafikState extends State<MaksumuseGraafik> {
     //await prefs.clear();
 
     String? storedJsonMap = prefs.getString('seadmed');
-    print(storedJsonMap);
     if (storedJsonMap != null) {
       storedJsonMap = prefs.getString('seadmed');
       Map<String, dynamic> storedMap = json.decode(storedJsonMap!);
@@ -42,16 +41,13 @@ class _MaksumuseGraafikState extends State<MaksumuseGraafik> {
         var pistik = storedMap['Seade$i']['Seadme_pistik'];
         var olek = storedMap['Seade$i']['Seadme_olek'];
         var gen = storedMap['Seade$i']['Seadme_generatsioon'];
-        print('olek: $olek');
         Map<String, List<String>> ajutineMap = {
           name: ['assets/boiler1.jpg', '$id', '$olek', '$pistik', '$gen'],
         };
         seadmeteMap.addAll(ajutineMap);
         i++;
       }
-      print('seadmed');
 
-      print(SeadmeteMap);
 
       setState(() {
         SeadmeteMap = seadmeteMap;
@@ -75,7 +71,6 @@ class _MaksumuseGraafikState extends State<MaksumuseGraafik> {
       String asendus1 = storedMap['Seade$j']['Seadme_nimi'] as String;
       j++;
 
-      print("seadmemaksusmu ${await seadmeMaksumus(asendus)}");
       double calculateSum(Map<DateTime, double> data) {
         double sum = 0.0;
         data.values.forEach((value) {
@@ -99,9 +94,6 @@ class _MaksumuseGraafikState extends State<MaksumuseGraafik> {
     for (var entry in maksumuseMap.entries) {
       chartData.add(ChartData(entry.key, entry.value));
     }
-    print("lõpp");
-    print(chartData);
-    print(maksumuseMap);
     setState(() {
       chartData = chartData;
       kokku = kokku;
@@ -182,8 +174,6 @@ class _MaksumuseGraafikState extends State<MaksumuseGraafik> {
                   ColumnSeries<ChartData, String>(
                     onPointTap: (pointInteractionDetails) {
                       int? rowIndex = pointInteractionDetails.pointIndex;
-                      print("rowindex $rowIndex");
-                      print(SeadmeteMap.keys.elementAt(rowIndex!));
                       Navigator.push(
                         context,
                         MaterialPageRoute(

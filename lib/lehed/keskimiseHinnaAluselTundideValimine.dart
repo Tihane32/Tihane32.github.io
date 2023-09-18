@@ -461,7 +461,6 @@ class _KeskmiseHinnaAluselTundideValimineState
                                 parsedValue = 24;
                               }
                               valitudTunnid = parsedValue;
-                              print(valitudTunnid);
                               lulitus =
                                   OdavimadTunnidOn(lulitus, valitudTunnid);
                               lulitusMapVasak = LulitusMapVasakVaartustamine(
@@ -538,7 +537,6 @@ class _KeskmiseHinnaAluselTundideValimineState
                                   onPointTap: (pointInteractionDetails) {
                                     int? rowIndex =
                                         pointInteractionDetails.pointIndex;
-                                    print('Row Index: $rowIndex');
                                     setState(() {
                                       lulitusMapVasak = TunniVarviMuutus(
                                           rowIndex, lulitusMapVasak);
@@ -574,7 +572,8 @@ class _KeskmiseHinnaAluselTundideValimineState
                                   dataLabelSettings: DataLabelSettings(
                                     isVisible: true,
                                     labelAlignment:
-                                        ChartDataLabelAlignment.outer,
+                                        ChartDataLabelAlignment.bottom,
+                                        offset: Offset(0, 45),
                                     textStyle: fontVaike,
                                     angle: 270,
                                   ),
@@ -585,8 +584,6 @@ class _KeskmiseHinnaAluselTundideValimineState
                                   onPointTap: (pointInteractionDetails) {
                                     int? rowIndex =
                                         pointInteractionDetails.pointIndex;
-                                    print('Row Index: $rowIndex');
-                                    print(lulitus);
 
                                     setState(() {
                                       lulitusMapVasak = TunniVarviMuutus(
@@ -596,9 +593,6 @@ class _KeskmiseHinnaAluselTundideValimineState
                                       lulitusMap = lulitusMapParem;
                                     });
                                     updateLulitusMap(lulitusMap);
-                                    print(lulitusMap);
-                                    print(lulitusMapParem);
-                                    print(lulitusMapVasak);
                                   },
                                   borderRadius: BorderRadius.only(
                                       topLeft: Radius.circular(20),
@@ -626,7 +620,9 @@ class _KeskmiseHinnaAluselTundideValimineState
                                   dataLabelSettings: DataLabelSettings(
                                     isVisible: true,
                                     labelAlignment:
-                                        ChartDataLabelAlignment.outer,
+                                        
+                                        ChartDataLabelAlignment.bottom,
+                                        offset: Offset(0, -45),
                                     textStyle: fontVaike,
                                     angle: 270,
                                   ),
@@ -667,7 +663,6 @@ keskmineHindArvutaus(Map<int, dynamic> lulitus) {
 
   AVG = summa / hindNr;
 
-  print('Keskmine hind: $AVG');
 
   if (hindNr > 0) {
     return ((AVG * mod).round().toDouble() / mod);
@@ -780,14 +775,10 @@ LulitusParemVaartustamine(
 }
 
 TunniVarviMuutus(int? rowIndex, Map<int, dynamic> lulitusMap2) {
-  print('vana');
-  print(lulitusMap2[rowIndex]);
   if (lulitusMap2[rowIndex][2] == false) {
     lulitusMap2[rowIndex][2] = true;
   } else {
     lulitusMap2[rowIndex][2] = false;
   }
-  print('uus');
-  print(lulitusMap2[rowIndex]);
   return lulitusMap2;
 }

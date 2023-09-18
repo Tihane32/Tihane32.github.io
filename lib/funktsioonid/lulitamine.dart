@@ -7,7 +7,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 
 void lulitamine(String seade) async {
-  print('lülitus $seade');
   //Kõikide Shellyde on/off lülitamine
 
   SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -23,21 +22,16 @@ void lulitamine(String seade) async {
     if (storedMap['Seade$j']['Seadme_ID'] == seade) {
       var id = storedMap['Seade$j']['Seadme_ID'];
       var olek = storedMap['Seade$j']['Seadme_olek'];
-      print('olek: $olek');
       if (olek == 'on') {
         olek = 'off';
       } else {
         olek = 'on';
       }
       storedMap['Seade$j']['Seadme_olek'] = olek;
-      print(storedMap['Seade$j']);
-      print('uus olek: $olek');
       await prefs.setString('seadmed', json.encode(storedMap));
-      print(storedMap);
       String? storedKey = prefs.getString('key');
 
       String storedKeyString = jsonDecode(storedKey!);
-      print(storedKeyString);
 
       var headers = {
         'Content-Type': 'application/x-www-form-urlencoded',
@@ -53,8 +47,6 @@ void lulitamine(String seade) async {
       var url =
           Uri.parse('https://shelly-64-eu.shelly.cloud/device/relay/control');
       var res = await http.post(url, headers: headers, body: data);
-      print(res.body);
-      print(storedKeyString);
     }
 
     j++;

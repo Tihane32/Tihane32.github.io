@@ -9,7 +9,6 @@ gen2GraafikuLoomine(var selected, var valitudPaev, String value) async {
   var graafikud = Map<String, dynamic>();
   List temp = List.empty(growable: true);
   await graafikuteSaamine(graafikud, value, temp, valitudPaev);
-  print(temp);
 
   await graafikuloomine(graafikud, selected, valitudPaev, value);
 
@@ -60,7 +59,6 @@ graafikuteSaamine(Map<String, dynamic> graafikud, String value, List temp,
       // Format the current date to get the weekday abbreviation (e.g., "MON," "TUE," etc.)
       String formattedWeekday = dateFormat.format(now);
       formattedWeekday = formattedWeekday.toUpperCase();
-      print("Today's weekday is: $formattedWeekday");
 
       String date = job['timespec'].split(" ")[5];
       if (date == formattedWeekday) {
@@ -170,7 +168,6 @@ graafikuSaatmine(bool lulitus, String tund, valitudPaev, String value) async {
   var url = Uri.parse(
       'https://shelly-64-eu.shelly.cloud/fast/device/gen2_generic_command');
   var res = await http.post(url, headers: headers, body: data);
-  print('vastusgen2 ${res.body}');
   if (res.statusCode != 200)
     throw Exception('http.post error: statusCode= ${res.statusCode}');
 }
@@ -308,27 +305,20 @@ Future<Map<int, dynamic>> gen2GraafikSaamine(
     // Format the current date to get the weekday abbreviation (e.g., "MON," "TUE," etc.)
     String formattedWeekday = dateFormat.format(now);
     formattedWeekday = formattedWeekday.toUpperCase();
-    print("Today's weekday is: $formattedWeekday");
     for (var i = 0; i < graafikud.length; i++) {
       var temp = graafikud[i]['Timespec'];
       // print(temp);
       int hour = int.parse(temp.split(" ")[2]);
-      print('siiiin ${graafikud[i]}');
       String date = temp.split(" ")[5];
-      print(date);
-      print(formattedWeekday);
       // Update boolean value in hourDataMap if the hour exists
       if (onOff.containsKey(hour)) {
         if (formattedWeekday == date) {
-          print("yessssss");
           abi.add(hour);
           onOff[hour][2] = graafikud[i]["On/Off"];
         }
       }
     }
     abi.sort();
-    print('object');
-    print(onOff);
     for (var i = 0; i < abi.length - 1; i++) {
       //print(onOff);
       int j = abi[i];
@@ -337,15 +327,11 @@ Future<Map<int, dynamic>> gen2GraafikSaamine(
       for (j; j < o; j++) {
         onOff[j][2] = onOff[abi[i]][2];
 
-        print('$i ${abi[i]} $j $o ${onOff[j][2]} ${onOff[i][2]}');
-        print(onOff[7][2]);
         //print('$onOff $i');
       }
       //print(onOff);
     }
 
-    print(abi);
-    print('lulitus $onOff');
     return onOff;
   } else {
     return onOff;
@@ -371,7 +357,5 @@ delete(value, List temp) async {
         'https://shelly-64-eu.shelly.cloud/fast/device/gen2_generic_command');
     var res1 = await http.post(url, headers: headers, body: data);
 
-    print(data);
-    print(res1.body);
   }
 }

@@ -118,7 +118,6 @@ gen1GraafikLoomine(
   var url1 = Uri.parse(
       'https://shelly-64-eu.shelly.cloud/device/relay/settings/schedule_rules');
   var res1 = await http.post(url1, headers: headers1, body: data1);
-  print(res1.body);
   for (int i = 0; i < 24; i++) {
     String temp = selected[i][2];
     bool temp1;

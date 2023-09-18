@@ -27,33 +27,14 @@ class _SeadmeYldinfoLehtState extends State<SeadmeYldinfoLeht> {
   late Map<int, dynamic> lulitusMap;
   int selectedRowIndex = -1;
   late double hindAVG;
-  String paevNupp = 'Täna';
-  String selectedPage = 'Üldinfo';
-  String onoffNupp = 'Shelly ON';
+
   String uusNimi = '';
-  var hetkeHind = '0';
-
-  var hetkevoismus = '0';
-
-  var ajatarbimine = '0';
-
-  var kulu = '0';
-  bool isLoading = false;
-  String selectedOption = 'Nädala';
-  List<String> dropdownOptions = ['Nädala', 'Kuu', 'Aasta'];
+  
   double vahe = 20;
 
   Color boxColor = sinineKast;
 
-  TextStyle fontLaadimine() {
-    return GoogleFonts.roboto(
-      textStyle: TextStyle(
-        fontSize: 20,
-        color: isLoading ? Colors.grey : Colors.black,
-        fontWeight: FontWeight.w500,
-      ),
-    );
-  }
+  
 
   BorderRadius borderRadius = BorderRadius.circular(5.0);
 
