@@ -7,6 +7,7 @@ import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:testuus4/lehed/SeadmeGraafikLeht.dart';
 import 'package:testuus4/lehed/SeadmeTarbimisLeht.dart';
 import 'package:testuus4/lehed/TarbimisLeht.dart';
+import 'package:testuus4/lehed/dynamicSeadmeInfo.dart';
 import 'package:testuus4/lehed/koduleht.dart';
 import 'package:testuus4/main.dart';
 
@@ -58,7 +59,6 @@ class _TarbimiseGraafikState extends State<TarbimiseGraafik> {
         i++;
       }
 
-
       setState(() {
         SeadmeteMap = seadmeteMap;
       });
@@ -93,8 +93,10 @@ class _TarbimiseGraafikState extends State<TarbimiseGraafik> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => TarbimisLeht(
-                        seadmeNimi: SeadmeteMap.keys.elementAt(rowIndex!), SeadmeteMap: SeadmeteMap,
+                      builder: (context) => DunaamilineSeadmeLeht(
+                        seadmeNimi: SeadmeteMap.keys.elementAt(rowIndex!),
+                        SeadmeteMap: SeadmeteMap,
+                        valitud: 1,
                       ),
                     ),
                   );

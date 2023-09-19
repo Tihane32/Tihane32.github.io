@@ -26,7 +26,7 @@ class _LisaSeadeState extends State<LisaSeade> {
   final GlobalKey<ScaffoldMessengerState> _scaffoldMessengerKey =
       GlobalKey<ScaffoldMessengerState>();
 
-  //TODO: Lisada seadme salvestamine mälusse
+
   Future<void> _submitForm() async {
     String ajutineParool = parool.text;
     String ajutineKastuajanimi = kasutajanimi.text;

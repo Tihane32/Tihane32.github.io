@@ -263,7 +263,7 @@ class _KeskmiseHinnaAluselTundideValimineState
           LulitusParemVaartustamine(hindAVG, lulitus, lulitusMapParem);
       lulitusMap = lulitusMapParem;
     });
-    updateLulitusMap(lulitusMap);
+    updateLulitusMap(lulitusMap, tana);
   }
 
   @override
@@ -544,7 +544,7 @@ class _KeskmiseHinnaAluselTundideValimineState
                                           rowIndex, lulitusMapParem);
                                       lulitusMap = lulitusMapParem;
                                     });
-                                    updateLulitusMap(lulitusMap);
+                                    updateLulitusMap(lulitusMap,tana);
                                   },
                                   borderRadius: BorderRadius.only(
                                       bottomLeft: Radius.circular(20),
@@ -592,7 +592,7 @@ class _KeskmiseHinnaAluselTundideValimineState
                                           rowIndex, lulitusMapParem);
                                       lulitusMap = lulitusMapParem;
                                     });
-                                    updateLulitusMap(lulitusMap);
+                                    updateLulitusMap(lulitusMap,tana);
                                   },
                                   borderRadius: BorderRadius.only(
                                       topLeft: Radius.circular(20),

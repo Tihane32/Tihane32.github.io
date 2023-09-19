@@ -99,7 +99,7 @@ class _SeadmeTarbimineLehtState extends State<SeadmeTarbimineLeht> {
     final data =
         await getCurrentPrice(); //Kutsub esile CurrentPrice funktsiooni
 
-    //TODO: Lisada käibemaks ja võrguteenustasud
+   
     final test = 0;
     isLoading = false;
 

@@ -109,6 +109,6 @@ seadmeMaksumus(String value) async {
     maksumusSeade[DateTime.parse(abi)] = temp;
   }
   u++;
-
+  print("seadmemaksusmus $value $maksumusSeade");
   return maksumusSeade;
 }

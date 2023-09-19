@@ -84,7 +84,7 @@ class _KopeeriGraafikTundideValikState
         minuSeadmedK.addAll(ajutineMap);
         i++;
       }
-      //TODO: eemalda j'rgmine rida kui gen2 tgraafik tootab
+    
       minuSeadmedK['Shelly Pro PM']![4] = 'ei';
     }
     setState(() {

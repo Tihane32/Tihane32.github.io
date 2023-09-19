@@ -7,6 +7,7 @@ import 'package:testuus4/lehed/AbiLeht.dart';
 import 'package:testuus4/lehed/SeadmeTarbimisLeht.dart';
 import 'package:testuus4/lehed/TarbimisLeht.dart';
 import 'package:testuus4/lehed/dynamicKoduLeht.dart';
+import 'package:testuus4/lehed/dynamicSeadmeInfo.dart';
 import 'SeadmeYldInfo.dart';
 import 'seadmeteList.dart';
 import 'package:flutter/services.dart';
@@ -180,7 +181,7 @@ class _SeadmeGraafikuLehtState extends State<SeadmeGraafikuLeht> {
     }
 
     setState(() {
-      //hommeNahtav = true; //TODO: testimise jaoks
+     
       if (date.hour >= 15) {
         hommeNahtav = true;
       }
@@ -860,9 +861,9 @@ class _SeadmeGraafikuLehtState extends State<SeadmeGraafikuLeht> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => SeadmeGraafikuLeht(
+                      builder: (context) => DunaamilineSeadmeLeht(
                         seadmeNimi: seadmeNimi,
-                        SeadmeteMap: SeadmeteMap,
+                        SeadmeteMap: SeadmeteMap, valitud: 0,
                       ),
                     ),
                   );

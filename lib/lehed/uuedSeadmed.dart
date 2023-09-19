@@ -66,42 +66,52 @@ class _uuedSeadmedState extends State<uuedSeadmed> {
       body: Column(
         children: [
           Expanded(
-            child: Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: ListView.builder(
-                itemCount: widget.uuedSeadmedString.length,
-                itemBuilder: (context, index) {
-                  final seadeKey = 'Seade$index';
-                  final seadmeInfo = widget.uuedSeadmedString[seadeKey] ??
-                      {}; // Add null check
-                  final seadmeNimi = seadmeInfo['Seadme_nimi'] ?? '';
-                  return Row(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(12.0),
-                        child: Text(
-                          seadmeNimi,
-                          style: fontSuur, // Change this to your desired font
-                        ),
+            child: ListView.builder(
+              itemCount: widget.uuedSeadmedString.length,
+              itemBuilder: (context, index) {
+                final seadeKey = 'Seade$index';
+                final seadmeInfo = widget.uuedSeadmedString[seadeKey] ??
+                    {}; // Add null check
+                final seadmeNimi = seadmeInfo['Seadme_nimi'] ?? '';
+                return Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(20,20,20,8),
+                      child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Column(
+                            children: [
+                              Text(
+                                seadmeNimi,
+                                style: fontSuur, // Change this to your desired font
+                              ),
+                            ],
+                          ),
+                          Transform.scale(
+                            scale: 1.5,
+                            child: Checkbox(
+                              shape: CircleBorder(),
+                              activeColor: Color.fromARGB(255, 69, 207, 44),
+                              value: checkboxValues[index],
+                              onChanged: (Newvalue) {
+                                setState(() {
+                                  if (Newvalue == false) {}
+                                  checkboxValues[index] = Newvalue!;
+                                });
+                              },
+                            ),
+                          )
+                        ],
                       ),
-                      Transform.scale(
-                        scale: 1.5,
-                        child: Checkbox(
-                          shape: CircleBorder(),
-                          activeColor: Color.fromARGB(255, 69, 207, 44),
-                          value: checkboxValues[index],
-                          onChanged: (Newvalue) {
-                            setState(() {
-                              if (Newvalue == false) {}
-                              checkboxValues[index] = Newvalue!;
-                            });
-                          },
-                        ),
-                      )
-                    ],
-                  );
-                },
-              ),
+                    ),
+                     Container(
+                      height: 1,
+                      width: double.infinity,
+                      color: Colors.black,
+                    ),
+                  ],
+                );
+              },
             ),
           ),
           GestureDetector(

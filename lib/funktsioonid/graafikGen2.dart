@@ -4,7 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'token.dart';
 import 'package:intl/intl.dart';
 
-//TODO: peab tegema nii, et topelt graafikut ei laseks panna
+
 gen2GraafikuLoomine(var selected, var valitudPaev, String value) async {
   var graafikud = Map<String, dynamic>();
   List temp = List.empty(growable: true);

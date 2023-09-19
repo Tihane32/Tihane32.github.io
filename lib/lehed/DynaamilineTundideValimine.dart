@@ -61,7 +61,8 @@ class _DynamilineTundideValimineState extends State<DynamilineTundideValimine> {
   int valitudTunnid = 10;
   Color boxColor = sinineKast;
   int leht = 0;
-  late List<Widget> lehedMenu; // Declare the list
+  late List<Widget> lehedMenu;
+  Color paev = Colors.green; // Declare the list
 
   @override
   void initState() {
@@ -78,9 +79,10 @@ class _DynamilineTundideValimineState extends State<DynamilineTundideValimine> {
     ];
   }
 
-  updateLulitusMap(Map<int, dynamic> updatedMap) {
+  updateLulitusMap(Map<int, dynamic> updatedMap, Color updatedPaev) {
     setState(() {
       lulitusMap = updatedMap;
+      paev = updatedPaev;
     });
   }
 
@@ -186,7 +188,7 @@ class _DynamilineTundideValimineState extends State<DynamilineTundideValimine> {
                               builder: (context) => SeadmeteListValimine()),
                         );
                       } else if (koduindex == 1) {
-                        graafikuteSaatmine(valitudSeadmed, lulitusMap);
+                        graafikuteSaatmine(valitudSeadmed, lulitusMap, paev);
                         showDialog(
                             context: context,
                             builder: (context) => AlertDialog(
@@ -233,19 +235,25 @@ class _DynamilineTundideValimineState extends State<DynamilineTundideValimine> {
   }
 }
 
-graafikuteSaatmine(var valitudSeadmed, Map<int, dynamic> lulitusMap) async {
+graafikuteSaatmine(
+    var valitudSeadmed, Map<int, dynamic> lulitusMap, Color paev) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   var storedJsonMap = prefs.getString('seadmed');
   Map<String, dynamic> seadmed;
   seadmed = json.decode(storedJsonMap!);
+  String valitudPaev = "homme";
+  if (paev == Colors.green) {
+    valitudPaev = "täna";
+  }
+  print(valitudPaev);
   for (int i = 0; i < seadmed.length; i++) {
     if (valitudSeadmed[i] == true) {
       if (seadmed['Seade$i']["Seadme_generatsioon"] == 1) {
         await gen1GraafikLoomine(
-            lulitusMap, 'täna', seadmed['Seade$i']["Seadme_ID"]);
+            lulitusMap, valitudPaev, seadmed['Seade$i']["Seadme_ID"]);
       } else {
         await gen2GraafikuLoomine(
-            lulitusMap, 'täna', seadmed['Seade$i']["Seadme_ID"]);
+            lulitusMap, valitudPaev, seadmed['Seade$i']["Seadme_ID"]);
       }
     }
   }

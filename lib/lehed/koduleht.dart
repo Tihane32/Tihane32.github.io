@@ -93,8 +93,8 @@ class _KoduLehtState extends State<KoduLeht> {
     final data =
         await getCurrentPrice(); //Kutsub esile CurrentPrice funktsiooni
 
-    //TODO: Lisada käibemaks ja võrguteenustasud
-    double test = await tarbimine(tarbimiseMap, updateTarbimine) as double;
+
+    var test = await tarbimine(tarbimiseMap, updateTarbimine);
     isLoading = false;
     num k = num.parse(test.toStringAsFixed(4));
     //Võtab data Mapist 'price' väärtuse

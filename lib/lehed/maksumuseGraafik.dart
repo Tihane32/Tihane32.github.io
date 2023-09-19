@@ -48,7 +48,6 @@ class _MaksumuseGraafikState extends State<MaksumuseGraafik> {
         i++;
       }
 
-
       setState(() {
         SeadmeteMap = seadmeteMap;
       });
@@ -75,8 +74,10 @@ class _MaksumuseGraafikState extends State<MaksumuseGraafik> {
         double sum = 0.0;
         data.values.forEach((value) {
           sum += value;
+          print("sum: $sum");
         });
-        kokku = sum;
+        kokku = kokku + sum;
+        print("kokku: $kokku");
         return sum;
       }
 

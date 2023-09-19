@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:testuus4/lehed/AbiLeht.dart';
 import 'package:testuus4/lehed/SeadmeGraafikLeht.dart';
 import 'package:testuus4/lehed/TarbimisLeht.dart';
@@ -29,12 +32,11 @@ class _SeadmeYldinfoLehtState extends State<SeadmeYldinfoLeht> {
   late double hindAVG;
 
   String uusNimi = '';
-  
+
   double vahe = 20;
-
+  String mudel = "";
+  String id = "";
   Color boxColor = sinineKast;
-
-  
 
   BorderRadius borderRadius = BorderRadius.circular(5.0);
 
@@ -47,6 +49,14 @@ class _SeadmeYldinfoLehtState extends State<SeadmeYldinfoLeht> {
   @override
   void initState() {
     super.initState();
+    init();
+  }
+
+  init() {
+    setState(() {
+      mudel = SeadmeteMap[seadmeNimi]![3];
+      id = SeadmeteMap[seadmeNimi]![1];
+    });
   }
 
   @override
@@ -60,38 +70,43 @@ class _SeadmeYldinfoLehtState extends State<SeadmeYldinfoLeht> {
             Align(
               alignment: Alignment.center,
               child: Container(
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  color: boxColor,
+                  borderRadius: BorderRadius.circular(5.0),
+                  border: Border.all(
+                    color: Color.fromARGB(0, 0, 0, 0),
+                    width: 2,
+                  ),
+                ),
+                width: sinineKastLaius,
+                height: sinineKastKorgus,
+                child: Align(
                   alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                      color: boxColor,
-                      borderRadius: BorderRadius.circular(5.0),
-                      border: Border.all(
-                        color: Color.fromARGB(0, 0, 0, 0),
-                        width: 2,
-                      )),
-                  width: sinineKastLaius,
-                  height: sinineKastKorgus,
-                  child: Align(
-                    alignment: Alignment.center,
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 8.0),
-                      child: TextField(
-                        // textAlignVertical: TextAlignVertical.center,
-                        //cursorWidth: 0,
-                        onSubmitted: (value) {
-                          setState(() {
-                            uusNimi = value;
-                            SeadmeteMap =
-                                nimeMuutmine(seadmeNimi, SeadmeteMap, uusNimi);
-                            seadmeNimi = uusNimi;
-                          });
-                        },
-                        decoration: InputDecoration(
-                            hintText: '$seadmeNimi',
-                            hintStyle: font,
-                            floatingLabelStyle: font),
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 8.0),
+                    child: TextField(
+                      // Ensure that the style is applied to the TextField
+                      style: font, // Apply your TextStyle here
+                      // textAlignVertical: TextAlignVertical.center,
+                      // cursorWidth: 0,
+                      onSubmitted: (value) {
+                        setState(() {
+                          uusNimi = value;
+
+                          nimeMuutmine(seadmeNimi, SeadmeteMap, uusNimi);
+                          seadmeNimi = uusNimi;
+                        });
+                      },
+                      decoration: InputDecoration(
+                        hintText: '$seadmeNimi',
+                        hintStyle: font,
+                        floatingLabelStyle: font,
                       ),
                     ),
-                  )),
+                  ),
+                ),
+              ),
             ),
             SizedBox(height: vahe),
             Align(
@@ -166,7 +181,7 @@ class _SeadmeYldinfoLehtState extends State<SeadmeYldinfoLeht> {
                     ),
                     children: [
                       TextSpan(text: 'Seadme mudel: ', style: font),
-                      TextSpan(text: SeadmeteMap[seadmeNimi]![3], style: font),
+                      TextSpan(text: mudel, style: font),
                     ],
                   ),
                 ),
@@ -195,7 +210,7 @@ class _SeadmeYldinfoLehtState extends State<SeadmeYldinfoLeht> {
                     ),
                     children: [
                       TextSpan(text: 'Seadme ID: ', style: font),
-                      TextSpan(text: SeadmeteMap[seadmeNimi]![1], style: font),
+                      TextSpan(text: id, style: font),
                     ],
                   ),
                 ),
@@ -234,11 +249,31 @@ muudaSeadmeOlek(Map<String, List<String>> SeadmeteMap, SeadmeNimi) {
   return SeadmeteMap; // Device key not found in the map
 }
 
-nimeMuutmine(
-    String seadmeNimi, Map<String, List<String>> seadmeteMap, String uusNimi) {
-  List<String>? info = seadmeteMap[seadmeNimi];
-  Map<String, List<String>> newSeadmeteMap = Map.from(seadmeteMap);
-  newSeadmeteMap[uusNimi] = info!;
-  newSeadmeteMap.remove(seadmeNimi);
-  return newSeadmeteMap;
+nimeMuutmine(String seadmeNimi, Map<String, List<String>> seadmeteMap,
+    String uusNimi) async {
+  print(seadmeNimi);
+  print(seadmeteMap);
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  //await prefs.clear();
+
+  String? storedJsonMap = prefs.getString('seadmed');
+  if (storedJsonMap != null) {
+    storedJsonMap = prefs.getString('seadmed');
+    Map<String, dynamic> storedMap = json.decode(storedJsonMap!);
+    var i = 0;
+    for (String Seade in storedMap.keys) {
+      print(storedMap['Seade$i']['Seadme_ID']);
+      print(seadmeteMap[seadmeNimi]![1]);
+      if (seadmeteMap[seadmeNimi]![1] == storedMap['Seade$i']['Seadme_ID']) {
+        storedMap['Seade$i']['Seadme_nimi'] = uusNimi;
+
+        String keyMap = json.encode(storedMap);
+        prefs.setString('seadmed', keyMap);
+        print(seadmeteMap[seadmeNimi]![3]);
+        break;
+      }
+
+      i++;
+    }
+  }
 }

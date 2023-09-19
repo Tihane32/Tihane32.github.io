@@ -5,7 +5,7 @@ import 'package:testuus4/funktsioonid/graafikGen2.dart';
 import 'token.dart';
 import 'graafikGen1.dart';
 
-//TODO: peab tegema nii, et topelt graafikut ei laseks panna
+
 genMaaramine(
   Map<int, dynamic> lulitus,
   String paev,
