@@ -38,7 +38,7 @@ class _DunaamilineSeadmeLehtState extends State<DunaamilineSeadmeLeht> {
   @override
   void initState() {
     super.initState();
-    lehedSeadme = [s
+    lehedSeadme = [
       SeadmeGraafikuLeht(
         SeadmeteMap: SeadmeteMap,
         seadmeNimi: seadmeNimi,
