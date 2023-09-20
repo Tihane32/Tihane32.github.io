@@ -348,18 +348,9 @@ class _SeadmeteListValimineState extends State<SeadmeteListValimine> {
                             )),
                   );
                 } else {
-                  showDialog(
-                    context: context,
-                    builder: (context) => AlertDialog(
-                      title: Text(
-                        'Hoiatus!',
-                        style: font,
-                      ),
-                      content: Text(
-                        'Enne graafiku koostamist valida seadmed!',
-                        style: font,
-                      ),
-                    ),
+                  Hoiatus(
+                    context,
+                    'Enne graafiku koostamist valige kaasatavad seadmed!',
                   );
                 }
               }
