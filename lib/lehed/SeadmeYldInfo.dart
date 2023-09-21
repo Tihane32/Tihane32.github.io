@@ -137,20 +137,21 @@ class _SeadmeYldinfoLehtState extends State<SeadmeYldinfoLeht> {
                     ),
                     Spacer(),
                     Container(
+                      alignment: Alignment.center,
                       decoration: BoxDecoration(
                         color: Colors.blue.withOpacity(0.6),
                         shape: BoxShape.circle,
                       ),
                       child: IconButton(
-                        iconSize: 20,
+                        padding: EdgeInsets.all(0.0),
+                        iconSize: 30,
                         onPressed: () {
                           setState(() {
-                            SeadmeteMap =
-                                muudaSeadmeOlek(SeadmeteMap, seadmeNimi);
+                            //TREVOR
                           });
                         },
                         icon: Icon(
-                          Icons.camera_alt_outlined,
+                          Icons.photo_outlined,
                           color: Colors.white,
                         ),
                       ),

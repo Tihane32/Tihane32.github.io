@@ -103,11 +103,15 @@ class _DynamilineTundideValimineState extends State<DynamilineTundideValimine> {
             child: Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
-                color: Colors.blue,
+                color: boxColor,
               ),
               padding: EdgeInsets.symmetric(horizontal: 10),
               child: DropdownButton<String>(
+                icon: Icon(Icons.menu),
                 value: selectedPage,
+                style: font,
+                dropdownColor: sinineKast,
+                borderRadius: borderRadius,
                 onChanged: (String? newValue) {
                   setState(() {
                     selectedPage = newValue!;
@@ -133,7 +137,7 @@ class _DynamilineTundideValimineState extends State<DynamilineTundideValimine> {
                     value: value,
                     child: Text(
                       value,
-                      style: TextStyle(color: Colors.black),
+                      style: font,
                     ),
                   );
                 }).toList(),
