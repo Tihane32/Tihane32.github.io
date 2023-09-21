@@ -1,6 +1,6 @@
 22.09.2023 Eesmärgid
-    Graafikutel päised paigale ja stiil korda
+    Graafikutel päised paigale ja stiil korda                           TEHTUD
     Seadme pildid ja nime muutmine                                      OSALISELT, NIME SAAB MUUTA
-    Seadme graafiku kopeerimine tööle                                   
+    Seadme graafiku kopeerimine tööle                                   OLEKS SEADMEID JUURDE VAJA
     Seadme lisamise leht paremaks                                       TEHTUD
-    Shelly pärimise optimeerimine                                       TEHTUD, VAJA KATSETADA
+    Shelly pärimise optimeerimine                                       TEHTUD
