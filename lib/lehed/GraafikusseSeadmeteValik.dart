@@ -1,25 +1,16 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:testuus4/lehed/Login.dart';
-import 'package:testuus4/lehed/SeadmeGraafikLeht.dart';
-import 'package:testuus4/lehed/abiLeht.dart';
-import 'package:testuus4/lehed/drawer.dart';
-import 'package:testuus4/lehed/kasutajaSeaded.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:testuus4/lehed/keskimiseHinnaAluselTundideValimine.dart';
-import 'package:testuus4/lehed/seadmeteList.dart';
+import 'package:testuus4/lehed/SeadmeGraafikLeht.dart';
 import '../funktsioonid/seisukord.dart';
+import '../funktsioonid/token.dart';
 import 'DynaamilineTundideValimine.dart';
 import 'dynamicKoduLeht.dart';
-import 'navigationBar.dart';
 import 'package:testuus4/main.dart';
-import 'package:flutter/material.dart';
-import '../funktsioonid/graafikGen2.dart';
 import 'package:http/http.dart' as http;
-import 'dart:convert';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class SeadmeteValmisPage extends StatelessWidget {
   @override
@@ -75,18 +66,32 @@ class _SeadmeteListValimineState extends State<SeadmeteListValimine> {
         var name = storedMap['Seade$i']['Seadme_nimi'];
         var pistik = storedMap['Seade$i']['Seadme_pistik'];
         var olek = storedMap['Seade$i']['Seadme_olek'];
+        var gen = storedMap['Seade$i']['Seadme_generatsioon'];
+        print(
+            'gen: $gen ---------------------------------------------------------------');
         Map<String, List<String>> ajutineMap = {
-          name: ['assets/boiler1.jpg', '$id', '$olek', '$pistik', 'jah'],
+          name: [
+            'assets/boiler1.jpg',
+            '$id',
+            '$olek',
+            '$pistik',
+            '$gen',
+            'jah',
+          ],
         };
         minuSeadmedK.addAll(ajutineMap);
+        if (minuSeadmedK[name]![4] == '1') {
+          minuSeadmedK[name]![5] = await SeadmeGraafikKontrollimineGen1(id);
+        } else if (minuSeadmedK[name]![4] == '2') {
+          minuSeadmedK[name]![5] =
+              'ei'; //await SeadmeGraafikKontrollimineGen2(id);
+        }
+
         i++;
       }
-   
-      minuSeadmedK['Shelly Pro PM']![4] = 'ei';
     }
     setState(() {
       SeadmeteMap = minuSeadmedK;
-
       ValitudSeadmed = valitudSeadmeteNullimine(SeadmeteMap);
       isLoading = false;
     });
@@ -209,61 +214,81 @@ class _SeadmeteListValimineState extends State<SeadmeteListValimine> {
                                           color: Colors.blue,
                                         ),
                                         onPressed: () async {
-                                          if (SeadmeteMap[seade]![2] !=
-                                              'Offline') {
-                                            var temp =
-                                                await SeadmeGraafikKoostamineGen1(
-                                                    SeadmeteMap[seade]![2]);
+                                          if (SeadmeteMap[seade]![4] == '1') {
+                                            if (SeadmeteMap[seade]![2] !=
+                                                'Offline') {
+                                              var temp =
+                                                  await SeadmeGraafikKoostamineGen1(
+                                                      SeadmeteMap[seade]![1]);
 
-                                            setState(() {
-                                              seadmeGraafik = temp;
-                                            });
+                                              setState(() {
+                                                seadmeGraafik = temp;
+                                              });
+                                            }
+                                          } else {
+                                            if (SeadmeteMap[seade]![2] !=
+                                                'Offline') {
+                                              var temp =
+                                                  await SeadmeGraafikKoostamineGen2(
+                                                      SeadmeteMap[seade]![1]);
+
+                                              setState(() {
+                                                seadmeGraafik = temp;
+                                              });
+                                            }
                                           }
                                           showDialog(
-                                              context: context,
-                                              builder: (context) => AlertDialog(
-                                                    title:
-                                                        Text('$seade graafik:'),
-                                                    content: Container(
-                                                      height: 500,
-                                                      width: 100,
-                                                      child: ListView.builder(
-                                                        itemCount: seadmeGraafik
-                                                            .length,
-                                                        itemBuilder:
-                                                            (context, index) {
-                                                          var item =
-                                                              seadmeGraafik[
-                                                                  index];
-                                                          return Container(
-                                                            decoration:
-                                                                BoxDecoration(
-                                                              color: item ==
-                                                                      'on'
-                                                                  ? Colors.green
-                                                                  : Colors.grey,
-                                                              border: Border.all(
-                                                                  color: Colors
-                                                                      .black),
-                                                            ),
-                                                            height: 20,
-                                                            width: 100,
-                                                            child: index < 10
-                                                                ? Text(
-                                                                    "0" +
-                                                                        index
-                                                                            .toString() +
-                                                                        ":00 \t \t \t \t \t \t \t \t \t \t \t \t $item",
-                                                                    style: font)
-                                                                : Text(
-                                                                    index.toString() +
-                                                                        ":00 \t \t \t \t \t \t \t \t \t \t \t \t $item",
-                                                                    style: font),
-                                                          );
-                                                        },
-                                                      ),
-                                                    ),
-                                                  ));
+                                            context: context,
+                                            builder: (context) => AlertDialog(
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.all(
+                                                    Radius.circular(10.0)),
+                                              ),
+                                              titlePadding:
+                                                  EdgeInsets.only(top: 10.0),
+                                              contentPadding:
+                                                  EdgeInsets.only(top: 10.0),
+                                              title: Align(
+                                                alignment: Alignment.center,
+                                                child: Text('$seade graafik:'),
+                                              ),
+                                              content: Container(
+                                                height: 528,
+                                                child: Column(
+                                                  children: List.generate(
+                                                    seadmeGraafik.length,
+                                                    (index) {
+                                                      var item =
+                                                          seadmeGraafik[index];
+                                                      return Container(
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          color: item == 'on'
+                                                              ? Colors.green
+                                                              : Colors.grey,
+                                                          border: Border.all(
+                                                              color:
+                                                                  Colors.black,
+                                                              width: 0.5),
+                                                        ),
+                                                        child: Align(
+                                                          alignment:
+                                                              Alignment.center,
+                                                          child: Text(
+                                                            index < 10
+                                                                ? "0${index.toString()}:00"
+                                                                : "${index.toString()}:00",
+                                                            style:
+                                                                font, // Assuming 'font' is a TextStyle object you've defined elsewhere
+                                                          ),
+                                                        ),
+                                                      );
+                                                    },
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          );
                                         },
                                       ),
                               ),
@@ -337,14 +362,20 @@ class _SeadmeteListValimineState extends State<SeadmeteListValimine> {
                     MaterialPageRoute(
                         builder: (context) => DynaamilenieKoduLeht(i: 1)));
               } else if (koduindex == 1) {
-                Navigator.push(
-                  //Kui vajutatakse Teie seade ikooni peale, siis viiakse Seadmetelisamine lehele
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => DynamilineTundideValimine(
-                            valitudSeadmed: ValitudSeadmed,
-                          )),
-                );
+                if (ValitudSeadmed.values.any((value) => value == true)) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => DynamilineTundideValimine(
+                              valitudSeadmed: ValitudSeadmed,
+                            )),
+                  );
+                } else {
+                  Hoiatus(
+                    context,
+                    'Enne graafiku koostamist valige kaasatavad seadmed!',
+                  );
+                }
               }
             });
           }),
@@ -400,14 +431,14 @@ Map<int, bool> valitudSeadmeteNullimine(Map<String, List<String>> SeadmeteMap) {
 SaaSeadmegraafik(Map<String, List<String>> SeadmeteMap, SeadmeNimi) {
   List<String>? deviceInfo = SeadmeteMap[SeadmeNimi];
   if (deviceInfo != null) {
-    String graafik = deviceInfo[4];
+    String graafik = deviceInfo[5];
     return graafik;
   }
   return null; // Device key not found in the map
 }
 
 SeadmeGraafikKoostamineGen1(String value) async {
-  bool grafikOlems = true;
+  bool grafikOlems = false;
   DateTime now = DateTime.now();
   SharedPreferences prefs = await SharedPreferences.getInstance();
   String? storedKey = prefs.getString('key');
@@ -418,7 +449,7 @@ SeadmeGraafikKoostamineGen1(String value) async {
 
   var data = {
     'channel': '0',
-    'id': '80646f81ad9a',
+    'id': value,
     'auth_key': storedKeyString,
   };
 
@@ -433,7 +464,6 @@ SeadmeGraafikKoostamineGen1(String value) async {
 
   var seadmeGraafik1 =
       httpPackageJson['data']['device_settings']['relays'][0]['schedule_rules'];
-
 
   int paev = 0;
 
@@ -485,7 +515,6 @@ SeadmeGraafikKoostamineGen1(String value) async {
       filledTimes.add("${lastTime.toString().padLeft(4, '0')}-0-$lastState");
     }
 
-
     List<String> onOffStatus = [];
 
     for (var timeEntry in filledTimes) {
@@ -496,10 +525,124 @@ SeadmeGraafikKoostamineGen1(String value) async {
         onOffStatus.add(status);
       }
     }
-
+    print(onOffStatus);
     return onOffStatus;
   } else {
     List<String> tuhi = ['pole graafikut'];
     return tuhi;
+  }
+}
+
+SeadmeGraafikKoostamineGen2(
+  String value,
+) async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  var graafikud = Map<String, dynamic>();
+  List temp = List.empty(growable: true);
+
+  String token = await getToken();
+  var headers = {
+    'Authorization': 'Bearer $token',
+  };
+
+  var data = {
+    'id': value,
+    'method': 'schedule.list',
+  };
+
+  var url = Uri.parse(
+      'https://shelly-64-eu.shelly.cloud/fast/device/gen2_generic_command');
+  var res = await http.post(url, headers: headers, body: data);
+  if (res.statusCode == 200) {
+    var resJSON = jsonDecode(res.body) as Map<String, dynamic>;
+    if (resJSON == null) {
+      return; // stop the function if resJSON is null
+    }
+    var jobs = resJSON['data']['jobs'];
+    if (jobs == null) {
+      // handle the case where jobs is null
+      return;
+    }
+    jobs = resJSON['data']['jobs'] as List<dynamic>;
+    int k = 0;
+    for (var job in jobs) {
+      DateTime now = DateTime.now();
+
+      // Create a DateFormat instance to format the date
+      DateFormat dateFormat =
+          DateFormat('EEE'); // 'EEE' gives the abbreviated weekday name
+
+      // Format the current date to get the weekday abbreviation (e.g., "MON," "TUE," etc.)
+      String formattedWeekday = dateFormat.format(now);
+      formattedWeekday = formattedWeekday.toUpperCase();
+
+      String date = job['timespec'].split(" ")[5];
+      if (date == formattedWeekday) {
+        var id = job['id'] as int;
+        var timespec = job['timespec'] as String;
+        temp.add(id);
+
+        var calls = job['calls'] as List<dynamic>;
+        var graafik = Map<String, dynamic>();
+        for (var call in calls) {
+          var params = call['params']['on'];
+
+          graafik['Timespec'] = timespec;
+          graafik['On/Off'] = params;
+          graafikud['$id'] = graafik;
+        }
+      }
+      k++;
+    }
+  }
+}
+
+SeadmeGraafikKontrollimineGen1(String value) async {
+  bool grafikOlems = false;
+  DateTime now = DateTime.now();
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  String? storedKey = prefs.getString('key');
+  String storedKeyString = jsonDecode(storedKey!);
+  var headers = {
+    'Content-Type': 'application/x-www-form-urlencoded',
+  };
+
+  var data = {
+    'channel': '0',
+    'id': value,
+    'auth_key': storedKeyString,
+  };
+
+  var url = Uri.parse('https://shelly-64-eu.shelly.cloud/device/settings');
+
+  var res = await http.post(url, headers: headers, body: data);
+
+  await Future.delayed(const Duration(seconds: 2));
+  //Kui post läheb läbi siis:
+
+  final httpPackageJson = json.decode(res.body) as Map<String, dynamic>;
+
+  var seadmeGraafik1 =
+      httpPackageJson['data']['device_settings']['relays'][0]['schedule_rules'];
+
+  int paev = 0;
+
+  if (now.weekday == 7) {
+    paev = 0;
+  } else {
+    paev = now.weekday - 1;
+  }
+
+  for (var i = 0; i < seadmeGraafik1.length; i++) {
+    String mainString = seadmeGraafik1[i];
+    if (mainString.contains("-$paev-")) {
+      grafikOlems = true;
+    }
+  }
+
+  if (grafikOlems) {
+    return 'jah';
+  } else {
+    return 'ei';
   }
 }
