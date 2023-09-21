@@ -82,6 +82,8 @@ class _DynamilineTundideValimineState extends State<DynamilineTundideValimine> {
   updateLulitusMap(Map<int, dynamic> updatedMap, Color updatedPaev) {
     setState(() {
       lulitusMap = updatedMap;
+      print("uus paev");
+      print(updatedPaev);
       paev = updatedPaev;
     });
   }

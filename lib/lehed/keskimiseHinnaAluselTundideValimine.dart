@@ -31,21 +31,22 @@ class KeskmiseHinnaAluselTundideValimine extends StatefulWidget {
 }
 
 int koduindex = 1;
-Color valge = Colors.white;
-Color green = Colors.green;
-Color homme = valge;
-Color tana = green;
-TextStyle hommeFont = font;
-TextStyle tanaFont = fontValge;
-int? tappedIndex;
-bool hommeNahtav = false;
 
+ Color valge = Colors.white;
+Color green = Colors.green;
 class _KeskmiseHinnaAluselTundideValimineState
     extends State<KeskmiseHinnaAluselTundideValimine> {
   _KeskmiseHinnaAluselTundideValimineState(
       {Key? key, required this.lulitusMap, required this.updateLulitusMap});
   Function updateLulitusMap;
   var lulitusMap;
+ 
+Color homme = valge;
+Color tana = green;
+TextStyle hommeFont = font;
+TextStyle tanaFont = fontValge;
+int? tappedIndex;
+bool hommeNahtav = false;
   int selectedRowIndex = -1;
   String paevNupp = 'Täna';
   String selectedPage = 'Keskmine hind';
@@ -277,7 +278,6 @@ class _KeskmiseHinnaAluselTundideValimineState
     return CustomScrollView(
       slivers: <Widget>[
         SliverAppBar(
-          
           automaticallyImplyLeading: false,
           backgroundColor: Colors.white,
           pinned: true,
@@ -357,13 +357,14 @@ class _KeskmiseHinnaAluselTundideValimineState
                                       hind = KeskHindString(hind, hindAVG);
                                       keskHind = keskmineHindMapVaartustamine(
                                           hindAVG, keskHind, lulitus);
-                                      lulitus =
-                                          OdavimadTunnidOn(lulitus, valitudTunnid);
+                                      lulitus = OdavimadTunnidOn(
+                                          lulitus, valitudTunnid);
                                       lulitusMapVasak =
-                                          LulitusMapVasakVaartustamine(
-                                              hindAVG, lulitus, lulitusMapVasak);
-                                      lulitusMapParem = LulitusParemVaartustamine(
-                                          hindAVG, lulitus, lulitusMapParem);
+                                          LulitusMapVasakVaartustamine(hindAVG,
+                                              lulitus, lulitusMapVasak);
+                                      lulitusMapParem =
+                                          LulitusParemVaartustamine(hindAVG,
+                                              lulitus, lulitusMapParem);
                                       temp = hindAVG / 4;
                                       if (temp < 40 && hindAVG > 40) {
                                         temp = 40;
@@ -428,66 +429,58 @@ class _KeskmiseHinnaAluselTundideValimineState
                               ))
                   ],
                 ),
-              
-               Container(
-              height: 20,
-              alignment: Alignment.center,
-              child: RichText(
-                text: TextSpan(
-                  style: TextStyle(
-                    fontSize: 20,
-                    color: Colors.black,
-                  ),
-                  children: [
-                    TextSpan(
-                      text: '  Valitud tunnid:  ',
-                      style: font
-                    ),
-                    WidgetSpan(
-                      alignment: PlaceholderAlignment.bottom,
-                      child: Container(
-                        height: 20,
-                        width: 45,
-                        
-                        child: TextField(
-                          keyboardType: TextInputType.number,
-                          inputFormatters: [
-                            FilteringTextInputFormatter.digitsOnly,
-                          ],
-                          onSubmitted: (value) {
-                            setState(() {
-                              int parsedValue = int.tryParse(value) ?? 0;
-                              if (parsedValue > 24) {
-                                parsedValue = 24;
-                              }
-                              valitudTunnid = parsedValue;
-                              lulitus =
-                                  OdavimadTunnidOn(lulitus, valitudTunnid);
-                              lulitusMapVasak = LulitusMapVasakVaartustamine(
-                                  hindAVG, lulitus, lulitusMapVasak);
-                              lulitusMapParem = LulitusParemVaartustamine(
-                                  hindAVG, lulitus, lulitusMapParem);
-                            });
-                          },
-                          decoration: InputDecoration(
-                            border: InputBorder.none,
-                            isDense: true,
-                            hintText: valitudTunnid.toString(),
-                            contentPadding:
-                                EdgeInsets.symmetric(vertical: 3.0),
-                          ),
-                          style: font
-                        ),
+                Container(
+                  height: 20,
+                  alignment: Alignment.center,
+                  child: RichText(
+                    text: TextSpan(
+                      style: TextStyle(
+                        fontSize: 20,
+                        color: Colors.black,
                       ),
+                      children: [
+                        TextSpan(text: '  Valitud tunnid:  ', style: font),
+                        WidgetSpan(
+                          alignment: PlaceholderAlignment.bottom,
+                          child: Container(
+                            height: 20,
+                            width: 45,
+                            child: TextField(
+                                keyboardType: TextInputType.number,
+                                inputFormatters: [
+                                  FilteringTextInputFormatter.digitsOnly,
+                                ],
+                                onSubmitted: (value) {
+                                  setState(() {
+                                    int parsedValue = int.tryParse(value) ?? 0;
+                                    if (parsedValue > 24) {
+                                      parsedValue = 24;
+                                    }
+                                    valitudTunnid = parsedValue;
+                                    lulitus = OdavimadTunnidOn(
+                                        lulitus, valitudTunnid);
+                                    lulitusMapVasak =
+                                        LulitusMapVasakVaartustamine(
+                                            hindAVG, lulitus, lulitusMapVasak);
+                                    lulitusMapParem = LulitusParemVaartustamine(
+                                        hindAVG, lulitus, lulitusMapParem);
+                                  });
+                                },
+                                decoration: InputDecoration(
+                                  border: InputBorder.none,
+                                  isDense: true,
+                                  hintText: valitudTunnid.toString(),
+                                  contentPadding:
+                                      EdgeInsets.symmetric(vertical: 3.0),
+                                ),
+                                style: font),
+                          ),
+                        ),
+                      ],
                     ),
-                  ],
+                  ),
                 ),
-              ),
-            ),
               ],
-
-
-
             ),
           ),
         ),
@@ -495,7 +488,7 @@ class _KeskmiseHinnaAluselTundideValimineState
           delegate: SliverChildBuilderDelegate(
             (BuildContext context, int index) {
               return Container(
-                color: Colors.white,
+                  color: Colors.white,
                   height: MediaQuery.of(context).size.height * 0.791,
                   child: Center(
                       child: RotatedBox(
@@ -544,7 +537,8 @@ class _KeskmiseHinnaAluselTundideValimineState
                                           rowIndex, lulitusMapParem);
                                       lulitusMap = lulitusMapParem;
                                     });
-                                    updateLulitusMap(lulitusMap,tana);
+                                    print("tana $tana");
+                                    updateLulitusMap(lulitusMap, tana);
                                   },
                                   borderRadius: BorderRadius.only(
                                       bottomLeft: Radius.circular(20),
@@ -573,7 +567,7 @@ class _KeskmiseHinnaAluselTundideValimineState
                                     isVisible: true,
                                     labelAlignment:
                                         ChartDataLabelAlignment.bottom,
-                                        offset: Offset(0, 45),
+                                    offset: Offset(0, 45),
                                     textStyle: fontVaike,
                                     angle: 270,
                                   ),
@@ -592,7 +586,7 @@ class _KeskmiseHinnaAluselTundideValimineState
                                           rowIndex, lulitusMapParem);
                                       lulitusMap = lulitusMapParem;
                                     });
-                                    updateLulitusMap(lulitusMap,tana);
+                                    updateLulitusMap(lulitusMap, tana);
                                   },
                                   borderRadius: BorderRadius.only(
                                       topLeft: Radius.circular(20),
@@ -620,9 +614,8 @@ class _KeskmiseHinnaAluselTundideValimineState
                                   dataLabelSettings: DataLabelSettings(
                                     isVisible: true,
                                     labelAlignment:
-                                        
                                         ChartDataLabelAlignment.bottom,
-                                        offset: Offset(0, -45),
+                                    offset: Offset(0, -45),
                                     textStyle: fontVaike,
                                     angle: 270,
                                   ),
@@ -642,7 +635,6 @@ class _KeskmiseHinnaAluselTundideValimineState
         ),
       ],
     );
-    
   }
 }
 
@@ -662,7 +654,6 @@ keskmineHindArvutaus(Map<int, dynamic> lulitus) {
   });
 
   AVG = summa / hindNr;
-
 
   if (hindNr > 0) {
     return ((AVG * mod).round().toDouble() / mod);
