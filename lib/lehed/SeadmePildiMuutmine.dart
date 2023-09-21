@@ -12,20 +12,35 @@ import 'SeadmeTarbimisLeht.dart';
 
 class SeadmePildiMuutmine extends StatefulWidget {
   const SeadmePildiMuutmine(
-      {Key? key, required this.seadmeNimi, required this.SeadmeteMap})
+      {Key? key,
+      required this.seadmeNimi,
+      required this.SeadmeteMap,
+      required this.uusPilt,
+      required this.pilt})
       : super(key: key);
 
   final String seadmeNimi;
   final Map<String, List<String>> SeadmeteMap;
+  final String uusPilt;
+  final Function pilt;
   @override
   _SeadmePildiMuutmineState createState() => _SeadmePildiMuutmineState(
-      seadmeNimi: seadmeNimi, SeadmeteMap: SeadmeteMap);
+      seadmeNimi: seadmeNimi,
+      SeadmeteMap: SeadmeteMap,
+      uusPilt: uusPilt,
+      pilt: pilt);
 }
 
 class _SeadmePildiMuutmineState extends State<SeadmePildiMuutmine> {
   _SeadmePildiMuutmineState(
-      {Key? key, required this.seadmeNimi, required this.SeadmeteMap});
+      {Key? key,
+      required this.seadmeNimi,
+      required this.SeadmeteMap,
+      required this.uusPilt,
+      required this.pilt});
+  Function pilt;
   String seadmeNimi;
+  String uusPilt;
   Map<String, List<String>> SeadmeteMap;
   late Map<int, dynamic> lulitusMap;
   int selectedRowIndex = -1;
@@ -40,21 +55,20 @@ class _SeadmePildiMuutmineState extends State<SeadmePildiMuutmine> {
   List<String> Pildid = [
     'assets/boiler1.jpg',
     'assets/pump1.jpg',
-    'assets/verandaLamp1.jpg',
-    'assets/tuulik1.jpg',
-    'assets/tuulik.jpg',
-    'assets/tuulik2.jpg',
-    'assets/tuulik3.jpg',
-    'assets/tuulik4.jpg',
+    'assets/verandaLamp1.png',
+    'assets/aku1.jpg',
+    'assets/MitsubishiIMiEv1.jpg',
+    'assets/saun1.jpg',
+    'assets/TeslaModel31.jpg',
+    'assets/vesinik1.jpg',
   ];
+  String algnePilt = '';
+
   @override
   void initState() {
     super.initState();
-    init();
-  }
-
-  init() {
-    setState(() {});
+    algnePilt = SeadmeteMap[seadmeNimi]![0];
+    uusPilt = algnePilt;
   }
 
   @override
@@ -66,7 +80,7 @@ class _SeadmePildiMuutmineState extends State<SeadmePildiMuutmine> {
             ),
             itemCount: Pildid.length + 1,
             itemBuilder: (context, index) {
-              if (index == SeadmeteMap.length) {
+              if (index == 0) {
                 return GestureDetector(
                   onTap: () {
                     Navigator.push(context,
@@ -94,7 +108,51 @@ class _SeadmePildiMuutmineState extends State<SeadmePildiMuutmine> {
                   ),
                 );
               }
-              return GestureDetector(OnTap: () {});
+              final pilt1 = Pildid.elementAt(index - 1);
+              return GestureDetector(
+                onTap: () {
+                  setState(() {
+                    uusPilt = Pildid[index - 1];
+                  });
+                  pilt(uusPilt);
+                },
+                child: Padding(
+                  padding: const EdgeInsets.all(1),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      border: border,
+                    ),
+                    child: Container(
+                      width: double.infinity,
+                      height: double.infinity,
+                      decoration: BoxDecoration(
+                        border: uusPilt == pilt1
+                            ? Border.all(
+                                color: Colors.green,
+                                width: 8,
+                              )
+                            : Border.all(
+                                color: Colors.grey,
+                                width: 8,
+                              ),
+                      ),
+                      child: Stack(
+                        children: [
+                          AspectRatio(
+                            aspectRatio: 1,
+                            child: ClipRRect(
+                              child: Image.asset(
+                                pilt1,
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              );
             }));
   }
 }

@@ -75,8 +75,15 @@ class _SeadmeteListState extends State<SeadmeteList> {
         var pistik = storedMap['Seade$i']['Seadme_pistik'];
         var olek = storedMap['Seade$i']['Seadme_olek'];
         var gen = storedMap['Seade$i']['Seadme_generatsioon'];
+        var pilt = "";
+        if (storedMap['Seade$i']['Seadme_pilt'] != null) {
+          pilt = storedMap['Seade$i']['Seadme_pilt'];
+        } else {
+          pilt = 'assets/boiler1.jpg';
+        }
+
         Map<String, List<String>> ajutineMap = {
-          name: ['assets/boiler1.jpg', '$id', '$olek', '$pistik', '$gen'],
+          name: ['$pilt', '$id', '$olek', '$pistik', '$gen'],
         };
         minuSeadmedK.addAll(ajutineMap);
         i++;
