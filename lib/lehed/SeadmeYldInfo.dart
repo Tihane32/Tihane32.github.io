@@ -1,10 +1,10 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:testuus4/lehed/AbiLeht.dart';
 import 'package:testuus4/lehed/SeadmeGraafikLeht.dart';
+import 'package:testuus4/lehed/SeadmePildiMuutmine.dart';
 import 'package:testuus4/lehed/TarbimisLeht.dart';
 import 'package:testuus4/lehed/seadmedKontoltNim.dart';
 import 'package:testuus4/main.dart';
@@ -146,9 +146,13 @@ class _SeadmeYldinfoLehtState extends State<SeadmeYldinfoLeht> {
                         padding: EdgeInsets.all(0.0),
                         iconSize: 30,
                         onPressed: () {
-                          setState(() {
-                            //TREVOR
-                          });
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => SeadmePildiMuutmine(
+                                    seadmeNimi: seadmeNimi,
+                                    SeadmeteMap: SeadmeteMap)),
+                          );
                         },
                         icon: Icon(
                           Icons.photo_outlined,
