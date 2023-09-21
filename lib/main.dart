@@ -4,6 +4,7 @@ TalTech
 */
 //Kit test
 import 'package:flutter/material.dart';
+import 'funktsioonid/backroundTask.dart';
 import 'lehed/dynamicKoduLeht.dart';
 import 'lehed/koduleht.dart';
 import 'lehed/kaksTabelit.dart';
@@ -11,6 +12,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'lehed/seadmeteList.dart';
 import 'package:get/get.dart';
+import 'package:http/http.dart' as http;
+import 'package:workmanager/workmanager.dart';
 
 //Maini käivitamine, home on koduleht.
 //bool graafikuNahtavus = true;
@@ -46,12 +49,48 @@ Border border = Border.all(
   color: const Color.fromARGB(255, 0, 0, 0),
   width: 2,
 );
+void callbackDispatcher() {
+  Workmanager().executeTask((task, inputData) async {
+    print("Background task executed at ${DateTime.now()}");
 
-void main() {
+    var headers1 = {
+      'Content-Type': 'application/x-www-form-urlencoded',
+    };
+
+    var data1 = {
+      'channel': '0',
+      'enabled': "1",
+      'schedule_rules': "0051-3-on",
+      'id': '80646f81ad9a',
+      'auth_key':
+          "MTcxYTNjdWlk99F3FBAA1664CCBA1DB1A6FE1A156072DB6AF5A8F1B4A1B0ACB7C82002649DADF1114D97483D4E12",
+    };
+
+    var url1 = Uri.parse(
+        'https://shelly-64-eu.shelly.cloud/device/relay/settings/schedule_rules');
+    var res1 = await http.post(url1, headers: headers1, body: data1);
+    print(res1.body);
+
+    return Future.value(true);
+  });
+}
+
+Future<void> main() async {
+//backround start
+
+//backround end
+
   runApp(MaterialApp(
     theme: ThemeData(brightness: Brightness.light),
     home: DynaamilenieKoduLeht(i: 1), //Alustab appi kodulehest
   ));
+
+  Workmanager().initialize(callbackDispatcher);
+  Workmanager().registerPeriodicTask(
+    "1",
+    "simplePeriodicTask",
+    frequency: Duration(seconds: 5),
+  );
 }
 
 void Hoiatus(BuildContext context, String contentMessage) {
