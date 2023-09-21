@@ -1,9 +1,12 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:testuus4/lehed/SeadmeGraafikLeht.dart';
 import '../funktsioonid/seisukord.dart';
+import '../funktsioonid/token.dart';
 import 'DynaamilineTundideValimine.dart';
 import 'dynamicKoduLeht.dart';
 import 'package:testuus4/main.dart';
@@ -63,25 +66,25 @@ class _SeadmeteListValimineState extends State<SeadmeteListValimine> {
         var name = storedMap['Seade$i']['Seadme_nimi'];
         var pistik = storedMap['Seade$i']['Seadme_pistik'];
         var olek = storedMap['Seade$i']['Seadme_olek'];
+        var gen = storedMap['Seade$i']['Seadme_generatsioon'];
+        print(
+            'gen: $gen ---------------------------------------------------------------');
         Map<String, List<String>> ajutineMap = {
           name: [
             'assets/boiler1.jpg',
             '$id',
             '$olek',
             '$pistik',
-            'gen1',
+            '$gen',
             'jah',
           ],
         };
         minuSeadmedK.addAll(ajutineMap);
-// asendus ajutine function siia lisada generatsiooni maaramine
-        if (name == 'Shelly Pro PM') {
-          minuSeadmedK['Shelly Pro PM']![4] = 'gen2';
-        }
-        if (minuSeadmedK[name]![4] == 'gen1') {
+        if (minuSeadmedK[name]![4] == '1') {
           minuSeadmedK[name]![5] = await SeadmeGraafikKontrollimineGen1(id);
-        } else if (minuSeadmedK[name]![4] == 'gen2') {
-          minuSeadmedK[name]![5] = 'ei';
+        } else if (minuSeadmedK[name]![4] == '2') {
+          minuSeadmedK[name]![5] =
+              'ei'; //await SeadmeGraafikKontrollimineGen2(id);
         }
 
         i++;
@@ -211,27 +214,46 @@ class _SeadmeteListValimineState extends State<SeadmeteListValimine> {
                                           color: Colors.blue,
                                         ),
                                         onPressed: () async {
-                                          if (SeadmeteMap[seade]![2] !=
-                                              'Offline') {
-                                            var temp =
-                                                await SeadmeGraafikKoostamineGen1(
-                                                    SeadmeteMap[seade]![1]);
+                                          if (SeadmeteMap[seade]![4] == '1') {
+                                            if (SeadmeteMap[seade]![2] !=
+                                                'Offline') {
+                                              var temp =
+                                                  await SeadmeGraafikKoostamineGen1(
+                                                      SeadmeteMap[seade]![1]);
 
-                                            setState(() {
-                                              seadmeGraafik = temp;
-                                            });
+                                              setState(() {
+                                                seadmeGraafik = temp;
+                                              });
+                                            }
+                                          } else {
+                                            if (SeadmeteMap[seade]![2] !=
+                                                'Offline') {
+                                              var temp =
+                                                  await SeadmeGraafikKoostamineGen2(
+                                                      SeadmeteMap[seade]![1]);
+
+                                              setState(() {
+                                                seadmeGraafik = temp;
+                                              });
+                                            }
                                           }
                                           showDialog(
                                             context: context,
                                             builder: (context) => AlertDialog(
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.all(
+                                                    Radius.circular(10.0)),
+                                              ),
                                               titlePadding:
                                                   EdgeInsets.only(top: 10.0),
                                               contentPadding:
                                                   EdgeInsets.only(top: 10.0),
-                                              title: Text('  $seade graafik:'),
+                                              title: Align(
+                                                alignment: Alignment.center,
+                                                child: Text('$seade graafik:'),
+                                              ),
                                               content: Container(
                                                 height: 528,
-                                                width: 50,
                                                 child: Column(
                                                   children: List.generate(
                                                     seadmeGraafik.length,
@@ -254,9 +276,10 @@ class _SeadmeteListValimineState extends State<SeadmeteListValimine> {
                                                               Alignment.center,
                                                           child: Text(
                                                             index < 10
-                                                                ? "0${index.toString()}:00 \t \t \t \t \t \t \t \t \t \t \t \t $item"
-                                                                : "${index.toString()}:00 \t \t \t \t \t \t \t \t \t \t \t \t $item",
-                                                            style: font,
+                                                                ? "0${index.toString()}:00"
+                                                                : "${index.toString()}:00",
+                                                            style:
+                                                                font, // Assuming 'font' is a TextStyle object you've defined elsewhere
                                                           ),
                                                         ),
                                                       );
@@ -415,7 +438,7 @@ SaaSeadmegraafik(Map<String, List<String>> SeadmeteMap, SeadmeNimi) {
 }
 
 SeadmeGraafikKoostamineGen1(String value) async {
-  bool grafikOlems = true;
+  bool grafikOlems = false;
   DateTime now = DateTime.now();
   SharedPreferences prefs = await SharedPreferences.getInstance();
   String? storedKey = prefs.getString('key');
@@ -502,7 +525,7 @@ SeadmeGraafikKoostamineGen1(String value) async {
         onOffStatus.add(status);
       }
     }
-
+    print(onOffStatus);
     return onOffStatus;
   } else {
     List<String> tuhi = ['pole graafikut'];
@@ -510,8 +533,72 @@ SeadmeGraafikKoostamineGen1(String value) async {
   }
 }
 
+SeadmeGraafikKoostamineGen2(
+  String value,
+) async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  var graafikud = Map<String, dynamic>();
+  List temp = List.empty(growable: true);
+
+  String token = await getToken();
+  var headers = {
+    'Authorization': 'Bearer $token',
+  };
+
+  var data = {
+    'id': value,
+    'method': 'schedule.list',
+  };
+
+  var url = Uri.parse(
+      'https://shelly-64-eu.shelly.cloud/fast/device/gen2_generic_command');
+  var res = await http.post(url, headers: headers, body: data);
+  if (res.statusCode == 200) {
+    var resJSON = jsonDecode(res.body) as Map<String, dynamic>;
+    if (resJSON == null) {
+      return; // stop the function if resJSON is null
+    }
+    var jobs = resJSON['data']['jobs'];
+    if (jobs == null) {
+      // handle the case where jobs is null
+      return;
+    }
+    jobs = resJSON['data']['jobs'] as List<dynamic>;
+    int k = 0;
+    for (var job in jobs) {
+      DateTime now = DateTime.now();
+
+      // Create a DateFormat instance to format the date
+      DateFormat dateFormat =
+          DateFormat('EEE'); // 'EEE' gives the abbreviated weekday name
+
+      // Format the current date to get the weekday abbreviation (e.g., "MON," "TUE," etc.)
+      String formattedWeekday = dateFormat.format(now);
+      formattedWeekday = formattedWeekday.toUpperCase();
+
+      String date = job['timespec'].split(" ")[5];
+      if (date == formattedWeekday) {
+        var id = job['id'] as int;
+        var timespec = job['timespec'] as String;
+        temp.add(id);
+
+        var calls = job['calls'] as List<dynamic>;
+        var graafik = Map<String, dynamic>();
+        for (var call in calls) {
+          var params = call['params']['on'];
+
+          graafik['Timespec'] = timespec;
+          graafik['On/Off'] = params;
+          graafikud['$id'] = graafik;
+        }
+      }
+      k++;
+    }
+  }
+}
+
 SeadmeGraafikKontrollimineGen1(String value) async {
-  bool grafikOlems = true;
+  bool grafikOlems = false;
   DateTime now = DateTime.now();
   SharedPreferences prefs = await SharedPreferences.getInstance();
   String? storedKey = prefs.getString('key');
