@@ -1,14 +1,15 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:testuus4/lehed/AbiLeht.dart';
 import 'package:testuus4/lehed/SeadmeGraafikLeht.dart';
+import 'package:testuus4/lehed/SeadmePildiMuutmine.dart';
 import 'package:testuus4/lehed/TarbimisLeht.dart';
 import 'package:testuus4/lehed/seadmedKontoltNim.dart';
 import 'package:testuus4/main.dart';
 import 'SeadmeTarbimisLeht.dart';
+import 'dynamicSeadmeInfo.dart';
 
 class SeadmeYldinfoLeht extends StatefulWidget {
   const SeadmeYldinfoLeht(
@@ -146,9 +147,16 @@ class _SeadmeYldinfoLehtState extends State<SeadmeYldinfoLeht> {
                         padding: EdgeInsets.all(0.0),
                         iconSize: 30,
                         onPressed: () {
-                          setState(() {
-                            //TREVOR
-                          });
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => DunaamilineSeadmeLeht(
+                                seadmeNimi: seadmeNimi,
+                                SeadmeteMap: SeadmeteMap,
+                                valitud: 3,
+                              ),
+                            ),
+                          );
                         },
                         icon: Icon(
                           Icons.photo_outlined,
@@ -274,6 +282,28 @@ nimeMuutmine(String seadmeNimi, Map<String, List<String>> seadmeteMap,
         break;
       }
 
+      i++;
+    }
+  }
+}
+
+pildiMuutmine(String seadmeNimi, Map<String, List<String>> seadmeteMap,
+    String uusPilt) async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  //await prefs.clear();
+
+  String? storedJsonMap = prefs.getString('seadmed');
+  if (storedJsonMap != null) {
+    storedJsonMap = prefs.getString('seadmed');
+    Map<String, dynamic> storedMap = json.decode(storedJsonMap!);
+    var i = 0;
+    for (String Seade in storedMap.keys) {
+      if (seadmeteMap[seadmeNimi]![1] == storedMap['Seade$i']['Seadme_ID']) {
+        storedMap['Seade$i']['Seadme_pilt'] = uusPilt;
+        String keyMap = json.encode(storedMap);
+        prefs.setString('seadmed', keyMap);
+        break;
+      }
       i++;
     }
   }
