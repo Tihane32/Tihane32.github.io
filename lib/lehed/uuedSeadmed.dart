@@ -70,20 +70,22 @@ class _uuedSeadmedState extends State<uuedSeadmed> {
               itemCount: widget.uuedSeadmedString.length,
               itemBuilder: (context, index) {
                 final seadeKey = 'Seade$index';
-                final seadmeInfo = widget.uuedSeadmedString[seadeKey] ??
-                    {}; // Add null check
+                final seadmeInfo =
+                    widget.uuedSeadmedString[seadeKey] ?? {}; // Add null check
                 final seadmeNimi = seadmeInfo['Seadme_nimi'] ?? '';
                 return Column(
                   children: [
                     Padding(
-                      padding: const EdgeInsets.fromLTRB(20,20,20,8),
-                      child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Column(
                             children: [
                               Text(
                                 seadmeNimi,
-                                style: fontSuur, // Change this to your desired font
+                                style:
+                                    fontSuur, // Change this to your desired font
                               ),
                             ],
                           ),
@@ -104,11 +106,6 @@ class _uuedSeadmedState extends State<uuedSeadmed> {
                         ],
                       ),
                     ),
-                     Container(
-                      height: 1,
-                      width: double.infinity,
-                      color: Colors.black,
-                    ),
                   ],
                 );
               },
@@ -125,31 +122,30 @@ class _uuedSeadmedState extends State<uuedSeadmed> {
               );
             },
             child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Container(
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
+              padding: const EdgeInsets.all(8.0),
+              child: Container(
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
                     color: sinineKast,
                     borderRadius: BorderRadius.all(Radius.circular(20)),
                     border: Border.all(
-  color: Color.fromARGB(41, 0, 0, 0),
-  width: 2,
-)
-                  ),
-                  
-                  width: 200,
-                  height: sinineKastKorgus,
-                  child: RichText(
-                    textAlign: TextAlign.center,
-                    text: TextSpan(
-                      children: [
-                        TextSpan(text: 'OK', style: fontSuur),
-                      ],
-                    ),
+                      color: Color.fromARGB(41, 0, 0, 0),
+                      width: 2,
+                    )),
+                width: 200,
+                height: sinineKastKorgus,
+                child: RichText(
+                  textAlign: TextAlign.center,
+                  text: TextSpan(
+                    children: [
+                      TextSpan(text: 'OK', style: fontSuur),
+                    ],
                   ),
                 ),
-          ),
-      )],
+              ),
+            ),
+          )
+        ],
       ),
     );
   }
@@ -196,7 +192,7 @@ Future<void> sort(
     String seadmedMap = json.encode(seadmed);
     await prefs.setString('seadmed', seadmedMap);
     seisukord();
-  }else{
+  } else {
     String seadmedMap = json.encode(uuedSeadmedString);
     await prefs.setString('seadmed', seadmedMap);
     seisukord();

@@ -10,6 +10,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:intl/intl.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'dart:math';
 
 class TarbimisLeht extends StatefulWidget {
   const TarbimisLeht(
@@ -72,7 +73,8 @@ class _MGraafikState extends State<MGraafik> {
   Map<DateTime, double> temp = {};
   Map<dynamic, dynamic> consumption = {};
   bool graafik = false;
-  int asi = 40;
+  double asi = 0;
+  double asi2 = 0.02;
   String total = '0';
   String total2 = '0';
   String total2Uhik = '';
@@ -124,6 +126,26 @@ class _MGraafikState extends State<MGraafik> {
       });
       total = abi.toStringAsFixed(3);
       keskmine = double.parse(total) / double.parse(total2);
+    });
+
+    double findMaxValue(Map<DateTime, double> temp) {
+      double max = double
+          .negativeInfinity; // Initialize with negative infinity as the starting maximum value
+
+      // Iterate through the values in the map
+      temp.values.forEach((value) {
+        if (value > max) {
+          max = value; // Update max if a larger value is found
+        }
+      });
+
+      return max;
+    }
+
+    double maxTempValue = findMaxValue(temp);
+
+    setState(() {
+      asi2 = maxTempValue;
     });
   }
 
@@ -200,10 +222,23 @@ class _MGraafikState extends State<MGraafik> {
       total2Uhik = jsonData['data']['units']['consumption'].toString();
     });
 
+    double findMaxValue(List<_ChartData> chartData) {
+      if (chartData.isEmpty) {
+        return 0.0; // Return 0 or any default value if the list is empty.
+      }
+      return chartData.map((data) => data.consumption).reduce(max);
+    }
+
+// Now, you can call this method to get the maximum value.
+    double maxChartDataValue = findMaxValue(chartData);
+
+    setState(() {
+      asi = maxChartDataValue;
+    });
+
     String dataString = jsonEncode(jsonData['data']['history']);
     prefs.setString('consumption', dataString);
     prefs.setString('total', total2);
-
   }
 
   late TooltipBehavior _tooltipBehavior;
@@ -364,7 +399,14 @@ class _MGraafikState extends State<MGraafik> {
                                 dataSource: temp.entries.toList(),
                                 yAxisName: 'firstAxis',
                                 xValueMapper: (entry, _) => entry.key,
-                                yValueMapper: (entry, _) => entry.value,
+                                yValueMapper: (entry, _) {
+                                  final yValue = entry.value;
+                                  return yValue == 0
+                                      ? 0
+                                      : yValue < asi2 * 0.25
+                                          ? asi2 * 0.25
+                                          : yValue;
+                                },
                                 enableTooltip: false,
                                 dataLabelSettings: DataLabelSettings(
                                   offset: Offset(0, -10),
@@ -396,8 +438,8 @@ class _MGraafikState extends State<MGraafik> {
                                   final yValue = data.consumption;
                                   return yValue == 0
                                       ? 0
-                                      : yValue < asi
-                                          ? asi
+                                      : yValue < asi * 0.25
+                                          ? asi * 0.25
                                           : yValue;
                                 },
                                 enableTooltip: false,
