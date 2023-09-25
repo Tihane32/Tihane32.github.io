@@ -4,3 +4,9 @@
     Seadme graafiku kopeerimine tööle                                   OLEKS SEADMEID JUURDE VAJA
     Seadme lisamise leht paremaks                                       TEHTUD
     Shelly pärimise optimeerimine                                       TEHTUD
+
+29.09.2023 Eesmärgid
+    Proovida taustal töötamine tööle saada
+    Luua taustal töötamise leht
+    Päeva tarbimisgraafiku kuvamine
+    Seadme graafiku kopeerimine tööle 

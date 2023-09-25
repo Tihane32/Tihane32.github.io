@@ -36,6 +36,7 @@ class _DunaamilineSeadmeLehtState extends State<DunaamilineSeadmeLeht> {
   Map<String, List<String>> SeadmeteMap;
   int valitud;
   String selectedPage = 'Lülitusgraafik';
+
   Color boxColor = sinineKast;
   int koduindex = 1;
   String uusPilt = "";
@@ -50,6 +51,9 @@ class _DunaamilineSeadmeLehtState extends State<DunaamilineSeadmeLeht> {
   @override
   void initState() {
     super.initState();
+    if (valitud == 3) {
+      selectedPage = "Seaded";
+    }
     lehedSeadme = [
       SeadmeGraafikuLeht(
         SeadmeteMap: SeadmeteMap,
