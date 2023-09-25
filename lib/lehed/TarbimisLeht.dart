@@ -11,7 +11,7 @@ import 'package:intl/intl.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'dart:math';
-
+import 'paevaGraafik.dart';
 class TarbimisLeht extends StatefulWidget {
   const TarbimisLeht(
       {Key? key, required this.seadmeNimi, required this.SeadmeteMap})
@@ -389,6 +389,20 @@ class _MGraafikState extends State<MGraafik> {
                             series: <ChartSeries>[
                               StackedColumnSeries<MapEntry<DateTime, double>,
                                   DateTime>(
+                                onPointTap: (pointInteractionDetails) {
+                                   List<DateTime> dateTimes = temp.keys.toList();
+                                  int rowIndex =
+                                      pointInteractionDetails.pointIndex as int;
+                                  showDialog(
+                                    context: context,
+                                    builder: (context) {
+                                      return AlertDialog(
+                                        title: Text('Point Details'),
+                                        content: PaevaTarbimine(date: dateTimes[rowIndex].toString(), value: widget.value, ),
+                                      );
+                                    },
+                                  );
+                                },
                                 color: Colors.green,
                                 width: 0.9,
                                 groupName: 'A',

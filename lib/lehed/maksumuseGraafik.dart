@@ -174,6 +174,7 @@ class _MaksumuseGraafikState extends State<MaksumuseGraafik> {
                   // Renders spline chart
                   ColumnSeries<ChartData, String>(
                     onPointTap: (pointInteractionDetails) {
+                      
                       int? rowIndex = pointInteractionDetails.pointIndex;
                       Navigator.push(
                         context,
