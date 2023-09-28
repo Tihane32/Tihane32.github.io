@@ -67,8 +67,6 @@ class _SeadmeteListValimineState extends State<SeadmeteListValimine> {
         var pistik = storedMap['Seade$i']['Seadme_pistik'];
         var olek = storedMap['Seade$i']['Seadme_olek'];
         var gen = storedMap['Seade$i']['Seadme_generatsioon'];
-        print(
-            'gen: $gen ---------------------------------------------------------------');
         Map<String, List<String>> ajutineMap = {
           name: [
             'assets/boiler1.jpg',
