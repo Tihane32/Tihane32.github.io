@@ -11,25 +11,27 @@ import 'AbiLeht.dart';
 import 'hinnaPiiriAluselTunideValimine.dart';
 import 'package:http/http.dart' as http;
 
-class LylitusValimisLeht3 extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: KopeeriGraafikTundideValik(),
-    );
-  }
-}
-
 class KopeeriGraafikTundideValik extends StatefulWidget {
-  KopeeriGraafikTundideValik({Key? key}) : super(key: key);
-
+  final Function updateValitudSeadmed;
+  KopeeriGraafikTundideValik(
+      {Key? key, this.valitudSeadmed, required this.updateValitudSeadmed})
+      : super(key: key);
+  final valitudSeadmed;
   @override
   _KopeeriGraafikTundideValikState createState() =>
-      _KopeeriGraafikTundideValikState();
+      _KopeeriGraafikTundideValikState(
+          valitudSeadmed: valitudSeadmed,
+          updateValitudSeadmed: updateValitudSeadmed);
 }
 
 class _KopeeriGraafikTundideValikState
     extends State<KopeeriGraafikTundideValik> {
+  _KopeeriGraafikTundideValikState(
+      {Key? key,
+      required this.valitudSeadmed,
+      required this.updateValitudSeadmed});
+  Function updateValitudSeadmed;
+  var valitudSeadmed;
   int koduindex = 1;
   bool isLoading = true;
   String selectedPage = 'Kopeeri graafik';
@@ -84,8 +86,8 @@ class _KopeeriGraafikTundideValikState
         minuSeadmedK.addAll(ajutineMap);
         i++;
       }
-    
-      minuSeadmedK['Shelly Pro PM']![4] = 'ei';
+
+      //minuSeadmedK['Shelly Pro PM']![4] = 'ei';
     }
     setState(() {
       SeadmeteMap = minuSeadmedK;
@@ -132,6 +134,10 @@ class _KopeeriGraafikTundideValikState
                                     title: Text("  Seadmel puudub graafik"),
                                   ));
                         }
+                        print(SeadmeteMap);
+                        print(ValitudGraafik);
+                        print(valitudSeadmed);
+                        updateValitudSeadmed(ValitudGraafik);
                       },
                       child: Padding(
                         padding: const EdgeInsets.all(1),
@@ -327,7 +333,6 @@ SeadmeGraafikKoostamineGen1(String value) async {
   var seadmeGraafik1 =
       httpPackageJson['data']['device_settings']['relays'][0]['schedule_rules'];
 
-
   Map<int, String> map = {};
 
   for (var item in seadmeGraafik1) {
@@ -358,7 +363,6 @@ SeadmeGraafikKoostamineGen1(String value) async {
   for (var item in seadmeGraafik2) {
     seadmeGraafik3 += item;
   }
-
 
   return seadmeGraafik3.toString();
 }

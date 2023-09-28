@@ -11,6 +11,7 @@ import 'package:intl/intl.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'dart:math';
+import 'paevaGraafik.dart';
 
 class TarbimisLeht extends StatefulWidget {
   const TarbimisLeht(
@@ -69,6 +70,7 @@ class MGraafik extends StatefulWidget {
 }
 
 class _MGraafikState extends State<MGraafik> {
+  Map<int, List<double>> paevaMaksumus = {};
   List<_ChartData> chartData = [];
   Map<DateTime, double> temp = {};
   Map<dynamic, dynamic> consumption = {};
@@ -79,6 +81,14 @@ class _MGraafikState extends State<MGraafik> {
   String total2 = '0';
   String total2Uhik = '';
   double keskmine = 0;
+
+  setPaevamaksumus(paevaList) {
+    setState(() {
+      paevaMaksumus = paevaList;
+      print("käes $paevaList");
+    });
+  }
+
   fetchData(value) async {
     DateTime currentDateTime = DateTime.now();
 
@@ -109,7 +119,7 @@ class _MGraafikState extends State<MGraafik> {
       consumption[j] = k;
     }
     double abi = 0;
-    temp = await seadmeMaksumus(value);
+    temp = await seadmeMaksumus(value, setPaevamaksumus);
     for (DateTime date = firstDayOfMonth;
         date.isBefore(lastDayOfMonth);
         date = date.add(Duration(days: 1))) {
@@ -389,6 +399,36 @@ class _MGraafikState extends State<MGraafik> {
                             series: <ChartSeries>[
                               StackedColumnSeries<MapEntry<DateTime, double>,
                                   DateTime>(
+                                onPointTap: (pointInteractionDetails) {
+                                  List<DateTime> dateTimes = temp.keys.toList();
+                                  int rowIndex =
+                                      pointInteractionDetails.pointIndex as int;
+                                  showDialog(
+                                    context: context,
+                                    builder: (context) {
+                                      return FractionallySizedBox(
+                                        heightFactor: 0.5,
+                                        widthFactor: 1.0,
+                                        child: Material(
+                                          color: Colors.white,
+                                          child: Container(
+                                            height: MediaQuery.of(context).size.height*0.5,
+                                            width: MediaQuery.of(context).size.width,
+                                            child: SingleChildScrollView(
+                                              scrollDirection: Axis.horizontal,
+                                              child: PaevaTarbimine(
+                                                date: dateTimes[rowIndex].toString(),
+                                                value: widget.value,
+                                                rowIndex: rowIndex,
+                                                paevaMaksumus: paevaMaksumus
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                  );
+                                },
                                 color: Colors.green,
                                 width: 0.9,
                                 groupName: 'A',

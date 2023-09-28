@@ -72,7 +72,7 @@ gen1GraafikLoomine(
     'id': value,
     'auth_key': storedKeyString,
   };
-
+  
   var url = Uri.parse('https://shelly-64-eu.shelly.cloud/device/settings');
   var res = await http.post(url, headers: headers, body: data);
   await Future.delayed(const Duration(seconds: 2));

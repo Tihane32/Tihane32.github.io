@@ -13,6 +13,7 @@ import 'AbiLeht.dart';
 import 'keskimiseHinnaAluselTundideValimine.dart';
 import 'hinnaPiiriAluselTunideValimine.dart';
 import 'kopeeeriGraafikTundideValimine.dart';
+import 'package:http/http.dart' as http;
 
 class DynamilineTundideValimine extends StatefulWidget {
   DynamilineTundideValimine({Key? key, required this.valitudSeadmed})
@@ -56,6 +57,7 @@ Map<int, dynamic> lulitusMap = {
 class _DynamilineTundideValimineState extends State<DynamilineTundideValimine> {
   _DynamilineTundideValimineState({Key? key, required this.valitudSeadmed});
   var valitudSeadmed;
+  Map<String, bool> ValitudGraafik = {};
   String selectedPage = 'Keskmine hind';
   double vahe = 10;
   int valitudTunnid = 10;
@@ -74,7 +76,9 @@ class _DynamilineTundideValimineState extends State<DynamilineTundideValimine> {
           lulitusMap: lulitusMap, updateLulitusMap: updateLulitusMap),
       HinnaPiiriAluselTundideValimine(
           lulitusMap: lulitusMap, updateLulitusMap: updateLulitusMap),
-      KopeeriGraafikTundideValik(),
+      KopeeriGraafikTundideValik(
+          valitudSeadmed: valitudSeadmed,
+          updateValitudSeadmed: updateValitudSeamded),
       AbiLeht(),
     ];
   }
@@ -85,6 +89,12 @@ class _DynamilineTundideValimineState extends State<DynamilineTundideValimine> {
       print("uus paev");
       print(updatedPaev);
       paev = updatedPaev;
+    });
+  }
+
+  updateValitudSeamded(Map<String, bool> ValitudGraafikuus) {
+    setState(() {
+      ValitudGraafik = ValitudGraafikuus;
     });
   }
 
@@ -194,7 +204,13 @@ class _DynamilineTundideValimineState extends State<DynamilineTundideValimine> {
                               builder: (context) => SeadmeteListValimine()),
                         );
                       } else if (koduindex == 1) {
-                        graafikuteSaatmine(valitudSeadmed, lulitusMap, paev);
+                        if (selectedPage == "Kopeeri graafik") {
+                          print("siin2");
+                          graafikuKopeerimine(ValitudGraafik, valitudSeadmed);
+                        } else {
+                          graafikuteSaatmine(valitudSeadmed, lulitusMap, paev);
+                        }
+
                         showDialog(
                             context: context,
                             builder: (context) => AlertDialog(
@@ -263,4 +279,46 @@ graafikuteSaatmine(
       }
     }
   }
+}
+
+graafikuKopeerimine(Map<String, bool> valitudGraafik, valitudSeadmed) async {
+  print("Lõpp $valitudGraafik");
+  print("Lõpp $valitudSeadmed");
+
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  String? storedKey = prefs.getString('key');
+  String storedKeyString = jsonDecode(storedKey!);
+  var storedJsonMap = prefs.getString('seadmed');
+  Map<String, dynamic> seadmed;
+  seadmed = json.decode(storedJsonMap!);
+  String valitudID = "";
+  int j = 0;
+  valitudGraafik.forEach((key, value) async {
+    if (value == true) {
+      valitudID = seadmed["Seade$j"]["Seadme_ID"];
+      print(valitudID);
+
+      var headers = {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      };
+
+      var data = {
+        'channel': '0',
+        'id': valitudID,
+        'auth_key': storedKeyString,
+      };
+
+      var url = Uri.parse('https://shelly-64-eu.shelly.cloud/device/settings');
+      var res = await http.post(url, headers: headers, body: data);
+      await Future.delayed(const Duration(seconds: 2));
+      //Kui post läheb läbi siis:
+      List<String> newList = [];
+      final httpPackageJson = json.decode(res.body) as Map<String, dynamic>;
+
+      var scheduleRules1 = httpPackageJson['data']['device_settings']['relays']
+          [0]['schedule_rules'];
+      print(scheduleRules1);
+    }
+    j++;
+  });
 }

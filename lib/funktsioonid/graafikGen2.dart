@@ -4,7 +4,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'token.dart';
 import 'package:intl/intl.dart';
 
-
 gen2GraafikuLoomine(var selected, var valitudPaev, String value) async {
   var graafikud = Map<String, dynamic>();
   List temp = List.empty(growable: true);
@@ -274,8 +273,11 @@ Future<Map<int, dynamic>> gen2GraafikSaamine(
     var resJSON = jsonDecode(res.body) as Map<String, dynamic>;
 
     var jobs = resJSON['data']['jobs'];
+    if (resJSON['data']['jobs'] == null) {
+      jobs = {};
+    }else{jobs = resJSON['data']['jobs'] as List<dynamic>;}
 
-    jobs = resJSON['data']['jobs'] as List<dynamic>;
+    
     int k = 0;
     for (var job in jobs) {
       var id = job['id'] as int;
@@ -356,6 +358,5 @@ delete(value, List temp) async {
     var url = Uri.parse(
         'https://shelly-64-eu.shelly.cloud/fast/device/gen2_generic_command');
     var res1 = await http.post(url, headers: headers, body: data);
-
   }
 }

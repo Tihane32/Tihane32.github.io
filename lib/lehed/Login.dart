@@ -71,20 +71,22 @@ class _LoginPageState extends State<LoginPage> {
     }
     var vastusJSON =
         json.decode(sisselogimiseVastus.body) as Map<String, dynamic>;
+    print(vastusJSON);
+    print(vastusJSON['data']["user_api_url"]);
     var token = vastusJSON['data']['token'];
-
+    String apiUrl = vastusJSON['data']["user_api_url"].toString();
     var headers1 = {
       'Authorization': 'Bearer $token',
     };
 
-    var seadmeteSaamiseUrl = Uri.parse(
-        'https://shelly-64-eu.shelly.cloud/interface/device/get_all_lists');
+    var seadmeteSaamiseUrl =
+        Uri.parse('$apiUrl/interface/device/get_all_lists');
     var seadmeteSaamiseVastus =
         await http.post(seadmeteSaamiseUrl, headers: headers1);
     var seadmeteSaamiseVastusJSON =
         json.decode(seadmeteSaamiseVastus.body) as Map<String, dynamic>;
     var seadmeteMap = seadmeteSaamiseVastusJSON['data']['devices'];
-
+    print(seadmeteMap);
     var i = 0;
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var storedJsonMap = prefs.getString('seadmed');
@@ -106,6 +108,7 @@ class _LoginPageState extends State<LoginPage> {
           seade['Seadme_nimi'] = device['name'];
           seade['Seadme_pistik'] = device['name'];
           seade['Seadme_generatsioon'] = device['gen'];
+          seade['api_url'] = apiUrl;
           seadmed['Seade$i'] = seade;
           uuedSeadmedString.add(device['name']);
         }
@@ -113,15 +116,15 @@ class _LoginPageState extends State<LoginPage> {
         i++;
       }
       var keySaamiseUrl =
-          Uri.parse('https://shelly-64-eu.shelly.cloud/user/get_user_key');
+          Uri.parse('$apiUrl/user/get_user_key');
       var keyVastus = await http.post(keySaamiseUrl, headers: headers1);
       var keyVastusJSON = json.decode(keyVastus.body);
 
       String seadmedMap = json.encode(seadmed);
-     // await prefs.setString('seadmed', seadmedMap);
+      // await prefs.setString('seadmed', seadmedMap);
       String keyMap = json.encode(keyVastusJSON['data']['key']);
       await prefs.setString('key', keyMap);
-     // seisukord();
+      // seisukord();
 
       //showCustomAlertDialog(
       //  context, seadmedMap, uuedSeadmed, uuedSeadmedString);
@@ -134,31 +137,32 @@ class _LoginPageState extends State<LoginPage> {
         seade['Seadme_nimi'] = device['name'];
         seade['Seadme_pistik'] = device['name'];
         seade['Seadme_generatsioon'] = device['gen'];
+        seade['api_url'] = apiUrl;
         seadmed['Seade$i'] = seade;
         i++;
 
         uuedSeadmedString.add(device['name']);
       }
       var keySaamiseUrl =
-          Uri.parse('https://shelly-64-eu.shelly.cloud/user/get_user_key');
+          Uri.parse('$apiUrl/user/get_user_key');
       var keyVastus = await http.post(keySaamiseUrl, headers: headers1);
       var keyVastusJSON = json.decode(keyVastus.body);
       String seadmedMap = json.encode(seadmed);
-     // await prefs.setString('seadmed', seadmedMap);
+      // await prefs.setString('seadmed', seadmedMap);
       String keyMap = json.encode(keyVastusJSON['data']['key']);
       await prefs.setString('key', keyMap);
 
       //showCustomAlertDialog(
       //  context, seadmedMap, uuedSeadmed, uuedSeadmedString);
     }
-      //seisukord();
-      Future.delayed(Duration(seconds: 3), () {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-              builder: (context) => uuedSeadmed(uuedSeadmedString: seadmed)),
-        );
-      });
+    //seisukord();
+    Future.delayed(Duration(seconds: 3), () {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+            builder: (context) => uuedSeadmed(uuedSeadmedString: seadmed)),
+      );
+    });
 
     /* Näide kuidas võtta mälust seadmete map
     String? storedJsonMap = prefs.getString('seadmed');
