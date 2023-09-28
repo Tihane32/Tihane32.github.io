@@ -9,7 +9,7 @@ Future voimus() async {
   []; //Võtab mälust 'users'-i asukohast väärtused
   var seadmedJSONmap = prefs.getString('seadmed');
   //print(seadmedJSONmap);
-  if(seadmedJSONmap == null) {
+  if (seadmedJSONmap == null) {
     return 0;
   }
   var storedMap = json.decode(seadmedJSONmap);
@@ -23,34 +23,39 @@ Future voimus() async {
 
   var j = 0;
   double voimsus = 0;
-  for (var i in storedMap.values) {
-    //print(storedMap['Seade$j']['Seadme_ID']);
-    String asendus = storedMap['Seade$j']['Seadme_ID'] as String;
-    var headers = {
-      'Authorization': 'Bearer $getToken()',
-    };
-    var data = {'id': asendus, 'auth_key': authKey};
+  print(storedMap);
+  storedMap.forEach((key, value) async {
+    {
+      //print(storedMap['Seade$j']['Seadme_ID']);
+      String asendus = key as String;
+      var headers = {
+        'Authorization': 'Bearer $getToken',
+      };
+      var data = {'id': asendus, 'auth_key': authKey};
 
-    var url = Uri.parse('https://shelly-64-eu.shelly.cloud/device/status');
-    var res = await http.post(url, headers: headers, body: data);
-    //print(res.body);
-    var resJson = json.decode(res.body) as Map<String, dynamic>;
-    //print(resJson);
-    if (storedMap['Seade$j']['Seadme_generatsioon'] as int == 1) {
-      voimsus =
-          voimsus + resJson['data']['device_status']['meters'][0]['power'];
-    } else {
-      voimsus =
-          voimsus + resJson['data']['device_status']['switch:0']['apower'];
+      var url = Uri.parse('${value['api_url']}.cloud/device/status');
+      var res = await http.post(url, headers: headers, body: data);
+      //print(res.body);
+      var resJson = json.decode(res.body) as Map<String, dynamic>;
+      //print(resJson);
+      if (value['Seadme_generatsioon'] as int == 1) {
+        voimsus =
+            voimsus + resJson['data']['device_status']['meters'][0]['power'];
+      } else {
+        voimsus =
+            voimsus + resJson['data']['device_status']['switch:0']['apower'];
+      }
+
+      //print(resJson['data']['device_status']['switch:0']['voltage']);
+      //print(resJson['data']['device_status']['switch:0']['current']);
+      //print(resJson['data']['device_status']['switch:0']['pf']);
+      //print(resJson['data']['device_status']['switch:0']['aenergy']);
+      //await energia();
+      j++;
     }
-
-    //print(resJson['data']['device_status']['switch:0']['voltage']);
-    //print(resJson['data']['device_status']['switch:0']['current']);
-    //print(resJson['data']['device_status']['switch:0']['pf']);
-    //print(resJson['data']['device_status']['switch:0']['aenergy']);
-    //await energia();
-    j++;
-  }
+  });
+  print(voimsus);
+  print("korras");
   return voimsus;
 }
 

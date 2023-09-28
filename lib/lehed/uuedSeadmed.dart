@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:testuus4/funktsioonid/seisukord.dart';
 import 'package:testuus4/lehed/dynamicKoduLeht.dart';
 import 'package:testuus4/lehed/koduleht.dart';
+import 'package:testuus4/lehed/seadmedKontoltNim.dart';
 import 'package:testuus4/main.dart';
 import 'package:flutter/material.dart';
 import 'package:testuus4/funktsioonid/KeskmineHind.dart';
@@ -36,13 +37,21 @@ class uuedSeadmed extends StatefulWidget {
 
 class _uuedSeadmedState extends State<uuedSeadmed> {
   List<bool> checkboxValues = [];
-
+  Map<int, Map<String, dynamic>> newMap = {};
   @override
   void initState() {
     super.initState();
+    print(widget.uuedSeadmedString[0]);
+
+    int index = 0;
+    setState(() {
+      widget.uuedSeadmedString.forEach((key, value) {
+        newMap[index] = {key: value};
+        index++;
+      });
+    });
     // Initialize the list of checkbox values with default values
-    checkboxValues =
-        List.generate(widget.uuedSeadmedString.length, (index) => true);
+    checkboxValues = List.generate(newMap.length, (index) => true);
   }
 
   @override
@@ -69,10 +78,16 @@ class _uuedSeadmedState extends State<uuedSeadmed> {
             child: ListView.builder(
               itemCount: widget.uuedSeadmedString.length,
               itemBuilder: (context, index) {
-                final seadeKey = 'Seade$index';
-                final seadmeInfo =
-                    widget.uuedSeadmedString[seadeKey] ?? {}; // Add null check
-                final seadmeNimi = seadmeInfo['Seadme_nimi'] ?? '';
+                final seadmeInfo = newMap[index] ?? {};
+                print(seadmeInfo); // Add null check
+                var seadmeNimi;
+                seadmeInfo.forEach((key, value) {
+                  if (value is Map<String, dynamic> &&
+                      value.containsKey('Seadme_nimi')) {
+                    seadmeNimi = value['Seadme_nimi'];
+                    return;
+                  }
+                });
                 return Column(
                   children: [
                     Padding(
@@ -113,7 +128,7 @@ class _uuedSeadmedState extends State<uuedSeadmed> {
           ),
           GestureDetector(
             onTap: () {
-              sort(checkboxValues, widget.uuedSeadmedString);
+              sort(checkboxValues, newMap);
               // Navigate to another page when the button is pressed
               Navigator.push(
                 context,
@@ -151,20 +166,19 @@ class _uuedSeadmedState extends State<uuedSeadmed> {
   }
 }
 
-Future<void> sort(
-    List<bool> checkboxValues, Map<String, dynamic> uuedSeadmedString) async {
+Future<void> sort(List<bool> checkboxValues, Map<int, Map<String, dynamic>> uuedSeadmedString) async {
   int i = 0;
   int j = 0;
   for (j = 0; j < uuedSeadmedString.length; j++) {
     if (checkboxValues[i] == false) {
-      uuedSeadmedString.remove('Seade$i');
+      uuedSeadmedString.remove(i);
 
 // Re-index the remaining entries
-      final reindexedMap = <String, dynamic>{};
+      Map<int, Map<String, dynamic>> reindexedMap = {};
       int newIndex = 0;
 
       uuedSeadmedString.forEach((key, value) {
-        final newKey = 'Seade$newIndex';
+        final newKey = newIndex;
         reindexedMap[newKey] = value;
         newIndex++;
       });
@@ -174,12 +188,12 @@ Future<void> sort(
     }
     i++;
   }
-
+  print("optsi $uuedSeadmedString");
   SharedPreferences prefs = await SharedPreferences.getInstance();
   var seadmedJSON = prefs.getString('seadmed');
   if (seadmedJSON != null) {
     Map<String, dynamic> seadmed = json.decode(seadmedJSON);
-    int pikkus = seadmed.length + uuedSeadmedString.length;
+    num pikkus = seadmed.length + uuedSeadmedString.length;
 
     final reindexedMap = <String, dynamic>{};
     i = 0;
@@ -193,7 +207,14 @@ Future<void> sort(
     await prefs.setString('seadmed', seadmedMap);
     seisukord();
   } else {
-    String seadmedMap = json.encode(uuedSeadmedString);
+    
+
+Map<String, dynamic> convertedMap = {};
+
+for (var innerMap in uuedSeadmedString.values) {
+  convertedMap.addAll(innerMap);
+}
+    String seadmedMap = json.encode(convertedMap);
     await prefs.setString('seadmed', seadmedMap);
     seisukord();
   }

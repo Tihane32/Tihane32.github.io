@@ -115,8 +115,7 @@ class _LoginPageState extends State<LoginPage> {
 
         i++;
       }
-      var keySaamiseUrl =
-          Uri.parse('$apiUrl/user/get_user_key');
+      var keySaamiseUrl = Uri.parse('$apiUrl/user/get_user_key');
       var keyVastus = await http.post(keySaamiseUrl, headers: headers1);
       var keyVastusJSON = json.decode(keyVastus.body);
 
@@ -133,18 +132,17 @@ class _LoginPageState extends State<LoginPage> {
       i = 0;
       for (var device in seadmeteMap.values) {
         var seade = new Map<String, dynamic>();
-        seade['Seadme_ID'] = device['id'];
+        //seade['Seadme_ID'] = device['id'];
         seade['Seadme_nimi'] = device['name'];
         seade['Seadme_pistik'] = device['name'];
         seade['Seadme_generatsioon'] = device['gen'];
         seade['api_url'] = apiUrl;
-        seadmed['Seade$i'] = seade;
+        seadmed['${device['id']}'] = seade;
         i++;
 
         uuedSeadmedString.add(device['name']);
       }
-      var keySaamiseUrl =
-          Uri.parse('$apiUrl/user/get_user_key');
+      var keySaamiseUrl = Uri.parse('$apiUrl/user/get_user_key');
       var keyVastus = await http.post(keySaamiseUrl, headers: headers1);
       var keyVastusJSON = json.decode(keyVastus.body);
       String seadmedMap = json.encode(seadmed);
@@ -156,6 +154,7 @@ class _LoginPageState extends State<LoginPage> {
       //  context, seadmedMap, uuedSeadmed, uuedSeadmedString);
     }
     //seisukord();
+    print(seadmed);
     Future.delayed(Duration(seconds: 3), () {
       Navigator.pushReplacement(
         context,
