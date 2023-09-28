@@ -430,38 +430,33 @@ class _HinnaPiiriAluselTundideValimineState
                         color: Colors.black,
                       ),
                       children: [
-                        TextSpan(
-                          text: ' Sisesta hinnapiir:  ',
-                          style: font
-                        ),
+                        TextSpan(text: ' Sisesta hinnapiir:  ', style: font),
                         WidgetSpan(
                           alignment: PlaceholderAlignment.bottom,
                           child: Container(
                             height: 20,
                             width: 45,
-                          
                             child: TextField(
-                              keyboardType: TextInputType.number,
-                              onSubmitted: (value) {
-                                setState(() {
-                                  hinnaPiir = double.tryParse(value) ?? 0;
-                                  lulitusMapParemHP =
-                                      LulitusMapParemVaartustamine(hinnaPiir,
-                                          lulitus, lulitusMapParemHP);
-                                  lulitusMapVasakHP =
-                                      LulitusMapVasakVaartustamine(hinnaPiir,
-                                          lulitus, lulitusMapVasakHP);
-                                });
-                              },
-                              decoration: InputDecoration(
-                                border: InputBorder.none,
-                                isDense: true,
-                                hintText: hinnaPiir.toString(),
-                                contentPadding:
-                                    EdgeInsets.symmetric(vertical: 3.0),
-                              ),
-                              style: font
-                            ),
+                                keyboardType: TextInputType.number,
+                                onSubmitted: (value) {
+                                  setState(() {
+                                    hinnaPiir = double.tryParse(value) ?? 0;
+                                    lulitusMapParemHP =
+                                        LulitusMapParemVaartustamine(hinnaPiir,
+                                            lulitus, lulitusMapParemHP);
+                                    lulitusMapVasakHP =
+                                        LulitusMapVasakVaartustamine(hinnaPiir,
+                                            lulitus, lulitusMapVasakHP);
+                                  });
+                                },
+                                decoration: InputDecoration(
+                                  border: InputBorder.none,
+                                  isDense: true,
+                                  hintText: hinnaPiir.toString(),
+                                  contentPadding:
+                                      EdgeInsets.symmetric(vertical: 3.0),
+                                ),
+                                style: font),
                           ),
                         ),
                       ],
@@ -476,7 +471,7 @@ class _HinnaPiiriAluselTundideValimineState
           delegate: SliverChildBuilderDelegate(
             (BuildContext context, int index) {
               return Container(
-                  color: Colors.white,
+                color: Colors.white,
                 height: MediaQuery.of(context).size.height * 0.791,
                 child: Center(
                     child: RotatedBox(
@@ -505,8 +500,7 @@ class _HinnaPiiriAluselTundideValimineState
                           dataLabelSettings: DataLabelSettings(
                             isVisible: true,
                             labelAlignment: ChartDataLabelAlignment.middle,
-                            textStyle:
-                               fontVaike,
+                            textStyle: fontVaike,
                             angle: 270,
                           ),
                           pointColorMapper: (data, _) => Colors.transparent,
@@ -544,9 +538,9 @@ class _HinnaPiiriAluselTundideValimineState
                               : Color.fromARGB(255, 164, 159, 159),
                           dataLabelSettings: DataLabelSettings(
                             isVisible: true,
-                            labelAlignment: ChartDataLabelAlignment.outer,
-                            textStyle:
-                               fontVaike,
+                            labelAlignment: ChartDataLabelAlignment.bottom,
+                            offset: Offset(0, 45),
+                            textStyle: fontVaike,
                             angle: 270,
                           ),
                         ),
@@ -583,9 +577,9 @@ class _HinnaPiiriAluselTundideValimineState
                               : Color.fromARGB(255, 164, 159, 159),
                           dataLabelSettings: DataLabelSettings(
                             isVisible: true,
-                            labelAlignment: ChartDataLabelAlignment.outer,
-                            textStyle:
-                                fontVaike,
+                            labelAlignment: ChartDataLabelAlignment.bottom,
+                            offset: Offset(0, -45),
+                            textStyle: fontVaike,
                             angle: 270,
                           ),
                         ),
