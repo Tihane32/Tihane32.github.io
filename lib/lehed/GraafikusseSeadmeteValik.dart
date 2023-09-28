@@ -480,6 +480,7 @@ SeadmeGraafikKoostamineGen1(String value) async {
 
   if (grafikOlems) {
     List<String> filledTimes = [];
+    List<String> graafikParis = [];
     String? lastState;
 
     for (var i = 0; i < seadmeGraafik1.length; i++) {
@@ -508,14 +509,32 @@ SeadmeGraafikKoostamineGen1(String value) async {
     var lastParts = filledTimes.last.split('-');
     var lastTime = int.parse(lastParts[0]);
 
-    while (lastTime < 2300) {
+    while (lastTime < 2400) {
       lastTime += 100;
       filledTimes.add("${lastTime.toString().padLeft(4, '0')}-0-$lastState");
     }
+    if (filledTimes[0] != '0000-$paev-on' ||
+        filledTimes[0] != '0000-$paev-off') {
+      int maramataPaevad = 24 - filledTimes.length;
+      for (int i = 0; i < 24; i++) {
+        String tunnike = '';
+        if (i < maramataPaevad + 1) {
+          if (i < 10) {
+            tunnike = '0$i';
+          } else {
+            tunnike = '$i';
+          }
+          graafikParis.add("${tunnike}00-0-off");
+        } else {
+          graafikParis.add(filledTimes[i - maramataPaevad - 1]);
+        }
+      }
+    }
+    print(graafikParis);
 
     List<String> onOffStatus = [];
 
-    for (var timeEntry in filledTimes) {
+    for (var timeEntry in graafikParis) {
       var parts = timeEntry.split('-');
       var status = parts[2];
 
