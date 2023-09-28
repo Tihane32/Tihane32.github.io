@@ -406,19 +406,22 @@ class _MGraafikState extends State<MGraafik> {
                                   showDialog(
                                     context: context,
                                     builder: (context) {
-                                      return AlertDialog(
-                                        contentPadding: EdgeInsets.all(0
-                                        ),
-                                        title: Text('Päeva tarbimine'),
-                                        content: Container(
-                                          height: MediaQuery.of(context).size.height,
-                                          width: MediaQuery.of(context).size.width*0.7,
-                                          child: SingleChildScrollView(
-                                            child: PaevaTarbimine(
-                                              date: dateTimes[rowIndex].toString(),
-                                              value: widget.value,
-                                              rowIndex: rowIndex,
-                                              paevaMaksumus: paevaMaksumus
+                                      return FractionallySizedBox(
+                                        heightFactor: 0.5,
+                                        widthFactor: 1.0,
+                                        child: Material(
+                                          color: Colors.white,
+                                          child: Container(
+                                            height: MediaQuery.of(context).size.height*0.5,
+                                            width: MediaQuery.of(context).size.width,
+                                            child: SingleChildScrollView(
+                                              scrollDirection: Axis.horizontal,
+                                              child: PaevaTarbimine(
+                                                date: dateTimes[rowIndex].toString(),
+                                                value: widget.value,
+                                                rowIndex: rowIndex,
+                                                paevaMaksumus: paevaMaksumus
+                                              ),
                                             ),
                                           ),
                                         ),

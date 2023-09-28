@@ -4,6 +4,7 @@ TalTech
 */
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
 
 Future<List> getElering(String paevtest) async {
   var entryList;
@@ -77,4 +78,38 @@ Future<List> getElering(String paevtest) async {
   var hinnagraafik = ajutine2[0].value;
 
   return hinnagraafik;
+}
+
+Future<List<double>> getEleringVahemik(String algusPaev, String vahemik) async {
+  var entryList;
+
+  DateFormat format = DateFormat("yyyy-MM-dd");
+  DateTime dateTime = format.parse(algusPaev);
+  dateTime = DateTime(dateTime.year, dateTime.month, dateTime.day - 1);
+  String formattedDate = DateFormat('yyyy-MM-dd').format(dateTime);
+  DateTime newDateTime =
+      DateTime(dateTime.year, dateTime.month, dateTime.day + 1);
+  String formattedDate2 = DateFormat('yyyy-MM-dd').format(newDateTime);
+  print(formattedDate);
+  String url =
+      'https://dashboard.elering.ee/api/nps/price?start=${formattedDate}T21%3A00%3A00Z&end=${formattedDate2}T20%3A00%3A00Z';
+  print(url);
+  final httpPackageUrl = Uri.parse(url);
+  final httpPackageInfo = await http.read(httpPackageUrl);
+  final httpPackageJson = json.decode(httpPackageInfo) as Map<String, dynamic>;
+
+  entryList = httpPackageJson.entries.toList();
+
+  //Võtab Listist Eesti hinnagraafiku
+  var ajutine = entryList[1].value;
+  var ajutine2 = ajutine.entries.toList();
+  var hinnagraafik = ajutine2[0].value;
+  List<double> prices = [];
+  for (int i = 0; i < hinnagraafik.length;) {
+    prices.add(hinnagraafik[i]["price"]);
+    
+    i++;
+  }
+
+  return prices;
 }
