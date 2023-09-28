@@ -25,11 +25,11 @@ Future tarbimine(tarbimiseMap, Function updateTarbimine) async {
   var j = 0;
   var tarbimine = 0.0;
   String token = await getToken();
-  for (var i in storedMap.values) {
+  storedMap.forEach((key, value) async {
     //await Future.delayed(const Duration(seconds: 3));
     //print(storedMap['Seade$j']['Seadme_ID']);
-    String asendus = storedMap['Seade$j']['Seadme_ID'] as String;
-    String asendus1 = storedMap['Seade$j']['Seadme_nimi'] as String;
+    String asendus = key.toString();
+      String asendus1 = value['Seadme_nimi'].toString();
     //print(token);
     var headers = {
       'Authorization': 'Bearer $token',
@@ -43,7 +43,7 @@ Future tarbimine(tarbimiseMap, Function updateTarbimine) async {
     };
 
     var url = Uri.parse(
-        'https://shelly-64-eu.shelly.cloud/statistics/relay/consumption');
+        '${value["api_url"]}/statistics/relay/consumption');
     var res = await http.post(url, headers: headers, body: data);
     //print(res.body);
     var resJson = json.decode(res.body) as Map<String, dynamic>;
@@ -52,14 +52,12 @@ Future tarbimine(tarbimiseMap, Function updateTarbimine) async {
       double ajutine = resJson['data']['total'] / 1000.0;
       tarbimine = tarbimine + ajutine;
       tarbimiseMap["$asendus1"] = ajutine;
-     
     } else {
       double ajutine = resJson['data']['total'] * 1.0;
-      tarbimine = tarbimine + ajutine; 
+      tarbimine = tarbimine + ajutine;
       tarbimiseMap["$asendus1"] = ajutine;
-      
     }
-   
+
     //print(resJson);
 
     //print(resJson['data']['device_status']['switch:0']['voltage']);
@@ -68,7 +66,7 @@ Future tarbimine(tarbimiseMap, Function updateTarbimine) async {
     //print(resJson['data']['device_status']['switch:0']['aenergy']);
     //await energia();
     j++;
-  }
+  });
   updateTarbimine(tarbimiseMap);
 
   return tarbimine;

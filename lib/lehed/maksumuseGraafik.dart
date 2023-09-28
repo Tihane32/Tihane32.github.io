@@ -15,7 +15,7 @@ class MaksumuseGraafik extends StatefulWidget {
 }
 
 class _MaksumuseGraafikState extends State<MaksumuseGraafik> {
-  Map<String, List<String>> SeadmeteMap = {};
+  Map<String, dynamic> SeadmeteMap = {};
   List<ChartData> chartData = [];
   num kokku = 0;
   @override
@@ -25,7 +25,7 @@ class _MaksumuseGraafikState extends State<MaksumuseGraafik> {
     getSeadmeteMap(SeadmeteMap);
   }
 
-  getSeadmeteMap(Map<String, List<String>> seadmeteMap) async {
+  getSeadmeteMap(Map<String, dynamic> seadmeteMap) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     //await prefs.clear();
 
@@ -33,20 +33,6 @@ class _MaksumuseGraafikState extends State<MaksumuseGraafik> {
     if (storedJsonMap != null) {
       storedJsonMap = prefs.getString('seadmed');
       Map<String, dynamic> storedMap = json.decode(storedJsonMap!);
-      await Future.delayed(const Duration(seconds: 3));
-      var i = 0;
-      for (String Seade in storedMap.keys) {
-        var id = storedMap['Seade$i']['Seadme_ID'];
-        var name = storedMap['Seade$i']['Seadme_nimi'];
-        var pistik = storedMap['Seade$i']['Seadme_pistik'];
-        var olek = storedMap['Seade$i']['Seadme_olek'];
-        var gen = storedMap['Seade$i']['Seadme_generatsioon'];
-        Map<String, List<String>> ajutineMap = {
-          name: ['assets/boiler1.jpg', '$id', '$olek', '$pistik', '$gen'],
-        };
-        seadmeteMap.addAll(ajutineMap);
-        i++;
-      }
 
       setState(() {
         SeadmeteMap = seadmeteMap;
@@ -65,9 +51,9 @@ class _MaksumuseGraafikState extends State<MaksumuseGraafik> {
     }
     Map<String, dynamic> storedMap = json.decode(seadmedJSONmap);
     int j = 0;
-    for (var i in storedMap.values) {
-      String asendus = storedMap['Seade$j']['Seadme_ID'] as String;
-      String asendus1 = storedMap['Seade$j']['Seadme_nimi'] as String;
+    storedMap.forEach((key, value) async {
+      String asendus = key.toString();
+      String asendus1 = value['Seadme_nimi'].toString();
       j++;
 
       double calculateSum(Map<DateTime, double> data) {
@@ -89,7 +75,7 @@ class _MaksumuseGraafikState extends State<MaksumuseGraafik> {
       String abi = temp.toStringAsFixed(2);
       temp = double.parse(abi);
       maksumuseMap["$asendus1"] = temp;
-    }
+    });
     chartData.clear();
 
     for (var entry in maksumuseMap.entries) {
@@ -174,7 +160,6 @@ class _MaksumuseGraafikState extends State<MaksumuseGraafik> {
                   // Renders spline chart
                   ColumnSeries<ChartData, String>(
                     onPointTap: (pointInteractionDetails) {
-                      
                       int? rowIndex = pointInteractionDetails.pointIndex;
                       Navigator.push(
                         context,

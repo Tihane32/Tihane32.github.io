@@ -44,7 +44,7 @@ class _SeadmeteListState extends State<SeadmeteList> {
 
   int koduindex = 1;
 
-  Map<String, List<String>> SeadmeteMap = {};
+  Map<String, dynamic> SeadmeteMap = {};
   Set<String> selectedPictures = Set<String>();
 
   void toggleSelection(String pictureName) {
@@ -67,32 +67,11 @@ class _SeadmeteListState extends State<SeadmeteList> {
       await seisukord();
       storedJsonMap = prefs.getString('seadmed');
       Map<String, dynamic> storedMap = json.decode(storedJsonMap!);
-      await Future.delayed(const Duration(seconds: 3));
-      var i = 0;
-      for (String Seade in storedMap.keys) {
-        var id = storedMap['Seade$i']['Seadme_ID'];
-        var name = storedMap['Seade$i']['Seadme_nimi'];
-        var pistik = storedMap['Seade$i']['Seadme_pistik'];
-        var olek = storedMap['Seade$i']['Seadme_olek'];
-        var gen = storedMap['Seade$i']['Seadme_generatsioon'];
-        var pilt = "";
-        if (storedMap['Seade$i']['Seadme_pilt'] != null) {
-          pilt = storedMap['Seade$i']['Seadme_pilt'];
-        } else {
-          pilt = 'assets/boiler1.jpg';
-        }
-
-        Map<String, List<String>> ajutineMap = {
-          name: ['$pilt', '$id', '$olek', '$pistik', '$gen'],
-        };
-        minuSeadmedK.addAll(ajutineMap);
-        i++;
-      }
+      setState(() {
+        SeadmeteMap = storedMap;
+        isLoading = false;
+      });
     }
-    setState(() {
-      SeadmeteMap = minuSeadmedK;
-      isLoading = false;
-    });
   }
 
   bool canPressButton = true;
@@ -292,37 +271,39 @@ class _SeadmeteListState extends State<SeadmeteList> {
   }
 }
 
-SaaSeadmePilt(Map<String, List<String>> SeadmeteMap, SeadmeNimi) {
-  List<String>? deviceInfo = SeadmeteMap[SeadmeNimi];
+SaaSeadmePilt(Map<String, dynamic> SeadmeteMap, SeadmeNimi) {
+  String deviceInfo = SeadmeteMap[SeadmeNimi]["Seadme_pilt"];
+  print("------");
+  print(SeadmeteMap[SeadmeNimi]);
   if (deviceInfo != null) {
-    String pilt = deviceInfo[0];
+    String pilt = deviceInfo;
     return pilt;
   }
   return null; // Device key not found in the map
 }
 
-SaaSeadmeolek(Map<String, List<String>> SeadmeteMap, SeadmeNimi) {
-  List<String>? deviceInfo = SeadmeteMap[SeadmeNimi];
+SaaSeadmeolek(Map<String, dynamic> SeadmeteMap, SeadmeNimi) {
+  String deviceInfo = SeadmeteMap[SeadmeNimi]["Seadme_olek"];
   if (deviceInfo != null) {
-    String olek = deviceInfo[2];
-    return olek;
+    String pilt = deviceInfo;
+    return pilt;
   }
   return null; // Device key not found in the map
 }
 
-muudaSeadmeOlek(Map<String, List<String>> SeadmeteMap, SeadmeNimi) {
-  List<String>? deviceInfo = SeadmeteMap[SeadmeNimi];
+muudaSeadmeOlek(Map<String, dynamic> SeadmeteMap, SeadmeNimi) {
+  String deviceInfo = SeadmeteMap[SeadmeNimi]["Seadme_olek"];
   if (deviceInfo != null) {
-    String status = deviceInfo[2];
+    String status = deviceInfo;
 
     if (status == 'on') {
-      deviceInfo[2] = 'off';
-      SeadmeteMap[SeadmeNimi] = deviceInfo;
-      lulitamine(deviceInfo[1]);
+      deviceInfo = 'off';
+      SeadmeteMap[SeadmeNimi]["Seadme_olek"] = deviceInfo;
+      lulitamine(SeadmeNimi);
     } else if (status == 'off') {
-      deviceInfo[2] = 'on';
-      SeadmeteMap[SeadmeNimi] = deviceInfo;
-      lulitamine(deviceInfo[1]);
+      deviceInfo = 'on';
+      SeadmeteMap[SeadmeNimi]["Seadme_olek"] = deviceInfo;
+      lulitamine(SeadmeNimi);
     }
     return SeadmeteMap;
   }

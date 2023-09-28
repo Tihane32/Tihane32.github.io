@@ -17,7 +17,7 @@ class SeadmeYldinfoLeht extends StatefulWidget {
       : super(key: key);
 
   final String seadmeNimi;
-  final Map<String, List<String>> SeadmeteMap;
+  final Map<String, dynamic> SeadmeteMap;
   @override
   _SeadmeYldinfoLehtState createState() =>
       _SeadmeYldinfoLehtState(seadmeNimi: seadmeNimi, SeadmeteMap: SeadmeteMap);
@@ -27,7 +27,7 @@ class _SeadmeYldinfoLehtState extends State<SeadmeYldinfoLeht> {
   _SeadmeYldinfoLehtState(
       {Key? key, required this.seadmeNimi, required this.SeadmeteMap});
   String seadmeNimi;
-  Map<String, List<String>> SeadmeteMap;
+  Map<String, dynamic> SeadmeteMap;
   late Map<int, dynamic> lulitusMap;
   int selectedRowIndex = -1;
   late double hindAVG;
@@ -258,7 +258,7 @@ muudaSeadmeOlek(Map<String, List<String>> SeadmeteMap, SeadmeNimi) {
   return SeadmeteMap; // Device key not found in the map
 }
 
-nimeMuutmine(String seadmeNimi, Map<String, List<String>> seadmeteMap,
+nimeMuutmine(String seadmeNimi, Map<String, dynamic> seadmeteMap,
     String uusNimi) async {
   print(seadmeNimi);
   print(seadmeteMap);
@@ -287,7 +287,7 @@ nimeMuutmine(String seadmeNimi, Map<String, List<String>> seadmeteMap,
   }
 }
 
-pildiMuutmine(String seadmeNimi, Map<String, List<String>> seadmeteMap,
+pildiMuutmine(String seadmeNimi, Map<String, dynamic> seadmeteMap,
     String uusPilt) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   //await prefs.clear();

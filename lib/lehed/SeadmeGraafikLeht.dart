@@ -32,7 +32,7 @@ class SeadmeGraafikuLeht extends StatefulWidget {
       : super(key: key);
 
   final String seadmeNimi;
-  final Map<String, List<String>> SeadmeteMap;
+  final Map<String, dynamic> SeadmeteMap;
   @override
   _SeadmeGraafikuLehtState createState() => _SeadmeGraafikuLehtState(
       seadmeNimi: seadmeNimi, SeadmeteMap: SeadmeteMap);
@@ -47,7 +47,7 @@ bool hommeNahtav = false;
 class _SeadmeGraafikuLehtState extends State<SeadmeGraafikuLeht> {
   _SeadmeGraafikuLehtState(
       {Key? key, required this.seadmeNimi, required this.SeadmeteMap});
-  Map<String, List<String>> SeadmeteMap;
+  Map<String, dynamic> SeadmeteMap;
   final String seadmeNimi;
   late Map<int, dynamic> lulitusMap;
   int selectedRowIndex = -1;
@@ -1044,7 +1044,7 @@ minLeidmine(Map<int, dynamic> map) {
 }
 
 Future graafik(
-    Map<String, List<String>> SeadmeteMap, String seadmeNimi, lulitus) async {
+    Map<String, dynamic> SeadmeteMap, String seadmeNimi, lulitus) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
 
   []; //Võtab mälust 'users'-i asukohast väärtused

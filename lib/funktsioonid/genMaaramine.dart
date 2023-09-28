@@ -9,7 +9,7 @@ import 'graafikGen1.dart';
 genMaaramine(
   Map<int, dynamic> lulitus,
   String paev,
-  Map<String, List<String>> seadmeteMap,
+  Map<String, dynamic> seadmeteMap,
   String seadmeNimi,
 ) {
   if (seadmeteMap[seadmeNimi]![4] == '1') {

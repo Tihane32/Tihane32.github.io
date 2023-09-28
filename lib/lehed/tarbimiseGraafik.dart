@@ -21,7 +21,7 @@ class TarbimiseGraafik extends StatefulWidget {
 }
 
 class _TarbimiseGraafikState extends State<TarbimiseGraafik> {
-  Map<String, List<String>> SeadmeteMap = {};
+  Map<String, dynamic> SeadmeteMap = {};
   final Map<String, dynamic> tarbimiseMap;
 
   _TarbimiseGraafikState(this.tarbimiseMap);
@@ -36,7 +36,7 @@ class _TarbimiseGraafikState extends State<TarbimiseGraafik> {
     return chartData;
   }
 
-  getSeadmeteMap(Map<String, List<String>> seadmeteMap) async {
+ getSeadmeteMap(Map<String, dynamic> seadmeteMap) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     //await prefs.clear();
 
@@ -44,20 +44,6 @@ class _TarbimiseGraafikState extends State<TarbimiseGraafik> {
     if (storedJsonMap != null) {
       storedJsonMap = prefs.getString('seadmed');
       Map<String, dynamic> storedMap = json.decode(storedJsonMap!);
-      await Future.delayed(const Duration(seconds: 3));
-      var i = 0;
-      for (String Seade in storedMap.keys) {
-        var id = storedMap['Seade$i']['Seadme_ID'];
-        var name = storedMap['Seade$i']['Seadme_nimi'];
-        var pistik = storedMap['Seade$i']['Seadme_pistik'];
-        var olek = storedMap['Seade$i']['Seadme_olek'];
-        var gen = storedMap['Seade$i']['Seadme_generatsioon'];
-        Map<String, List<String>> ajutineMap = {
-          name: ['assets/boiler1.jpg', '$id', '$olek', '$pistik', '$gen'],
-        };
-        seadmeteMap.addAll(ajutineMap);
-        i++;
-      }
 
       setState(() {
         SeadmeteMap = seadmeteMap;

@@ -18,16 +18,16 @@ void lulitamine(String seade) async {
   prefs = await SharedPreferences.getInstance();
 
   var j = 0;
-  for (var i in storedMap.values) {
-    if (storedMap['Seade$j']['Seadme_ID'] == seade) {
-      var id = storedMap['Seade$j']['Seadme_ID'];
-      var olek = storedMap['Seade$j']['Seadme_olek'];
+  storedMap.forEach((key, value) async {
+    if (key == seade) {
+      var id = key;
+      var olek = value['Seadme_olek'];
       if (olek == 'on') {
         olek = 'off';
       } else {
         olek = 'on';
       }
-      storedMap['Seade$j']['Seadme_olek'] = olek;
+      value['Seadme_olek'] = olek;
       await prefs.setString('seadmed', json.encode(storedMap));
       String? storedKey = prefs.getString('key');
 
@@ -43,12 +43,11 @@ void lulitamine(String seade) async {
         'id': id,
         'auth_key': storedKeyString,
       };
-
-      var url =
-          Uri.parse('https://shelly-64-eu.shelly.cloud/device/relay/control');
+      print(value["api_url"]);
+      var url = Uri.parse('${value["api_url"]}/device/relay/control');
       var res = await http.post(url, headers: headers, body: data);
     }
 
     j++;
-  }
+  });
 }

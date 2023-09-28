@@ -20,7 +20,7 @@ class SeadmePildiMuutmine extends StatefulWidget {
       : super(key: key);
 
   final String seadmeNimi;
-  final Map<String, List<String>> SeadmeteMap;
+  final Map<String, dynamic> SeadmeteMap;
   final String uusPilt;
   final Function pilt;
   @override
@@ -41,7 +41,7 @@ class _SeadmePildiMuutmineState extends State<SeadmePildiMuutmine> {
   Function pilt;
   String seadmeNimi;
   String uusPilt;
-  Map<String, List<String>> SeadmeteMap;
+  Map<String, dynamic> SeadmeteMap;
   late Map<int, dynamic> lulitusMap;
   int selectedRowIndex = -1;
 

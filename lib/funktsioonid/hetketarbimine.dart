@@ -33,7 +33,7 @@ Future voimus() async {
       };
       var data = {'id': asendus, 'auth_key': authKey};
 
-      var url = Uri.parse('${value['api_url']}.cloud/device/status');
+      var url = Uri.parse('${value['api_url']}/device/status');
       var res = await http.post(url, headers: headers, body: data);
       //print(res.body);
       var resJson = json.decode(res.body) as Map<String, dynamic>;

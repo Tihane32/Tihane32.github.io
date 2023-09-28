@@ -137,6 +137,7 @@ class _LoginPageState extends State<LoginPage> {
         seade['Seadme_pistik'] = device['name'];
         seade['Seadme_generatsioon'] = device['gen'];
         seade['api_url'] = apiUrl;
+        seade['Seadme_pilt'] = "assets/boiler1.jpg";
         seadmed['${device['id']}'] = seade;
         i++;
 
