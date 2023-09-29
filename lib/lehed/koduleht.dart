@@ -64,6 +64,7 @@ class _KoduLehtState extends State<KoduLeht> {
     );
   }
 
+  bool dataFetched = false;
 //Lehe avamisel toob hetke hinna ja tundide arvu
 
   @override
@@ -77,48 +78,28 @@ class _KoduLehtState extends State<KoduLeht> {
   //Lisab tundide arvule ühe juurde
 
   //Võtab Eleringi API-st hetke hinna
-  updateTarbimine(tarbimiseMap) {
+  updateTarbimine(tarbimiseMap1) {
+    print("update $tarbimiseMap1");
     setState(() {
-      tarbimiseMap = tarbimiseMap;
+      tarbimiseMap = tarbimiseMap1;
     });
+    print("Tarbimine siin: $tarbimiseMap");
   }
 
   Future<void> _getCurrentPrice() async {
-    getKeskmineHind(); //testimiseks
-    setState(() {
-      isLoading =
-          true; //Enne hinna saamist kuvab ekraanile laadimis animatsiooni
-    });
-    final hetkeW = await voimus();
-    final data =
-        await getCurrentPrice(); //Kutsub esile CurrentPrice funktsiooni
-
+    //getKeskmineHind(); //testimiseks
 
     var test = await tarbimine(tarbimiseMap, updateTarbimine);
-    isLoading = false;
+    print("test: $test");
+
     num k = num.parse(test.toStringAsFixed(4));
     //Võtab data Mapist 'price' väärtuse
 
-    var ajutine = data.entries.toList();
-
-    var ajutine1 = ajutine[1].value;
-
-    double price = ajutine1[0]['price'];
-    price = price / 1000.0;
-    price = price * 1.2;
-    num n = num.parse(price.toStringAsFixed(4));
-    price = n as double;
-
     setState(() {
-      hetkeHind = price.toString();
-      //Salvestab pricei hetke hinnaks
-      hetkevoismus = hetkeW.toString();
+      dataFetched = true;
       ajatarbimine = k.toString();
     });
-   // final temp = await maksumus(selectedOption);
-    setState(() {
-     // kulu = temp.toString(); //Pärast hinna saamist laadimis animatsioon lõppeb
-    });
+    // final temp = await maksumus(selectedOption);
   }
 
 //Määrab kodulehe struktuuri
@@ -331,9 +312,22 @@ class _KoduLehtState extends State<KoduLeht> {
                         ),
                       ),
                       // Add some spacing between the two widgets
-                      Visibility(
-                          visible: tarbimineBool,
-                          child: TarbimiseGraafik(tarbimiseMap)),
+                      FutureBuilder<void>(
+                        future: Future.value(), // Use an empty future here
+                        builder: (context, snapshot) {
+                          if (!dataFetched) {
+                            return Center(child: CircularProgressIndicator());
+                          } else if (snapshot.hasError) {
+                            return Center(
+                                child: Text('Error: ${snapshot.error}'));
+                          } else {
+                            return Visibility(
+                              visible: tarbimineBool,
+                              child: TarbimiseGraafik(tarbimiseMap),
+                            );
+                          }
+                        },
+                      ),
                       Visibility(
                           visible: !tarbimineBool,
                           child: TarbimiseGraafikSpline()),
@@ -417,7 +411,6 @@ class _KoduLehtState extends State<KoduLeht> {
                       ),
                       SizedBox(height: vahe / 4),
 
-                      
                       MaksumuseGraafik(),
                       Container(
                         height: 1,
@@ -434,33 +427,6 @@ class _KoduLehtState extends State<KoduLeht> {
   }
 }
 
-/*
-class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
-  final VoidCallback onMenuButtonTap;
-
-  const MyAppBar({required this.onMenuButtonTap});
-
-  @override
-  Widget build(BuildContext context) {
-    return AppBar(
-      backgroundColor: const Color.fromARGB(255, 115, 162, 195),
-      title: Text(
-        'Shelly app',
-        style: GoogleFonts.roboto(
-          textStyle: const TextStyle(fontSize: 25),
-        ),
-      ),
-      actions: [
-        IconButton(
-          icon: Icon(Icons.menu),
-          onPressed: onMenuButtonTap,
-        ),
-      ],
-    );
-  }
-
-  @override
-  Size get preferredSize => Size.fromHeight(kToolbarHeight);*/
 class ChartData {
   ChartData(this.x, this.y);
   final String x;

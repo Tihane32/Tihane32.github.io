@@ -23,6 +23,7 @@ class _MaksumuseGraafikState extends State<MaksumuseGraafik> {
     super.initState();
     function();
     getSeadmeteMap(SeadmeteMap);
+    print("chartdata $chartData");
   }
 
   getSeadmeteMap(Map<String, dynamic> seadmeteMap) async {
@@ -35,7 +36,7 @@ class _MaksumuseGraafikState extends State<MaksumuseGraafik> {
       Map<String, dynamic> storedMap = json.decode(storedJsonMap!);
 
       setState(() {
-        SeadmeteMap = seadmeteMap;
+        SeadmeteMap = storedMap;
       });
     }
   }
@@ -45,45 +46,48 @@ class _MaksumuseGraafikState extends State<MaksumuseGraafik> {
     Map<String, dynamic> maksumuseMap = {};
     //Võtab mälust 'users'-i asukohast väärtused
     var seadmedJSONmap = prefs.getString('seadmed');
+    double calculateSum(Map<DateTime, double> data) {
+      double sum = 0.0;
+      data.values.forEach((value) {
+        sum += value;
+        print("sum: $sum");
+      });
+      kokku = kokku + sum;
+      print("kokku: $kokku");
+      return sum;
+    }
 
     if (seadmedJSONmap == null) {
+      print("tühi");
       return 0;
     }
     Map<String, dynamic> storedMap = json.decode(seadmedJSONmap);
     int j = 0;
     storedMap.forEach((key, value) async {
+      print("siin");
       String asendus = key.toString();
       String asendus1 = value['Seadme_nimi'].toString();
       j++;
 
-      double calculateSum(Map<DateTime, double> data) {
-        double sum = 0.0;
-        data.values.forEach((value) {
-          sum += value;
-          print("sum: $sum");
-        });
-        kokku = kokku + sum;
-        print("kokku: $kokku");
-        return sum;
-      }
-
 // Call seadmeMaksumus to get the map
       Map<DateTime, double> dataMap = await seadmeMaksumus(asendus);
-
+      print("datamap: $dataMap");
 // Calculate the sum of the double values in the map
       double temp = calculateSum(dataMap);
       String abi = temp.toStringAsFixed(2);
       temp = double.parse(abi);
       maksumuseMap["$asendus1"] = temp;
-    });
-    chartData.clear();
+      print("siin : $maksumuseMap");
+      chartData.clear();
+      for (var entry in maksumuseMap.entries) {
+        chartData.add(ChartData(entry.key, entry.value));
+      }
 
-    for (var entry in maksumuseMap.entries) {
-      chartData.add(ChartData(entry.key, entry.value));
-    }
-    setState(() {
-      chartData = chartData;
-      kokku = kokku;
+      print("siin: $chartData");
+      setState(() {
+        chartData = chartData;
+        kokku = kokku;
+      });
     });
   }
 
