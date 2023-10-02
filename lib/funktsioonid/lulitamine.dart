@@ -24,6 +24,9 @@ void lulitamine(String seade) async {
   /// The code block `seadmeteMap.forEach((key, value) async { ... })` is iterating over each key-value
   /// pair in the `seadmeteMap` map.
   seadmeteMap.forEach((key, value) async {
+    print("selline");
+    print(seadmeteMap[key]);
+
     if (key == seade) {
       var id = key;
       var olek = value['Seadme_olek'];
@@ -54,6 +57,8 @@ void lulitamine(String seade) async {
       var url = Uri.parse('${value["api_url"]}/device/relay/control');
       var res = await http.post(url, headers: headers, body: data);
       print(res.body);
+      String seadmedMap = json.encode(seadmeteMap);
+      await prefs.setString('seadmed', seadmedMap);
     }
 
     j++;

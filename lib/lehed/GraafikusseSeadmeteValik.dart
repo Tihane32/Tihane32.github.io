@@ -13,15 +13,6 @@ import 'dynamicKoduLeht.dart';
 import 'package:testuus4/main.dart';
 import 'package:http/http.dart' as http;
 
-class SeadmeteValmisPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: SeadmeteListValimine(),
-    );
-  }
-}
-
 class SeadmeteListValimine extends StatefulWidget {
   const SeadmeteListValimine({Key? key}) : super(key: key);
 
@@ -30,14 +21,13 @@ class SeadmeteListValimine extends StatefulWidget {
 }
 
 class _SeadmeteListValimineState extends State<SeadmeteListValimine> {
-  Map<int, bool> ValitudSeadmed = {};
-  bool isLoading = true;
-  late Map<String, List<String>> minuSeadmedK = {};
+  Map<String, bool> ValitudSeadmed = {};
+  bool isLoading = false;
+
   dynamic seadmeGraafik;
   @override
   int koduindex = 1;
 
-  Map<String, List<String>> SeadmeteMap = {};
   Set<String> selectedPictures = Set<String>();
 
   void toggleSelection(String pictureName) {
@@ -51,55 +41,22 @@ class _SeadmeteListValimineState extends State<SeadmeteListValimine> {
   }
 
   Future _submitForm() async {
-    minuSeadmedK.clear();
-    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await SeadmeGraafikKontrollimineGen1();
     //await prefs.clear();
 
-    String? storedJsonMap = prefs.getString('seadmed');
-    if (storedJsonMap != null) {
-      await seisukord();
-      storedJsonMap = prefs.getString('seadmed');
-      Map<String, dynamic> storedMap = json.decode(storedJsonMap!);
-      await Future.delayed(const Duration(seconds: 3));
-      var i = 0;
-      for (String Seade in storedMap.keys) {
-        var id = storedMap['Seade$i']['Seadme_ID'];
-        var name = storedMap['Seade$i']['Seadme_nimi'];
-        var pistik = storedMap['Seade$i']['Seadme_pistik'];
-        var olek = storedMap['Seade$i']['Seadme_olek'];
-        var gen = storedMap['Seade$i']['Seadme_generatsioon'];
-        Map<String, List<String>> ajutineMap = {
-          name: [
-            'assets/boiler1.jpg',
-            '$id',
-            '$olek',
-            '$pistik',
-            '$gen',
-            'jah',
-          ],
-        };
-        minuSeadmedK.addAll(ajutineMap);
+    /* minuSeadmedK.addAll(ajutineMap);
         if (minuSeadmedK[name]![4] == '1') {
           minuSeadmedK[name]![5] = await SeadmeGraafikKontrollimineGen1(id);
         } else if (minuSeadmedK[name]![4] == '2') {
           minuSeadmedK[name]![5] =
               'ei'; //await SeadmeGraafikKontrollimineGen2(id);
-        }
-
-        i++;
-      }
-    }
-    setState(() {
-      SeadmeteMap = minuSeadmedK;
-      ValitudSeadmed = valitudSeadmeteNullimine(SeadmeteMap);
-      isLoading = false;
-    });
+        }*/
   }
 
   @override
   void initState() {
-    //seisukord();
-    _submitForm();
+    ValitudSeadmed = valitudSeadmeteNullimine();
+    _submitForm;
     super.initState();
   }
 
@@ -126,21 +83,22 @@ class _SeadmeteListValimineState extends State<SeadmeteListValimine> {
                   childAspectRatio: MediaQuery.of(context).size.width /
                       (MediaQuery.of(context).size.height / 5),
                 ),
-                itemCount: SeadmeteMap.length,
+                itemCount: seadmeteMap.length,
                 itemBuilder: (context, index) {
-                  final seade = SeadmeteMap.keys.elementAt(index);
-                  final pilt = SaaSeadmePilt(SeadmeteMap, seade);
-                  final staatus = SaaSeadmeolek(SeadmeteMap, seade);
-                  final graafik = SaaSeadmegraafik(SeadmeteMap, seade);
+                  final seade = seadmeteMap.keys.elementAt(index);
+                  final pilt = seadmeteMap[seade]["Seadme_pilt"];
+                  final staatus = seadmeteMap[seade]["Seadme_olek"];
+
                   return GestureDetector(
                     onTap: () {
-                      if (SeadmeteMap[seade]![2] != 'Offline') {
+                      if (seadmeteMap[seade]["Seadme_olek"] != 'Offline') {
                         setState(() {
-                          if (ValitudSeadmed[index] == false) {
-                            ValitudSeadmed[index] = true;
+                          if (ValitudSeadmed[seade] == false) {
+                            ValitudSeadmed[seade] = true;
                           } else {
-                            ValitudSeadmed[index] = false;
+                            ValitudSeadmed[seade] = false;
                           }
+                          print(ValitudSeadmed);
                         });
                       } else {
                         showDialog(
@@ -162,7 +120,7 @@ class _SeadmeteListValimineState extends State<SeadmeteListValimine> {
                           height: double.infinity,
                           decoration: BoxDecoration(
                             border: Border.all(
-                              color: ValitudSeadmed[index] == true
+                              color: ValitudSeadmed[seade] == true
                                   ? Colors.green
                                   : Colors.grey,
                               width: 8,
@@ -188,7 +146,7 @@ class _SeadmeteListValimineState extends State<SeadmeteListValimine> {
                               Positioned(
                                 top: 8,
                                 right: 8,
-                                child: graafik == 'ei'
+                                child: seadmeteMap[seade]["Graafik"] == 'ei'
                                     ? IconButton(
                                         iconSize: 60,
                                         icon: Icon(
@@ -213,23 +171,27 @@ class _SeadmeteListValimineState extends State<SeadmeteListValimine> {
                                           color: Colors.blue,
                                         ),
                                         onPressed: () async {
-                                          if (SeadmeteMap[seade]![4] == '1') {
-                                            if (SeadmeteMap[seade]![2] !=
+                                          if (seadmeteMap[seade]
+                                                  ["Seadme_generatsioon"] ==
+                                              1) {
+                                            if (seadmeteMap[seade]
+                                                    ["Seadme_olek"] !=
                                                 'Offline') {
                                               var temp =
                                                   await SeadmeGraafikKoostamineGen1(
-                                                      SeadmeteMap[seade]![1]);
+                                                      seade);
 
                                               setState(() {
                                                 seadmeGraafik = temp;
                                               });
                                             }
                                           } else {
-                                            if (SeadmeteMap[seade]![2] !=
+                                            if (seadmeteMap[seade]
+                                                    ["Seadme_olek"] !=
                                                 'Offline') {
                                               var temp =
                                                   await SeadmeGraafikKoostamineGen2(
-                                                      SeadmeteMap[seade]![1]);
+                                                      seade);
 
                                               setState(() {
                                                 seadmeGraafik = temp;
@@ -316,7 +278,7 @@ class _SeadmeteListValimineState extends State<SeadmeteListValimine> {
                                   padding: EdgeInsets.symmetric(vertical: 8),
                                   child: Center(
                                     child: Text(
-                                      seade,
+                                      seadmeteMap[seade]["Seadme_nimi"],
                                       style: TextStyle(
                                         color: Colors.white,
                                         fontSize: 18,
@@ -382,53 +344,16 @@ class _SeadmeteListValimineState extends State<SeadmeteListValimine> {
   }
 }
 
-SaaSeadmePilt(Map<String, List<String>> SeadmeteMap, SeadmeNimi) {
-  List<String>? deviceInfo = SeadmeteMap[SeadmeNimi];
-  if (deviceInfo != null) {
-    String pilt = deviceInfo[0];
-    return pilt;
-  }
-  return null; // Device key not found in the map
-}
-
-SaaSeadmeolek(Map<String, List<String>> SeadmeteMap, SeadmeNimi) {
-  List<String>? deviceInfo = SeadmeteMap[SeadmeNimi];
-  if (deviceInfo != null) {
-    String olek = deviceInfo[2];
-    return olek;
-  }
-  return null; // Device key not found in the map
-}
-
-muudaSeadmeOlek(Map<String, List<String>> SeadmeteMap, SeadmeNimi) {
-  List<String>? deviceInfo = SeadmeteMap[SeadmeNimi];
-  if (deviceInfo != null) {
-    String status = deviceInfo[2];
-
-    if (status == 'on') {
-      deviceInfo[2] = 'off';
-      SeadmeteMap[SeadmeNimi] = deviceInfo;
-    } else if (status == 'off') {
-      deviceInfo[2] = 'on';
-      SeadmeteMap[SeadmeNimi] = deviceInfo;
-    }
-    return SeadmeteMap;
-  }
-  return SeadmeteMap; // Device key not found in the map
-}
-
-Map<int, bool> valitudSeadmeteNullimine(Map<String, List<String>> SeadmeteMap) {
-  Map<int, bool> ValitudSeadmed = {};
-  int i = 0;
-  for (String seade in SeadmeteMap.keys) {
-    ValitudSeadmed[i] = false;
-    i++;
-  }
+Map<String, bool> valitudSeadmeteNullimine() {
+  Map<String, bool> ValitudSeadmed = {};
+  seadmeteMap.forEach((key, value) async {
+    ValitudSeadmed[key] = false;
+  });
   return ValitudSeadmed;
 }
 
-SaaSeadmegraafik(Map<String, List<String>> SeadmeteMap, SeadmeNimi) {
-  List<String>? deviceInfo = SeadmeteMap[SeadmeNimi];
+SaaSeadmegraafik(SeadmeNimi) {
+  String deviceInfo = seadmeteMap[SeadmeNimi];
   if (deviceInfo != null) {
     String graafik = deviceInfo[5];
     return graafik;
@@ -481,6 +406,7 @@ SeadmeGraafikKoostamineGen1(String value) async {
 
   if (grafikOlems) {
     List<String> filledTimes = [];
+    List<String> graafikParis = [];
     String? lastState;
 
     for (var i = 0; i < seadmeGraafik1.length; i++) {
@@ -509,14 +435,32 @@ SeadmeGraafikKoostamineGen1(String value) async {
     var lastParts = filledTimes.last.split('-');
     var lastTime = int.parse(lastParts[0]);
 
-    while (lastTime < 2300) {
+    while (lastTime < 2400) {
       lastTime += 100;
       filledTimes.add("${lastTime.toString().padLeft(4, '0')}-0-$lastState");
     }
+    if (filledTimes[0] != '0000-$paev-on' ||
+        filledTimes[0] != '0000-$paev-off') {
+      int maramataPaevad = 24 - filledTimes.length;
+      for (int i = 0; i < 24; i++) {
+        String tunnike = '';
+        if (i < maramataPaevad + 1) {
+          if (i < 10) {
+            tunnike = '0$i';
+          } else {
+            tunnike = '$i';
+          }
+          graafikParis.add("${tunnike}00-0-off");
+        } else {
+          graafikParis.add(filledTimes[i - maramataPaevad - 1]);
+        }
+      }
+    }
+    print(graafikParis);
 
     List<String> onOffStatus = [];
 
-    for (var timeEntry in filledTimes) {
+    for (var timeEntry in graafikParis) {
       var parts = timeEntry.split('-');
       var status = parts[2];
 
@@ -596,52 +540,59 @@ SeadmeGraafikKoostamineGen2(
   }
 }
 
-SeadmeGraafikKontrollimineGen1(String value) async {
+SeadmeGraafikKontrollimineGen1() async {
   bool grafikOlems = false;
   DateTime now = DateTime.now();
   SharedPreferences prefs = await SharedPreferences.getInstance();
   String? storedKey = prefs.getString('key');
   String storedKeyString = jsonDecode(storedKey!);
-  var headers = {
-    'Content-Type': 'application/x-www-form-urlencoded',
-  };
 
-  var data = {
-    'channel': '0',
-    'id': value,
-    'auth_key': storedKeyString,
-  };
+  seadmeteMap.forEach((key, value) async {
+    if (value['Seadme_generatsioon'] == 1) {
+      var headers = {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      };
 
-  var url = Uri.parse('https://shelly-64-eu.shelly.cloud/device/settings');
+      var data = {
+        'channel': '0',
+        'id': key,
+        'auth_key': value["Cloud_key"],
+      };
 
-  var res = await http.post(url, headers: headers, body: data);
+      var url = Uri.parse('https://shelly-64-eu.shelly.cloud/device/settings');
 
-  await Future.delayed(const Duration(seconds: 2));
-  //Kui post läheb läbi siis:
+      var res = await http.post(url, headers: headers, body: data);
 
-  final httpPackageJson = json.decode(res.body) as Map<String, dynamic>;
+      await Future.delayed(const Duration(seconds: 2));
+      //Kui post läheb läbi siis:
 
-  var seadmeGraafik1 =
-      httpPackageJson['data']['device_settings']['relays'][0]['schedule_rules'];
+      final httpPackageJson = json.decode(res.body) as Map<String, dynamic>;
 
-  int paev = 0;
+      var seadmeGraafik1 = httpPackageJson['data']['device_settings']['relays']
+          [0]['schedule_rules'];
 
-  if (now.weekday == 7) {
-    paev = 0;
-  } else {
-    paev = now.weekday - 1;
-  }
+      int paev = 0;
 
-  for (var i = 0; i < seadmeGraafik1.length; i++) {
-    String mainString = seadmeGraafik1[i];
-    if (mainString.contains("-$paev-")) {
-      grafikOlems = true;
+      if (now.weekday == 7) {
+        paev = 0;
+      } else {
+        paev = now.weekday - 1;
+      }
+
+      for (var i = 0; i < seadmeGraafik1.length; i++) {
+        String mainString = seadmeGraafik1[i];
+        if (mainString.contains("-$paev-")) {
+          grafikOlems = true;
+        }
+      }
+
+      if (grafikOlems) {
+        seadmeteMap[key]["Graafik"] = 'jah';
+        //return 'jah';
+      } else {
+        //return 'ei';
+        seadmeteMap[key]["Graafik"] = 'ei';
+      }
     }
-  }
-
-  if (grafikOlems) {
-    return 'jah';
-  } else {
-    return 'ei';
-  }
+  });
 }

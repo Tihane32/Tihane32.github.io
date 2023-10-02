@@ -293,6 +293,8 @@ graafikuKopeerimine(Map<String, bool> valitudGraafik, valitudSeadmed) async {
   seadmed = json.decode(storedJsonMap!);
   String valitudID = "";
   int j = 0;
+  
+
   valitudGraafik.forEach((key, value) async {
     if (value == true) {
       valitudID = seadmed["Seade$j"]["Seadme_ID"];

@@ -33,24 +33,21 @@ class _KopeeriGraafikTundideValikState
   Function updateValitudSeadmed;
   var valitudSeadmed;
   int koduindex = 1;
-  bool isLoading = true;
+  bool isLoading = false;
   String selectedPage = 'Kopeeri graafik';
   double vahe = 10;
   int valitudTunnid = 10;
   Color boxColor = sinineKast;
   Map<String, bool> ValitudGraafik = {};
 
-  late Map<String, List<String>> minuSeadmedK = {};
   dynamic seadmeGraafik;
   @override
   void initState() {
     //seisukord();
-    _submitForm();
     super.initState();
-    ValitudGraafik = valitudSeadmeteNullimine(SeadmeteMap);
+    ValitudGraafik = valitudSeadmeteNullimine();
   }
 
-  Map<String, List<String>> SeadmeteMap = {};
   Set<String> selectedPictures = Set<String>();
 
   void toggleSelection(String pictureName) {
@@ -60,38 +57,6 @@ class _KopeeriGraafikTundideValikState
       } else {
         selectedPictures.add(pictureName);
       }
-    });
-  }
-
-  Future _submitForm() async {
-    minuSeadmedK.clear();
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    //await prefs.clear();
-
-    String? storedJsonMap = prefs.getString('seadmed');
-    if (storedJsonMap != null) {
-      await seisukord();
-      storedJsonMap = prefs.getString('seadmed');
-      Map<String, dynamic> storedMap = json.decode(storedJsonMap!);
-      await Future.delayed(const Duration(seconds: 3));
-      var i = 0;
-      for (String Seade in storedMap.keys) {
-        var id = storedMap['Seade$i']['Seadme_ID'];
-        var name = storedMap['Seade$i']['Seadme_nimi'];
-        var pistik = storedMap['Seade$i']['Seadme_pistik'];
-        var olek = storedMap['Seade$i']['Seadme_olek'];
-        Map<String, List<String>> ajutineMap = {
-          name: ['assets/boiler1.jpg', '$id', '$olek', '$pistik', 'jah'],
-        };
-        minuSeadmedK.addAll(ajutineMap);
-        i++;
-      }
-
-      //minuSeadmedK['Shelly Pro PM']![4] = 'ei';
-    }
-    setState(() {
-      SeadmeteMap = minuSeadmedK;
-      isLoading = false;
     });
   }
 
@@ -109,19 +74,19 @@ class _KopeeriGraafikTundideValikState
                     childAspectRatio: MediaQuery.of(context).size.width /
                         (MediaQuery.of(context).size.height / 5),
                   ),
-                  itemCount: SeadmeteMap.length,
+                  itemCount: seadmeteMap.length,
                   itemBuilder: (context, index) {
-                    final seade = SeadmeteMap.keys.elementAt(index);
-                    final pilt = SaaSeadmePilt(SeadmeteMap, seade);
-                    final staatus = SaaSeadmeolek(SeadmeteMap, seade);
-                    final graafik = SaaSeadmegraafik(SeadmeteMap, seade);
+                    final seade = seadmeteMap.keys.elementAt(index);
+                    final pilt = seadmeteMap[seade]["Seadme_pilt"];
+                    final staatus = seadmeteMap[seade]["Seadme_olek"];
+                    
                     return GestureDetector(
                       onTap: () {
                         setState(() {
                           ValitudGraafik =
-                              valitudSeadmeteNullimine(SeadmeteMap);
+                              valitudSeadmeteNullimine();
                         });
-                        if (graafik == 'jah') {
+                        if (seadmeteMap[seade]["Graafik"] == 'jah') {
                           setState(() {
                             if (ValitudGraafik[seade] == false) {
                               ValitudGraafik[seade] = true;
@@ -134,7 +99,7 @@ class _KopeeriGraafikTundideValikState
                                     title: Text("  Seadmel puudub graafik"),
                                   ));
                         }
-                        print(SeadmeteMap);
+                        print(seadmeteMap);
                         print(ValitudGraafik);
                         print(valitudSeadmed);
                         updateValitudSeadmed(ValitudGraafik);
@@ -174,7 +139,7 @@ class _KopeeriGraafikTundideValikState
                                 Positioned(
                                   top: 8,
                                   right: 8,
-                                  child: graafik == 'ei'
+                                  child: seadmeteMap[seade]["Graafik"] == 'ei'
                                       ? IconButton(
                                           iconSize: 60,
                                           icon: Icon(
@@ -200,11 +165,11 @@ class _KopeeriGraafikTundideValikState
                                             color: Colors.blue,
                                           ),
                                           onPressed: () async {
-                                            if (SeadmeteMap[seade]![2] !=
+                                            if (seadmeteMap[seade]["Seadme_olek"] !=
                                                 'Offline') {
                                               var temp =
                                                   await SeadmeGraafikKoostamineGen1(
-                                                      SeadmeteMap[seade]![2]);
+                                                      seade);
 
                                               setState(() {
                                                 seadmeGraafik = temp;
@@ -289,17 +254,16 @@ muudaSeadmeOlek(Map<String, List<String>> SeadmeteMap, SeadmeNimi) {
   return SeadmeteMap; // Device key not found in the map
 }
 
-Map<String, bool> valitudSeadmeteNullimine(
-    Map<String, List<String>> SeadmeteMap) {
+Map<String, bool> valitudSeadmeteNullimine() {
   Map<String, bool> ValitudSeadmed = {};
-  for (String seade in SeadmeteMap.keys) {
-    ValitudSeadmed[seade] = false;
-  }
+  seadmeteMap.forEach((key, value) {
+    ValitudSeadmed[key] = false;
+  });
   return ValitudSeadmed;
 }
 
-SaaSeadmegraafik(Map<String, List<String>> SeadmeteMap, SeadmeNimi) {
-  List<String>? deviceInfo = SeadmeteMap[SeadmeNimi];
+SaaSeadmegraafik(SeadmeNimi) {
+  List<String>? deviceInfo = seadmeteMap[SeadmeNimi];
   if (deviceInfo != null) {
     String graafik = deviceInfo[4];
     return graafik;
