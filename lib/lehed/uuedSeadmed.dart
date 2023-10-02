@@ -127,8 +127,8 @@ class _uuedSeadmedState extends State<uuedSeadmed> {
             ),
           ),
           GestureDetector(
-            onTap: () {
-              sort(checkboxValues, newMap);
+            onTap: () async {
+              await sort(checkboxValues, newMap);
               // Navigate to another page when the button is pressed
               Navigator.push(
                 context,
@@ -166,7 +166,8 @@ class _uuedSeadmedState extends State<uuedSeadmed> {
   }
 }
 
-Future<void> sort(List<bool> checkboxValues, Map<int, Map<String, dynamic>> uuedSeadmedString) async {
+Future<void> sort(List<bool> checkboxValues,
+    Map<int, Map<String, dynamic>> uuedSeadmedString) async {
   int i = 0;
   int j = 0;
   for (j = 0; j < uuedSeadmedString.length; j++) {
@@ -203,19 +204,20 @@ Future<void> sort(List<bool> checkboxValues, Map<int, Map<String, dynamic>> uued
 
       i++;
     }
+    seadmeteMap = seadmed;
     String seadmedMap = json.encode(seadmed);
     await prefs.setString('seadmed', seadmedMap);
-    seisukord();
+    await seisukord();
   } else {
-    
+    Map<String, dynamic> convertedMap = {};
 
-Map<String, dynamic> convertedMap = {};
-
-for (var innerMap in uuedSeadmedString.values) {
-  convertedMap.addAll(innerMap);
-}
+    for (var innerMap in uuedSeadmedString.values) {
+      convertedMap.addAll(innerMap);
+    }
+    seadmeteMap = convertedMap;
     String seadmedMap = json.encode(convertedMap);
     await prefs.setString('seadmed', seadmedMap);
-    seisukord();
+    await seisukord();
+    
   }
 }

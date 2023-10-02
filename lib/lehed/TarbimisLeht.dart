@@ -47,7 +47,7 @@ class _TarbimisLehtState extends State<TarbimisLeht> {
 
   @override
   void initState() {
-    seadmeMaksumus(SeadmeteMap[seadmeNimi]![1]);
+    seadmeMaksumus(seadmeNimi);
     super.initState();
   }
 
@@ -57,7 +57,7 @@ class _TarbimisLehtState extends State<TarbimisLeht> {
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: Color.fromARGB(255, 255, 255, 255), //TaustavÃ¤rv
-        body: MGraafik(value: SeadmeteMap[seadmeNimi]![1]));
+        body: MGraafik(value: seadmeNimi));
   }
 }
 

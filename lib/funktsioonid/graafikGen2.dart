@@ -3,7 +3,18 @@ import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'token.dart';
 import 'package:intl/intl.dart';
-
+import 'package:testuus4/main.dart';
+/// The function `gen2GraafikuLoomine` creates and deletes schedules for a device based on selected
+/// values and user preferences.
+/// 
+/// Args:
+///   selected: A list of lists representing the selected hours for creating a schedule. Each inner list
+/// contains three elements: the hour (0-23), a boolean value indicating whether the hour is selected or
+/// not, and a boolean value indicating whether the hour is toggled on or off.
+///   valitudPaev: The parameter "valitudPaev" is a string that represents the selected day. It can have
+/// two possible values: "täna" (today) or "homme" (tomorrow).
+///   value (String): The value parameter is a string that represents a specific value or identifier. It
+/// is used in various parts of the code to retrieve or manipulate data related to that value.
 gen2GraafikuLoomine(var selected, var valitudPaev, String value) async {
   var graafikud = Map<String, dynamic>();
   List temp = List.empty(growable: true);
@@ -31,7 +42,7 @@ graafikuteSaamine(Map<String, dynamic> graafikud, String value, List temp,
   };
 
   var url = Uri.parse(
-      'https://shelly-64-eu.shelly.cloud/fast/device/gen2_generic_command');
+      '${seadmeteMap[value]['api_url']}/fast/device/gen2_generic_command');
   var res = await http.post(url, headers: headers, body: data);
   if (res.statusCode == 200) {
     var resJSON = jsonDecode(res.body) as Map<String, dynamic>;
@@ -165,7 +176,7 @@ graafikuSaatmine(bool lulitus, String tund, valitudPaev, String value) async {
         '{"enable":true,"timespec":"0 0 $tund * * $nadalapaev","calls":[{"method":"Switch.Set","params":{"id":0,"on":$lulitus}}]}',
   };
   var url = Uri.parse(
-      'https://shelly-64-eu.shelly.cloud/fast/device/gen2_generic_command');
+      '${seadmeteMap[value]['api_url']}/fast/device/gen2_generic_command');
   var res = await http.post(url, headers: headers, body: data);
   if (res.statusCode != 200)
     throw Exception('http.post error: statusCode= ${res.statusCode}');
@@ -243,7 +254,7 @@ graafikuKustutamine(Map<String, dynamic> graafikud, String value) async {
       };
 
       var url = Uri.parse(
-          'https://shelly-64-eu.shelly.cloud/fast/device/gen2_generic_command');
+          '${seadmeteMap[value]['api_url']}/fast/device/gen2_generic_command');
       var res = await http.post(url, headers: headers, body: data);
       if (res.statusCode != 200)
         throw Exception('http.post error: statusCode= ${res.statusCode}');
@@ -267,7 +278,7 @@ Future<Map<int, dynamic>> gen2GraafikSaamine(
   };
 
   var url = Uri.parse(
-      'https://shelly-64-eu.shelly.cloud/fast/device/gen2_generic_command');
+      '${seadmeteMap[value]['api_url']}/fast/device/gen2_generic_command');
   var res = await http.post(url, headers: headers, body: data);
   if (res.statusCode == 200) {
     var resJSON = jsonDecode(res.body) as Map<String, dynamic>;
@@ -356,7 +367,7 @@ delete(value, List temp) async {
     };
 
     var url = Uri.parse(
-        'https://shelly-64-eu.shelly.cloud/fast/device/gen2_generic_command');
+        '${seadmeteMap[value]['api_url']}/fast/device/gen2_generic_command');
     var res1 = await http.post(url, headers: headers, body: data);
   }
 }

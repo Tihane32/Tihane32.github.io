@@ -6,6 +6,16 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 
+/// The function `getElering` retrieves the price graph data for electricity in Estonia from the Elering
+/// API for a specified date.
+/// 
+/// Args:
+///   paevtest (String): The parameter "paevtest" is a string that determines whether to get the data
+/// for today or tomorrow. If the value of "paevtest" is "tana", it means to get the data for today.
+/// Otherwise, it will get the data for tomorrow.
+/// 
+/// Returns:
+///   a Future<List> object.
 Future<List> getElering(String paevtest) async {
   var entryList;
 

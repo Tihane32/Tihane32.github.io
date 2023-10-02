@@ -821,9 +821,9 @@ class _SeadmeGraafikuLehtState extends State<SeadmeGraafikuLeht> {
             child: GestureDetector(
               onTap: () {
                 if (tana == green) {
-                  genMaaramine(lulitus, 'täna', SeadmeteMap, seadmeNimi);
+                  genMaaramine(lulitus, 'täna', seadmeNimi);
                 } else {
-                  genMaaramine(lulitus, 'homme', SeadmeteMap, seadmeNimi);
+                  genMaaramine(lulitus, 'homme', seadmeNimi);
                 }
 
                 showDialog(
@@ -1043,7 +1043,7 @@ Future graafik(
 
   []; //Võtab mälust 'users'-i asukohast väärtused
   var seadmedJSONmap = prefs.getString('seadmed');
-  String value = SeadmeteMap[seadmeNimi]![1];
+  
   Map<String, dynamic> storedMap = json.decode(seadmedJSONmap!);
 
   String? storedKey = prefs.getString('key');
@@ -1052,9 +1052,9 @@ Future graafik(
   var j = 0;
   var authKey = storedKeyString;
   // ignore: unused_local_variable
-  for (var i in storedMap.values) {
-    if (storedMap['Seade$j']['Seadme_ID'] == value) {
-      var seadeGen = storedMap['Seade$j']['Seadme_generatsioon'] as int;
+
+  
+      var seadeGen = storedMap[seadmeNimi]['Seadme_generatsioon'] as int;
 
       if (seadeGen == 1) {
         DateTime now = DateTime.now();
@@ -1069,7 +1069,7 @@ Future graafik(
 
         var data = {
           'channel': '0',
-          'id': value,
+          'id': seadmeNimi,
           'auth_key': authKey,
         };
 
@@ -1140,9 +1140,8 @@ Future graafik(
           }
         }
         ;
-      }
-      break;
-    }
+      
+      
     j++;
   }
 

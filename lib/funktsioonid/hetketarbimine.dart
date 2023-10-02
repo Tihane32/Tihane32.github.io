@@ -2,7 +2,14 @@ import 'dart:convert';
 import 'token.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:testuus4/main.dart';
 
+/// The function `voimus` retrieves data from stored preferences, makes HTTP requests to retrieve device
+/// status, calculates power consumption, and returns the total power consumption.
+/// 
+/// Returns:
+///   the value of the variable "voimsus", which represents the total power consumption calculated in
+/// the function.
 Future voimus() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
 
@@ -24,7 +31,7 @@ Future voimus() async {
   var j = 0;
   double voimsus = 0;
   print(storedMap);
-  storedMap.forEach((key, value) async {
+  seadmeteMap.forEach((key, value) async {
     {
       //print(storedMap['Seade$j']['Seadme_ID']);
       String asendus = key as String;

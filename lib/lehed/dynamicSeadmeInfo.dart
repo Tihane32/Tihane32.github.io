@@ -178,7 +178,7 @@ class _DunaamilineSeadmeLehtState extends State<DunaamilineSeadmeLeht> {
                     ),
                   );
                 } else if (koduindex == 1) {
-                  pildiMuutmine(seadmeNimi, SeadmeteMap, uusPilt);
+                  pildiMuutmine(seadmeNimi, uusPilt);
                   showDialog(
                       context: context,
                       builder: (context) => AlertDialog(

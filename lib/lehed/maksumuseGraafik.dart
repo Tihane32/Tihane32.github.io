@@ -74,7 +74,7 @@ class _MaksumuseGraafikState extends State<MaksumuseGraafik> {
       print("datamap: $dataMap");
 // Calculate the sum of the double values in the map
       double temp = calculateSum(dataMap);
-      String abi = temp.toStringAsFixed(2);
+      String abi = temp.toStringAsFixed(4);
       temp = double.parse(abi);
       maksumuseMap["$asendus1"] = temp;
       print("siin : $maksumuseMap");
@@ -113,7 +113,7 @@ class _MaksumuseGraafikState extends State<MaksumuseGraafik> {
                       style: font,
                       children: [
                         TextSpan(
-                            text: 'Kokku: ${kokku.toStringAsFixed(2)} €',
+                            text: 'Kokku: ${kokku.toStringAsFixed(4)} €',
                             style: font),
                       ],
                     ),

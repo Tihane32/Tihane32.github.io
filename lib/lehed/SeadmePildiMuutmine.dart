@@ -67,7 +67,7 @@ class _SeadmePildiMuutmineState extends State<SeadmePildiMuutmine> {
   @override
   void initState() {
     super.initState();
-    algnePilt = SeadmeteMap[seadmeNimi]![0];
+    algnePilt = SeadmeteMap[seadmeNimi]["Seadme_pilt"];
     uusPilt = algnePilt;
   }
 

@@ -1,4 +1,5 @@
 import 'package:http/http.dart' as http;
+import 'package:testuus4/main.dart';
 import 'token.dart';
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -20,14 +21,13 @@ seisukord() async {
     throw Exception('http.post error: statusCode= ${res.statusCode}');
   var vastus = json.decode(res.body);
   vastus as Map<String, dynamic>;
-  String? storedJsonMap = prefs.getString('seadmed');
-  if (storedJsonMap != null) {
-    Map<String, dynamic> storedMap = json.decode(storedJsonMap);
+ 
+    Map<String, dynamic> storedMap = seadmeteMap;
 
-    var i = 0;
+    
     storedMap.forEach((key, value) async {
       var id = key;
-      
+
       if (vastus['data']['devices_status']['$id'] == null) {
         value['Seadme_olek'] = 'Offline';
 
@@ -45,6 +45,7 @@ seisukord() async {
           value['Seadme_olek'] = olek;
 
           await prefs.setString('seadmed', json.encode(storedMap));
+          seadmeteMap = storedMap;
         } else {
           var asendus =
               vastus['data']['devices_status']['$id']['switch:0']['output'];
@@ -57,10 +58,12 @@ seisukord() async {
           value['Seadme_olek'] = olek;
 
           await prefs.setString('seadmed', json.encode(storedMap));
+          seadmeteMap = storedMap;
         }
       }
 
-      i++;
+      
     });
-  }
+  
+  print('seisukordmap: $seadmeteMap');
 }

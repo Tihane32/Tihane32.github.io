@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:testuus4/lehed/SeadmeGraafikLeht.dart';
+import 'package:testuus4/widgets/hoitatus.dart';
 import '../funktsioonid/seisukord.dart';
 import '../funktsioonid/token.dart';
 import 'DynaamilineTundideValimine.dart';
