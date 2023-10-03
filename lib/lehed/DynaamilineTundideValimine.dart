@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -257,70 +258,73 @@ class _DynamilineTundideValimineState extends State<DynamilineTundideValimine> {
   }
 }
 
-graafikuteSaatmine(
-    var valitudSeadmed, Map<int, dynamic> lulitusMap, Color paev) async {
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  var storedJsonMap = prefs.getString('seadmed');
-  Map<String, dynamic> seadmed;
-  seadmed = json.decode(storedJsonMap!);
+graafikuteSaatmine(Map<String, bool> valitudSeadmed,
+    Map<int, dynamic> lulitusMap, Color paev) async {
   String valitudPaev = "homme";
   if (paev == Colors.green) {
     valitudPaev = "täna";
   }
-  print(valitudPaev);
-  for (int i = 0; i < seadmed.length; i++) {
-    if (valitudSeadmed[i] == true) {
-      if (seadmed['Seade$i']["Seadme_generatsioon"] == 1) {
-        await gen1GraafikLoomine(
-            lulitusMap, valitudPaev, seadmed['Seade$i']["Seadme_ID"]);
+  valitudSeadmed.forEach((key, value) async {
+    if (value == true) {
+      if (seadmeteMap[key]['Seadme_generatsioon'] == 1) {
+        await gen1GraafikLoomine(lulitusMap, valitudPaev, key);
       } else {
-        await gen2GraafikuLoomine(
-            lulitusMap, valitudPaev, seadmed['Seade$i']["Seadme_ID"]);
+        await gen2GraafikuLoomine(lulitusMap, valitudPaev, key);
       }
     }
-  }
+  });
 }
 
-graafikuKopeerimine(Map<String, bool> valitudGraafik, valitudSeadmed) async {
-  print("Lõpp $valitudGraafik");
-  print("Lõpp $valitudSeadmed");
-
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  String? storedKey = prefs.getString('key');
-  String storedKeyString = jsonDecode(storedKey!);
-  var storedJsonMap = prefs.getString('seadmed');
-  Map<String, dynamic> seadmed;
-  seadmed = json.decode(storedJsonMap!);
-  String valitudID = "";
-  int j = 0;
-  
-
+graafikuKopeerimine(
+    Map<String, bool> valitudGraafik, Map<String, bool> valitudSeadmed) async {
+  //Graafiku saamise osa
+  var scheduleRules1;
   valitudGraafik.forEach((key, value) async {
     if (value == true) {
-      valitudID = seadmed["Seade$j"]["Seadme_ID"];
-      print(valitudID);
+      if (seadmeteMap[key]['Seadme_generatsioon'] == 1) {
+        var headers = {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        };
 
-      var headers = {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      };
+        var data = {
+          'channel': '0',
+          'id': key,
+          'auth_key': seadmeteMap[key]['Cloud_key'],
+        };
 
-      var data = {
-        'channel': '0',
-        'id': valitudID,
-        'auth_key': storedKeyString,
-      };
+        var url = Uri.parse('${seadmeteMap[key]['api_url']}/device/settings');
+        var res = await http.post(url, headers: headers, body: data);
+        await Future.delayed(const Duration(seconds: 2));
+        //Kui post läheb läbi siis:
 
-      var url = Uri.parse('https://shelly-64-eu.shelly.cloud/device/settings');
-      var res = await http.post(url, headers: headers, body: data);
-      await Future.delayed(const Duration(seconds: 2));
-      //Kui post läheb läbi siis:
-      List<String> newList = [];
-      final httpPackageJson = json.decode(res.body) as Map<String, dynamic>;
+        final httpPackageJson = json.decode(res.body) as Map<String, dynamic>;
 
-      var scheduleRules1 = httpPackageJson['data']['device_settings']['relays']
-          [0]['schedule_rules'];
-      print(scheduleRules1);
+        scheduleRules1 = httpPackageJson['data']['device_settings']['relays'][0]
+            ['schedule_rules'];
+        print(scheduleRules1);
+      }
     }
-    j++;
+  });
+  //Graafiku saatmise osa
+  valitudSeadmed.forEach((key, value) async {
+    if (value == true) {
+      if (seadmeteMap[key]['Seadme_generatsioon'] == 1) {
+        var headers1 = {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        };
+
+        var data1 = {
+          'channel': '0',
+          'enabled': "1",
+          'schedule_rules': scheduleRules1.toString(),
+          'id': key,
+          'auth_key': seadmeteMap[key]['Cloud_key'],
+        };
+
+        var url1 = Uri.parse(
+            '${seadmeteMap[key]['api_url']}/device/relay/settings/schedule_rules');
+        var res1 = await http.post(url1, headers: headers1, body: data1);
+      }
+    }
   });
 }

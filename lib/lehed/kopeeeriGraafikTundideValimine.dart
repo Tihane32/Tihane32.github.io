@@ -44,6 +44,7 @@ class _KopeeriGraafikTundideValikState
   @override
   void initState() {
     //seisukord();
+    SeadmeGraafikKontrollimineGen1();
     super.initState();
     ValitudGraafik = valitudSeadmeteNullimine();
   }
@@ -79,13 +80,13 @@ class _KopeeriGraafikTundideValikState
                     final seade = seadmeteMap.keys.elementAt(index);
                     final pilt = seadmeteMap[seade]["Seadme_pilt"];
                     final staatus = seadmeteMap[seade]["Seadme_olek"];
-                    
+
                     return GestureDetector(
                       onTap: () {
                         setState(() {
-                          ValitudGraafik =
-                              valitudSeadmeteNullimine();
+                          ValitudGraafik = valitudSeadmeteNullimine();
                         });
+                        print(seadmeteMap[seade]["Graafik"]);
                         if (seadmeteMap[seade]["Graafik"] == 'jah') {
                           setState(() {
                             if (ValitudGraafik[seade] == false) {
@@ -165,7 +166,8 @@ class _KopeeriGraafikTundideValikState
                                             color: Colors.blue,
                                           ),
                                           onPressed: () async {
-                                            if (seadmeteMap[seade]["Seadme_olek"] !=
+                                            if (seadmeteMap[seade]
+                                                    ["Seadme_olek"] !=
                                                 'Offline') {
                                               var temp =
                                                   await SeadmeGraafikKoostamineGen1(

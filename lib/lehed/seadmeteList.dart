@@ -147,8 +147,8 @@ class _SeadmeteListState extends State<SeadmeteList> {
                   }
 
                   final seade = seadmeteMap.keys.elementAt(index);
-                  final pilt = SaaSeadmePilt(seadmeteMap, seade);
-                  final staatus =  SaaSeadmeolek(seadmeteMap, seade);
+                  final pilt = seadmeteMap[seade]["Seadme_pilt"];
+                  final staatus =  seadmeteMap[seade]["Seadme_olek"];
                   print('Staatus: $staatus');
                   return GestureDetector(
                     onTap: () {

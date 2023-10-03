@@ -63,20 +63,18 @@ class _MaksumuseGraafikState extends State<MaksumuseGraafik> {
     }
     Map<String, dynamic> storedMap = json.decode(seadmedJSONmap);
     int j = 0;
-    storedMap.forEach((key, value) async {
-      print("siin");
-      String asendus = key.toString();
-      String asendus1 = value['Seadme_nimi'].toString();
-      j++;
+    seadmeteMap.forEach((key, value) async {
+      
+      
 
 // Call seadmeMaksumus to get the map
-      Map<DateTime, double> dataMap = await seadmeMaksumus(asendus);
+      Map<DateTime, double> dataMap = await seadmeMaksumus(key);
       print("datamap: $dataMap");
 // Calculate the sum of the double values in the map
       double temp = calculateSum(dataMap);
       String abi = temp.toStringAsFixed(4);
       temp = double.parse(abi);
-      maksumuseMap["$asendus1"] = temp;
+      maksumuseMap["${value['Seadme_nimi']}"] = temp;
       print("siin : $maksumuseMap");
       chartData.clear();
       for (var entry in maksumuseMap.entries) {
@@ -165,6 +163,7 @@ class _MaksumuseGraafikState extends State<MaksumuseGraafik> {
                   ColumnSeries<ChartData, String>(
                     onPointTap: (pointInteractionDetails) {
                       int? rowIndex = pointInteractionDetails.pointIndex;
+                      
                       Navigator.push(
                         context,
                         MaterialPageRoute(
