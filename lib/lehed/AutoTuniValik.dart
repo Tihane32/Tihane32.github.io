@@ -1,91 +1,80 @@
+import 'dart:async';
+import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:testuus4/lehed/DynaamilineTundideValimine.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:testuus4/lehed/GraafikusseSeadmeteValik.dart';
 import 'package:testuus4/lehed/dynamicKoduLeht.dart';
-import '../funktsioonid/Elering.dart';
+import 'package:testuus4/lehed/keskimiseHinnaAluselTundideValimine.dart';
+import '../funktsioonid/seisukord.dart';
 import '../main.dart';
 import 'AbiLeht.dart';
-import 'koduleht.dart';
 import 'hinnaPiiriAluselTunideValimine.dart';
-import 'dart:math';
-import 'package:testuus4/lehed/kaksTabelit.dart';
-import 'package:syncfusion_flutter_charts/charts.dart';
+import 'package:http/http.dart' as http;
 
-import 'kopeeeriGraafikTundideValimine.dart';
-import 'package:testuus4/lehed/DynaamilineTundideValimine.dart';
-
-class AutoTundideValimine extends StatefulWidget {
-  final Function updateLulitusMap;
-
-  AutoTundideValimine(
-      {Key? key, required this.lulitusMap, required this.updateLulitusMap})
+class AutoTundideValik extends StatefulWidget {
+  final Function updateValitudSeadmed;
+  AutoTundideValik(
+      {Key? key, this.valitudSeadmed, required this.updateValitudSeadmed})
       : super(key: key);
-
-  var lulitusMap;
+  final valitudSeadmed;
   @override
-  _AutoTundideValimineState createState() =>
-      _AutoTundideValimineState(
-          lulitusMap: lulitusMap, updateLulitusMap: updateLulitusMap);
+  _AutoTundideValikState createState() => _AutoTundideValikState(
+      valitudSeadmed: valitudSeadmed,
+      updateValitudSeadmed: updateValitudSeadmed);
 }
 
-int koduindex = 1;
-
- Color valge = Colors.white;
-Color green = Colors.green;
-class _AutoTundideValimineState
-    extends State<AutoTundideValimine> {
-  _AutoTundideValimineState(
-      {Key? key, required this.lulitusMap, required this.updateLulitusMap});
-  Function updateLulitusMap;
-  var lulitusMap;
-  int selectedRowIndex = -1;
-  String selectedPage = 'Keskmine hind';
+class _AutoTundideValikState extends State<AutoTundideValik> {
+  _AutoTundideValikState(
+      {Key? key,
+      required this.valitudSeadmed,
+      required this.updateValitudSeadmed});
+  Function updateValitudSeadmed;
+  var valitudSeadmed;
+  int koduindex = 1;
+  bool isLoading = true;
+  String selectedPage = 'Kopeeri graafik';
   double vahe = 10;
-  int valitudTunnid = 12;
+  int valitudTunnid = 10;
   Color boxColor = sinineKast;
-   bool _notificationsEnabled = false;
+  bool _notificationsEnabled = false;
   String _selectedTheme = 'Light';
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-     body:ListView(
-        children: <Widget>[
-          ListTile(
-            title: Text('Enable Notifications'),
-            trailing: Switch(
-              value: _notificationsEnabled,
-              onChanged: (bool value) {
-                setState(() {
-                  _notificationsEnabled = value;
-                });
-              },
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
+      child: Scaffold(
+        body: ListView(
+          children: <Widget>[
+            ListTile(
+              title: Text('Enable Notifications'),
+              trailing: Switch(
+                value: _notificationsEnabled,
+                onChanged: (bool value) {
+                  setState(() {
+                    _notificationsEnabled = value;
+                  });
+                },
+              ),
             ),
-          ),
-          ListTile(
-            title: Text('Theme'),
-            trailing: DropdownButton<String>(
-              value: _selectedTheme,
-              onChanged: (String newValue) {
-                setState(() {
-                  _selectedTheme = newValue;
-                });
-              },
-              items: <String>['Light', 'Dark']
-                  .map<DropdownMenuItem<String>>((String value) {
-                return DropdownMenuItem<String>(
-                  value: value,
-                  child: Text(value),
-                );
-              }).toList(),
+            ListTile(
+              title: Text('Seaded'),
+              trailing: DropdownButton<String>(
+                value: _selectedTheme,
+                onChanged: (value) => _notificationsEnabled,
+                items: <String>['Light', 'Dark']
+                    .map<DropdownMenuItem<String>>((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
+                  );
+                }).toList(),
+              ),
             ),
-          ),
-          // Add more settings options as you need
-        ],
+            // Add more settings options as you need
+          ],
+        ),
       ),
     );
-    )
   }
 }
