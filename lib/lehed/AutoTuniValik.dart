@@ -37,7 +37,26 @@ class _AutoTundideValikState extends State<AutoTundideValik> {
   int valitudTunnid = 10;
   Color boxColor = sinineKast;
   bool _notificationsEnabled = false;
-  String _selectedTheme = 'Light';
+  String _selectedTheme = 'Odavaimad Tunnid';
+  double _selectedDuration = 7;
+  Map<double, String> _durationMap = {
+    1: '1 päeva',
+    2: '2 päeva',
+    3: '3 päeva',
+    4: '4 päeva',
+    5: '5 päeva',
+    6: '6 päeva',
+    7: '1 nädalat',
+    8: '2 nädalat',
+    9: '3 nädalat',
+    10: '1 kuud',
+    11: '2 kuud',
+    12: '3 kuud',
+    13: 'pool aastat',
+    14: 'igavesti',
+  };
+  TextEditingController _textController = TextEditingController();
+  String? get readableDuration => _durationMap[_selectedDuration];
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +66,7 @@ class _AutoTundideValikState extends State<AutoTundideValik> {
         body: ListView(
           children: <Widget>[
             ListTile(
-              title: Text('Enable Notifications'),
+              title: Text('Saada teavitus kui seade ei ole kättesaadav'),
               trailing: Switch(
                 value: _notificationsEnabled,
                 onChanged: (bool value) {
@@ -58,12 +77,34 @@ class _AutoTundideValikState extends State<AutoTundideValik> {
               ),
             ),
             ListTile(
-              title: Text('Seaded'),
+              title: Text('Kestus: $readableDuration'),
+              subtitle: Slider(
+                value: _selectedDuration,
+                onChanged: (newValue) {
+                  setState(() {
+                    _selectedDuration = newValue;
+                  });
+                },
+                divisions: 13,
+                min: 1,
+                max: 14,
+                label: readableDuration,
+              ),
+            ),
+            ListTile(
+              title: Text('Vali lülitusgraafiku koostamis algoritm'),
               trailing: DropdownButton<String>(
                 value: _selectedTheme,
-                onChanged: (value) => _notificationsEnabled,
-                items: <String>['Light', 'Dark']
-                    .map<DropdownMenuItem<String>>((String value) {
+                onChanged: (lylitusViis) {
+                  setState(() {
+                    _selectedTheme = lylitusViis!;
+                  });
+                },
+                items: <String>[
+                  'Odavaimad Tunnid',
+                  'Hinnapiir',
+                  'Minu eelistusd',
+                ].map<DropdownMenuItem<String>>((String value) {
                   return DropdownMenuItem<String>(
                     value: value,
                     child: Text(value),
@@ -71,7 +112,32 @@ class _AutoTundideValikState extends State<AutoTundideValik> {
                 }).toList(),
               ),
             ),
-            // Add more settings options as you need
+            Visibility(
+              visible: _selectedTheme == 'Odavaimad Tunnid',
+              child: ListTile(
+                title: Text('Vali tunnid kus vool peab tagatud olema'),
+                trailing: Container(
+                  width: 100,
+                  child: TextField(
+                    controller: _textController,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            ListTile(
+              title: Text('Vali tunnid kus vool peab tagatud olema'),
+              trailing: Switch(
+                value: _notificationsEnabled,
+                onChanged: (bool value) {
+                  setState(() {
+                    _notificationsEnabled = value;
+                  });
+                },
+              ),
+            ),
           ],
         ),
       ),
