@@ -10,6 +10,8 @@ import 'package:testuus4/lehed/dynamicKoduLeht.dart';
 import '../funktsioonid/genMaaramine.dart';
 import '../main.dart';
 import 'AbiLeht.dart';
+import 'AutoTuniValik.dart';
+import 'keelatudTunnid.dart';
 import 'keskimiseHinnaAluselTundideValimine.dart';
 import 'hinnaPiiriAluselTunideValimine.dart';
 import 'kopeeeriGraafikTundideValimine.dart';
@@ -79,6 +81,10 @@ class _DynamilineTundideValimineState extends State<DynamilineTundideValimine> {
       KopeeriGraafikTundideValik(
           valitudSeadmed: valitudSeadmed,
           updateValitudSeadmed: updateValitudSeamded),
+      AutoTundideValik(
+          valitudSeadmed: valitudSeadmed,
+          updateValitudSeadmed: updateValitudSeamded),
+      KeelatudTunnid(valitudSeadmed: valitudSeadmed),
       AbiLeht(),
     ];
   }
@@ -134,8 +140,10 @@ class _DynamilineTundideValimineState extends State<DynamilineTundideValimine> {
                     leht = 1;
                   } else if (selectedPage == 'Kopeeri graafik') {
                     leht = 2;
-                  } else if (selectedPage == 'Minu eelistused') {
+                  } else if (selectedPage == 'Automaatne') {
                     leht = 3;
+                  } else if (selectedPage == 'Minu eelistused') {
+                    leht = 4;
                   }
                 },
                 underline: Container(), // or SizedBox.shrink()
@@ -143,6 +151,7 @@ class _DynamilineTundideValimineState extends State<DynamilineTundideValimine> {
                   'Keskmine hind',
                   'Hinnapiir',
                   'Kopeeri graafik',
+                  'Automaatne',
                   'Minu eelistused',
                 ].map((String value) {
                   return DropdownMenuItem<String>(
