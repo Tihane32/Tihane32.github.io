@@ -8,6 +8,7 @@ import 'package:testuus4/lehed/keskimiseHinnaAluselTundideValimine.dart';
 import '../funktsioonid/seisukord.dart';
 import '../main.dart';
 import 'AbiLeht.dart';
+import 'DynaamilineTundideValimine.dart';
 import 'hinnaPiiriAluselTunideValimine.dart';
 import 'package:http/http.dart' as http;
 
@@ -42,16 +43,16 @@ class _AutoTundideValikState extends State<AutoTundideValik> {
   String _selectedTheme = 'Odavaimad Tunnid';
   double _selectedDuration = 7;
   Map<double, String> _durationMap = {
-    1: '1 päeva',
+    1: '1 päev',
     2: '2 päeva',
     3: '3 päeva',
     4: '4 päeva',
     5: '5 päeva',
     6: '6 päeva',
-    7: '1 nädalat',
+    7: '1 nädal',
     8: '2 nädalat',
     9: '3 nädalat',
-    10: '1 kuud',
+    10: '1 kuu',
     11: '2 kuud',
     12: '3 kuud',
     13: 'pool aastat',
@@ -118,7 +119,7 @@ class _AutoTundideValikState extends State<AutoTundideValik> {
             Visibility(
               visible: _selectedTheme == 'Odavaimad Tunnid',
               child: ListTile(
-                title: Text('Vali tunnid kus vool peab tagatud olema'),
+                title: Text('Sisesta soovitud tundide arv'),
                 trailing: Container(
                   width: 100,
                   child: TextField(
@@ -133,7 +134,7 @@ class _AutoTundideValikState extends State<AutoTundideValik> {
             Visibility(
               visible: _selectedTheme == 'Hinnapiir',
               child: ListTile(
-                title: Text('Vali tunnid kus vool peab tagatud olema'),
+                title: Text('Sisesta hinnapiir'),
                 trailing: Container(
                   width: 100,
                   child: TextField(
@@ -146,18 +147,41 @@ class _AutoTundideValikState extends State<AutoTundideValik> {
               ),
             ),
             ListTile(
-                title: Text('Vali tunnid kus vool peab tagatud olema'),
+                title: Text('Vali tunnid kus seade peab töötama'),
                 trailing: IconButton(
                     onPressed: () {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) =>
-                              KeelatudTunnid(valitudSeadmed: valitudSeadmed),
-                        ),
+                            builder: (context) => DynamilineTundideValimine(
+                                valitudSeadmed: valitudSeadmed,
+                                i: 4,
+                                luba: 'jah')),
                       );
                     },
-                    icon: Icon(Icons.more_time_rounded))),
+                    icon: Icon(
+                      Icons.more_time_rounded,
+                      color: Colors.green,
+                      size: 30,
+                    ))),
+            ListTile(
+                title: Text('Vali tunnid kus seade ei tohi töödata'),
+                trailing: IconButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => DynamilineTundideValimine(
+                                valitudSeadmed: valitudSeadmed,
+                                i: 4,
+                                luba: 'ei')),
+                      );
+                    },
+                    icon: Icon(
+                      Icons.more_time_rounded,
+                      color: Colors.red,
+                      size: 30,
+                    ))),
           ],
         ),
       ),

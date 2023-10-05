@@ -19,14 +19,20 @@ import 'kopeeeriGraafikTundideValimine.dart';
 import 'package:http/http.dart' as http;
 
 class DynamilineTundideValimine extends StatefulWidget {
-  DynamilineTundideValimine({Key? key, required this.valitudSeadmed})
+  DynamilineTundideValimine(
+      {Key? key,
+      required this.valitudSeadmed,
+      required this.i,
+      required this.luba})
       : super(key: key);
-
+  int i;
+  String luba;
   var valitudSeadmed;
 
   @override
   _DynamilineTundideValimineState createState() =>
-      _DynamilineTundideValimineState(valitudSeadmed: valitudSeadmed);
+      _DynamilineTundideValimineState(
+          valitudSeadmed: valitudSeadmed, leht: i, luba: luba);
 }
 
 int koduindex = 1;
@@ -58,14 +64,19 @@ Map<int, dynamic> lulitusMap = {
 };
 
 class _DynamilineTundideValimineState extends State<DynamilineTundideValimine> {
-  _DynamilineTundideValimineState({Key? key, required this.valitudSeadmed});
+  _DynamilineTundideValimineState(
+      {Key? key,
+      required this.valitudSeadmed,
+      required this.leht,
+      required this.luba});
+  String luba;
+  int leht;
   var valitudSeadmed;
   Map<String, bool> ValitudGraafik = {};
   String selectedPage = 'Keskmine hind';
   double vahe = 10;
   int valitudTunnid = 10;
   Color boxColor = sinineKast;
-  int leht = 0;
   late List<Widget> lehedMenu;
   Color paev = Colors.green; // Declare the list
 
@@ -85,7 +96,7 @@ class _DynamilineTundideValimineState extends State<DynamilineTundideValimine> {
       AutoTundideValik(
           valitudSeadmed: valitudSeadmed,
           updateValitudSeadmed: updateValitudSeamded),
-      KeelatudTunnid(valitudSeadmed: valitudSeadmed),
+      KeelatudTunnid(valitudSeadmed: valitudSeadmed, luba: luba),
       AbiLeht(),
     ];
   }
@@ -144,7 +155,7 @@ class _DynamilineTundideValimineState extends State<DynamilineTundideValimine> {
                   } else if (selectedPage == 'Automaatne') {
                     leht = 3;
                   } else if (selectedPage == 'Minu eelistused') {
-                    leht = 4;
+                    leht = 5;
                   }
                 },
                 underline: Container(), // or SizedBox.shrink()
@@ -180,85 +191,124 @@ class _DynamilineTundideValimineState extends State<DynamilineTundideValimine> {
               top: -5,
               left: 0,
               right: 0,
-              child: BottomNavigationBar(
-                  backgroundColor: Color.fromARGB(255, 115, 162, 195),
-                  fixedColor: Color.fromARGB(255, 157, 214, 171),
-                  unselectedItemColor: Colors.white,
-                  selectedIconTheme: IconThemeData(size: 40),
-                  unselectedIconTheme: IconThemeData(size: 30),
-                  items: const <BottomNavigationBarItem>[
-                    BottomNavigationBarItem(
-                      label: 'Seadmed',
-                      icon: Icon(
-                        Icons.list_outlined,
-                        size: 30,
+              child: leht == 4
+                  ? Container(
+                      height: 60,
+                      color: Color.fromARGB(255, 115, 162, 195),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          IconButton(
+                            icon: Icon(
+                              Icons.check_circle_outline_outlined,
+                              size: 30,
+                              color: Color.fromARGB(255, 157, 214, 171),
+                            ),
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      DynamilineTundideValimine(
+                                          valitudSeadmed: valitudSeadmed,
+                                          i: 3,
+                                          luba: ''),
+                                ),
+                              );
+                            },
+                          ),
+                          Text(
+                            ' Kinnita',
+                            style: TextStyle(
+                                color: Color.fromARGB(255, 157, 214, 171)),
+                          )
+                        ],
                       ),
-                    ),
-                    BottomNavigationBarItem(
-                      label: 'Kinnita',
-                      icon: Icon(
-                        Icons.check_circle_outlined,
-                        size: 30,
-                      ),
-                    ),
-                  ],
-                  currentIndex: koduindex,
-                  onTap: (int kodu) {
-                    setState(() {
-                      koduindex = kodu;
-                      if (koduindex == 0) {
-                        Navigator.push(
-                          //Kui vajutatakse Hinnagraafiku ikooni peale, siis viiakse Hinnagraafiku lehele
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => SeadmeteListValimine()),
-                        );
-                      } else if (koduindex == 1) {
-                        if (selectedPage == "Kopeeri graafik") {
-                          print("siin2");
-                          graafikuKopeerimine(ValitudGraafik, valitudSeadmed);
-                        } else {
-                          graafikuteSaatmine(valitudSeadmed, lulitusMap, paev);
-                        }
+                    )
+                  : BottomNavigationBar(
+                      backgroundColor: Color.fromARGB(255, 115, 162, 195),
+                      fixedColor: Color.fromARGB(255, 157, 214, 171),
+                      unselectedItemColor: Colors.white,
+                      selectedIconTheme: IconThemeData(size: 40),
+                      unselectedIconTheme: IconThemeData(size: 30),
+                      items: const <BottomNavigationBarItem>[
+                        BottomNavigationBarItem(
+                          label: 'Seadmed',
+                          icon: Icon(
+                            Icons.list_outlined,
+                            size: 30,
+                          ),
+                        ),
+                        BottomNavigationBarItem(
+                          label: 'Kinnita',
+                          icon: Icon(
+                            Icons.check_circle_outlined,
+                            size: 30,
+                          ),
+                        ),
+                      ],
+                      currentIndex: koduindex,
+                      onTap: (int kodu) {
+                        setState(() {
+                          koduindex = kodu;
+                          if (koduindex == 0) {
+                            Navigator.push(
+                              //Kui vajutatakse Hinnagraafiku ikooni peale, siis viiakse Hinnagraafiku lehele
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => SeadmeteListValimine()),
+                            );
+                          } else if (koduindex == 1) {
+                            if (selectedPage == "Kopeeri graafik") {
+                              print("siin2");
+                              graafikuKopeerimine(
+                                  ValitudGraafik, valitudSeadmed);
+                            } else {
+                              graafikuteSaatmine(
+                                  valitudSeadmed, lulitusMap, paev);
+                            }
 
-                        showDialog(
-                            context: context,
-                            builder: (context) => AlertDialog(
-                                  content: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
+                            showDialog(
+                                context: context,
+                                builder: (context) => AlertDialog(
+                                      content: Column(
+                                        mainAxisSize: MainAxisSize.min,
                                         children: [
-                                          // Add some spacing between icon and text
-                                          Text("Kinnitatud", style: fontSuur),
-                                          SizedBox(width: 8),
-                                          Icon(
-                                            Icons.check_circle_outline_outlined,
-                                            size: 35,
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              // Add some spacing between icon and text
+                                              Text("Kinnitatud",
+                                                  style: fontSuur),
+                                              SizedBox(width: 8),
+                                              Icon(
+                                                Icons
+                                                    .check_circle_outline_outlined,
+                                                size: 35,
+                                              ),
+                                            ],
                                           ),
+                                          // Add other content of the dialog if needed
                                         ],
                                       ),
-                                      // Add other content of the dialog if needed
-                                    ],
-                                  ),
-                                ));
-                        HapticFeedback.vibrate();
-                        Future.delayed(Duration(seconds: 5), () {
-                          Navigator.of(context).pop(); // Close the AlertDialog
-                          Navigator.push(
-                            //Kui vajutatakse Teie seade ikooni peale, siis viiakse Seadmetelisamine lehele
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => DynaamilenieKoduLeht(
-                                      i: 1,
-                                    )),
-                          );
+                                    ));
+                            HapticFeedback.vibrate();
+                            Future.delayed(Duration(seconds: 5), () {
+                              Navigator.of(context)
+                                  .pop(); // Close the AlertDialog
+                              Navigator.push(
+                                //Kui vajutatakse Teie seade ikooni peale, siis viiakse Seadmetelisamine lehele
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => DynaamilenieKoduLeht(
+                                          i: 1,
+                                        )),
+                              );
+                            });
+                          }
                         });
-                      }
-                    });
-                  }),
+                      }),
             ),
           ],
         ),
