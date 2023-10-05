@@ -58,14 +58,16 @@ class _KeelatudTunnidState extends State<KeelatudTunnid> {
           ],
         ),
       ),
-      body: ListView.builder(
-        shrinkWrap: true,
+      body: ListView.separated(
+        separatorBuilder: (BuildContext context, int index) => const Divider(),
+        padding: const EdgeInsets.all(8),
         itemCount: 24,
         itemBuilder: (BuildContext context, int index) {
           return ListTile(
-            title: Text('$index:00'),
-            tileColor:
-                _selectedHours.contains(index) ? valitudvarv : Colors.grey,
+            title: Align(alignment: Alignment.center, child: Text('$index:00')),
+            tileColor: _selectedHours.contains(index)
+                ? valitudvarv
+                : Color.fromARGB(255, 218, 207, 207),
             onTap: () {
               setState(() {
                 if (_selectedHours.contains(index)) {

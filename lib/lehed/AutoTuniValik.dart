@@ -97,23 +97,34 @@ class _AutoTundideValikState extends State<AutoTundideValik> {
             ),
             ListTile(
               title: Text('Vali lülitusgraafiku koostamis algoritm'),
-              trailing: DropdownButton<String>(
-                value: _selectedTheme,
-                onChanged: (lylitusViis) {
-                  setState(() {
-                    _selectedTheme = lylitusViis!;
-                  });
-                },
-                items: <String>[
-                  'Odavaimad Tunnid',
-                  'Hinnapiir',
-                  'Minu eelistusd',
-                ].map<DropdownMenuItem<String>>((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value),
-                  );
-                }).toList(),
+              trailing: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: boxColor,
+                ),
+                padding: EdgeInsets.symmetric(horizontal: 10),
+                child: DropdownButton<String>(
+                  style: font,
+                  dropdownColor: sinineKast,
+                  borderRadius: borderRadius,
+                  underline: Container(),
+                  value: _selectedTheme,
+                  onChanged: (lylitusViis) {
+                    setState(() {
+                      _selectedTheme = lylitusViis!;
+                    });
+                  },
+                  items: <String>[
+                    'Odavaimad Tunnid',
+                    'Hinnapiir',
+                    'Minu eelistusd',
+                  ].map<DropdownMenuItem<String>>((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value),
+                    );
+                  }).toList(),
+                ),
               ),
             ),
             Visibility(

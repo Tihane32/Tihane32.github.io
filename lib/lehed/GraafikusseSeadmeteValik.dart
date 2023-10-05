@@ -239,8 +239,7 @@ class _SeadmeteListValimineState extends State<SeadmeteListValimine> {
                                                             index < 10
                                                                 ? "0${index.toString()}:00"
                                                                 : "${index.toString()}:00",
-                                                            style:
-                                                                font, // Assuming 'font' is a TextStyle object you've defined elsewhere
+                                                            style: font,
                                                           ),
                                                         ),
                                                       );
