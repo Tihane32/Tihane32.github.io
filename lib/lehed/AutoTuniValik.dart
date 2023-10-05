@@ -11,6 +11,8 @@ import 'AbiLeht.dart';
 import 'hinnaPiiriAluselTunideValimine.dart';
 import 'package:http/http.dart' as http;
 
+import 'keelatudTunnid.dart';
+
 class AutoTundideValik extends StatefulWidget {
   final Function updateValitudSeadmed;
   AutoTundideValik(
@@ -55,6 +57,7 @@ class _AutoTundideValikState extends State<AutoTundideValik> {
     13: 'pool aastat',
     14: 'igavesti',
   };
+  Set<int> _selectedHours = {};
   TextEditingController _textController = TextEditingController();
   String? get readableDuration => _durationMap[_selectedDuration];
 
@@ -127,17 +130,34 @@ class _AutoTundideValikState extends State<AutoTundideValik> {
                 ),
               ),
             ),
-            ListTile(
-              title: Text('Vali tunnid kus vool peab tagatud olema'),
-              trailing: Switch(
-                value: _notificationsEnabled,
-                onChanged: (bool value) {
-                  setState(() {
-                    _notificationsEnabled = value;
-                  });
-                },
+            Visibility(
+              visible: _selectedTheme == 'Hinnapiir',
+              child: ListTile(
+                title: Text('Vali tunnid kus vool peab tagatud olema'),
+                trailing: Container(
+                  width: 100,
+                  child: TextField(
+                    controller: _textController,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                ),
               ),
             ),
+            ListTile(
+                title: Text('Vali tunnid kus vool peab tagatud olema'),
+                trailing: IconButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              KeelatudTunnid(valitudSeadmed: valitudSeadmed),
+                        ),
+                      );
+                    },
+                    icon: Icon(Icons.more_time_rounded))),
           ],
         ),
       ),

@@ -11,6 +11,7 @@ import '../funktsioonid/genMaaramine.dart';
 import '../main.dart';
 import 'AbiLeht.dart';
 import 'AutoTuniValik.dart';
+import 'keelatudTunnid.dart';
 import 'keskimiseHinnaAluselTundideValimine.dart';
 import 'hinnaPiiriAluselTunideValimine.dart';
 import 'kopeeeriGraafikTundideValimine.dart';
@@ -83,6 +84,7 @@ class _DynamilineTundideValimineState extends State<DynamilineTundideValimine> {
       AutoTundideValik(
           valitudSeadmed: valitudSeadmed,
           updateValitudSeadmed: updateValitudSeamded),
+      KeelatudTunnid(valitudSeadmed: valitudSeadmed),
       AbiLeht(),
     ];
   }
