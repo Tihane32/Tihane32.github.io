@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:testuus4/funktsioonid/lulitamine.dart';
 import 'package:testuus4/lehed/AbiLeht.dart';
 import 'package:testuus4/lehed/SeadmeGraafikLeht.dart';
 import 'package:testuus4/lehed/SeadmePildiMuutmine.dart';
@@ -17,7 +18,7 @@ class SeadmeYldinfoLeht extends StatefulWidget {
       : super(key: key);
 
   final String seadmeNimi;
-  final Map<String, List<String>> SeadmeteMap;
+  final Map<String, dynamic> SeadmeteMap;
   @override
   _SeadmeYldinfoLehtState createState() =>
       _SeadmeYldinfoLehtState(seadmeNimi: seadmeNimi, SeadmeteMap: SeadmeteMap);
@@ -27,7 +28,7 @@ class _SeadmeYldinfoLehtState extends State<SeadmeYldinfoLeht> {
   _SeadmeYldinfoLehtState(
       {Key? key, required this.seadmeNimi, required this.SeadmeteMap});
   String seadmeNimi;
-  Map<String, List<String>> SeadmeteMap;
+  Map<String, dynamic> SeadmeteMap;
   late Map<int, dynamic> lulitusMap;
   int selectedRowIndex = -1;
   late double hindAVG;
@@ -55,8 +56,10 @@ class _SeadmeYldinfoLehtState extends State<SeadmeYldinfoLeht> {
 
   init() {
     setState(() {
-      mudel = SeadmeteMap[seadmeNimi]![3];
-      id = SeadmeteMap[seadmeNimi]![1];
+      print("siiiiin");
+      print(SeadmeteMap[seadmeNimi]);
+      mudel = SeadmeteMap[seadmeNimi]["Seadme_pistik"];
+      id = seadmeNimi;
     });
   }
 
@@ -95,7 +98,7 @@ class _SeadmeYldinfoLehtState extends State<SeadmeYldinfoLeht> {
                         setState(() {
                           uusNimi = value;
 
-                          nimeMuutmine(seadmeNimi, SeadmeteMap, uusNimi);
+                          nimeMuutmine(seadmeNimi, uusNimi);
                           seadmeNimi = uusNimi;
                         });
                       },
@@ -232,34 +235,36 @@ class _SeadmeYldinfoLehtState extends State<SeadmeYldinfoLeht> {
   }
 }
 
-loeSeadmeOlek(Map<String, List<String>> SeadmeteMap, SeadmeNimi) {
-  List<String>? deviceInfo = SeadmeteMap[SeadmeNimi];
+loeSeadmeOlek(SeadmeNimi) {
+  String deviceInfo = seadmeteMap[SeadmeNimi]["Seadme_olek"];
   if (deviceInfo != null) {
-    String status = deviceInfo[2];
-    return status;
+    String pilt = deviceInfo;
+    return pilt;
   }
   return null; // Device key not found in the map
 }
 
-muudaSeadmeOlek(Map<String, List<String>> SeadmeteMap, SeadmeNimi) {
-  List<String>? deviceInfo = SeadmeteMap[SeadmeNimi];
+muudaSeadmeOlek(SeadmeNimi) {
+   String deviceInfo = seadmeteMap[SeadmeNimi]["Seadme_olek"];
   if (deviceInfo != null) {
-    String status = deviceInfo[2];
+    String status = deviceInfo;
 
     if (status == 'on') {
-      deviceInfo[2] = 'off';
-      SeadmeteMap[SeadmeNimi] = deviceInfo;
+      deviceInfo = 'off';
+      seadmeteMap[SeadmeNimi]["Seadme_olek"] = deviceInfo;
+      lulitamine(SeadmeNimi);
     } else if (status == 'off') {
-      deviceInfo[2] = 'on';
-      SeadmeteMap[SeadmeNimi] = deviceInfo;
+      deviceInfo = 'on';
+      seadmeteMap[SeadmeNimi]["Seadme_olek"] = deviceInfo;
+      lulitamine(SeadmeNimi);
     }
-    return SeadmeteMap;
+    return seadmeteMap;
   }
-  return SeadmeteMap; // Device key not found in the map
+  return seadmeteMap; // Device key not found in the map
 }
 
-nimeMuutmine(String seadmeNimi, Map<String, List<String>> seadmeteMap,
-    String uusNimi) async {
+nimeMuutmine(
+    String seadmeNimi, String uusNimi) async {
   print(seadmeNimi);
   print(seadmeteMap);
   SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -270,25 +275,17 @@ nimeMuutmine(String seadmeNimi, Map<String, List<String>> seadmeteMap,
     storedJsonMap = prefs.getString('seadmed');
     Map<String, dynamic> storedMap = json.decode(storedJsonMap!);
     var i = 0;
-    for (String Seade in storedMap.keys) {
-      print(storedMap['Seade$i']['Seadme_ID']);
-      print(seadmeteMap[seadmeNimi]![1]);
-      if (seadmeteMap[seadmeNimi]![1] == storedMap['Seade$i']['Seadme_ID']) {
-        storedMap['Seade$i']['Seadme_nimi'] = uusNimi;
 
-        String keyMap = json.encode(storedMap);
-        prefs.setString('seadmed', keyMap);
-        print(seadmeteMap[seadmeNimi]![3]);
-        break;
-      }
+    storedMap[seadmeNimi]['Seadme_nimi'] = uusNimi;
 
-      i++;
-    }
+    String keyMap = json.encode(storedMap);
+    prefs.setString('seadmed', keyMap);
+    seadmeteMap = storedMap;
+    print(storedMap[seadmeNimi]['Seadme_nimi']);
   }
 }
 
-pildiMuutmine(String seadmeNimi, Map<String, List<String>> seadmeteMap,
-    String uusPilt) async {
+pildiMuutmine(String seadmeNimi, String uusPilt) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   //await prefs.clear();
 
@@ -296,15 +293,12 @@ pildiMuutmine(String seadmeNimi, Map<String, List<String>> seadmeteMap,
   if (storedJsonMap != null) {
     storedJsonMap = prefs.getString('seadmed');
     Map<String, dynamic> storedMap = json.decode(storedJsonMap!);
-    var i = 0;
-    for (String Seade in storedMap.keys) {
-      if (seadmeteMap[seadmeNimi]![1] == storedMap['Seade$i']['Seadme_ID']) {
-        storedMap['Seade$i']['Seadme_pilt'] = uusPilt;
-        String keyMap = json.encode(storedMap);
-        prefs.setString('seadmed', keyMap);
-        break;
-      }
-      i++;
-    }
+
+    storedMap[seadmeNimi]['Seadme_pilt'] = uusPilt;
+    String keyMap = json.encode(storedMap);
+    print("uus");
+    print(keyMap);
+    prefs.setString('seadmed', keyMap);
+    seadmeteMap = storedMap;
   }
 }

@@ -1,8 +1,8 @@
 import 'package:http/http.dart' as http;
+import 'package:testuus4/main.dart';
 import 'token.dart';
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
-
 
 seisukord() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -21,20 +21,19 @@ seisukord() async {
     throw Exception('http.post error: statusCode= ${res.statusCode}');
   var vastus = json.decode(res.body);
   vastus as Map<String, dynamic>;
-  String? storedJsonMap = prefs.getString('seadmed');
-  if (storedJsonMap != null) {
-    Map<String, dynamic> storedMap = json.decode(storedJsonMap);
+ 
+    Map<String, dynamic> storedMap = seadmeteMap;
 
-    var i = 0;
-    for (String Seade in storedMap.keys) {
-      var id = storedMap['Seade$i']['Seadme_ID'];
+    
+    storedMap.forEach((key, value) async {
+      var id = key;
 
       if (vastus['data']['devices_status']['$id'] == null) {
-        storedMap['Seade$i']['Seadme_olek'] = 'Offline';
+        value['Seadme_olek'] = 'Offline';
 
         await prefs.setString('seadmed', json.encode(storedMap));
       } else {
-        if (storedMap['Seade$i']['Seadme_generatsioon'] == 1) {
+        if (value['Seadme_generatsioon'] == 1) {
           var asendus = vastus['data']['devices_status']['$id']['relays'];
           bool ison = asendus[0]["ison"];
           String olek;
@@ -43,9 +42,10 @@ seisukord() async {
           } else {
             olek = 'on';
           }
-          storedMap['Seade$i']['Seadme_olek'] = olek;
+          value['Seadme_olek'] = olek;
 
           await prefs.setString('seadmed', json.encode(storedMap));
+          seadmeteMap = storedMap;
         } else {
           var asendus =
               vastus['data']['devices_status']['$id']['switch:0']['output'];
@@ -55,14 +55,15 @@ seisukord() async {
           } else {
             olek = 'on';
           }
-          storedMap['Seade$i']['Seadme_olek'] = olek;
+          value['Seadme_olek'] = olek;
 
           await prefs.setString('seadmed', json.encode(storedMap));
+          seadmeteMap = storedMap;
         }
       }
 
-      i++;
-    }
-  }
-
+      
+    });
+  
+  print('seisukordmap: $seadmeteMap');
 }

@@ -15,7 +15,7 @@ class MaksumuseGraafik extends StatefulWidget {
 }
 
 class _MaksumuseGraafikState extends State<MaksumuseGraafik> {
-  Map<String, List<String>> SeadmeteMap = {};
+  Map<String, dynamic> SeadmeteMap = {};
   List<ChartData> chartData = [];
   num kokku = 0;
   @override
@@ -23,9 +23,10 @@ class _MaksumuseGraafikState extends State<MaksumuseGraafik> {
     super.initState();
     function();
     getSeadmeteMap(SeadmeteMap);
+    print("chartdata $chartData");
   }
 
-  getSeadmeteMap(Map<String, List<String>> seadmeteMap) async {
+  getSeadmeteMap(Map<String, dynamic> seadmeteMap) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     //await prefs.clear();
 
@@ -33,23 +34,9 @@ class _MaksumuseGraafikState extends State<MaksumuseGraafik> {
     if (storedJsonMap != null) {
       storedJsonMap = prefs.getString('seadmed');
       Map<String, dynamic> storedMap = json.decode(storedJsonMap!);
-      await Future.delayed(const Duration(seconds: 3));
-      var i = 0;
-      for (String Seade in storedMap.keys) {
-        var id = storedMap['Seade$i']['Seadme_ID'];
-        var name = storedMap['Seade$i']['Seadme_nimi'];
-        var pistik = storedMap['Seade$i']['Seadme_pistik'];
-        var olek = storedMap['Seade$i']['Seadme_olek'];
-        var gen = storedMap['Seade$i']['Seadme_generatsioon'];
-        Map<String, List<String>> ajutineMap = {
-          name: ['assets/boiler1.jpg', '$id', '$olek', '$pistik', '$gen'],
-        };
-        seadmeteMap.addAll(ajutineMap);
-        i++;
-      }
 
       setState(() {
-        SeadmeteMap = seadmeteMap;
+        SeadmeteMap = storedMap;
       });
     }
   }
@@ -59,45 +46,46 @@ class _MaksumuseGraafikState extends State<MaksumuseGraafik> {
     Map<String, dynamic> maksumuseMap = {};
     //Võtab mälust 'users'-i asukohast väärtused
     var seadmedJSONmap = prefs.getString('seadmed');
+    double calculateSum(Map<DateTime, double> data) {
+      double sum = 0.0;
+      data.values.forEach((value) {
+        sum += value;
+        print("sum: $sum");
+      });
+      kokku = kokku + sum;
+      print("kokku: $kokku");
+      return sum;
+    }
 
     if (seadmedJSONmap == null) {
+      print("tühi");
       return 0;
     }
     Map<String, dynamic> storedMap = json.decode(seadmedJSONmap);
     int j = 0;
-    for (var i in storedMap.values) {
-      String asendus = storedMap['Seade$j']['Seadme_ID'] as String;
-      String asendus1 = storedMap['Seade$j']['Seadme_nimi'] as String;
-      j++;
-
-      double calculateSum(Map<DateTime, double> data) {
-        double sum = 0.0;
-        data.values.forEach((value) {
-          sum += value;
-          print("sum: $sum");
-        });
-        kokku = kokku + sum;
-        print("kokku: $kokku");
-        return sum;
-      }
+    seadmeteMap.forEach((key, value) async {
+      
+      
 
 // Call seadmeMaksumus to get the map
-      Map<DateTime, double> dataMap = await seadmeMaksumus(asendus);
-
+      Map<DateTime, double> dataMap = await seadmeMaksumus(key);
+      print("datamap: $dataMap");
 // Calculate the sum of the double values in the map
       double temp = calculateSum(dataMap);
-      String abi = temp.toStringAsFixed(2);
+      String abi = temp.toStringAsFixed(4);
       temp = double.parse(abi);
-      maksumuseMap["$asendus1"] = temp;
-    }
-    chartData.clear();
+      maksumuseMap["${value['Seadme_nimi']}"] = temp;
+      print("siin : $maksumuseMap");
+      chartData.clear();
+      for (var entry in maksumuseMap.entries) {
+        chartData.add(ChartData(entry.key, entry.value));
+      }
 
-    for (var entry in maksumuseMap.entries) {
-      chartData.add(ChartData(entry.key, entry.value));
-    }
-    setState(() {
-      chartData = chartData;
-      kokku = kokku;
+      print("siin: $chartData");
+      setState(() {
+        chartData = chartData;
+        kokku = kokku;
+      });
     });
   }
 
@@ -123,7 +111,7 @@ class _MaksumuseGraafikState extends State<MaksumuseGraafik> {
                       style: font,
                       children: [
                         TextSpan(
-                            text: 'Kokku: ${kokku.toStringAsFixed(2)} €',
+                            text: 'Kokku: ${kokku.toStringAsFixed(4)} €',
                             style: font),
                       ],
                     ),
@@ -174,8 +162,8 @@ class _MaksumuseGraafikState extends State<MaksumuseGraafik> {
                   // Renders spline chart
                   ColumnSeries<ChartData, String>(
                     onPointTap: (pointInteractionDetails) {
-                      
                       int? rowIndex = pointInteractionDetails.pointIndex;
+                      
                       Navigator.push(
                         context,
                         MaterialPageRoute(

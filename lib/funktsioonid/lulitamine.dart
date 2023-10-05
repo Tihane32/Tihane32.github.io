@@ -5,30 +5,39 @@ TalTech
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
+import 'package:testuus4/main.dart';
 
+/// The function `lulitamine` toggles the on/off state of all Shelly devices based on the provided
+/// `seade` parameter.
+///
+/// Args:
+///   seade (String): The parameter "seade" is a String that represents the device identifier.
 void lulitamine(String seade) async {
   //Kõikide Shellyde on/off lülitamine
 
   SharedPreferences prefs = await SharedPreferences.getInstance();
 
-  String? storedJsonMap = prefs.getString('seadmed');
-
-  Map<String, dynamic> storedMap = json.decode(storedJsonMap!);
-
   prefs = await SharedPreferences.getInstance();
 
   var j = 0;
-  for (var i in storedMap.values) {
-    if (storedMap['Seade$j']['Seadme_ID'] == seade) {
-      var id = storedMap['Seade$j']['Seadme_ID'];
-      var olek = storedMap['Seade$j']['Seadme_olek'];
+
+  /// The code block `seadmeteMap.forEach((key, value) async { ... })` is iterating over each key-value
+  /// pair in the `seadmeteMap` map.
+  seadmeteMap.forEach((key, value) async {
+    print("selline");
+    print(seadmeteMap[key]);
+
+    if (key == seade) {
+      var id = key;
+      var olek = value['Seadme_olek'];
+      print(value['Seadme_olek']);
       if (olek == 'on') {
         olek = 'off';
       } else {
         olek = 'on';
       }
-      storedMap['Seade$j']['Seadme_olek'] = olek;
-      await prefs.setString('seadmed', json.encode(storedMap));
+      value['Seadme_olek'] = olek;
+
       String? storedKey = prefs.getString('key');
 
       String storedKeyString = jsonDecode(storedKey!);
@@ -41,14 +50,17 @@ void lulitamine(String seade) async {
         'channel': '0',
         'turn': olek,
         'id': id,
-        'auth_key': storedKeyString,
+        'auth_key': value["Cloud_key"],
       };
-
-      var url =
-          Uri.parse('https://shelly-64-eu.shelly.cloud/device/relay/control');
+      print(data);
+      print(value["api_url"]);
+      var url = Uri.parse('${value["api_url"]}/device/relay/control');
       var res = await http.post(url, headers: headers, body: data);
+      print(res.body);
+      String seadmedMap = json.encode(seadmeteMap);
+      await prefs.setString('seadmed', seadmedMap);
     }
 
     j++;
-  }
+  });
 }

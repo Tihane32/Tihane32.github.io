@@ -32,19 +32,19 @@ class SeadmeteList extends StatefulWidget {
 }
 
 class _SeadmeteListState extends State<SeadmeteList> {
-  bool isLoading = true;
+  bool isLoading = false;
   late Map<String, List<String>> minuSeadmedK = {};
   //String onoffNupp = 'Shelly ON';
   @override
   void initState() {
     //seisukord();
-    _submitForm();
+
     super.initState();
+    bool isLoading = false;
   }
 
   int koduindex = 1;
 
-  Map<String, List<String>> SeadmeteMap = {};
   Set<String> selectedPictures = Set<String>();
 
   void toggleSelection(String pictureName) {
@@ -57,44 +57,6 @@ class _SeadmeteListState extends State<SeadmeteList> {
     });
   }
 
-  Future _submitForm() async {
-    minuSeadmedK.clear();
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    //await prefs.clear();
-
-    String? storedJsonMap = prefs.getString('seadmed');
-    if (storedJsonMap != null) {
-      await seisukord();
-      storedJsonMap = prefs.getString('seadmed');
-      Map<String, dynamic> storedMap = json.decode(storedJsonMap!);
-      await Future.delayed(const Duration(seconds: 3));
-      var i = 0;
-      for (String Seade in storedMap.keys) {
-        var id = storedMap['Seade$i']['Seadme_ID'];
-        var name = storedMap['Seade$i']['Seadme_nimi'];
-        var pistik = storedMap['Seade$i']['Seadme_pistik'];
-        var olek = storedMap['Seade$i']['Seadme_olek'];
-        var gen = storedMap['Seade$i']['Seadme_generatsioon'];
-        var pilt = "";
-        if (storedMap['Seade$i']['Seadme_pilt'] != null) {
-          pilt = storedMap['Seade$i']['Seadme_pilt'];
-        } else {
-          pilt = 'assets/boiler1.jpg';
-        }
-
-        Map<String, List<String>> ajutineMap = {
-          name: ['$pilt', '$id', '$olek', '$pistik', '$gen'],
-        };
-        minuSeadmedK.addAll(ajutineMap);
-        i++;
-      }
-    }
-    setState(() {
-      SeadmeteMap = minuSeadmedK;
-      isLoading = false;
-    });
-  }
-
   bool canPressButton = true;
 
   void _handleButtonPress(seade) {
@@ -102,7 +64,7 @@ class _SeadmeteListState extends State<SeadmeteList> {
 
     setState(() {
       canPressButton = false;
-      SeadmeteMap = muudaSeadmeOlek(SeadmeteMap, seade);
+      seadmeteMap = muudaSeadmeOlek(seadmeteMap, seade);
     });
 
     Timer(Duration(seconds: 3), () {
@@ -150,9 +112,9 @@ class _SeadmeteListState extends State<SeadmeteList> {
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
                 ),
-                itemCount: SeadmeteMap.length + 1,
+                itemCount: seadmeteMap.length + 1,
                 itemBuilder: (context, index) {
-                  if (index == SeadmeteMap.length) {
+                  if (index == seadmeteMap.length) {
                     return GestureDetector(
                       onTap: () {
                         Navigator.push(
@@ -184,17 +146,18 @@ class _SeadmeteListState extends State<SeadmeteList> {
                     );
                   }
 
-                  final seade = SeadmeteMap.keys.elementAt(index);
-                  final pilt = SaaSeadmePilt(SeadmeteMap, seade);
-                  final staatus = SaaSeadmeolek(SeadmeteMap, seade);
+                  final seade = seadmeteMap.keys.elementAt(index);
+                  final pilt = seadmeteMap[seade]["Seadme_pilt"];
+                  final staatus =  seadmeteMap[seade]["Seadme_olek"];
+                  print('Staatus: $staatus');
                   return GestureDetector(
                     onTap: () {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
                           builder: (context) => DunaamilineSeadmeLeht(
-                            seadmeNimi: SeadmeteMap.keys.elementAt(index),
-                            SeadmeteMap: SeadmeteMap,
+                            seadmeNimi: seadmeteMap.keys.elementAt(index),
+                            SeadmeteMap: seadmeteMap,
                             valitud: 0,
                           ),
                         ),
@@ -269,7 +232,7 @@ class _SeadmeteListState extends State<SeadmeteList> {
                                   padding: EdgeInsets.symmetric(vertical: 8),
                                   child: Center(
                                     child: Text(
-                                      seade,
+                                      seadmeteMap[seade]["Seadme_nimi"],
                                       style: TextStyle(
                                         color: Colors.white,
                                         fontSize: 18,
@@ -292,39 +255,31 @@ class _SeadmeteListState extends State<SeadmeteList> {
   }
 }
 
-SaaSeadmePilt(Map<String, List<String>> SeadmeteMap, SeadmeNimi) {
-  List<String>? deviceInfo = SeadmeteMap[SeadmeNimi];
+SaaSeadmePilt(Map<String, dynamic> SeadmeteMap, SeadmeNimi) {
+  String deviceInfo = seadmeteMap[SeadmeNimi]["Seadme_pilt"];
+  print("------");
+  print(SeadmeteMap[SeadmeNimi]);
   if (deviceInfo != null) {
-    String pilt = deviceInfo[0];
+    String pilt = deviceInfo;
     return pilt;
   }
   return null; // Device key not found in the map
 }
 
-SaaSeadmeolek(Map<String, List<String>> SeadmeteMap, SeadmeNimi) {
-  List<String>? deviceInfo = SeadmeteMap[SeadmeNimi];
+SaaSeadmeolek(Map<String, dynamic> SeadmeteMap, SeadmeNimi) {
+  
+  print("seamdetMap $seadmeteMap");
+  String deviceInfo = seadmeteMap[SeadmeNimi]["Seadme_olek"];
   if (deviceInfo != null) {
-    String olek = deviceInfo[2];
-    return olek;
+    String pilt = deviceInfo;
+    return pilt;
   }
   return null; // Device key not found in the map
 }
 
-muudaSeadmeOlek(Map<String, List<String>> SeadmeteMap, SeadmeNimi) {
-  List<String>? deviceInfo = SeadmeteMap[SeadmeNimi];
-  if (deviceInfo != null) {
-    String status = deviceInfo[2];
-
-    if (status == 'on') {
-      deviceInfo[2] = 'off';
-      SeadmeteMap[SeadmeNimi] = deviceInfo;
-      lulitamine(deviceInfo[1]);
-    } else if (status == 'off') {
-      deviceInfo[2] = 'on';
-      SeadmeteMap[SeadmeNimi] = deviceInfo;
-      lulitamine(deviceInfo[1]);
-    }
-    return SeadmeteMap;
-  }
-  return SeadmeteMap; // Device key not found in the map
+muudaSeadmeOlek(Map<String, dynamic> SeadmeteMap, SeadmeNimi) {
+ 
+      lulitamine(SeadmeNimi);
+      
+  return seadmeteMap; // Device key not found in the map
 }

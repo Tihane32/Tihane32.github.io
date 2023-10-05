@@ -19,7 +19,7 @@ class DunaamilineSeadmeLeht extends StatefulWidget {
       : super(key: key);
 
   final String seadmeNimi;
-  final Map<String, List<String>> SeadmeteMap;
+  final Map<String, dynamic> SeadmeteMap;
   int valitud;
   @override
   _DunaamilineSeadmeLehtState createState() => _DunaamilineSeadmeLehtState(
@@ -33,7 +33,7 @@ class _DunaamilineSeadmeLehtState extends State<DunaamilineSeadmeLeht> {
       required this.SeadmeteMap,
       required this.valitud});
   String seadmeNimi;
-  Map<String, List<String>> SeadmeteMap;
+  Map<String, dynamic> SeadmeteMap;
   int valitud;
   String selectedPage = 'Lülitusgraafik';
 
@@ -178,7 +178,7 @@ class _DunaamilineSeadmeLehtState extends State<DunaamilineSeadmeLeht> {
                     ),
                   );
                 } else if (koduindex == 1) {
-                  pildiMuutmine(seadmeNimi, SeadmeteMap, uusPilt);
+                  pildiMuutmine(seadmeNimi, uusPilt);
                   showDialog(
                       context: context,
                       builder: (context) => AlertDialog(

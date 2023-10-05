@@ -3,7 +3,16 @@ import '../funktsioonid/graafikGen2.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
-
+import 'package:testuus4/main.dart';
+/// The function `gen1GraafikLoomine` creates a graph based on the provided data and sends a POST
+/// request to update the schedule rules for a device.
+/// 
+/// Args:
+///   lulitus (Map<int, dynamic>): A map containing the schedule settings for each hour of the day. The
+/// keys are integers representing the hour (0-23), and the values are dynamic types.
+///   valitudPaev (String): The parameter "valitudPaev" is a String that represents the selected day. It
+/// can have two possible values: "täna" (today) or "homme" (tomorrow).
+///   value (String): The value parameter is a string that represents the ID of a device.
 gen1GraafikLoomine(
     Map<int, dynamic> lulitus, String valitudPaev, String value) async {
   DateTime now = DateTime.now();
@@ -70,10 +79,10 @@ gen1GraafikLoomine(
   var data = {
     'channel': '0',
     'id': value,
-    'auth_key': storedKeyString,
+    'auth_key': seadmeteMap[value]['Cloud_key'],
   };
   
-  var url = Uri.parse('https://shelly-64-eu.shelly.cloud/device/settings');
+  var url = Uri.parse('${seadmeteMap[value]['api_url']}/device/settings');
   var res = await http.post(url, headers: headers, body: data);
   await Future.delayed(const Duration(seconds: 2));
   //Kui post läheb läbi siis:
@@ -112,11 +121,11 @@ gen1GraafikLoomine(
     'enabled': "1",
     'schedule_rules': graafikString,
     'id': value,
-    'auth_key': storedKeyString,
+    'auth_key': seadmeteMap[value]['Cloud_key'],
   };
 
   var url1 = Uri.parse(
-      'https://shelly-64-eu.shelly.cloud/device/relay/settings/schedule_rules');
+      '${seadmeteMap[value]['api_url']}/device/relay/settings/schedule_rules');
   var res1 = await http.post(url1, headers: headers1, body: data1);
   for (int i = 0; i < 24; i++) {
     String temp = selected[i][2];

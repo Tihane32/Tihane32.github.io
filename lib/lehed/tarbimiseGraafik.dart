@@ -21,22 +21,27 @@ class TarbimiseGraafik extends StatefulWidget {
 }
 
 class _TarbimiseGraafikState extends State<TarbimiseGraafik> {
-  Map<String, List<String>> SeadmeteMap = {};
+  Map<String, dynamic> SeadmeteMap = {};
   final Map<String, dynamic> tarbimiseMap;
 
   _TarbimiseGraafikState(this.tarbimiseMap);
+  List<ChartData> chartData = [];
 
-  List<ChartData> getChartData() {
+  getChartData() {
+    print("tarbimiseMap: $tarbimiseMap");
     // Convert the tarbimiseMap data to a list of ChartData objects
 
-    List<ChartData> chartData = [];
+    List<ChartData> chartData1 = [];
     tarbimiseMap.forEach((key, value) {
-      chartData.add(ChartData(key, value));
+      chartData1.add(ChartData(key, value));
     });
-    return chartData;
+    setState(() {
+      chartData = chartData1;
+    });
+    //return chartData;
   }
 
-  getSeadmeteMap(Map<String, List<String>> seadmeteMap) async {
+  getSeadmeteMap(Map<String, dynamic> seadmeteMap) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     //await prefs.clear();
 
@@ -44,37 +49,24 @@ class _TarbimiseGraafikState extends State<TarbimiseGraafik> {
     if (storedJsonMap != null) {
       storedJsonMap = prefs.getString('seadmed');
       Map<String, dynamic> storedMap = json.decode(storedJsonMap!);
-      await Future.delayed(const Duration(seconds: 3));
-      var i = 0;
-      for (String Seade in storedMap.keys) {
-        var id = storedMap['Seade$i']['Seadme_ID'];
-        var name = storedMap['Seade$i']['Seadme_nimi'];
-        var pistik = storedMap['Seade$i']['Seadme_pistik'];
-        var olek = storedMap['Seade$i']['Seadme_olek'];
-        var gen = storedMap['Seade$i']['Seadme_generatsioon'];
-        Map<String, List<String>> ajutineMap = {
-          name: ['assets/boiler1.jpg', '$id', '$olek', '$pistik', '$gen'],
-        };
-        seadmeteMap.addAll(ajutineMap);
-        i++;
-      }
 
       setState(() {
-        SeadmeteMap = seadmeteMap;
+        SeadmeteMap = storedMap;
       });
     }
   }
 
   @override
   void initState() {
-    //seisukord();
+    getChartData();
     getSeadmeteMap(SeadmeteMap);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    List<ChartData> chartData = getChartData(); // Get the chart data
+    // Get the chart data
+
     return Container(
       height: MediaQuery.of(context).size.height * chartData.length * 0.06,
       //width: double.infinity,
@@ -90,6 +82,7 @@ class _TarbimiseGraafikState extends State<TarbimiseGraafik> {
               ColumnSeries<ChartData, String>(
                 onPointTap: (pointInteractionDetails) {
                   int? rowIndex = pointInteractionDetails.pointIndex;
+
                   Navigator.push(
                     context,
                     MaterialPageRoute(

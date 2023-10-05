@@ -19,7 +19,7 @@ class TarbimisLeht extends StatefulWidget {
       : super(key: key);
 
   final String seadmeNimi;
-  final Map<String, List<String>> SeadmeteMap;
+  final Map<String, dynamic> SeadmeteMap;
   @override
   _TarbimisLehtState createState() =>
       _TarbimisLehtState(seadmeNimi: seadmeNimi, SeadmeteMap: SeadmeteMap);
@@ -30,7 +30,7 @@ int koduindex = 2;
 class _TarbimisLehtState extends State<TarbimisLeht> {
   _TarbimisLehtState(
       {Key? key, required this.seadmeNimi, required this.SeadmeteMap});
-  Map<String, List<String>> SeadmeteMap;
+  Map<String, dynamic> SeadmeteMap;
   final String seadmeNimi;
   late Map<int, dynamic> lulitusMap;
   int selectedRowIndex = -1;
@@ -47,7 +47,7 @@ class _TarbimisLehtState extends State<TarbimisLeht> {
 
   @override
   void initState() {
-    seadmeMaksumus(SeadmeteMap[seadmeNimi]![1]);
+    seadmeMaksumus(seadmeNimi);
     super.initState();
   }
 
@@ -57,7 +57,7 @@ class _TarbimisLehtState extends State<TarbimisLeht> {
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: Color.fromARGB(255, 255, 255, 255), //TaustavÃ¤rv
-        body: MGraafik(value: SeadmeteMap[seadmeNimi]![1]));
+        body: MGraafik(value: seadmeNimi));
   }
 }
 

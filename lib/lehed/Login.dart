@@ -90,6 +90,10 @@ class _LoginPageState extends State<LoginPage> {
     var i = 0;
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var storedJsonMap = prefs.getString('seadmed');
+    var keySaamiseUrl = Uri.parse('$apiUrl/user/get_user_key');
+    var keyVastus = await http.post(keySaamiseUrl, headers: headers1);
+    var keyVastusJSON = json.decode(keyVastus.body);
+    String keyMap = keyVastusJSON['data']['key'];
 
     if (storedJsonMap != null) {
       seadmed = json.decode(storedJsonMap);
@@ -109,53 +113,54 @@ class _LoginPageState extends State<LoginPage> {
           seade['Seadme_pistik'] = device['name'];
           seade['Seadme_generatsioon'] = device['gen'];
           seade['api_url'] = apiUrl;
+          seade['Cloud_key'] = keyMap;
           seadmed['Seade$i'] = seade;
           uuedSeadmedString.add(device['name']);
         }
 
         i++;
       }
-      var keySaamiseUrl =
-          Uri.parse('$apiUrl/user/get_user_key');
-      var keyVastus = await http.post(keySaamiseUrl, headers: headers1);
-      var keyVastusJSON = json.decode(keyVastus.body);
 
       String seadmedMap = json.encode(seadmed);
       // await prefs.setString('seadmed', seadmedMap);
-      String keyMap = json.encode(keyVastusJSON['data']['key']);
-      await prefs.setString('key', keyMap);
+
+      await prefs.setString('key', json.encode(keyVastusJSON['data']['key']));
       // seisukord();
 
       //showCustomAlertDialog(
       //  context, seadmedMap, uuedSeadmed, uuedSeadmedString);
     } else {
+       var keySaamiseUrl = Uri.parse('$apiUrl/user/get_user_key');
+      var keyVastus = await http.post(keySaamiseUrl, headers: headers1);
+      var keyVastusJSON = json.decode(keyVastus.body);
+      String keyMap = keyVastusJSON['data']['key'];
       seadmed = new Map<String, dynamic>();
       i = 0;
       for (var device in seadmeteMap.values) {
         var seade = new Map<String, dynamic>();
-        seade['Seadme_ID'] = device['id'];
+        //seade['Seadme_ID'] = device['id'];
         seade['Seadme_nimi'] = device['name'];
         seade['Seadme_pistik'] = device['name'];
         seade['Seadme_generatsioon'] = device['gen'];
         seade['api_url'] = apiUrl;
-        seadmed['Seade$i'] = seade;
+        seade['Seadme_pilt'] = "assets/boiler1.jpg";
+        seade['Cloud_key'] = keyMap;
+        seadmed['${device['id']}'] = seade;
         i++;
 
         uuedSeadmedString.add(device['name']);
       }
-      var keySaamiseUrl =
-          Uri.parse('$apiUrl/user/get_user_key');
-      var keyVastus = await http.post(keySaamiseUrl, headers: headers1);
-      var keyVastusJSON = json.decode(keyVastus.body);
+     
       String seadmedMap = json.encode(seadmed);
       // await prefs.setString('seadmed', seadmedMap);
-      String keyMap = json.encode(keyVastusJSON['data']['key']);
-      await prefs.setString('key', keyMap);
+      
+      await prefs.setString('key', json.encode(keyVastusJSON['data']['key']));
 
       //showCustomAlertDialog(
       //  context, seadmedMap, uuedSeadmed, uuedSeadmedString);
     }
     //seisukord();
+    print(seadmed);
     Future.delayed(Duration(seconds: 3), () {
       Navigator.pushReplacement(
         context,

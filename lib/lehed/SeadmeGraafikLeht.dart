@@ -32,7 +32,7 @@ class SeadmeGraafikuLeht extends StatefulWidget {
       : super(key: key);
 
   final String seadmeNimi;
-  final Map<String, List<String>> SeadmeteMap;
+  final Map<String, dynamic> SeadmeteMap;
   @override
   _SeadmeGraafikuLehtState createState() => _SeadmeGraafikuLehtState(
       seadmeNimi: seadmeNimi, SeadmeteMap: SeadmeteMap);
@@ -47,7 +47,7 @@ bool hommeNahtav = false;
 class _SeadmeGraafikuLehtState extends State<SeadmeGraafikuLeht> {
   _SeadmeGraafikuLehtState(
       {Key? key, required this.seadmeNimi, required this.SeadmeteMap});
-  Map<String, List<String>> SeadmeteMap;
+  Map<String, dynamic> SeadmeteMap;
   final String seadmeNimi;
   late Map<int, dynamic> lulitusMap;
   int selectedRowIndex = -1;
@@ -181,7 +181,6 @@ class _SeadmeGraafikuLehtState extends State<SeadmeGraafikuLeht> {
     }
 
     setState(() {
-     
       if (date.hour >= 15) {
         hommeNahtav = true;
       }
@@ -202,7 +201,7 @@ class _SeadmeGraafikuLehtState extends State<SeadmeGraafikuLeht> {
 
     []; //Võtab mälust 'users'-i asukohast väärtused
     var seadmedJSONmap = prefs.getString('seadmed');
-    String value = SeadmeteMap[seadmeNimi]![1];
+
     Map<String, dynamic> storedMap = json.decode(seadmedJSONmap!);
 
     String? storedKey = prefs.getString('key');
@@ -211,110 +210,104 @@ class _SeadmeGraafikuLehtState extends State<SeadmeGraafikuLeht> {
     var j = 0;
     var authKey = storedKeyString;
     // ignore: unused_local_variable
-    for (var i in storedMap.values) {
-      if (storedMap['Seade$j']['Seadme_ID'] == value) {
-        var seadeGen = storedMap['Seade$j']['Seadme_generatsioon'] as int;
 
-        if (seadeGen == 1) {
-          lulitusHomme = await graafik(SeadmeteMap, seadmeNimi, lulitusHomme);
-          gen = 1;
-          DateTime now = DateTime.now();
-          int tana = now.weekday - 1;
+    var seadeGen = storedMap[seadmeNimi]['Seadme_generatsioon'] as int;
 
-          List<String> newList = [];
-          var headers = {
-            'Content-Type': 'application/x-www-form-urlencoded',
-          };
+    if (seadeGen == 1) {
+      lulitusHomme = await graafik(SeadmeteMap, seadmeNimi, lulitusHomme);
+      gen = 1;
+      DateTime now = DateTime.now();
+      int tana = now.weekday - 1;
 
-          var data = {
-            'channel': '0',
-            'id': value,
-            'auth_key': authKey,
-          };
+      List<String> newList = [];
+      var headers = {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      };
 
-          var url =
-              Uri.parse('https://shelly-64-eu.shelly.cloud/device/settings');
-          var res = await http.post(url, headers: headers, body: data);
-          await Future.delayed(const Duration(seconds: 2));
-          //Kui post läheb läbi siis:
+      var data = {
+        'channel': '0',
+        'id': seadmeNimi,
+        'auth_key': authKey,
+      };
 
-          final httpPackageJson = json.decode(res.body) as Map<String, dynamic>;
+      var url = Uri.parse('https://shelly-64-eu.shelly.cloud/device/settings');
+      var res = await http.post(url, headers: headers, body: data);
+      await Future.delayed(const Duration(seconds: 2));
+      //Kui post läheb läbi siis:
 
-          var scheduleRules1 = httpPackageJson['data']['device_settings']
-              ['relays'][0]['schedule_rules'];
-          for (String item in scheduleRules1) {
-            List<String> parts = item.split('-');
-            if (parts[1].length > 1) {
-              for (int i = 0; i < parts[1].length; i++) {
-                //lülituskäsk tehakse iga "-" juures pooleks ja lisatakse eraldi listi
-                String newItem = '${parts[0]}-${parts[1][i]}-${parts[2]}';
-                newList.add(newItem);
-              }
-            } else {
-              newList.add(item);
-            }
+      final httpPackageJson = json.decode(res.body) as Map<String, dynamic>;
+
+      var scheduleRules1 = httpPackageJson['data']['device_settings']['relays']
+          [0]['schedule_rules'];
+      for (String item in scheduleRules1) {
+        List<String> parts = item.split('-');
+        if (parts[1].length > 1) {
+          for (int i = 0; i < parts[1].length; i++) {
+            //lülituskäsk tehakse iga "-" juures pooleks ja lisatakse eraldi listi
+            String newItem = '${parts[0]}-${parts[1][i]}-${parts[2]}';
+            newList.add(newItem);
           }
-          List<String> filteredRules = [];
-
-          RegExp regExp = RegExp("-$tana-");
-
-          for (var rule in newList) {
-            if (regExp.hasMatch(rule)) {
-              filteredRules.add(rule);
-            }
-          }
-
-          var i = 0;
-
-          setState(() {
-            gen = 1;
-            i = filteredRules.length;
-            var u = 0;
-
-            bool k = false;
-            for (var j = 0; j < 24; j++) {
-              String asendus = '$j';
-              if (j < 10) {
-                asendus = '0' + asendus + '00';
-              } else {
-                asendus = asendus + '00';
-              }
-              for (u = 0; u < i; u++) {
-                List<String> parts = filteredRules[u].split('-');
-
-                String timeString = parts[0];
-                String formattedTime =
-                    timeString.substring(0, 2) + timeString.substring(2);
-                if (formattedTime == asendus) {
-                  if (parts[2] == 'on') {
-                    lulitus[j][2] = true;
-                    k = true;
-                  } else {
-                    lulitus[j][2] = false;
-                    k = false;
-                  }
-                  break;
-                } else {
-                  if (j != 0) {
-                    lulitus[j][2] = lulitus[j - 1][2];
-                  }
-                }
-              }
-            }
-          });
         } else {
-          var graafikud = await gen2GraafikSaamine(value, lulitus, "tana");
-          var graafikud1 =
-              await gen2GraafikSaamine(value, lulitusHomme, "homme");
-          setState(() {
-            gen = 2;
-            lulitus = graafikud;
-            lulitusHomme = graafikud1;
-          });
+          newList.add(item);
         }
-        break;
       }
-      j++;
+      List<String> filteredRules = [];
+
+      RegExp regExp = RegExp("-$tana-");
+
+      for (var rule in newList) {
+        if (regExp.hasMatch(rule)) {
+          filteredRules.add(rule);
+        }
+      }
+
+      var i = 0;
+
+      setState(() {
+        gen = 1;
+        i = filteredRules.length;
+        var u = 0;
+
+        bool k = false;
+        for (var j = 0; j < 24; j++) {
+          String asendus = '$j';
+          if (j < 10) {
+            asendus = '0' + asendus + '00';
+          } else {
+            asendus = asendus + '00';
+          }
+          for (u = 0; u < i; u++) {
+            List<String> parts = filteredRules[u].split('-');
+
+            String timeString = parts[0];
+            String formattedTime =
+                timeString.substring(0, 2) + timeString.substring(2);
+            if (formattedTime == asendus) {
+              if (parts[2] == 'on') {
+                lulitus[j][2] = true;
+                k = true;
+              } else {
+                lulitus[j][2] = false;
+                k = false;
+              }
+              break;
+            } else {
+              if (j != 0) {
+                lulitus[j][2] = lulitus[j - 1][2];
+              }
+            }
+          }
+        }
+      });
+    } else {
+      var graafikud = await gen2GraafikSaamine(seadmeNimi, lulitus, "tana");
+      var graafikud1 =
+          await gen2GraafikSaamine(seadmeNimi, lulitusHomme, "homme");
+      setState(() {
+        gen = 2;
+        lulitus = graafikud;
+        lulitusHomme = graafikud1;
+      });
     }
   }
 
@@ -828,9 +821,9 @@ class _SeadmeGraafikuLehtState extends State<SeadmeGraafikuLeht> {
             child: GestureDetector(
               onTap: () {
                 if (tana == green) {
-                  genMaaramine(lulitus, 'täna', SeadmeteMap, seadmeNimi);
+                  genMaaramine(lulitus, 'täna', seadmeNimi);
                 } else {
-                  genMaaramine(lulitus, 'homme', SeadmeteMap, seadmeNimi);
+                  genMaaramine(lulitus, 'homme', seadmeNimi);
                 }
 
                 showDialog(
@@ -863,7 +856,8 @@ class _SeadmeGraafikuLehtState extends State<SeadmeGraafikuLeht> {
                     MaterialPageRoute(
                       builder: (context) => DunaamilineSeadmeLeht(
                         seadmeNimi: seadmeNimi,
-                        SeadmeteMap: SeadmeteMap, valitud: 0,
+                        SeadmeteMap: SeadmeteMap,
+                        valitud: 0,
                       ),
                     ),
                   );
@@ -1044,12 +1038,12 @@ minLeidmine(Map<int, dynamic> map) {
 }
 
 Future graafik(
-    Map<String, List<String>> SeadmeteMap, String seadmeNimi, lulitus) async {
+    Map<String, dynamic> SeadmeteMap, String seadmeNimi, lulitus) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
 
   []; //Võtab mälust 'users'-i asukohast väärtused
   var seadmedJSONmap = prefs.getString('seadmed');
-  String value = SeadmeteMap[seadmeNimi]![1];
+  
   Map<String, dynamic> storedMap = json.decode(seadmedJSONmap!);
 
   String? storedKey = prefs.getString('key');
@@ -1058,9 +1052,9 @@ Future graafik(
   var j = 0;
   var authKey = storedKeyString;
   // ignore: unused_local_variable
-  for (var i in storedMap.values) {
-    if (storedMap['Seade$j']['Seadme_ID'] == value) {
-      var seadeGen = storedMap['Seade$j']['Seadme_generatsioon'] as int;
+
+  
+      var seadeGen = storedMap[seadmeNimi]['Seadme_generatsioon'] as int;
 
       if (seadeGen == 1) {
         DateTime now = DateTime.now();
@@ -1075,7 +1069,7 @@ Future graafik(
 
         var data = {
           'channel': '0',
-          'id': value,
+          'id': seadmeNimi,
           'auth_key': authKey,
         };
 
@@ -1146,9 +1140,8 @@ Future graafik(
           }
         }
         ;
-      }
-      break;
-    }
+      
+      
     j++;
   }
 
