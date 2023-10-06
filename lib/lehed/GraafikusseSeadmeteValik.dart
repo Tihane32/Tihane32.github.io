@@ -211,7 +211,7 @@ class _SeadmeteListValimineState extends State<SeadmeteListValimine> {
                                                   EdgeInsets.only(top: 10.0),
                                               title: Align(
                                                 alignment: Alignment.center,
-                                                child: Text('$seade graafik:'),
+                                                child: Text('${seadmeteMap[seade]["Seadme_nimi"]} graafik:'),
                                               ),
                                               content: Container(
                                                 height: 528,
@@ -226,10 +226,15 @@ class _SeadmeteListValimineState extends State<SeadmeteListValimine> {
                                                             BoxDecoration(
                                                           color: item == 'on'
                                                               ? Colors.green
-                                                              : Colors.grey,
+                                                              : Color.fromARGB(
+                                                                  255,
+                                                                  202,
+                                                                  200,
+                                                                  200),
                                                           border: Border.all(
-                                                              color:
-                                                                  Colors.black,
+                                                              color: Color
+                                                                  .fromARGB(82,
+                                                                      0, 0, 0),
                                                               width: 0.5),
                                                         ),
                                                         child: Align(
@@ -239,8 +244,7 @@ class _SeadmeteListValimineState extends State<SeadmeteListValimine> {
                                                             index < 10
                                                                 ? "0${index.toString()}:00"
                                                                 : "${index.toString()}:00",
-                                                            style:
-                                                                font, // Assuming 'font' is a TextStyle object you've defined elsewhere
+                                                            style: font,
                                                           ),
                                                         ),
                                                       );

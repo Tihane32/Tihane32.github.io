@@ -32,6 +32,9 @@ TextStyle fontSuur = GoogleFonts.roboto(
 TextStyle font = GoogleFonts.roboto(
     textStyle: const TextStyle(
         fontWeight: FontWeight.w500, fontSize: 18, color: Colors.black));
+        TextStyle fontHall = GoogleFonts.roboto(
+    textStyle: const TextStyle(
+        fontWeight: FontWeight.w500, fontSize: 18, color: Colors.black));
 TextStyle fontValge = GoogleFonts.roboto(
     textStyle: const TextStyle(
         //fontWeight: FontWeight.w500,
@@ -45,6 +48,9 @@ TextStyle fontValgeVaike = GoogleFonts.roboto(
 TextStyle fontVaike = GoogleFonts.roboto(
     textStyle: const TextStyle(
         fontWeight: FontWeight.w500, fontSize: 14, color: Colors.black));
+        TextStyle fontVaikePunane = GoogleFonts.roboto(
+    textStyle: const TextStyle(
+        fontWeight: FontWeight.w500, fontSize: 14, color: Colors.red));
 double sinineKastLaius = double.infinity;
 double sinineKastKorgus = 45;
 BorderRadius borderRadius = BorderRadius.circular(5.0);
@@ -79,8 +85,9 @@ void callbackDispatcher() {
 }
 
 Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
 //backround start
- SharedPreferences prefs = await SharedPreferences.getInstance();
+  SharedPreferences prefs = await SharedPreferences.getInstance();
 
   []; //Võtab mälust 'users'-i asukohast väärtused
   var seadmedJSONmap = prefs.getString('seadmed');
@@ -88,7 +95,7 @@ Future<void> main() async {
   if (seadmedJSONmap != null) {
     seadmeteMap = json.decode(seadmedJSONmap);
   }
-  
+
 //backround end
 
   runApp(MaterialApp(
@@ -96,11 +103,10 @@ Future<void> main() async {
     home: DynaamilenieKoduLeht(i: 1), //Alustab appi kodulehest
   ));
 
-  Workmanager().initialize(callbackDispatcher);
+  /*Workmanager().initialize(callbackDispatcher);
   Workmanager().registerPeriodicTask(
     "1",
     "simplePeriodicTask",
     frequency: Duration(seconds: 5),
-  );
+  );*/
 }
-

@@ -77,34 +77,7 @@ class _SeadmeGraafikuLehtState extends State<SeadmeGraafikuLeht> {
 
   int tund = 0;
 
-  Map<int, dynamic> keskHind = {
-    0: ['0', 0, ''],
-    1: ['0.0', 0, ''],
-    2: ['1', 0, ''],
-    3: ['2', 0, ''],
-    4: ['3', 0, ''],
-    5: ['4', 0, ''],
-    6: ['5', 0, ''],
-    7: ['6', 0, ''],
-    8: ['7', 0, ''],
-    9: ['8', 0, ''],
-    10: ['9', 0, ''],
-    11: ['10', 0, ''],
-    12: ['12', 0, ''],
-    13: ['0', 0, ''],
-    14: ['0', 0, ''],
-    15: ['0', 0, ''],
-    16: ['0', 0, ''],
-    17: ['0', 0, ''],
-    18: ['0', 0, ''],
-    19: ['0', 0, ''],
-    20: ['0', 0, ''],
-    21: ['0', 0, ''],
-    22: ['0', 0, ''],
-    23: ['0', 0, ''],
-    24: ['0', 0, ''],
-    25: ['0', 0, ''],
-  };
+  Map<int, dynamic> keskHind = {};
 
   Future norm() async {
     DateTime now = new DateTime.now();
@@ -323,99 +296,420 @@ class _SeadmeGraafikuLehtState extends State<SeadmeGraafikuLeht> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      //backgroundColor: Color.fromARGB(255, 189, 216, 225), //TaustavÃ¤rv
-      body: Stack(children: [
-        Padding(
-          padding: const EdgeInsets.only(top: 75),
-          child: SingleChildScrollView(
-            child: Container(
-              decoration: BoxDecoration(color: Colors.white),
-              height: MediaQuery.of(context).size.height,
-              child: Center(
-                  child: RotatedBox(
-                quarterTurns: 1,
-                child: Container(
-                  //width: double.infinity,
-                  //height: double.infinity,
-                  child: SfCartesianChart(
-                    margin: EdgeInsets.all(0),
-                    primaryXAxis: CategoryAxis(
-                      majorGridLines: const MajorGridLines(width: 0),
-                      interval: 1,
-                      labelRotation: 270,
-                      visibleMinimum: -0.35,
-                      maximum: 23.5,
-                    ),
-                    primaryYAxis: NumericAxis(
-                      anchorRangeToVisiblePoints: true,
-                      axisLine: AxisLine(width: 0),
-                      isVisible: true,
-                      labelRotation: 270,
-                      /* title: AxisTitle(
-                                //text: 'EUR/MWh',
-                                textStyle: fontVaike,
-                                alignment: ChartAlignment.center),*/
-                      labelStyle: TextStyle(fontSize: 0),
-                    ),
-                    series: <ChartSeries>[
-                      ColumnSeries(
-                        width: 0.9,
-                        spacing: 0.1,
-                        onPointTap: (pointInteractionDetails) {
-                          int rowIndex = pointInteractionDetails.pointIndex!;
-                          kinnitusNahtav = true;
+      appBar: AppBar(automaticallyImplyLeading: false,backgroundColor: Colors.white,title:  Column(
+        children: [
+          SizedBox(height: vahe / 2),
+          Center(
+            child: Column(
+              children: [
+                Center(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Center(
+                          child: GestureDetector(
+                        onTap: () {
                           setState(() {
-                            lulitus[rowIndex][2] = !lulitus[rowIndex][2];
+                            if (tana == valge) {
+                              lulitus = lulitusTana;
+                              tana = green;
+                              tanaFont = fontValge;
+                              homme = valge;
+                              hommeFont = font;
+                              hindMax = maxLeidmine(lulitus);
+                              hindMin = minLeidmine(lulitus);
+                              hindAVG = keskmineHindArvutaus(lulitus);
+                              keskHind = keskmineHindMapVaartustamine(
+                                  hindAVG, keskHind, lulitus);
+                              temp = hindAVG / 4;
+                              if (temp < 40 && hindAVG > 40) {
+                                temp = 40;
+                              } else if (hindAVG < 40) {
+                                temp = hindAVG / 2;
+                              }
+                              HapticFeedback.vibrate();
+                            } /*else {
+                          lulitus = lulitusHomme;
+                          tana = valge;
+                          tanaFont = font;
+                          homme = green;
+                          hommeFont = fontValge;
+                        }*/
                           });
                         },
-                        borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(20),
-                            topRight: Radius.circular(20)),
-                        dataSource: lulitus.values.toList(),
-                        xValueMapper: (data, _) => data[0],
-                        yValueMapper: (data, _) {
-                          final yValue = data[1];
-                          return yValue < temp ? temp : yValue;
-                        },
-                        dataLabelMapper: (data, _) => data[1].toString(),
-                        pointColorMapper: (data, _) => data[2]
-                            ? Colors.green
-                            : Color.fromARGB(255, 164, 159, 159),
-                        dataLabelSettings: DataLabelSettings(
-                          isVisible: true,
-                          labelAlignment: ChartDataLabelAlignment.bottom,
-                          textStyle: fontVaike,
-                          angle: 270,
+                        child: Container(
+                          width: 100,
+                          height: 30,
+                          decoration: BoxDecoration(
+                              color: tana,
+                              borderRadius: BorderRadius.circular(20.0),
+                              border: Border.all(
+                                color: Colors.green,
+                                width: 3,
+                              )),
+                          child: Center(
+                              child: RichText(
+                            text: TextSpan(
+                              text: 'Täna',
+                              style: tanaFont,
+                            ),
+                            textAlign: TextAlign.center,
+                          )),
+                        ),
+                      )),
+                      Center(
+                          child: hommeNahtav
+                              ? GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      if (homme == valge) {
+                                        lulitus = lulitusHomme;
+                                        homme = green;
+                                        hommeFont = fontValge;
+                                        tana = valge;
+                                        tanaFont = font;
+                                        hindMax = maxLeidmine(lulitus);
+                                        hindMin = minLeidmine(lulitus);
+                                        hindAVG =
+                                            keskmineHindArvutaus(lulitus);
+                                        keskHind =
+                                            keskmineHindMapVaartustamine(
+                                                hindAVG, keskHind, lulitus);
+                                        temp = hindAVG / 4;
+                                        if (temp < 40 && hindAVG > 40) {
+                                          temp = 40;
+                                        } else if (hindAVG < 40) {
+                                          temp = hindAVG / 2;
+                                        }
+                                        HapticFeedback.vibrate();
+                                      } /*else {
+                            lulitus = lulitusTana;
+                            homme = valge;
+                            hommeFont = font;
+                            tana = green;
+                            tanaFont = fontValge;
+                          }*/
+                                    });
+                                  },
+                                  child: Container(
+                                    width: 100,
+                                    height: 30,
+                                    decoration: BoxDecoration(
+                                        color: homme,
+                                        borderRadius:
+                                            BorderRadius.circular(30.0),
+                                        border: Border.all(
+                                          color: Colors.green,
+                                          width: 3,
+                                        )),
+                                    child: Center(
+                                        child: RichText(
+                                      text: TextSpan(
+                                        text: 'Homme',
+                                        style: hommeFont,
+                                      ),
+                                      textAlign: TextAlign.center,
+                                    )),
+                                  ),
+                                )
+                              : GestureDetector(
+                                  onTap: () {
+                                    showDialog(
+                                        context: context,
+                                        builder: (context) => AlertDialog(
+                                              title: Text(
+                                                  'Homne graafik ei ole hetkel kättesaadav\nProovige uuesti kell 15.00'),
+                                            ));
+                                  },
+                                  child: Container(
+                                    width: 100,
+                                    height: 30,
+                                    decoration: BoxDecoration(
+                                        color: Color.fromARGB(
+                                            255, 209, 205, 205),
+                                        borderRadius:
+                                            BorderRadius.circular(30.0),
+                                        border: Border.all(
+                                          color: Color.fromARGB(
+                                              255, 12, 12, 12),
+                                          width: 3,
+                                        )),
+                                    child: Center(
+                                        child: RichText(
+                                      text: TextSpan(
+                                          text: 'Homme', style: font),
+                                      textAlign: TextAlign.center,
+                                    )),
+                                  ),
+                                ))
+                    ],
+                  ),
+                ),
+                Center(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Align(
+                        alignment: Alignment.center,
+                        child: Container(
+                          alignment: Alignment.center,
+                          //width: 200,
+                          child: Center(
+                            child: Column(
+                              children: [
+                                Align(
+                                  child: Container(
+                                    alignment: Alignment.center,
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                    ),
+                                    //width: sinineKastLaius,
+                                    //height: sinineKastKorgus,
+                                    child: RichText(
+                                      text: TextSpan(
+                                        style: fontVaike,
+                                        children: [
+                                          TextSpan(
+                                              text: '€/MWh',
+                                              style: fontVaike),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
                         ),
                       ),
-                      LineSeries(
-                        dataSource: keskHind.values.toList(),
-                        xValueMapper: (inf, _) => inf[0],
-                        yValueMapper: (inf, _) => inf[1],
-                        dataLabelMapper: (inf, _) => inf[2],
-                        color: Colors.red,
-                        dashArray: [20, 22],
-                        dataLabelSettings: DataLabelSettings(
-                          offset: Offset(-20, 0),
-                          isVisible: true,
-                          labelAlignment: ChartDataLabelAlignment.middle,
-                          textStyle: TextStyle(
-                              fontSize: 15,
-                              color: Color.fromARGB(255, 231, 17, 17)),
-                          angle: 270,
-                          alignment: ChartAlignment.center,
+                      Align(
+                        alignment: Alignment.center,
+                        child: Container(
+                          alignment: Alignment.center,
+                          //width: 200,
+                          child: Center(
+                            child: Column(
+                              children: [
+                                Align(
+                                  child: Container(
+                                    alignment: Alignment.center,
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                    ),
+                                    //width: sinineKastLaius,
+                                    //height: sinineKastKorgus,
+                                    child: RichText(
+                                      text: TextSpan(
+                                        style: fontVaike,
+                                        children: [
+                                          TextSpan(
+                                              text: 'Min: $hindMin',
+                                              style: fontVaike),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                      Align(
+                        alignment: Alignment.center,
+                        child: Container(
+                          //width: 200,
+                          child: Column(
+                            children: [
+                              Align(
+                                child: Container(
+                                  alignment: Alignment.center,
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                  ),
+                                  //width: sinineKastLaius,
+                                  //height: sinineKastKorgus,
+                                  child: RichText(
+                                    textAlign: TextAlign.center,
+                                    text: TextSpan(
+                                      style: fontVaikePunane,
+                                      children: [
+                                        TextSpan(
+                                            text: 'Kesk: $hindAVG',
+                                            style: fontVaikePunane),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      Align(
+                        alignment: Alignment.center,
+                        child: Container(
+                          //width: 200,
+                          child: Column(
+                            children: [
+                              Align(
+                                child: Container(
+                                  alignment: Alignment.center,
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                  ),
+                                  //width: sinineKastLaius,
+                                  //height: sinineKastKorgus,
+                                  child: RichText(
+                                    text: TextSpan(
+                                      style: fontVaike,
+                                      children: [
+                                        TextSpan(
+                                            text: 'Max: $hindMax',
+                                            style: fontVaike),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ],
                   ),
                 ),
-              )),
+
+                /*Center(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Align(
+                        child: Container(
+                          alignment: Alignment.center,
+
+                          //width: sinineKastLaius,
+                          //height: sinineKastKorgus,
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 5.0),
+                            child: RichText(
+                              textAlign: TextAlign.center,
+                              text: TextSpan(
+                                style: fontVaike,
+                                children: [
+                                  TextSpan(text: '€/MWh', style: fontVaike),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),*/
+              ],
             ),
           ),
+        ],
+      ),),
+      body: Stack(children: [
+        SingleChildScrollView(
+          child: Container(
+            decoration: BoxDecoration(color: Colors.white),
+            height: MediaQuery.of(context).size.height,
+            child: Center(
+                child: RotatedBox(
+              quarterTurns: 1,
+              child: Container(
+                //width: double.infinity,
+                //height: double.infinity,
+                child: SfCartesianChart(
+                  axes: [
+                    NumericAxis(
+                      name: 'xAxis',
+                      isVisible: false,
+                      title: AxisTitle(
+                        text: 'test',
+                        textStyle: fontVaike,
+                      ),
+                    ),
+                  ],
+                  margin: EdgeInsets.all(0),
+                  primaryXAxis: CategoryAxis(
+                    majorGridLines: const MajorGridLines(width: 0),
+                    interval: 1,
+                    labelRotation: 270,
+                    visibleMinimum: 0,
+                    //maximum: 23.5,
+                  ),
+                  primaryYAxis: NumericAxis(
+                    anchorRangeToVisiblePoints: true,
+                    axisLine: AxisLine(width: 0),
+                    isVisible: true,
+                    labelRotation: 270,
+                    /* title: AxisTitle(
+                              //text: 'EUR/MWh',
+                              textStyle: fontVaike,
+                              alignment: ChartAlignment.center),*/
+                    labelStyle: TextStyle(fontSize: 0),
+                  ),
+                  series: <ChartSeries>[
+                    ColumnSeries(
+                      width: 0.9,
+                      spacing: 0.1,
+                      onPointTap: (pointInteractionDetails) {
+                        int rowIndex = pointInteractionDetails.pointIndex!;
+                        kinnitusNahtav = true;
+                        setState(() {
+                          lulitus[rowIndex][2] = !lulitus[rowIndex][2];
+                        });
+                      },
+                      borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(20),
+                          topRight: Radius.circular(20)),
+                      dataSource: lulitus.values.toList(),
+                      xValueMapper: (data, _) => data[0],
+                      yValueMapper: (data, _) {
+                        final yValue = data[1];
+                        return yValue < temp ? temp : yValue;
+                      },
+                      dataLabelMapper: (data, _) => data[1].toString(),
+                      pointColorMapper: (data, _) => data[2]
+                          ? Colors.green
+                          : Color.fromARGB(255, 164, 159, 159),
+                      dataLabelSettings: DataLabelSettings(
+                        isVisible: true,
+                        labelAlignment: ChartDataLabelAlignment.bottom,
+                        textStyle: fontVaike,
+                        angle: 270,
+                      ),
+                    ),
+                    LineSeries(
+                      xAxisName: "xAxis",
+                      dataSource: keskHind.entries.map((entry) {
+                        final key = entry.key.toDouble();
+                        final value = entry.value;
+                        return {
+                          'x': key,
+                          'y': value
+                        }; // Creating a map with 'x' and 'y' keys.
+                      }).toList(),
+                      xValueMapper: (data, _) =>
+                          data['x'], // Access 'x' key from the map.
+                      yValueMapper: (data, _) =>
+                          data['y'], // Access 'y' key from the map.
+                      color: Colors.red,
+                      dashArray: [20, 22],
+                    ),
+                  ],
+                ),
+              ),
+            )),
+          ),
         ),
-        Container(
+        /*Container(
           decoration: BoxDecoration(color: Colors.white),
-          height: 80,
+          height: 60,
           child: Column(
             children: [
               SizedBox(height: vahe / 2),
@@ -590,6 +884,39 @@ class _SeadmeGraafikuLehtState extends State<SeadmeGraafikuLeht> {
                                             style: fontVaike,
                                             children: [
                                               TextSpan(
+                                                  text: '€/MWh',
+                                                  style: fontVaike),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                          Align(
+                            alignment: Alignment.center,
+                            child: Container(
+                              alignment: Alignment.center,
+                              //width: 200,
+                              child: Center(
+                                child: Column(
+                                  children: [
+                                    Align(
+                                      child: Container(
+                                        alignment: Alignment.center,
+                                        decoration: BoxDecoration(
+                                          color: Colors.white,
+                                        ),
+                                        //width: sinineKastLaius,
+                                        //height: sinineKastKorgus,
+                                        child: RichText(
+                                          text: TextSpan(
+                                            style: fontVaike,
+                                            children: [
+                                              TextSpan(
                                                   text: 'Min: $hindMin',
                                                   style: fontVaike),
                                             ],
@@ -597,43 +924,6 @@ class _SeadmeGraafikuLehtState extends State<SeadmeGraafikuLeht> {
                                         ),
                                       ),
                                     ),
-                                    /* Align(
-                                child: Container(
-                                  alignment: Alignment.center,
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                  ),
-                                  //width: sinineKastLaius,
-                                  //height: sinineKastKorgus,
-                                  child: RichText(
-                                    text: TextSpan(
-                                      style: fontVaike,
-                                      children: [
-                                        TextSpan(text: '$hindAVG', style: font),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              Align(
-                                child: Container(
-                                  alignment: Alignment.center,
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                  ),
-                                  //width: sinineKastLaius,
-                                  //height: sinineKastKorgus,
-                                  child: RichText(
-                                    text: TextSpan(
-                                      style: fontVaike,
-                                      children: [
-                                        TextSpan(
-                                            text: 'EUR/MWh', style: fontVaike),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              )*/
                                   ],
                                 ),
                               ),
@@ -656,56 +946,16 @@ class _SeadmeGraafikuLehtState extends State<SeadmeGraafikuLeht> {
                                       child: RichText(
                                         textAlign: TextAlign.center,
                                         text: TextSpan(
-                                          style: fontVaike,
+                                          style: fontVaikePunane,
                                           children: [
                                             TextSpan(
                                                 text: 'Kesk: $hindAVG',
-                                                style: fontVaike),
+                                                style: fontVaikePunane),
                                           ],
                                         ),
                                       ),
                                     ),
                                   ),
-                                  /* Align(
-                              child: Container(
-                                alignment: Alignment.center,
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                ),
-                                //width: sinineKastLaius,
-                                //height: sinineKastKorgus,
-                                child: RichText(
-                                  textAlign: TextAlign.center,
-                                  text: TextSpan(
-                                    style: fontVaike,
-                                    children: [
-                                      TextSpan(
-                                          text: '$hindMin', style: font),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Align(
-                              child: Container(
-                                alignment: Alignment.center,
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                ),
-                                //width: sinineKastLaius,
-                                //height: sinineKastKorgus,
-                                child: RichText(
-                                  textAlign: TextAlign.center,
-                                  text: TextSpan(
-                                    style: fontVaike,
-                                    children: [
-                                      TextSpan(
-                                          text: 'EUR/MWh', style: fontVaike),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),*/
                                 ],
                               ),
                             ),
@@ -736,43 +986,6 @@ class _SeadmeGraafikuLehtState extends State<SeadmeGraafikuLeht> {
                                       ),
                                     ),
                                   ),
-                                  /*Align(
-                              child: Container(
-                                alignment: Alignment.center,
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                ),
-                                //width: sinineKastLaius,
-                                //height: sinineKastKorgus,
-                                child: RichText(
-                                  text: TextSpan(
-                                    style: fontVaike,
-                                    children: [
-                                      TextSpan(text: '$hindMax', style: font),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Align(
-                              child: Container(
-                                alignment: Alignment.center,
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                ),
-                                //width: sinineKastLaius,
-                                //height: sinineKastKorgus,
-                                child: RichText(
-                                  text: TextSpan(
-                                    style: fontVaike,
-                                    children: [
-                                      TextSpan(
-                                          text: 'EUR/MWh', style: fontVaike),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            )*/
                                 ],
                               ),
                             ),
@@ -780,8 +993,8 @@ class _SeadmeGraafikuLehtState extends State<SeadmeGraafikuLeht> {
                         ],
                       ),
                     ),
-                    SizedBox(height: vahe),
-                    Center(
+
+                    /*Center(
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
@@ -807,14 +1020,14 @@ class _SeadmeGraafikuLehtState extends State<SeadmeGraafikuLeht> {
                           ),
                         ],
                       ),
-                    ),
+                    ),*/
                   ],
                 ),
               ),
             ],
           ),
         ),
-        Visibility(
+        */Visibility(
           visible: kinnitusNahtav,
           child: Align(
             alignment: Alignment.bottomCenter,
@@ -920,46 +1133,11 @@ eskmineHindArvutaus(Map<int, dynamic> lulitus) {
 
 keskmineHindMapVaartustamine(
     var hindAVG, Map<int, dynamic> keskHind, Map<int, dynamic> lulitus) {
-  String kell = '00';
-
-  int madalaimTund = 0;
-
-  int tund = 0;
-
-  for (var entry in lulitus.entries) {
-    double price = entry.value[1];
-
-    if (price < madalaimTund) {
-      madalaimTund = tund;
-    }
+  print(hindAVG);
+  for (int i = 0; i < 25;) {
+    keskHind[i] = hindAVG;
+    i++;
   }
-
-  keskHind[0] = [kell + '.00', hindAVG, 'Keskmine hind: $hindAVG'];
-
-  for (int i = 1; i < 24; i++) {
-    if (i < 10) {
-      kell = '0$i';
-    } else {
-      kell = '$i';
-    }
-
-    keskHind[i] = [kell + '.00', hindAVG, ''];
-
-    if (tund == i) {
-      keskHind[tund] = [kell + '.00', hindAVG, ''];
-    }
-  }
-
-  kell = '24.00';
-
-  keskHind[24] = [kell + '.00', hindAVG, ''];
-
-  kell = '25.00';
-
-  keskHind[25] = [kell + '.00', hindAVG, ''];
-
-  keskHind.forEach((key, value) {});
-
   return keskHind;
 }
 
@@ -1043,7 +1221,7 @@ Future graafik(
 
   []; //Võtab mälust 'users'-i asukohast väärtused
   var seadmedJSONmap = prefs.getString('seadmed');
-  
+
   Map<String, dynamic> storedMap = json.decode(seadmedJSONmap!);
 
   String? storedKey = prefs.getString('key');
@@ -1053,95 +1231,92 @@ Future graafik(
   var authKey = storedKeyString;
   // ignore: unused_local_variable
 
-  
-      var seadeGen = storedMap[seadmeNimi]['Seadme_generatsioon'] as int;
+  var seadeGen = storedMap[seadmeNimi]['Seadme_generatsioon'] as int;
 
-      if (seadeGen == 1) {
-        DateTime now = DateTime.now();
-        int tana = now.weekday;
-        if (tana == 7) {
-          tana = 0;
+  if (seadeGen == 1) {
+    DateTime now = DateTime.now();
+    int tana = now.weekday;
+    if (tana == 7) {
+      tana = 0;
+    }
+    List<String> newList = [];
+    var headers = {
+      'Content-Type': 'application/x-www-form-urlencoded',
+    };
+
+    var data = {
+      'channel': '0',
+      'id': seadmeNimi,
+      'auth_key': authKey,
+    };
+
+    var url = Uri.parse('https://shelly-64-eu.shelly.cloud/device/settings');
+    var res = await http.post(url, headers: headers, body: data);
+    await Future.delayed(const Duration(seconds: 2));
+    //Kui post läheb läbi siis:
+
+    final httpPackageJson = json.decode(res.body) as Map<String, dynamic>;
+    var scheduleRules1 = httpPackageJson['data']['device_settings']['relays'][0]
+        ['schedule_rules'];
+    for (String item in scheduleRules1) {
+      List<String> parts = item.split('-');
+      if (parts[1].length > 1) {
+        for (int i = 0; i < parts[1].length; i++) {
+          //lülituskäsk tehakse iga "-" juures pooleks ja lisatakse eraldi listi
+          String newItem = '${parts[0]}-${parts[1][i]}-${parts[2]}';
+          newList.add(newItem);
         }
-        List<String> newList = [];
-        var headers = {
-          'Content-Type': 'application/x-www-form-urlencoded',
-        };
+      } else {
+        newList.add(item);
+      }
+    }
+    List<String> filteredRules = [];
 
-        var data = {
-          'channel': '0',
-          'id': seadmeNimi,
-          'auth_key': authKey,
-        };
+    RegExp regExp = RegExp("-$tana-");
 
-        var url =
-            Uri.parse('https://shelly-64-eu.shelly.cloud/device/settings');
-        var res = await http.post(url, headers: headers, body: data);
-        await Future.delayed(const Duration(seconds: 2));
-        //Kui post läheb läbi siis:
+    for (var rule in newList) {
+      if (regExp.hasMatch(rule)) {
+        filteredRules.add(rule);
+      }
+    }
 
-        final httpPackageJson = json.decode(res.body) as Map<String, dynamic>;
-        var scheduleRules1 = httpPackageJson['data']['device_settings']
-            ['relays'][0]['schedule_rules'];
-        for (String item in scheduleRules1) {
-          List<String> parts = item.split('-');
-          if (parts[1].length > 1) {
-            for (int i = 0; i < parts[1].length; i++) {
-              //lülituskäsk tehakse iga "-" juures pooleks ja lisatakse eraldi listi
-              String newItem = '${parts[0]}-${parts[1][i]}-${parts[2]}';
-              newList.add(newItem);
-            }
+    var i = 0;
+
+    i = filteredRules.length;
+    var u = 0;
+
+    bool k = false;
+    for (var j = 0; j < 24; j++) {
+      String asendus = '$j';
+      if (j < 10) {
+        asendus = '0' + asendus + '00';
+      } else {
+        asendus = asendus + '00';
+      }
+      for (u = 0; u < i; u++) {
+        List<String> parts = filteredRules[u].split('-');
+
+        String timeString = parts[0];
+        String formattedTime =
+            timeString.substring(0, 2) + timeString.substring(2);
+        if (formattedTime == asendus) {
+          if (parts[2] == 'on') {
+            lulitus[j][2] = true;
+            k = true;
           } else {
-            newList.add(item);
+            lulitus[j][2] = false;
+            k = false;
+          }
+          break;
+        } else {
+          if (j != 0) {
+            lulitus[j][2] = lulitus[j - 1][2];
           }
         }
-        List<String> filteredRules = [];
+      }
+    }
+    ;
 
-        RegExp regExp = RegExp("-$tana-");
-
-        for (var rule in newList) {
-          if (regExp.hasMatch(rule)) {
-            filteredRules.add(rule);
-          }
-        }
-
-        var i = 0;
-
-        i = filteredRules.length;
-        var u = 0;
-
-        bool k = false;
-        for (var j = 0; j < 24; j++) {
-          String asendus = '$j';
-          if (j < 10) {
-            asendus = '0' + asendus + '00';
-          } else {
-            asendus = asendus + '00';
-          }
-          for (u = 0; u < i; u++) {
-            List<String> parts = filteredRules[u].split('-');
-
-            String timeString = parts[0];
-            String formattedTime =
-                timeString.substring(0, 2) + timeString.substring(2);
-            if (formattedTime == asendus) {
-              if (parts[2] == 'on') {
-                lulitus[j][2] = true;
-                k = true;
-              } else {
-                lulitus[j][2] = false;
-                k = false;
-              }
-              break;
-            } else {
-              if (j != 0) {
-                lulitus[j][2] = lulitus[j - 1][2];
-              }
-            }
-          }
-        }
-        ;
-      
-      
     j++;
   }
 

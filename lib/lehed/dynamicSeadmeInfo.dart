@@ -87,7 +87,7 @@ class _DunaamilineSeadmeLehtState extends State<DunaamilineSeadmeLeht> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              seadmeNimi,
+              seadmeteMap[seadmeNimi]["Seadme_nimi"],
               style: GoogleFonts.roboto(
                 textStyle: const TextStyle(fontSize: 25),
               ),

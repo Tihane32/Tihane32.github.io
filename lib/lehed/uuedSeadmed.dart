@@ -95,15 +95,7 @@ class _uuedSeadmedState extends State<uuedSeadmed> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Column(
-                            children: [
-                              Text(
-                                seadmeNimi,
-                                style:
-                                    fontSuur, // Change this to your desired font
-                              ),
-                            ],
-                          ),
+                         
                           Transform.scale(
                             scale: 1.5,
                             child: Checkbox(
@@ -117,7 +109,21 @@ class _uuedSeadmedState extends State<uuedSeadmed> {
                                 });
                               },
                             ),
-                          )
+                          ), Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                width: 150,
+                                child: Text(
+                                  
+                                  seadmeNimi,
+                                  style:
+                                      fontSuur,
+                                      //textAlign: TextAlign.start, // Change this to your desired font
+                                ),
+                              ),
+                            ],
+                          ),
                         ],
                       ),
                     ),
