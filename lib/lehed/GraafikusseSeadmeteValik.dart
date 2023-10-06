@@ -211,7 +211,8 @@ class _SeadmeteListValimineState extends State<SeadmeteListValimine> {
                                                   EdgeInsets.only(top: 10.0),
                                               title: Align(
                                                 alignment: Alignment.center,
-                                                child: Text('${seadmeteMap[seade]["Seadme_nimi"]} graafik:'),
+                                                child: Text(
+                                                    '${seadmeteMap[seade]["Seadme_nimi"]} graafik:'),
                                               ),
                                               content: Container(
                                                 height: 528,
@@ -332,7 +333,7 @@ class _SeadmeteListValimineState extends State<SeadmeteListValimine> {
                     context,
                     MaterialPageRoute(
                         builder: (context) => DynamilineTundideValimine(
-                            valitudSeadmed: ValitudSeadmed, i: 1, luba: '')),
+                            valitudSeadmed: ValitudSeadmed, i: 0, luba: '')),
                   );
                 } else {
                   Hoiatus(
