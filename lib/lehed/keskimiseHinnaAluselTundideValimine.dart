@@ -32,21 +32,22 @@ class KeskmiseHinnaAluselTundideValimine extends StatefulWidget {
 
 int koduindex = 1;
 
- Color valge = Colors.white;
+Color valge = Colors.white;
 Color green = Colors.green;
+
 class _KeskmiseHinnaAluselTundideValimineState
     extends State<KeskmiseHinnaAluselTundideValimine> {
   _KeskmiseHinnaAluselTundideValimineState(
       {Key? key, required this.lulitusMap, required this.updateLulitusMap});
   Function updateLulitusMap;
   var lulitusMap;
- 
-Color homme = valge;
-Color tana = green;
-TextStyle hommeFont = font;
-TextStyle tanaFont = fontValge;
-int? tappedIndex;
-bool hommeNahtav = false;
+
+  Color homme = valge;
+  Color tana = green;
+  TextStyle hommeFont = font;
+  TextStyle tanaFont = fontValge;
+  int? tappedIndex;
+  bool hommeNahtav = false;
   int selectedRowIndex = -1;
   String paevNupp = 'Täna';
   String selectedPage = 'Keskmine hind';
@@ -445,35 +446,43 @@ bool hommeNahtav = false;
                           child: Container(
                             height: 20,
                             width: 45,
-                            child: TextField(
-                                keyboardType: TextInputType.number,
-                                inputFormatters: [
-                                  FilteringTextInputFormatter.digitsOnly,
-                                ],
-                                onSubmitted: (value) {
-                                  setState(() {
-                                    int parsedValue = int.tryParse(value) ?? 0;
-                                    if (parsedValue > 24) {
-                                      parsedValue = 24;
-                                    }
-                                    valitudTunnid = parsedValue;
-                                    lulitus = OdavimadTunnidOn(
-                                        lulitus, valitudTunnid);
-                                    lulitusMapVasak =
-                                        LulitusMapVasakVaartustamine(
-                                            hindAVG, lulitus, lulitusMapVasak);
-                                    lulitusMapParem = LulitusParemVaartustamine(
-                                        hindAVG, lulitus, lulitusMapParem);
-                                  });
-                                },
-                                decoration: InputDecoration(
-                                  border: InputBorder.none,
-                                  isDense: true,
-                                  hintText: valitudTunnid.toString(),
-                                  contentPadding:
-                                      EdgeInsets.symmetric(vertical: 3.0),
-                                ),
-                                style: font),
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Colors.grey),
+                              borderRadius: BorderRadius.circular(4.0),
+                            ),
+                            child: Center(
+                              child: TextField(
+                                  keyboardType: TextInputType.number,
+                                  inputFormatters: [
+                                    FilteringTextInputFormatter.digitsOnly,
+                                  ],
+                                  onSubmitted: (value) {
+                                    setState(() {
+                                      int parsedValue =
+                                          int.tryParse(value) ?? 0;
+                                      if (parsedValue > 24) {
+                                        parsedValue = 24;
+                                      }
+                                      valitudTunnid = parsedValue;
+                                      lulitus = OdavimadTunnidOn(
+                                          lulitus, valitudTunnid);
+                                      lulitusMapVasak =
+                                          LulitusMapVasakVaartustamine(hindAVG,
+                                              lulitus, lulitusMapVasak);
+                                      lulitusMapParem =
+                                          LulitusParemVaartustamine(hindAVG,
+                                              lulitus, lulitusMapParem);
+                                    });
+                                  },
+                                  decoration: InputDecoration(
+                                    border: InputBorder.none,
+                                    isDense: true,
+                                    hintText: valitudTunnid.toString(),
+                                    contentPadding:
+                                        EdgeInsets.symmetric(vertical: 3.0),
+                                  ),
+                                  style: font),
+                            ),
                           ),
                         ),
                       ],

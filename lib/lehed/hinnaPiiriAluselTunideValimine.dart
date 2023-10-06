@@ -436,27 +436,37 @@ class _HinnaPiiriAluselTundideValimineState
                           child: Container(
                             height: 20,
                             width: 45,
-                            child: TextField(
-                                keyboardType: TextInputType.number,
-                                onSubmitted: (value) {
-                                  setState(() {
-                                    hinnaPiir = double.tryParse(value) ?? 0;
-                                    lulitusMapParemHP =
-                                        LulitusMapParemVaartustamine(hinnaPiir,
-                                            lulitus, lulitusMapParemHP);
-                                    lulitusMapVasakHP =
-                                        LulitusMapVasakVaartustamine(hinnaPiir,
-                                            lulitus, lulitusMapVasakHP);
-                                  });
-                                },
-                                decoration: InputDecoration(
-                                  border: InputBorder.none,
-                                  isDense: true,
-                                  hintText: hinnaPiir.toString(),
-                                  contentPadding:
-                                      EdgeInsets.symmetric(vertical: 3.0),
-                                ),
-                                style: font),
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Colors.grey),
+                              borderRadius: BorderRadius.circular(4.0),
+                            ),
+                            child: Center(
+                              child: TextField(
+                                  keyboardType: TextInputType.number,
+                                  onSubmitted: (value) {
+                                    setState(() {
+                                      hinnaPiir = double.tryParse(value) ?? 0;
+                                      lulitusMapParemHP =
+                                          LulitusMapParemVaartustamine(
+                                              hinnaPiir,
+                                              lulitus,
+                                              lulitusMapParemHP);
+                                      lulitusMapVasakHP =
+                                          LulitusMapVasakVaartustamine(
+                                              hinnaPiir,
+                                              lulitus,
+                                              lulitusMapVasakHP);
+                                    });
+                                  },
+                                  decoration: InputDecoration(
+                                    border: InputBorder.none,
+                                    isDense: true,
+                                    hintText: hinnaPiir.toString(),
+                                    contentPadding:
+                                        EdgeInsets.symmetric(vertical: 3.0),
+                                  ),
+                                  style: font),
+                            ),
                           ),
                         ),
                       ],
