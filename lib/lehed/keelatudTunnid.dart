@@ -33,6 +33,7 @@ class _KeelatudTunnidState extends State<KeelatudTunnid> {
   int koduindex = 1;
   Set<int> _selectedHours = {};
   Color valitudvarv = Colors.red;
+  String valitudSuund = 'Lubatud';
 
   @override
   void initState() {
@@ -43,23 +44,35 @@ class _KeelatudTunnidState extends State<KeelatudTunnid> {
     } else {
       valitudvarv = Colors.green;
     }
+
+    if (luba == 'ei') {
+      valitudSuund = 'Keelatud';
+    } else {
+      valitudSuund = 'Lubatud';
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        toolbarHeight: 40,
         automaticallyImplyLeading: false,
-        backgroundColor: Color.fromARGB(255, 115, 162, 195),
+        backgroundColor: Colors.white,
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text('$luba tundide valimine'),
+            Text(
+              '$valitudSuund tundide valimine',
+              style: font,
+            ),
           ],
         ),
       ),
       body: ListView.separated(
-        separatorBuilder: (BuildContext context, int index) => const Divider(),
+        separatorBuilder: (BuildContext context, int index) => const Divider(
+          color: Colors.transparent,
+        ),
         padding: const EdgeInsets.all(8),
         itemCount: 24,
         itemBuilder: (BuildContext context, int index) {

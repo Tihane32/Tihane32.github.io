@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:testuus4/lehed/GraafikusseSeadmeteValik.dart';
 import 'package:testuus4/lehed/dynamicKoduLeht.dart';
@@ -38,6 +39,7 @@ class _AutoTundideValikState extends State<AutoTundideValik> {
   String selectedPage = 'Kopeeri graafik';
   double vahe = 10;
   int valitudTunnid = 10;
+  double hinnapiir = 50.50;
   Color boxColor = sinineKast;
   bool _notificationsEnabled = false;
   String _selectedTheme = 'Odavaimad Tunnid';
@@ -70,7 +72,10 @@ class _AutoTundideValikState extends State<AutoTundideValik> {
         body: ListView(
           children: <Widget>[
             ListTile(
-              title: Text('Saada teavitus kui seade ei ole kättesaadav'),
+              title: Text(
+                'Saada teavitus kui seade ei ole kättesaadav',
+                style: font,
+              ),
               trailing: Switch(
                 value: _notificationsEnabled,
                 onChanged: (bool value) {
@@ -81,7 +86,10 @@ class _AutoTundideValikState extends State<AutoTundideValik> {
               ),
             ),
             ListTile(
-              title: Text('Kestus: $readableDuration'),
+              title: Text(
+                'Kestus: $readableDuration',
+                style: font,
+              ),
               subtitle: Slider(
                 value: _selectedDuration,
                 onChanged: (newValue) {
@@ -96,47 +104,79 @@ class _AutoTundideValikState extends State<AutoTundideValik> {
               ),
             ),
             ListTile(
-              title: Text('Vali lülitusgraafiku koostamis algoritm'),
+              title: Text(
+                'Lülitusgraafiku koostamis algoritm',
+                style: font,
+              ),
               trailing: Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
                   color: boxColor,
                 ),
                 padding: EdgeInsets.symmetric(horizontal: 10),
-                child: DropdownButton<String>(
-                  style: font,
-                  dropdownColor: sinineKast,
-                  borderRadius: borderRadius,
-                  underline: Container(),
-                  value: _selectedTheme,
-                  onChanged: (lylitusViis) {
-                    setState(() {
-                      _selectedTheme = lylitusViis!;
-                    });
-                  },
-                  items: <String>[
-                    'Odavaimad Tunnid',
-                    'Hinnapiir',
-                    'Minu eelistusd',
-                  ].map<DropdownMenuItem<String>>((String value) {
-                    return DropdownMenuItem<String>(
-                      value: value,
-                      child: Text(value),
-                    );
-                  }).toList(),
+                child: DropdownButtonHideUnderline(
+                  child: DropdownButton<String>(
+                    style: font,
+                    dropdownColor: sinineKast,
+                    borderRadius: borderRadius,
+                    value: _selectedTheme,
+                    onChanged: (lylitusViis) {
+                      setState(() {
+                        _selectedTheme = lylitusViis!;
+                      });
+                    },
+                    items: <String>[
+                      'Odavaimad Tunnid',
+                      'Hinnapiir',
+                      'Minu eelistusd',
+                    ].map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value),
+                      );
+                    }).toList(),
+                  ),
                 ),
               ),
             ),
             Visibility(
               visible: _selectedTheme == 'Odavaimad Tunnid',
               child: ListTile(
-                title: Text('Sisesta soovitud tundide arv'),
+                title: Text(
+                  'Soovitud tundide arv',
+                  style: font,
+                ),
                 trailing: Container(
-                  width: 100,
-                  child: TextField(
-                    controller: _textController,
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(),
+                  width: 40,
+                  height: 40,
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.grey),
+                    borderRadius: BorderRadius.circular(4.0),
+                  ),
+                  child: Center(
+                    // Center the TextField vertically in the increased-height Container
+                    child: TextField(
+                      keyboardType: TextInputType.number,
+                      inputFormatters: [
+                        FilteringTextInputFormatter.digitsOnly,
+                      ],
+                      onSubmitted: (value) {
+                        setState(() {
+                          int parsedValue = int.tryParse(value) ?? 0;
+                          if (parsedValue > 24) {
+                            parsedValue = 24;
+                          }
+                          valitudTunnid = parsedValue;
+                        });
+                      },
+                      decoration: InputDecoration(
+                        border: InputBorder.none,
+                        isDense: true,
+                        hintText: valitudTunnid.toString(),
+                        contentPadding: EdgeInsets.symmetric(
+                            vertical: 3.0, horizontal: 8.0),
+                      ),
+                      style: font,
                     ),
                   ),
                 ),
@@ -145,20 +185,51 @@ class _AutoTundideValikState extends State<AutoTundideValik> {
             Visibility(
               visible: _selectedTheme == 'Hinnapiir',
               child: ListTile(
-                title: Text('Sisesta hinnapiir'),
+                title: Text(
+                  'hinnapiir',
+                  style: font,
+                ),
                 trailing: Container(
-                  width: 100,
-                  child: TextField(
-                    controller: _textController,
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(),
+                  width: 60,
+                  height: 40,
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.grey),
+                    borderRadius: BorderRadius.circular(4.0),
+                  ),
+                  child: Center(
+                    // Center the TextField vertically in the increased-height Container
+                    child: TextField(
+                      keyboardType: TextInputType.number,
+                      inputFormatters: [
+                        FilteringTextInputFormatter.digitsOnly,
+                      ],
+                      onSubmitted: (value) {
+                        setState(() {
+                          double parsedValue = double.tryParse(value) ?? 0;
+                          if (parsedValue > 24) {
+                            parsedValue = 24;
+                          }
+                          hinnapiir = parsedValue;
+                        });
+                      },
+                      decoration: InputDecoration(
+                        border: InputBorder.none,
+                        isDense: true,
+                        hintText: hinnapiir.toString(),
+                        contentPadding: EdgeInsets.symmetric(
+                            vertical: 3.0, horizontal: 8.0),
+                      ),
+                      style: font,
                     ),
                   ),
                 ),
               ),
             ),
             ListTile(
-                title: Text('Vali tunnid kus seade peab töötama'),
+                title: Text(
+                  'Tunnid kus seade peab töötama',
+                  style: font,
+                ),
                 trailing: IconButton(
                     onPressed: () {
                       Navigator.push(
@@ -176,7 +247,10 @@ class _AutoTundideValikState extends State<AutoTundideValik> {
                       size: 30,
                     ))),
             ListTile(
-                title: Text('Vali tunnid kus seade ei tohi töödata'),
+                title: Text(
+                  'Tunnid kus seade ei tohi töödata',
+                  style: font,
+                ),
                 trailing: IconButton(
                     onPressed: () {
                       Navigator.push(
