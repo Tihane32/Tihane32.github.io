@@ -1,17 +1,8 @@
-import 'dart:async';
-import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:testuus4/lehed/GraafikusseSeadmeteValik.dart';
-import 'package:testuus4/lehed/dynamicKoduLeht.dart';
-import 'package:testuus4/lehed/keskimiseHinnaAluselTundideValimine.dart';
-import '../funktsioonid/seisukord.dart';
+import 'package:flutter/services.dart';
 import '../main.dart';
-import 'AbiLeht.dart';
-import 'hinnaPiiriAluselTunideValimine.dart';
-import 'package:http/http.dart' as http;
-
-import 'keelatudTunnid.dart';
+import 'DynaamilineTundideValimine.dart';
+import 'package:intl/intl.dart';
 
 class AutoTundideValik extends StatefulWidget {
   final Function updateValitudSeadmed;
@@ -37,29 +28,45 @@ class _AutoTundideValikState extends State<AutoTundideValik> {
   String selectedPage = 'Kopeeri graafik';
   double vahe = 10;
   int valitudTunnid = 10;
+  double hinnapiir = 50.50;
   Color boxColor = sinineKast;
   bool _notificationsEnabled = false;
   String _selectedTheme = 'Odavaimad Tunnid';
-  double _selectedDuration = 7;
-  Map<double, String> _durationMap = {
-    1: '1 päeva',
+  double tootamisAeg = 7;
+  Map<double, String> tootamisMap = {
+    1: '1 päev',
     2: '2 päeva',
     3: '3 päeva',
     4: '4 päeva',
     5: '5 päeva',
     6: '6 päeva',
-    7: '1 nädalat',
+    7: '1 nädal',
     8: '2 nädalat',
     9: '3 nädalat',
-    10: '1 kuud',
+    10: '1 kuu',
     11: '2 kuud',
     12: '3 kuud',
     13: 'pool aastat',
     14: 'igavesti',
   };
-  Set<int> _selectedHours = {};
+  double bufferPerjood = 3;
+  Map<double, String> bufferMap = {
+    1: 'puudub',
+    2: '2 tundi',
+    3: '3 tundi',
+    4: '4 tundi',
+    5: '5 tundi',
+    6: '6 tundi',
+    7: '8 tundi',
+    8: '10 tundi',
+    9: '12 tundi',
+    10: '1 päev',
+    11: '2 päeva',
+    12: '3 päeva',
+  };
   TextEditingController _textController = TextEditingController();
-  String? get readableDuration => _durationMap[_selectedDuration];
+  DateTime? holidayStart;
+  DateTime? holidayEnd;
 
   @override
   Widget build(BuildContext context) {
@@ -69,7 +76,10 @@ class _AutoTundideValikState extends State<AutoTundideValik> {
         body: ListView(
           children: <Widget>[
             ListTile(
-              title: Text('Saada teavitus kui seade ei ole kättesaadav'),
+              title: Text(
+                'Saada teavitus kui seade ei ole kättesaadav',
+                style: font,
+              ),
               trailing: Switch(
                 value: _notificationsEnabled,
                 onChanged: (bool value) {
@@ -80,51 +90,98 @@ class _AutoTundideValikState extends State<AutoTundideValik> {
               ),
             ),
             ListTile(
-              title: Text('Kestus: $readableDuration'),
+              title: Text(
+                'Automaatjuhtimise kestus: ${tootamisMap[tootamisAeg]}',
+                style: font,
+              ),
               subtitle: Slider(
-                value: _selectedDuration,
+                value: tootamisAeg,
                 onChanged: (newValue) {
                   setState(() {
-                    _selectedDuration = newValue;
+                    tootamisAeg = newValue;
                   });
                 },
                 divisions: 13,
                 min: 1,
                 max: 14,
-                label: readableDuration,
+                label: tootamisMap[tootamisAeg],
               ),
             ),
             ListTile(
-              title: Text('Vali lülitusgraafiku koostamis algoritm'),
-              trailing: DropdownButton<String>(
-                value: _selectedTheme,
-                onChanged: (lylitusViis) {
-                  setState(() {
-                    _selectedTheme = lylitusViis!;
-                  });
-                },
-                items: <String>[
-                  'Odavaimad Tunnid',
-                  'Hinnapiir',
-                  'Minu eelistusd',
-                ].map<DropdownMenuItem<String>>((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value),
-                  );
-                }).toList(),
+              title: Text(
+                'Lülitusgraafiku koostamis algoritm',
+                style: font,
+              ),
+              trailing: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: boxColor,
+                ),
+                padding: EdgeInsets.symmetric(horizontal: 10),
+                child: DropdownButtonHideUnderline(
+                  child: DropdownButton<String>(
+                    style: font,
+                    dropdownColor: sinineKast,
+                    borderRadius: borderRadius,
+                    value: _selectedTheme,
+                    onChanged: (lylitusViis) {
+                      setState(() {
+                        _selectedTheme = lylitusViis!;
+                      });
+                    },
+                    items: <String>[
+                      'Odavaimad Tunnid',
+                      'Hinnapiir',
+                      'Minu eelistusd',
+                      'Tarbimis muster',
+                    ].map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value),
+                      );
+                    }).toList(),
+                  ),
+                ),
               ),
             ),
             Visibility(
               visible: _selectedTheme == 'Odavaimad Tunnid',
               child: ListTile(
-                title: Text('Vali tunnid kus vool peab tagatud olema'),
+                title: Text(
+                  'Soovitud tundide arv',
+                  style: font,
+                ),
                 trailing: Container(
-                  width: 100,
-                  child: TextField(
-                    controller: _textController,
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(),
+                  width: 40,
+                  height: 40,
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.grey),
+                    borderRadius: BorderRadius.circular(4.0),
+                  ),
+                  child: Center(
+                    // Center the TextField vertically in the increased-height Container
+                    child: TextField(
+                      keyboardType: TextInputType.number,
+                      inputFormatters: [
+                        FilteringTextInputFormatter.digitsOnly,
+                      ],
+                      onSubmitted: (value) {
+                        setState(() {
+                          int parsedValue = int.tryParse(value) ?? 0;
+                          if (parsedValue > 24) {
+                            parsedValue = 24;
+                          }
+                          valitudTunnid = parsedValue;
+                        });
+                      },
+                      decoration: InputDecoration(
+                        border: InputBorder.none,
+                        isDense: true,
+                        hintText: valitudTunnid.toString(),
+                        contentPadding: EdgeInsets.symmetric(
+                            vertical: 3.0, horizontal: 8.0),
+                      ),
+                      style: font,
                     ),
                   ),
                 ),
@@ -133,31 +190,151 @@ class _AutoTundideValikState extends State<AutoTundideValik> {
             Visibility(
               visible: _selectedTheme == 'Hinnapiir',
               child: ListTile(
-                title: Text('Vali tunnid kus vool peab tagatud olema'),
+                title: Text(
+                  'hinnapiir',
+                  style: font,
+                ),
                 trailing: Container(
-                  width: 100,
-                  child: TextField(
-                    controller: _textController,
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(),
+                  width: 60,
+                  height: 40,
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.grey),
+                    borderRadius: BorderRadius.circular(4.0),
+                  ),
+                  child: Center(
+                    // Center the TextField vertically in the increased-height Container
+                    child: TextField(
+                      keyboardType: TextInputType.number,
+                      inputFormatters: [
+                        FilteringTextInputFormatter.digitsOnly,
+                      ],
+                      onSubmitted: (value) {
+                        setState(() {
+                          double parsedValue = double.tryParse(value) ?? 0;
+                          if (parsedValue > 24) {
+                            parsedValue = 24;
+                          }
+                          hinnapiir = parsedValue;
+                        });
+                      },
+                      decoration: InputDecoration(
+                        border: InputBorder.none,
+                        isDense: true,
+                        hintText: hinnapiir.toString(),
+                        contentPadding: EdgeInsets.symmetric(
+                            vertical: 3.0, horizontal: 8.0),
+                      ),
+                      style: font,
                     ),
                   ),
                 ),
               ),
             ),
             ListTile(
-                title: Text('Vali tunnid kus vool peab tagatud olema'),
+                title: Text(
+                  'Tunnid kus seade peab töötama',
+                  style: font,
+                ),
                 trailing: IconButton(
                     onPressed: () {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) =>
-                              KeelatudTunnid(valitudSeadmed: valitudSeadmed),
-                        ),
+                            builder: (context) => DynamilineTundideValimine(
+                                valitudSeadmed: valitudSeadmed,
+                                i: 4,
+                                luba: 'jah')),
                       );
                     },
-                    icon: Icon(Icons.more_time_rounded))),
+                    icon: Icon(
+                      Icons.more_time_rounded,
+                      color: Colors.green,
+                      size: 30,
+                    ))),
+            ListTile(
+                title: Text(
+                  'Tunnid kus seade ei tohi töödata',
+                  style: font,
+                ),
+                trailing: IconButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => DynamilineTundideValimine(
+                                valitudSeadmed: valitudSeadmed,
+                                i: 4,
+                                luba: 'ei')),
+                      );
+                    },
+                    icon: Icon(
+                      Icons.more_time_rounded,
+                      color: Colors.red,
+                      size: 30,
+                    ))),
+            ListTile(
+              title: Text(
+                'Puhkuse periood: \n ${holidayStart == null ? '-' : DateFormat('dd.MM.yyyy').format(holidayStart!)} kuni ${holidayEnd == null ? '-' : DateFormat('dd.MM.yyyy').format(holidayEnd!)}',
+                style: font,
+              ),
+              trailing: Row(
+                mainAxisSize: MainAxisSize
+                    .min, // Required to prevent the Row from expanding
+                children: [
+                  ElevatedButton(
+                    child: Text('Algus'),
+                    onPressed: () async {
+                      DateTime? pickedDate = await showDatePicker(
+                        context: context,
+                        initialDate: DateTime.now(),
+                        firstDate: DateTime(2000),
+                        lastDate: DateTime(2100),
+                      );
+                      if (pickedDate != null && pickedDate != holidayStart) {
+                        setState(() {
+                          holidayStart = pickedDate;
+                        });
+                      }
+                    },
+                  ),
+                  SizedBox(width: 8), // Spacing between the buttons
+                  ElevatedButton(
+                    child: Text('Lõpp'),
+                    onPressed: () async {
+                      DateTime? pickedDate = await showDatePicker(
+                        context: context,
+                        initialDate: DateTime.now(),
+                        firstDate: DateTime(2000),
+                        lastDate: DateTime(2100),
+                      );
+                      if (pickedDate != null && pickedDate != holidayEnd) {
+                        setState(() {
+                          holidayEnd = pickedDate;
+                        });
+                      }
+                    },
+                  ),
+                ],
+              ),
+            ),
+            ListTile(
+              title: Text(
+                'Enne saabumist töötamise aeg: ${bufferMap[bufferPerjood]}',
+                style: font,
+              ),
+              subtitle: Slider(
+                value: bufferPerjood,
+                onChanged: (newValue) {
+                  setState(() {
+                    bufferPerjood = newValue;
+                  });
+                },
+                divisions: 11,
+                min: 1,
+                max: 12,
+                label: bufferMap[bufferPerjood],
+              ),
+            ),
           ],
         ),
       ),
