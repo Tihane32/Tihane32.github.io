@@ -407,23 +407,22 @@ class _MGraafikState extends State<MGraafik> {
                                     context: context,
                                     builder: (context) {
                                       return FractionallySizedBox(
-                                        heightFactor: 0.5,
-                                        widthFactor: 1.0,
+                                        heightFactor: 0.8,
+                                        widthFactor: 0.8,
                                         child: Material(
                                           color: Colors.white,
-                                          child: Container(
-                                            height: MediaQuery.of(context).size.height*0.5,
-                                            width: MediaQuery.of(context).size.width,
-                                            child: SingleChildScrollView(
-                                              scrollDirection: Axis.horizontal,
+                                         borderRadius: BorderRadius.circular(10),
+                                            //height: MediaQuery.of(context).size.height*0.5,
+                                            //width: MediaQuery.of(context).size.width,
+                                     
                                               child: PaevaTarbimine(
                                                 date: dateTimes[rowIndex].toString(),
                                                 value: widget.value,
                                                 rowIndex: rowIndex,
                                                 paevaMaksumus: paevaMaksumus
                                               ),
-                                            ),
-                                          ),
+                                           
+                                          
                                         ),
                                       );
                                     },

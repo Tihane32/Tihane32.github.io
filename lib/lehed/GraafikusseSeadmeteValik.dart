@@ -40,8 +40,9 @@ class _SeadmeteListValimineState extends State<SeadmeteListValimine> {
     });
   }
 
-  Future _submitForm() async {
+  _submitForm() async {
     await SeadmeGraafikKontrollimineGen1();
+
     //await prefs.clear();
 
     /* minuSeadmedK.addAll(ajutineMap);
@@ -54,9 +55,10 @@ class _SeadmeteListValimineState extends State<SeadmeteListValimine> {
   }
 
   @override
-  void initState() {
+  initState() {
+    //_submitForm();
     ValitudSeadmed = valitudSeadmeteNullimine();
-    _submitForm;
+
     super.initState();
   }
 
@@ -512,6 +514,7 @@ SeadmeGraafikKoostamineGen2(
     }
     jobs = resJSON['data']['jobs'] as List<dynamic>;
     int k = 0;
+    print(res.body);
     for (var job in jobs) {
       DateTime now = DateTime.now();
 
@@ -550,7 +553,7 @@ SeadmeGraafikKontrollimineGen1() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   String? storedKey = prefs.getString('key');
   String storedKeyString = jsonDecode(storedKey!);
-
+  String graafik = '';
   seadmeteMap.forEach((key, value) async {
     if (value['Seadme_generatsioon'] == 1) {
       var headers = {
@@ -567,7 +570,6 @@ SeadmeGraafikKontrollimineGen1() async {
 
       var res = await http.post(url, headers: headers, body: data);
 
-      await Future.delayed(const Duration(seconds: 2));
       //Kui post läheb läbi siis:
 
       final httpPackageJson = json.decode(res.body) as Map<String, dynamic>;
@@ -592,10 +594,14 @@ SeadmeGraafikKontrollimineGen1() async {
 
       if (grafikOlems) {
         seadmeteMap[key]["Graafik"] = 'jah';
+        print('siin jaa');
+        graafik = 'jah';
         //return 'jah';
       } else {
         //return 'ei';
         seadmeteMap[key]["Graafik"] = 'ei';
+        print('siin ei');
+        graafik = 'ei';
       }
     }
   });
