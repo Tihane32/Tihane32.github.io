@@ -296,165 +296,263 @@ class _SeadmeGraafikuLehtState extends State<SeadmeGraafikuLeht> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(automaticallyImplyLeading: false,backgroundColor: Colors.white,title:  Column(
-        children: [
-          SizedBox(height: vahe / 2),
-          Center(
-            child: Column(
-              children: [
-                Center(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Center(
-                          child: GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            if (tana == valge) {
-                              lulitus = lulitusTana;
-                              tana = green;
-                              tanaFont = fontValge;
-                              homme = valge;
-                              hommeFont = font;
-                              hindMax = maxLeidmine(lulitus);
-                              hindMin = minLeidmine(lulitus);
-                              hindAVG = keskmineHindArvutaus(lulitus);
-                              keskHind = keskmineHindMapVaartustamine(
-                                  hindAVG, keskHind, lulitus);
-                              temp = hindAVG / 4;
-                              if (temp < 40 && hindAVG > 40) {
-                                temp = 40;
-                              } else if (hindAVG < 40) {
-                                temp = hindAVG / 2;
-                              }
-                              HapticFeedback.vibrate();
-                            } /*else {
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        backgroundColor: Colors.white,
+        title: Column(
+          children: [
+            SizedBox(height: vahe / 2),
+            Center(
+              child: Column(
+                children: [
+                  Center(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Center(
+                            child: GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              if (tana == valge) {
+                                lulitus = lulitusTana;
+                                tana = green;
+                                tanaFont = fontValge;
+                                homme = valge;
+                                hommeFont = font;
+                                hindMax = maxLeidmine(lulitus);
+                                hindMin = minLeidmine(lulitus);
+                                hindAVG = keskmineHindArvutaus(lulitus);
+                                keskHind = keskmineHindMapVaartustamine(
+                                    hindAVG, keskHind, lulitus);
+                                temp = hindAVG / 4;
+                                if (temp < 40 && hindAVG > 40) {
+                                  temp = 40;
+                                } else if (hindAVG < 40) {
+                                  temp = hindAVG / 2;
+                                }
+                                HapticFeedback.vibrate();
+                              } /*else {
                           lulitus = lulitusHomme;
                           tana = valge;
                           tanaFont = font;
                           homme = green;
                           hommeFont = fontValge;
                         }*/
-                          });
-                        },
-                        child: Container(
-                          width: 100,
-                          height: 30,
-                          decoration: BoxDecoration(
-                              color: tana,
-                              borderRadius: BorderRadius.circular(20.0),
-                              border: Border.all(
-                                color: Colors.green,
-                                width: 3,
-                              )),
-                          child: Center(
-                              child: RichText(
-                            text: TextSpan(
-                              text: 'Täna',
-                              style: tanaFont,
-                            ),
-                            textAlign: TextAlign.center,
-                          )),
-                        ),
-                      )),
-                      Center(
-                          child: hommeNahtav
-                              ? GestureDetector(
-                                  onTap: () {
-                                    setState(() {
-                                      if (homme == valge) {
-                                        lulitus = lulitusHomme;
-                                        homme = green;
-                                        hommeFont = fontValge;
-                                        tana = valge;
-                                        tanaFont = font;
-                                        hindMax = maxLeidmine(lulitus);
-                                        hindMin = minLeidmine(lulitus);
-                                        hindAVG =
-                                            keskmineHindArvutaus(lulitus);
-                                        keskHind =
-                                            keskmineHindMapVaartustamine(
-                                                hindAVG, keskHind, lulitus);
-                                        temp = hindAVG / 4;
-                                        if (temp < 40 && hindAVG > 40) {
-                                          temp = 40;
-                                        } else if (hindAVG < 40) {
-                                          temp = hindAVG / 2;
-                                        }
-                                        HapticFeedback.vibrate();
-                                      } /*else {
+                            });
+                          },
+                          child: Container(
+                            width: 100,
+                            height: 30,
+                            decoration: BoxDecoration(
+                                color: tana,
+                                borderRadius: BorderRadius.circular(20.0),
+                                border: Border.all(
+                                  color: Colors.green,
+                                  width: 3,
+                                )),
+                            child: Center(
+                                child: RichText(
+                              text: TextSpan(
+                                text: 'Täna',
+                                style: tanaFont,
+                              ),
+                              textAlign: TextAlign.center,
+                            )),
+                          ),
+                        )),
+                        Center(
+                            child: hommeNahtav
+                                ? GestureDetector(
+                                    onTap: () {
+                                      setState(() {
+                                        if (homme == valge) {
+                                          lulitus = lulitusHomme;
+                                          homme = green;
+                                          hommeFont = fontValge;
+                                          tana = valge;
+                                          tanaFont = font;
+                                          hindMax = maxLeidmine(lulitus);
+                                          hindMin = minLeidmine(lulitus);
+                                          hindAVG =
+                                              keskmineHindArvutaus(lulitus);
+                                          keskHind =
+                                              keskmineHindMapVaartustamine(
+                                                  hindAVG, keskHind, lulitus);
+                                          temp = hindAVG / 4;
+                                          if (temp < 40 && hindAVG > 40) {
+                                            temp = 40;
+                                          } else if (hindAVG < 40) {
+                                            temp = hindAVG / 2;
+                                          }
+                                          HapticFeedback.vibrate();
+                                        } /*else {
                             lulitus = lulitusTana;
                             homme = valge;
                             hommeFont = font;
                             tana = green;
                             tanaFont = fontValge;
                           }*/
-                                    });
-                                  },
-                                  child: Container(
-                                    width: 100,
-                                    height: 30,
-                                    decoration: BoxDecoration(
-                                        color: homme,
-                                        borderRadius:
-                                            BorderRadius.circular(30.0),
-                                        border: Border.all(
-                                          color: Colors.green,
-                                          width: 3,
-                                        )),
-                                    child: Center(
-                                        child: RichText(
-                                      text: TextSpan(
-                                        text: 'Homme',
-                                        style: hommeFont,
-                                      ),
-                                      textAlign: TextAlign.center,
-                                    )),
-                                  ),
-                                )
-                              : GestureDetector(
-                                  onTap: () {
-                                    showDialog(
-                                        context: context,
-                                        builder: (context) => AlertDialog(
-                                              title: Text(
-                                                  'Homne graafik ei ole hetkel kättesaadav\nProovige uuesti kell 15.00'),
-                                            ));
-                                  },
-                                  child: Container(
-                                    width: 100,
-                                    height: 30,
-                                    decoration: BoxDecoration(
-                                        color: Color.fromARGB(
-                                            255, 209, 205, 205),
-                                        borderRadius:
-                                            BorderRadius.circular(30.0),
-                                        border: Border.all(
+                                      });
+                                    },
+                                    child: Container(
+                                      width: 100,
+                                      height: 30,
+                                      decoration: BoxDecoration(
+                                          color: homme,
+                                          borderRadius:
+                                              BorderRadius.circular(30.0),
+                                          border: Border.all(
+                                            color: Colors.green,
+                                            width: 3,
+                                          )),
+                                      child: Center(
+                                          child: RichText(
+                                        text: TextSpan(
+                                          text: 'Homme',
+                                          style: hommeFont,
+                                        ),
+                                        textAlign: TextAlign.center,
+                                      )),
+                                    ),
+                                  )
+                                : GestureDetector(
+                                    onTap: () {
+                                      showDialog(
+                                          context: context,
+                                          builder: (context) => AlertDialog(
+                                                title: Text(
+                                                    'Homne graafik ei ole hetkel kättesaadav\nProovige uuesti kell 15.00'),
+                                              ));
+                                    },
+                                    child: Container(
+                                      width: 100,
+                                      height: 30,
+                                      decoration: BoxDecoration(
                                           color: Color.fromARGB(
-                                              255, 12, 12, 12),
-                                          width: 3,
-                                        )),
-                                    child: Center(
-                                        child: RichText(
-                                      text: TextSpan(
-                                          text: 'Homme', style: font),
+                                              255, 209, 205, 205),
+                                          borderRadius:
+                                              BorderRadius.circular(30.0),
+                                          border: Border.all(
+                                            color:
+                                                Color.fromARGB(255, 12, 12, 12),
+                                            width: 3,
+                                          )),
+                                      child: Center(
+                                          child: RichText(
+                                        text: TextSpan(
+                                            text: 'Homme', style: font),
+                                        textAlign: TextAlign.center,
+                                      )),
+                                    ),
+                                  ))
+                      ],
+                    ),
+                  ),
+                  Center(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Align(
+                          alignment: Alignment.center,
+                          child: Container(
+                            alignment: Alignment.center,
+                            //width: 200,
+                            child: Center(
+                              child: Column(
+                                children: [
+                                  Align(
+                                    child: Container(
+                                      alignment: Alignment.center,
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                      ),
+                                      //width: sinineKastLaius,
+                                      //height: sinineKastKorgus,
+                                      child: RichText(
+                                        text: TextSpan(
+                                          style: fontVaike,
+                                          children: [
+                                            TextSpan(
+                                                text: '€/MWh',
+                                                style: fontVaike),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                        Align(
+                          alignment: Alignment.center,
+                          child: Container(
+                            alignment: Alignment.center,
+                            //width: 200,
+                            child: Center(
+                              child: Column(
+                                children: [
+                                  Align(
+                                    child: Container(
+                                      alignment: Alignment.center,
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                      ),
+                                      //width: sinineKastLaius,
+                                      //height: sinineKastKorgus,
+                                      child: RichText(
+                                        text: TextSpan(
+                                          style: fontVaike,
+                                          children: [
+                                            TextSpan(
+                                                text: 'Min: $hindMin',
+                                                style: fontVaike),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                        Align(
+                          alignment: Alignment.center,
+                          child: Container(
+                            //width: 200,
+                            child: Column(
+                              children: [
+                                Align(
+                                  child: Container(
+                                    alignment: Alignment.center,
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                    ),
+                                    //width: sinineKastLaius,
+                                    //height: sinineKastKorgus,
+                                    child: RichText(
                                       textAlign: TextAlign.center,
-                                    )),
+                                      text: TextSpan(
+                                        style: fontVaikePunane,
+                                        children: [
+                                          TextSpan(
+                                              text: 'Kesk: $hindAVG',
+                                              style: fontVaikePunane),
+                                        ],
+                                      ),
+                                    ),
                                   ),
-                                ))
-                    ],
-                  ),
-                ),
-                Center(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Align(
-                        alignment: Alignment.center,
-                        child: Container(
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        Align(
                           alignment: Alignment.center,
-                          //width: 200,
-                          child: Center(
+                          child: Container(
+                            //width: 200,
                             child: Column(
                               children: [
                                 Align(
@@ -470,7 +568,7 @@ class _SeadmeGraafikuLehtState extends State<SeadmeGraafikuLeht> {
                                         style: fontVaike,
                                         children: [
                                           TextSpan(
-                                              text: '€/MWh',
+                                              text: 'Max: $hindMax',
                                               style: fontVaike),
                                         ],
                                       ),
@@ -481,106 +579,11 @@ class _SeadmeGraafikuLehtState extends State<SeadmeGraafikuLeht> {
                             ),
                           ),
                         ),
-                      ),
-                      Align(
-                        alignment: Alignment.center,
-                        child: Container(
-                          alignment: Alignment.center,
-                          //width: 200,
-                          child: Center(
-                            child: Column(
-                              children: [
-                                Align(
-                                  child: Container(
-                                    alignment: Alignment.center,
-                                    decoration: BoxDecoration(
-                                      color: Colors.white,
-                                    ),
-                                    //width: sinineKastLaius,
-                                    //height: sinineKastKorgus,
-                                    child: RichText(
-                                      text: TextSpan(
-                                        style: fontVaike,
-                                        children: [
-                                          TextSpan(
-                                              text: 'Min: $hindMin',
-                                              style: fontVaike),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                      Align(
-                        alignment: Alignment.center,
-                        child: Container(
-                          //width: 200,
-                          child: Column(
-                            children: [
-                              Align(
-                                child: Container(
-                                  alignment: Alignment.center,
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                  ),
-                                  //width: sinineKastLaius,
-                                  //height: sinineKastKorgus,
-                                  child: RichText(
-                                    textAlign: TextAlign.center,
-                                    text: TextSpan(
-                                      style: fontVaikePunane,
-                                      children: [
-                                        TextSpan(
-                                            text: 'Kesk: $hindAVG',
-                                            style: fontVaikePunane),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      Align(
-                        alignment: Alignment.center,
-                        child: Container(
-                          //width: 200,
-                          child: Column(
-                            children: [
-                              Align(
-                                child: Container(
-                                  alignment: Alignment.center,
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                  ),
-                                  //width: sinineKastLaius,
-                                  //height: sinineKastKorgus,
-                                  child: RichText(
-                                    text: TextSpan(
-                                      style: fontVaike,
-                                      children: [
-                                        TextSpan(
-                                            text: 'Max: $hindMax',
-                                            style: fontVaike),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
 
-                /*Center(
+                  /*Center(
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
@@ -607,11 +610,12 @@ class _SeadmeGraafikuLehtState extends State<SeadmeGraafikuLeht> {
                     ],
                   ),
                 ),*/
-              ],
+                ],
+              ),
             ),
-          ),
-        ],
-      ),),
+          ],
+        ),
+      ),
       body: Stack(children: [
         SingleChildScrollView(
           child: Container(
@@ -1027,7 +1031,8 @@ class _SeadmeGraafikuLehtState extends State<SeadmeGraafikuLeht> {
             ],
           ),
         ),
-        */Visibility(
+        */
+        Visibility(
           visible: kinnitusNahtav,
           child: Align(
             alignment: Alignment.bottomCenter,
