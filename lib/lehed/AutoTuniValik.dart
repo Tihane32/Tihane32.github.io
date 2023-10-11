@@ -50,24 +50,9 @@ class _AutoTundideValikState extends State<AutoTundideValik> {
     14: 'igavesti',
   };
   double bufferPerjood = 3;
-  Map<double, String> bufferMap = {
-    1: 'puudub',
-    2: '2 tundi',
-    3: '3 tundi',
-    4: '4 tundi',
-    5: '5 tundi',
-    6: '6 tundi',
-    7: '8 tundi',
-    8: '10 tundi',
-    9: '12 tundi',
-    10: '1 päev',
-    11: '2 päeva',
-    12: '3 päeva',
-  };
+  
   TextEditingController _textController = TextEditingController();
-  DateTime? holidayStart;
-  DateTime? holidayEnd;
-
+ 
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -272,69 +257,7 @@ class _AutoTundideValikState extends State<AutoTundideValik> {
                       color: Colors.red,
                       size: 30,
                     ))),
-            ListTile(
-              title: Text(
-                'Puhkuse periood: \n ${holidayStart == null ? '-' : DateFormat('dd.MM.yyyy').format(holidayStart!)} kuni ${holidayEnd == null ? '-' : DateFormat('dd.MM.yyyy').format(holidayEnd!)}',
-                style: font,
-              ),
-              trailing: Row(
-                mainAxisSize: MainAxisSize
-                    .min, // Required to prevent the Row from expanding
-                children: [
-                  ElevatedButton(
-                    child: Text('Algus'),
-                    onPressed: () async {
-                      DateTime? pickedDate = await showDatePicker(
-                        context: context,
-                        initialDate: DateTime.now(),
-                        firstDate: DateTime(2000),
-                        lastDate: DateTime(2100),
-                      );
-                      if (pickedDate != null && pickedDate != holidayStart) {
-                        setState(() {
-                          holidayStart = pickedDate;
-                        });
-                      }
-                    },
-                  ),
-                  SizedBox(width: 8), // Spacing between the buttons
-                  ElevatedButton(
-                    child: Text('Lõpp'),
-                    onPressed: () async {
-                      DateTime? pickedDate = await showDatePicker(
-                        context: context,
-                        initialDate: DateTime.now(),
-                        firstDate: DateTime(2000),
-                        lastDate: DateTime(2100),
-                      );
-                      if (pickedDate != null && pickedDate != holidayEnd) {
-                        setState(() {
-                          holidayEnd = pickedDate;
-                        });
-                      }
-                    },
-                  ),
-                ],
-              ),
-            ),
-            ListTile(
-              title: Text(
-                'Enne saabumist töötamise aeg: ${bufferMap[bufferPerjood]}',
-                style: font,
-              ),
-              subtitle: Slider(
-                value: bufferPerjood,
-                onChanged: (newValue) {
-                  setState(() {
-                    bufferPerjood = newValue;
-                  });
-                },
-                divisions: 11,
-                min: 1,
-                max: 12,
-                label: bufferMap[bufferPerjood],
-              ),
-            ),
+            
           ],
         ),
       ),

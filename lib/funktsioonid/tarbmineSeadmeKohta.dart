@@ -41,10 +41,13 @@ getTarbimine(String seadmeID, String algusPaev, String vahemik) async {
 
     if (historyData[i]['consumption'] == 0) {
       abi.add(0.0);
-    }else{
-      abi.add(historyData[i]['consumption']);
+    } else {
+      print(historyData[i]['consumption']);
+      var abi2 = historyData[i]['consumption'];
+      print(abi2);
+      abi.add(abi2.toDouble());
     }
-    
+
     i++;
   }
 

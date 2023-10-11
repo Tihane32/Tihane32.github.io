@@ -16,6 +16,7 @@ import 'lehed/seadmeteList.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:workmanager/workmanager.dart';
+import 'package:background_fetch/background_fetch.dart';
 
 //Maini käivitamine, home on koduleht.
 //bool graafikuNahtavus = true;
@@ -32,7 +33,7 @@ TextStyle fontSuur = GoogleFonts.roboto(
 TextStyle font = GoogleFonts.roboto(
     textStyle: const TextStyle(
         fontWeight: FontWeight.w500, fontSize: 18, color: Colors.black));
-        TextStyle fontHall = GoogleFonts.roboto(
+TextStyle fontHall = GoogleFonts.roboto(
     textStyle: const TextStyle(
         fontWeight: FontWeight.w500, fontSize: 18, color: Colors.black));
 TextStyle fontValge = GoogleFonts.roboto(
@@ -48,7 +49,7 @@ TextStyle fontValgeVaike = GoogleFonts.roboto(
 TextStyle fontVaike = GoogleFonts.roboto(
     textStyle: const TextStyle(
         fontWeight: FontWeight.w500, fontSize: 14, color: Colors.black));
-        TextStyle fontVaikePunane = GoogleFonts.roboto(
+TextStyle fontVaikePunane = GoogleFonts.roboto(
     textStyle: const TextStyle(
         fontWeight: FontWeight.w500, fontSize: 14, color: Colors.red));
 double sinineKastLaius = double.infinity;
@@ -102,6 +103,12 @@ Future<void> main() async {
     theme: ThemeData(brightness: Brightness.light),
     home: DynaamilenieKoduLeht(i: 1), //Alustab appi kodulehest
   ));
+  BackgroundFetch.registerHeadlessTask(backgroundFetchHeadlessTask);
+  BackgroundFetch.start().then((int status) {
+    print('[BackgroundFetch] start success: $status');
+  }).catchError((e) {
+    print('[BackgroundFetch] start FAILURE: $e');
+  });
 
   /*Workmanager().initialize(callbackDispatcher);
   Workmanager().registerPeriodicTask(
@@ -109,4 +116,14 @@ Future<void> main() async {
     "simplePeriodicTask",
     frequency: Duration(seconds: 5),
   );*/
+}
+
+backgroundFetchHeadlessTask(String taskId) async {
+  // Evaluate all the tasks which you want to perform in
+
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  prefs.setString('backround', taskId);
+  prefs.setString('kell', DateTime.now().toString());
+  BackgroundFetch.finish(taskId);
+  // write the code to be run in background BackgroundFetch.finish(taskId);
 }

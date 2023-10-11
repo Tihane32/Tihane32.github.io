@@ -15,31 +15,18 @@ class MaksumuseGraafik extends StatefulWidget {
 }
 
 class _MaksumuseGraafikState extends State<MaksumuseGraafik> {
-  Map<String, dynamic> SeadmeteMap = {};
+  
   List<ChartData> chartData = [];
   num kokku = 0;
   @override
   void initState() {
     super.initState();
     function();
-    getSeadmeteMap(SeadmeteMap);
+    
     print("chartdata $chartData");
   }
 
-  getSeadmeteMap(Map<String, dynamic> seadmeteMap) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    //await prefs.clear();
-
-    String? storedJsonMap = prefs.getString('seadmed');
-    if (storedJsonMap != null) {
-      storedJsonMap = prefs.getString('seadmed');
-      Map<String, dynamic> storedMap = json.decode(storedJsonMap!);
-
-      setState(() {
-        SeadmeteMap = storedMap;
-      });
-    }
-  }
+  
 
   function() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -168,8 +155,8 @@ class _MaksumuseGraafikState extends State<MaksumuseGraafik> {
                         context,
                         MaterialPageRoute(
                           builder: (context) => DunaamilineSeadmeLeht(
-                            seadmeNimi: SeadmeteMap.keys.elementAt(rowIndex!),
-                            SeadmeteMap: SeadmeteMap,
+                            seadmeNimi: seadmeteMap.keys.elementAt(rowIndex!),
+                            SeadmeteMap: seadmeteMap,
                             valitud: 1,
                           ),
                         ),

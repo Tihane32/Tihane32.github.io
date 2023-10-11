@@ -38,7 +38,7 @@ class _SeadmeteListState extends State<SeadmeteList> {
   @override
   void initState() {
     //seisukord();
-
+    SeadmeGraafikKontrollimineGen1();
     super.initState();
     bool isLoading = false;
   }
@@ -148,7 +148,7 @@ class _SeadmeteListState extends State<SeadmeteList> {
 
                   final seade = seadmeteMap.keys.elementAt(index);
                   final pilt = seadmeteMap[seade]["Seadme_pilt"];
-                  final staatus =  seadmeteMap[seade]["Seadme_olek"];
+                  final staatus = seadmeteMap[seade]["Seadme_olek"];
                   print('Staatus: $staatus');
                   return GestureDetector(
                     onTap: () {
@@ -267,7 +267,6 @@ SaaSeadmePilt(Map<String, dynamic> SeadmeteMap, SeadmeNimi) {
 }
 
 SaaSeadmeolek(Map<String, dynamic> SeadmeteMap, SeadmeNimi) {
-  
   print("seamdetMap $seadmeteMap");
   String deviceInfo = seadmeteMap[SeadmeNimi]["Seadme_olek"];
   if (deviceInfo != null) {
@@ -278,8 +277,7 @@ SaaSeadmeolek(Map<String, dynamic> SeadmeteMap, SeadmeNimi) {
 }
 
 muudaSeadmeOlek(Map<String, dynamic> SeadmeteMap, SeadmeNimi) {
- 
-      lulitamine(SeadmeNimi);
-      
+  lulitamine(SeadmeNimi);
+
   return seadmeteMap; // Device key not found in the map
 }
