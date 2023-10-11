@@ -20,10 +20,11 @@ class _MaksumuseGraafikState extends State<MaksumuseGraafik> {
   num kokku = 0;
   @override
   void initState() {
-    super.initState();
+    
     function();
     
     print("chartdata $chartData");
+    super.initState();
   }
 
   
@@ -32,7 +33,7 @@ class _MaksumuseGraafikState extends State<MaksumuseGraafik> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     Map<String, dynamic> maksumuseMap = {};
     //Võtab mälust 'users'-i asukohast väärtused
-    var seadmedJSONmap = prefs.getString('seadmed');
+   
     double calculateSum(Map<DateTime, double> data) {
       double sum = 0.0;
       data.values.forEach((value) {
@@ -44,11 +45,7 @@ class _MaksumuseGraafikState extends State<MaksumuseGraafik> {
       return sum;
     }
 
-    if (seadmedJSONmap == null) {
-      print("tühi");
-      return 0;
-    }
-    Map<String, dynamic> storedMap = json.decode(seadmedJSONmap);
+  
     int j = 0;
     seadmeteMap.forEach((key, value) async {
       

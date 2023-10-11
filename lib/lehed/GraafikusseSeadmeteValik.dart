@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:testuus4/funktsioonid/graafikGen2.dart';
 import 'package:testuus4/lehed/SeadmeGraafikLeht.dart';
 import 'package:testuus4/widgets/hoitatus.dart';
 import '../funktsioonid/seisukord.dart';
@@ -550,9 +551,7 @@ SeadmeGraafikKoostamineGen2(
 SeadmeGraafikKontrollimineGen1() async {
   bool grafikOlems = false;
   DateTime now = DateTime.now();
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  String? storedKey = prefs.getString('key');
-  String storedKeyString = jsonDecode(storedKey!);
+
   String graafik = '';
   seadmeteMap.forEach((key, value) async {
     if (value['Seadme_generatsioon'] == 1) {
@@ -603,6 +602,20 @@ SeadmeGraafikKontrollimineGen1() async {
         print('siin ei');
         graafik = 'ei';
       }
+    }
+  });
+}
+
+SeadmeGraafikKontrollimineGen2() async {
+  bool grafikOlems = false;
+  DateTime now = DateTime.now();
+
+  String graafik = '';
+  seadmeteMap.forEach((key, value) async {
+    if (value['Seadme_generatsioon'] == 2) {
+      List<dynamic> jobs = List.empty(growable: true);
+      jobs = await graafikGen2Lugemine(jobs);
+      graafik= await graafikGen2ToGraafikGen1(jobs);
     }
   });
 }

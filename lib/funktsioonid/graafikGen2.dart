@@ -4,9 +4,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'token.dart';
 import 'package:intl/intl.dart';
 import 'package:testuus4/main.dart';
+
 /// The function `gen2GraafikuLoomine` creates and deletes schedules for a device based on selected
 /// values and user preferences.
-/// 
+///
 /// Args:
 ///   selected: A list of lists representing the selected hours for creating a schedule. Each inner list
 /// contains three elements: the hour (0-23), a boolean value indicating whether the hour is selected or
@@ -31,7 +32,7 @@ graafikuteSaamine(Map<String, dynamic> graafikud, String value, List temp,
   String? ajutineKasutajanimi = prefs.getString('Kasutajanimi');
   String? sha1Hash = prefs.getString('Kasutajaparool');
 
-  String token = await getToken();
+  String token = await getToken2();
   var headers = {
     'Authorization': 'Bearer $token',
   };
@@ -286,9 +287,10 @@ Future<Map<int, dynamic>> gen2GraafikSaamine(
     var jobs = resJSON['data']['jobs'];
     if (resJSON['data']['jobs'] == null) {
       jobs = {};
-    }else{jobs = resJSON['data']['jobs'] as List<dynamic>;}
+    } else {
+      jobs = resJSON['data']['jobs'] as List<dynamic>;
+    }
 
-    
     int k = 0;
     for (var job in jobs) {
       var id = job['id'] as int;
@@ -370,4 +372,66 @@ delete(value, List temp) async {
         '${seadmeteMap[value]['api_url']}/fast/device/gen2_generic_command');
     var res1 = await http.post(url, headers: headers, body: data);
   }
+}
+
+graafikGen2Lugemine(var jobs) {
+  seadmeteMap.forEach((key, value) async {
+    if (value['Seadme_generatsioon'] == 2) {
+      String token = await getToken2();
+      var headers = {
+        'Authorization': 'Bearer $token',
+      };
+
+      var data = {
+        'id': key,
+        'method': 'schedule.list',
+      };
+
+      var url =
+          Uri.parse('${value['api_url']}/fast/device/gen2_generic_command');
+      var res = await http.post(url, headers: headers, body: data);
+      if (res.statusCode == 200) {
+        var resJSON = jsonDecode(res.body) as Map<String, dynamic>;
+        if (resJSON == null) {
+          return; // stop the function if resJSON is null
+        }
+        jobs = resJSON['data']['jobs'];
+        if (jobs == null) {
+          // handle the case where jobs is null
+          return;
+        }
+        jobs = resJSON['data']['jobs'] as List<dynamic>;
+        print(jobs);
+      }
+    }
+  });
+  return jobs;
+}
+
+graafikGen2ToGraafikGen1(List<dynamic> jobs) {
+  List<String> gen1 = [];
+  print("siiiiiiiinnnnn2");
+  for (var job in jobs) {
+    int id = job["id"];
+    String timespec = job["timespec"];
+    bool enable = job["enable"];
+    String callMethod = job["calls"][0]["method"];
+    bool callOn = job["calls"][0]["params"]["on"];
+
+    if (enable) {
+      List<String> timeParts = timespec.split(" ");
+      int hour = int.parse(timeParts[2]);
+      String onOff = callOn ? "on" : "off";
+
+      for (int i = 0; i < 24; i++) {
+        int time = (hour + i) % 24;
+        String gen1Entry = "${time.toString().padLeft(2, '0')}00-$id-$onOff";
+        gen1.add(gen1Entry);
+      }
+    }
+  }
+
+  String gen1String = gen1.join(', ');
+  print("siiiiiiiinnnnn");
+  print(gen1String);
 }

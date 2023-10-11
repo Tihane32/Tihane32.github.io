@@ -39,6 +39,7 @@ class _SeadmeteListState extends State<SeadmeteList> {
   void initState() {
     //seisukord();
     SeadmeGraafikKontrollimineGen1();
+    
     super.initState();
     bool isLoading = false;
   }

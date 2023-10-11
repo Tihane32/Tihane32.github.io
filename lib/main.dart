@@ -6,6 +6,8 @@ TalTech
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:testuus4/funktsioonid/graafikGen2.dart';
+import 'package:testuus4/lehed/GraafikusseSeadmeteValik.dart';
 import 'funktsioonid/backroundTask.dart';
 import 'lehed/dynamicKoduLeht.dart';
 import 'lehed/koduleht.dart';
@@ -116,6 +118,7 @@ Future<void> main() async {
     "simplePeriodicTask",
     frequency: Duration(seconds: 5),
   );*/
+  SeadmeGraafikKontrollimineGen2();
 }
 
 backgroundFetchHeadlessTask(String taskId) async {
