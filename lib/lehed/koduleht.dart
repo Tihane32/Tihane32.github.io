@@ -13,7 +13,7 @@ import 'dynamicKoduLeht.dart';
 import 'minuPakett.dart';
 import 'maksumuseGraafik.dart';
 
-import 'navigationBar.dart';
+import '../Arhiiv/navigationBar.dart';
 
 class KoduLeht extends StatefulWidget {
   const KoduLeht({Key? key}) : super(key: key);

@@ -5,7 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 import 'package:testuus4/lehed/SeadmeGraafikLeht.dart';
-import 'package:testuus4/lehed/SeadmeTarbimisLeht.dart';
+import 'package:testuus4/Arhiiv/SeadmeTarbimisLeht.dart';
 import 'package:testuus4/lehed/TarbimisLeht.dart';
 import 'package:testuus4/lehed/dynamicSeadmeInfo.dart';
 import 'package:testuus4/lehed/koduleht.dart';

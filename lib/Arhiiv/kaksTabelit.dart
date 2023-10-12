@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:testuus4/funktsioonid/lulitamine.dart';
 import 'package:testuus4/lehed/hindJoonise.dart';
-import 'Login.dart';
-import 'koduleht.dart';
+import '../lehed/Login.dart';
+import '../lehed/koduleht.dart';
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'seadmeSeaded.dart';
+import '../lehed/seadmeSeaded.dart';
 import 'package:testuus4/funktsioonid/seisukord.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:testuus4/main.dart';
-import 'kasutajaSeaded.dart';
-import 'rakenduseSeaded.dart';
-import 'AbiLeht.dart';
-import 'drawer.dart';
+import '../lehed/kasutajaSeaded.dart';
+import '../lehed/rakenduseSeaded.dart';
+import '../lehed/AbiLeht.dart';
+import '../lehed/drawer.dart';
 import 'navigationBar.dart';
 
 class MinuSeadmed extends StatelessWidget {
@@ -40,49 +40,49 @@ class _SeadmeTabelState extends State<SeadmeTabel> {
     return Padding(
       padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
       child: Scaffold(
-        backgroundColor: const Color.fromARGB(255, 208, 236, 239),
-        //backgroundColor: Color.fromARGB(255, 189, 216, 225), //Taustavärv
-        appBar: AppBar(
-          backgroundColor: appbar,
-          title: Text(
-            'Shelly App',
-            style: GoogleFonts.roboto(
-              textStyle: const TextStyle(fontSize: 25),
+          backgroundColor: const Color.fromARGB(255, 208, 236, 239),
+          //backgroundColor: Color.fromARGB(255, 189, 216, 225), //Taustavärv
+          appBar: AppBar(
+            backgroundColor: appbar,
+            title: Text(
+              'Shelly App',
+              style: GoogleFonts.roboto(
+                textStyle: const TextStyle(fontSize: 25),
+              ),
             ),
+            actions: [
+              Builder(
+                builder: (BuildContext context) {
+                  return IconButton(
+                    padding: EdgeInsets.only(right: 20),
+                    icon: Icon(
+                      Icons.menu,
+                      size: 30,
+                    ),
+                    onPressed: () {
+                      Scaffold.of(context).openEndDrawer();
+                    },
+                  );
+                },
+              ),
+            ],
           ),
-          actions: [
-            Builder(
-              builder: (BuildContext context) {
-                return IconButton(
-                  padding: EdgeInsets.only(right: 20),
-                  icon: Icon(
-                    Icons.menu,
-                    size: 30,
-                  ),
-                  onPressed: () {
-                    Scaffold.of(context).openEndDrawer();
-                  },
-                );
-              },
-            ),
-          ],
-        ),
-        endDrawer: drawer(),
-        body: Column(
-          children: [
-            const Padding(
-              padding: EdgeInsets.fromLTRB(0, 8, 0, 0),
-            ),
-            Expanded(
-              child: KontoSeadmed(onTap1: (rowData) {
-                print('Tapped row with data: $rowData');
-              }),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                /*IconButton(
+          endDrawer: drawer(),
+          body: Column(
+            children: [
+              const Padding(
+                padding: EdgeInsets.fromLTRB(0, 8, 0, 0),
+              ),
+              Expanded(
+                child: KontoSeadmed(onTap1: (rowData) {
+                  print('Tapped row with data: $rowData');
+                }),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  /*IconButton(
                   icon: const Icon(Icons.add),
                   onPressed: () {
                     Navigator.push(
@@ -91,37 +91,36 @@ class _SeadmeTabelState extends State<SeadmeTabel> {
                     );
                   },
                 ),*/
-                /*const DecoratedBox(
+                  /*const DecoratedBox(
                   decoration: const BoxDecoration(color: Colors.cyan),
                   child: Text(
                     'Manuaalselt lisatud Seadmed:',
                     style: TextStyle(fontSize: 20),
                   ),
                 ),*/
-              ],
-            ),
-            /*Expanded(
+                ],
+              ),
+              /*Expanded(
               child: ManuaalsedSeadmed(onTap: (rowData) {
                 print('Tapped row with data: $rowData');
               }),
             ),*/
-          ],
-        ),
-        bottomNavigationBar: Container(
-          decoration: const BoxDecoration(
-            border: Border(
-              top: BorderSide(
-                color: Colors.black,
-                width: 2.0,
+            ],
+          ),
+          bottomNavigationBar: Container(
+            decoration: const BoxDecoration(
+              border: Border(
+                top: BorderSide(
+                  color: Colors.black,
+                  width: 2.0,
+                ),
               ),
             ),
-          ),
-          child: SizedBox(
-            height: 72,
-            child: AppNavigationBar(i: 0),
-          ),
-        )
-      ),
+            child: SizedBox(
+              height: 72,
+              child: AppNavigationBar(i: 0),
+            ),
+          )),
     );
   }
 }

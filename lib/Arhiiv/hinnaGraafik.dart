@@ -7,10 +7,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:testuus4/funktsioonid/Elering.dart';
 
 import 'Graafik.dart';
-import 'OnOff.dart';
-import 'Login.dart';
+import '../lehed/Login.dart';
 import 'kaksTabelit.dart';
-import 'koduleht.dart';
+import '../lehed/koduleht.dart';
 
 //Defineerime hinnagraafiku lehe
 
@@ -234,7 +233,6 @@ class _HinnaGraafikState extends State<HinnaGraafik> {
                     ],
                   ),
                 ),
-                
                 DataColumn(
                   label: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -275,7 +273,6 @@ class _HinnaGraafikState extends State<HinnaGraafik> {
                     "$timestamp1:00",
                     style: TextStyle(fontSize: 17),
                   )),
-                  
                   DataCell(Text(
                     '$value',
                     style: TextStyle(fontSize: 17),

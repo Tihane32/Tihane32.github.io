@@ -5,7 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../funktsioonid/seisukord.dart';
 import 'package:testuus4/main.dart';
 
-import 'GraafikusseSeadmeteValik.dart';
+import '../lehed/GraafikusseSeadmeteValik.dart';
 
 class SeadmeteListValimineBody extends StatefulWidget {
   const SeadmeteListValimineBody({Key? key}) : super(key: key);

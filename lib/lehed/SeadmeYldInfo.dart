@@ -7,9 +7,9 @@ import 'package:testuus4/lehed/AbiLeht.dart';
 import 'package:testuus4/lehed/SeadmeGraafikLeht.dart';
 import 'package:testuus4/lehed/SeadmePildiMuutmine.dart';
 import 'package:testuus4/lehed/TarbimisLeht.dart';
-import 'package:testuus4/lehed/seadmedKontoltNim.dart';
+import 'package:testuus4/Arhiiv/seadmedKontoltNim.dart';
 import 'package:testuus4/main.dart';
-import 'SeadmeTarbimisLeht.dart';
+import '../Arhiiv/SeadmeTarbimisLeht.dart';
 import 'dynamicSeadmeInfo.dart';
 
 class SeadmeYldinfoLeht extends StatefulWidget {
@@ -245,7 +245,7 @@ loeSeadmeOlek(SeadmeNimi) {
 }
 
 muudaSeadmeOlek(SeadmeNimi) {
-   String deviceInfo = seadmeteMap[SeadmeNimi]["Seadme_olek"];
+  String deviceInfo = seadmeteMap[SeadmeNimi]["Seadme_olek"];
   if (deviceInfo != null) {
     String status = deviceInfo;
 
@@ -263,8 +263,7 @@ muudaSeadmeOlek(SeadmeNimi) {
   return seadmeteMap; // Device key not found in the map
 }
 
-nimeMuutmine(
-    String seadmeNimi, String uusNimi) async {
+nimeMuutmine(String seadmeNimi, String uusNimi) async {
   print(seadmeNimi);
   print(seadmeteMap);
   SharedPreferences prefs = await SharedPreferences.getInstance();

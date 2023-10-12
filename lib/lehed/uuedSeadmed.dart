@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:testuus4/funktsioonid/seisukord.dart';
 import 'package:testuus4/lehed/dynamicKoduLeht.dart';
 import 'package:testuus4/lehed/koduleht.dart';
-import 'package:testuus4/lehed/seadmedKontoltNim.dart';
+import 'package:testuus4/Arhiiv/seadmedKontoltNim.dart';
 import 'package:testuus4/main.dart';
 import 'package:flutter/material.dart';
 import 'package:testuus4/funktsioonid/KeskmineHind.dart';
@@ -13,8 +13,8 @@ import 'package:testuus4/lehed/drawer.dart';
 import 'package:testuus4/lehed/uuedSeadmed.dart';
 import 'package:testuus4/lehed/lisaSeade.dart';
 import 'package:testuus4/lehed/rakenduseSeaded.dart';
-import 'kaksTabelit.dart';
-import 'hinnaGraafik.dart';
+import '../Arhiiv/kaksTabelit.dart';
+import '../Arhiiv/hinnaGraafik.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:testuus4/funktsioonid/hetketarbimine.dart';
 import 'package:testuus4/funktsioonid/tarbimine.dart';
@@ -24,7 +24,7 @@ import '../funktsioonid/hetke_hind.dart';
 import 'package:testuus4/main.dart';
 import 'minuPakett.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'navigationBar.dart';
+import '../Arhiiv/navigationBar.dart';
 import 'dart:convert';
 
 class uuedSeadmed extends StatefulWidget {
@@ -95,7 +95,6 @@ class _uuedSeadmedState extends State<uuedSeadmed> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                         
                           Transform.scale(
                             scale: 1.5,
                             child: Checkbox(
@@ -109,17 +108,16 @@ class _uuedSeadmedState extends State<uuedSeadmed> {
                                 });
                               },
                             ),
-                          ), Column(
+                          ),
+                          Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Container(
                                 width: 150,
                                 child: Text(
-                                  
                                   seadmeNimi,
-                                  style:
-                                      fontSuur,
-                                      //textAlign: TextAlign.start, // Change this to your desired font
+                                  style: fontSuur,
+                                  //textAlign: TextAlign.start, // Change this to your desired font
                                 ),
                               ),
                             ],
@@ -224,6 +222,5 @@ Future<void> sort(List<bool> checkboxValues,
     String seadmedMap = json.encode(convertedMap);
     await prefs.setString('seadmed', seadmedMap);
     await seisukord();
-    
   }
 }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'Login.dart';
+import '../lehed/Login.dart';
 
 class SeadmeNimi extends StatefulWidget {
   final String value;

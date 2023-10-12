@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-void Hoiatus(BuildContext context, String contentMessage) {
+void Kinnitus(BuildContext context, String contentMessage) {
   showDialog(
     context: context,
     builder: (BuildContext context) {
@@ -14,7 +14,7 @@ void Hoiatus(BuildContext context, String contentMessage) {
           ),
           contentPadding: EdgeInsets.all(0),
           content: Card(
-            color: Colors.orange.withOpacity(0.85),
+            color: Color.fromARGB(255, 154, 202, 158).withOpacity(0.95),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(8.0),
               side: BorderSide(
@@ -28,9 +28,9 @@ void Hoiatus(BuildContext context, String contentMessage) {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Icon(
-                      Icons.warning,
+                      Icons.check_circle_outline_outlined,
                       size: 60.0,
-                      color: Colors.black,
+                      color: Color.fromARGB(255, 2, 150, 7),
                     ),
                     SizedBox(width: 16.0),
                     Expanded(
@@ -39,7 +39,7 @@ void Hoiatus(BuildContext context, String contentMessage) {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Hoiatus!',
+                            'Kinnitatud!',
                             style: TextStyle(
                               fontSize: 20.0,
                               fontWeight: FontWeight.bold,

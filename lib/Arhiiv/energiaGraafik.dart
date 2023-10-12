@@ -26,12 +26,11 @@ class _EGraafikState extends State<EGraafik> {
   List<_ChartData> chartData = [];
 
   Future<void> fetchData() async {
-   
     var prefs = await SharedPreferences.getInstance();
     String? storedJsonMap = prefs.getString('seadmed');
     String? koht = prefs.getString('KohaNumber');
     Map<String, dynamic> storedMap = json.decode(storedJsonMap!);
-var token = await getToken2();
+    var token = await getToken2();
     var seade = storedMap['Seade$koht'];
     var id = seade['Seadme_ID'];
     var headers = {

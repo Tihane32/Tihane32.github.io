@@ -9,8 +9,9 @@ import 'package:testuus4/lehed/drawer.dart';
 import 'package:testuus4/lehed/kasutajaSeaded.dart';
 import 'package:testuus4/lehed/lisaSeade.dart';
 import 'package:testuus4/lehed/rakenduseSeaded.dart';
-import 'kaksTabelit.dart';
-import 'hinnaGraafik.dart';
+import '../widgets/kinnitus.dart';
+import '../Arhiiv/kaksTabelit.dart';
+import '../Arhiiv/hinnaGraafik.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:testuus4/funktsioonid/hetketarbimine.dart';
 import 'package:testuus4/funktsioonid/tarbimine.dart';
@@ -20,7 +21,7 @@ import '../funktsioonid/hetke_hind.dart';
 import 'package:testuus4/main.dart';
 import 'minuPakett.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'navigationBar.dart';
+import '../Arhiiv/navigationBar.dart';
 
 class KasutajaSeaded extends StatefulWidget {
   @override
@@ -283,7 +284,6 @@ class _KasutajaSeadedState extends State<KasutajaSeaded> {
                         builder: (context) => AlertDialog(
                               title: Text("Lisada Shelly Cloud key siia"),
                             ));
-                           
                   },
                   child: Align(
                     alignment: Alignment.centerLeft,
@@ -322,12 +322,11 @@ class _KasutajaSeadedState extends State<KasutajaSeaded> {
                     height: vahe), // Add some spacing between the two widgets
                 GestureDetector(
                   onTap: () {
-                    showDialog(
-                        context: context,
-                        builder: (context) => AlertDialog(
-                              title: Text("Lisada Shelly Cloud key siia"),
-                            ));
-                             maluClear();
+                    Kinnitus(
+                      context,
+                      'Mälu kustutatud',
+                    );
+                    maluClear();
                   },
                   child: Align(
                     alignment: Alignment.centerLeft,

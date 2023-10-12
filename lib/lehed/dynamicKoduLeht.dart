@@ -8,12 +8,12 @@ import 'package:testuus4/main.dart';
 import 'AbiLeht.dart';
 import 'Login.dart';
 import 'drawer.dart';
-import 'kaksTabelit.dart';
+import '../Arhiiv/kaksTabelit.dart';
 import 'hindJoonise.dart';
 import 'package:get/get.dart';
 import 'kasutajaSeaded.dart';
 import 'lisaSeade.dart';
-import 'navigationBar.dart';
+import '../Arhiiv/navigationBar.dart';
 
 class DynaamilenieKoduLeht extends StatefulWidget {
   DynaamilenieKoduLeht({Key? key, required this.i}) : super(key: key);
@@ -40,7 +40,6 @@ class _DynaamilenieKoduLehtState extends State<DynaamilenieKoduLeht> {
 
   @override
   Widget build(BuildContext context) {
-  
     return Scaffold(
         backgroundColor: backround,
         appBar: AppBar(

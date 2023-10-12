@@ -12,10 +12,10 @@ import 'koduleht.dart';
 
 import 'dart:math';
 
-import 'package:testuus4/lehed/kaksTabelit.dart';
+import 'package:testuus4/Arhiiv/kaksTabelit.dart';
 
 import 'package:syncfusion_flutter_charts/charts.dart';
-import 'navigationBar.dart';
+import '../Arhiiv/navigationBar.dart';
 import 'package:testuus4/main.dart';
 import 'drawer.dart';
 
@@ -163,7 +163,6 @@ class _TulpDiagrammState extends State<TulpDiagramm> {
       temp = hindAVG / 4;
       keskHind = keskmineHindMapVaartustamine(hindAVG, keskHind, lulitus);
     });
-
   }
 
   @override

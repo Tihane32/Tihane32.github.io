@@ -4,9 +4,9 @@ import 'package:testuus4/lehed/GraafikusseSeadmeteValik.dart';
 import 'package:testuus4/lehed/koduleht.dart';
 import 'package:testuus4/lehed/seadmeteList.dart';
 import 'package:testuus4/main.dart';
-import 'dynamicKoduLeht.dart';
+import '../lehed/dynamicKoduLeht.dart';
 import 'kaksTabelit.dart';
-import 'hindJoonise.dart';
+import '../lehed/hindJoonise.dart';
 import 'package:get/get.dart';
 
 class AppNavigationBar extends StatelessWidget {

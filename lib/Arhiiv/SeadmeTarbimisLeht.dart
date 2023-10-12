@@ -17,7 +17,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:testuus4/main.dart';
-import 'SeadmeYldInfo.dart';
+import '../lehed/SeadmeYldInfo.dart';
 
 class SeadmeTarbimineLeht extends StatefulWidget {
   const SeadmeTarbimineLeht({Key? key, required this.seadmeNimi})
@@ -99,7 +99,6 @@ class _SeadmeTarbimineLehtState extends State<SeadmeTarbimineLeht> {
     final data =
         await getCurrentPrice(); //Kutsub esile CurrentPrice funktsiooni
 
-   
     final test = 0;
     isLoading = false;
 
@@ -639,7 +638,6 @@ class _EGraafikState extends State<EGraafik> {
     String dataString = jsonEncode(jsonData['data']['history']);
     prefs.setString('consumption', dataString);
     prefs.setString('total', total);
-
   }
 
   late TooltipBehavior _tooltipBehavior;
