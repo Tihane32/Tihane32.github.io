@@ -147,7 +147,7 @@ class _DynamilineTundideValimineState extends State<DynamilineTundideValimine> {
                   setState(() {
                     selectedPage = newValue!;
                   });
-                  if (selectedPage == 'Keskmine hind') {
+                  if (selectedPage == 'Odavaimad tunnid') {
                     leht = 0;
                   } else if (selectedPage == 'Hinnapiir') {
                     leht = 1;
@@ -155,17 +155,14 @@ class _DynamilineTundideValimineState extends State<DynamilineTundideValimine> {
                     leht = 2;
                   } else if (selectedPage == 'Automaatne') {
                     leht = 3;
-                  } else if (selectedPage == 'Minu eelistused') {
-                    leht = 5;
                   }
                 },
                 underline: Container(), // or SizedBox.shrink()
                 items: <String>[
-                  'Keskmine hind',
+                  'Odavaimad tunnid',
                   'Hinnapiir',
                   'Kopeeri graafik',
                   'Automaatne',
-                  'Minu eelistused',
                 ].map((String value) {
                   return DropdownMenuItem<String>(
                     value: value,
