@@ -449,11 +449,11 @@ graafikGen2ToGraafikGen1(List<dynamic> graafik) {
   print("reuslt");
   print(result);
   // Join the result list into a single string using commas
-  return result.join(', ');
+  return result;
 }
 
-graafikGen1ToGraafikGen2(String graafik) {
-  
+graafikGen1ToGraafikGen2(List<dynamic> graafik) {
+  String graafikString = graafik.join(", ");
 
   final dayMap = {
     0: 'MON',
@@ -466,7 +466,7 @@ graafikGen1ToGraafikGen2(String graafik) {
   };
 
   // Split the input string by commas to get individual job entries
-  List<String> entries = graafik.split(', ');
+  List<String> entries = graafikString.split(', ');
   List<dynamic> jobs = List.empty(growable: true);
   for (var entry in entries) {
     // Split each entry by the dash '-' to get its components
@@ -481,11 +481,11 @@ graafikGen1ToGraafikGen2(String graafik) {
       String? day = dayMap[dayNumber];
 
       // Create a map for the job and add it to the result list
-     
+
       if (time[0] == "0") {
         time = time.substring(1, 2);
-      }else{
-        time = time.substring(0,2);
+      } else {
+        time = time.substring(0, 2);
       }
       jobs.add({
         "enable": true,
@@ -497,9 +497,8 @@ graafikGen1ToGraafikGen2(String graafik) {
           }
         ]
       });
-      
     }
   }
-  
+
   return jobs;
 }

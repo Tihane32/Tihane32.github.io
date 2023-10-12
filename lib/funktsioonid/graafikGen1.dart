@@ -112,22 +112,8 @@ gen1GraafikLoomine(
       graafik.add(rule);
     }
   }
-  String graafikString = graafik.join(',');
-  var headers1 = {
-    'Content-Type': 'application/x-www-form-urlencoded',
-  };
 
-  var data1 = {
-    'channel': '0',
-    'enabled': "1",
-    'schedule_rules': graafikString,
-    'id': value,
-    'auth_key': seadmeteMap[value]['Cloud_key'],
-  };
-
-  var url1 = Uri.parse(
-      '${seadmeteMap[value]['api_url']}/device/relay/settings/schedule_rules');
-  var res1 = await http.post(url1, headers: headers1, body: data1);
+  graafikGen1Saatmine(graafik, value);
   for (int i = 0; i < 24; i++) {
     String temp = selected[i][2];
     bool temp1;
@@ -164,6 +150,52 @@ graafikGen1Lugemine(String id) async {
 
   var scheduleRules1 =
       httpPackageJson['data']['device_settings']['relays'][0]['schedule_rules'];
-  String result = scheduleRules1.join(", ");
-  return result;
+
+  return scheduleRules1;
+}
+
+graafikGen1Saatmine(List<dynamic> graafik, String id) async {
+  String graafikString = graafik.join(',');
+  var headers1 = {
+    'Content-Type': 'application/x-www-form-urlencoded',
+  };
+
+  var data1 = {
+    'channel': '0',
+    'enabled': "1",
+    'schedule_rules': graafikString,
+    'id': id,
+    'auth_key': seadmeteMap[id]['Cloud_key'],
+  };
+
+  var url1 = Uri.parse(
+      '${seadmeteMap[id]['api_url']}/device/relay/settings/schedule_rules');
+  var res1 = await http.post(url1, headers: headers1, body: data1);
+}
+
+graafikGen1filtreerimine(List<dynamic> graafik, List<int> paevad) {
+  List<String> newList = [];
+  List<String> newGraafik = [];
+  for (String item in graafik) {
+    List<String> parts = item.split('-');
+    if (parts[1].length > 1) {
+      for (int i = 0; i < parts[1].length; i++) {
+        //lülituskäsk tehakse iga "-" juures pooleks ja lisatakse eraldi listi
+        String newItem = '${parts[0]}-${parts[1][i]}-${parts[2]}';
+        newList.add(newItem);
+      }
+    } else {
+      newList.add(item);
+    }
+  }
+
+  for (int i = 0; i < paevad.length; i++) {
+    RegExp regExp = RegExp("-${paevad[i]}-");
+    for (var rule in newList) {
+      if (regExp.hasMatch(rule)) {
+        newGraafik.add(rule);
+      }
+    }
+  }
+  return newGraafik;
 }

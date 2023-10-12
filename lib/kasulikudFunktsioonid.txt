@@ -1,28 +1,59 @@
-loeb shelly api-st generatsioon 2 seadme graafiku
-    id = seadme, mille graafikut soovitakse saada id.  
-        graafikGen2Lugemine(String id) asnyc{
+
+1. SEADMETE FUNKTSIOONID
+
+  1.1 SEADMETE GRAAFIKU FUNKTSIOONID
+
+    1.1.1 GENERATSIOON 1 SEADMED
+
+      loeb shelly api-st generatsioon 1 seadme graafiku
+        id = seadme, mille graafikut soovitakse saada id.  
+          graafikGen1Lugemine(String id) asnyc{
             return List<dynamic>;
-        }
+          }
 
-loeb shelly api-st generatsioon 1 seadme graafiku
-    id = seadme, mille graafikut soovitakse saada id.  
-        graafikGen1Lugemine(String id) asnyc{
-            return String;
-        }
+      saadab graafiku generatsioon 1 seadmele
+        graafik = generatsioon 1 kujul graafik
+        id = seade, millele saadatakse graafik
+          graafikGen1Saatmine(List<dynamic> graafik, String id) async {
+          }
 
-teeb generatsioon 2 graafiku generatsioon 1 graafiku kujule.
-    graafik = olemas olev generatisoon 2 kujul graafik.
-        graafikGen2ToGraafikGen1(List<dynamic> graafik){
-            return String;
-        }
-
-teeb generatsioon 1 graafiku generatsioon 2 graafiku saatmise kujule. 
-    graafik = olemas olev generatsioon 1 kujul graafik. 
-        graafikGen1ToGraafikGen2(String graafik) {
+      võtab generatsiooni 1 graafikust, ainult soovitud päevade graafikud.
+        graafik = olemas olev generatsioon 1 kujul graafik. 
+        paevad = paevad mille graafikuid soovitakse.
+          graafikGen1filtreerimine(List<dynamic> graafik, List<int> paevad){
             return List<dynamic>;
-        }
+          }
 
-annab tänase nädalapäeva numbri.
-        int getCurrentDayOfWeek() {
+      teeb generatsioon 1 graafiku generatsioon 2 graafiku saatmise kujule. 
+        graafik = olemas olev generatsioon 1 kujul graafik. 
+          graafikGen1ToGraafikGen2(List<dynamic> graafik) {
+            return List<dynamic>;
+          }
+
+    1.1.1 GENERATSIOON 2 SEADMED
+
+      loeb shelly api-st generatsioon 2 seadme graafiku
+        id = seadme, mille graafikut soovitakse saada id.  
+          graafikGen2Lugemine(String id) asnyc{
+            return List<dynamic>;
+          }
+        
+      teeb generatsioon 2 graafiku generatsioon 1 graafiku kujule.
+        graafik = olemas olev generatisoon 2 kujul graafik.
+          graafikGen2ToGraafikGen1(List<dynamic> graafik){
+            return List<dynamic>;
+          }
+
+
+LISA FUNKTSIOONID
+
+      annab tänase nädalapäeva numbri.
+          int getCurrentDayOfWeek() {
             return int;
-        }
+          }
+
+
+
+
+
+

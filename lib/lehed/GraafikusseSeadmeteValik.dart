@@ -102,7 +102,6 @@ class _SeadmeteListValimineState extends State<SeadmeteListValimine> {
                           } else {
                             ValitudSeadmed[seade] = false;
                           }
-                          print(ValitudSeadmed);
                         });
                       } else {
                         showDialog(
@@ -464,7 +463,6 @@ SeadmeGraafikKoostamineGen1(String value) async {
         }
       }
     }
-    print(graafikParis);
 
     List<String> onOffStatus = [];
 
@@ -476,7 +474,6 @@ SeadmeGraafikKoostamineGen1(String value) async {
         onOffStatus.add(status);
       }
     }
-    print(onOffStatus);
     return onOffStatus;
   } else {
     List<String> tuhi = ['pole graafikut'];
@@ -516,7 +513,6 @@ SeadmeGraafikKoostamineGen2(
     }
     jobs = resJSON['data']['jobs'] as List<dynamic>;
     int k = 0;
-    print(res.body);
     for (var job in jobs) {
       DateTime now = DateTime.now();
 
@@ -551,29 +547,25 @@ SeadmeGraafikKoostamineGen2(
 
 SeadmeGraafikKontrollimineGen1() async {
   bool grafikOlems = false;
-  DateTime now = DateTime.now();
 
   String graafik = '';
   seadmeteMap.forEach((key, value) async {
     if (value['Seadme_generatsioon'] == 1) {
-      String seadmeGraafik1 = await graafikGen1Lugemine(key);
+      List<dynamic> seadmeGraafik1 = await graafikGen1Lugemine(key);
+      graafik = seadmeGraafik1.join(", ");
+      int paev = getCurrentDayOfWeek();
 
-     int paev = getCurrentDayOfWeek();
-
-      if (seadmeGraafik1.contains("-$paev-")) {
+      if (graafik.contains("-$paev-")) {
         grafikOlems = true;
       }
 
       if (grafikOlems) {
         seadmeteMap[key]["Graafik"] = 'jah';
-        print('siin jaa');
-        graafik = 'jah';
+
         //return 'jah';
       } else {
         //return 'ei';
         seadmeteMap[key]["Graafik"] = 'ei';
-        print('siin ei');
-        graafik = 'ei';
       }
     }
   });
@@ -584,16 +576,16 @@ SeadmeGraafikKontrollimineGen2() async {
   DateTime now = DateTime.now();
 
   String graafik = '';
+  List<dynamic> graafikList;
   seadmeteMap.forEach((key, value) async {
     if (value['Seadme_generatsioon'] == 2) {
       List<dynamic> jobs = List.empty(growable: true);
       jobs = await graafikGen2Lugemine(key);
-      graafik = await graafikGen2ToGraafikGen1(jobs);
-      await graafikGen1ToGraafikGen2(graafik);
+      graafikList = await graafikGen2ToGraafikGen1(jobs);
+      graafik = graafikList.join(", ");
+      await graafikGen1ToGraafikGen2(graafikList);
       int today = getCurrentDayOfWeek();
-      print("paev $today");
       if (graafik.contains("-$today-")) {
-        print("olemas");
         seadmeteMap[key]["Graafik"] = 'jah';
       } else {
         seadmeteMap[key]["Graafik"] = 'ei';
