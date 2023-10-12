@@ -374,64 +374,132 @@ delete(value, List temp) async {
   }
 }
 
-graafikGen2Lugemine(var jobs) {
-  seadmeteMap.forEach((key, value) async {
-    if (value['Seadme_generatsioon'] == 2) {
-      String token = await getToken2();
-      var headers = {
-        'Authorization': 'Bearer $token',
-      };
+graafikGen2Lugemine(String id) async {
+  List<dynamic> tuhiGraafik = List.empty(growable: true);
+  String token = await getToken2();
+  var headers = {
+    'Authorization': 'Bearer $token',
+  };
 
-      var data = {
-        'id': key,
-        'method': 'schedule.list',
-      };
+  var data = {
+    'id': id,
+    'method': 'schedule.list',
+  };
 
-      var url =
-          Uri.parse('${value['api_url']}/fast/device/gen2_generic_command');
-      var res = await http.post(url, headers: headers, body: data);
-      if (res.statusCode == 200) {
-        var resJSON = jsonDecode(res.body) as Map<String, dynamic>;
-        if (resJSON == null) {
-          return; // stop the function if resJSON is null
-        }
-        jobs = resJSON['data']['jobs'];
-        if (jobs == null) {
-          // handle the case where jobs is null
-          return;
-        }
-        jobs = resJSON['data']['jobs'] as List<dynamic>;
-        print(jobs);
-      }
+  var url = Uri.parse(
+      '${seadmeteMap[id]['api_url']}/fast/device/gen2_generic_command');
+  var res = await http.post(url, headers: headers, body: data);
+  if (res.statusCode == 200) {
+    var resJSON = jsonDecode(res.body) as Map<String, dynamic>;
+    if (resJSON == null) {
+      return; // stop the function if resJSON is null
     }
-  });
-  return jobs;
+    tuhiGraafik = resJSON['data']['jobs'];
+    if (tuhiGraafik == null) {
+      // handle the case where jobs is null
+      return;
+    }
+    tuhiGraafik = resJSON['data']['jobs'] as List<dynamic>;
+    print(tuhiGraafik);
+  }
+
+  return tuhiGraafik;
 }
 
-graafikGen2ToGraafikGen1(List<dynamic> jobs) {
-  List<String> gen1 = [];
-  print("siiiiiiiinnnnn2");
-  for (var job in jobs) {
-    int id = job["id"];
-    String timespec = job["timespec"];
-    bool enable = job["enable"];
-    String callMethod = job["calls"][0]["method"];
-    bool callOn = job["calls"][0]["params"]["on"];
+graafikGen2ToGraafikGen1(List<dynamic> graafik) {
+  List<String> result = [];
 
-    if (enable) {
-      List<String> timeParts = timespec.split(" ");
-      int hour = int.parse(timeParts[2]);
-      String onOff = callOn ? "on" : "off";
+  // Define a map to convert day names to their corresponding numbers
+  final dayMap = {
+    'MON': 0,
+    'TUE': 1,
+    'WED': 2,
+    'THU': 3,
+    'FRI': 4,
+    'SAT': 5,
+    'SUN': 6,
+  };
 
-      for (int i = 0; i < 24; i++) {
-        int time = (hour + i) % 24;
-        String gen1Entry = "${time.toString().padLeft(2, '0')}00-$id-$onOff";
-        gen1.add(gen1Entry);
+  // Iterate through the job entries
+  for (var job in graafik) {
+    if (job is Map && job.containsKey('timespec') && job.containsKey('calls')) {
+      String timespec = job['timespec'];
+      List<String> timespecParts = timespec.split(' ');
+
+      // Extract the relevant components
+      if (timespecParts.length == 6) {
+        String time = timespecParts[2];
+        String day = timespecParts[5];
+        String switchState = job['calls'][0]['params']['on'] ? 'on' : 'off';
+
+        // Convert the day name to a number using the dayMap
+        int? dayNumber = dayMap[day];
+        print(int.parse(time));
+        if (int.parse(time) < 10) {
+          time = "0${time}00";
+        } else {
+          time = "${time}00";
+        }
+        // Create the formatted string and add it to the result list
+        String formattedJob = '$time-$dayNumber-$switchState';
+        result.add(formattedJob);
       }
     }
   }
+  print("reuslt");
+  print(result);
+  // Join the result list into a single string using commas
+  return result.join(', ');
+}
 
-  String gen1String = gen1.join(', ');
-  print("siiiiiiiinnnnn");
-  print(gen1String);
+graafikGen1ToGraafikGen2(String graafik) {
+  
+
+  final dayMap = {
+    0: 'MON',
+    1: 'TUE',
+    2: 'WED',
+    3: 'THU',
+    4: 'FRI',
+    5: 'SAT',
+    6: 'SUN',
+  };
+
+  // Split the input string by commas to get individual job entries
+  List<String> entries = graafik.split(', ');
+  List<dynamic> jobs = List.empty(growable: true);
+  for (var entry in entries) {
+    // Split each entry by the dash '-' to get its components
+    List<String> parts = entry.split('-');
+
+    if (parts.length == 3) {
+      String time = parts[0];
+      int dayNumber = int.parse(parts[1]);
+      bool switchState = parts[2] == 'on' ? true : false;
+
+      // Convert the day number to the corresponding day name using the dayMap
+      String? day = dayMap[dayNumber];
+
+      // Create a map for the job and add it to the result list
+     
+      if (time[0] == "0") {
+        time = time.substring(1, 2);
+      }else{
+        time = time.substring(0,2);
+      }
+      jobs.add({
+        "enable": true,
+        "timespec": "0 0 $time * * $day",
+        "calls": [
+          {
+            "method": "Switch.Set",
+            "params": {"id": 0, "on": '$switchState'}
+          }
+        ]
+      });
+      
+    }
+  }
+  
+  return jobs;
 }

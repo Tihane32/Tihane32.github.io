@@ -4,9 +4,10 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:testuus4/main.dart';
+
 /// The function `gen1GraafikLoomine` creates a graph based on the provided data and sends a POST
 /// request to update the schedule rules for a device.
-/// 
+///
 /// Args:
 ///   lulitus (Map<int, dynamic>): A map containing the schedule settings for each hour of the day. The
 /// keys are integers representing the hour (0-23), and the values are dynamic types.
@@ -81,7 +82,7 @@ gen1GraafikLoomine(
     'id': value,
     'auth_key': seadmeteMap[value]['Cloud_key'],
   };
-  
+
   var url = Uri.parse('${seadmeteMap[value]['api_url']}/device/settings');
   var res = await http.post(url, headers: headers, body: data);
   await Future.delayed(const Duration(seconds: 2));
@@ -142,4 +143,27 @@ gen1GraafikLoomine(
     temp = temp.substring(0, 2) + '.' + temp.substring(2);
     selected[i][0] = temp;
   }
+}
+
+graafikGen1Lugemine(String id) async {
+  var headers = {
+    'Content-Type': 'application/x-www-form-urlencoded',
+  };
+
+  var data = {
+    'channel': '0',
+    'id': id,
+    'auth_key': seadmeteMap[id]['Cloud_key'],
+  };
+
+  var url = Uri.parse('${seadmeteMap[id]['api_url']}/device/settings');
+  var res = await http.post(url, headers: headers, body: data);
+  await Future.delayed(const Duration(seconds: 2));
+  //Kui post läheb läbi siis:
+  final httpPackageJson = json.decode(res.body) as Map<String, dynamic>;
+
+  var scheduleRules1 =
+      httpPackageJson['data']['device_settings']['relays'][0]['schedule_rules'];
+  String result = scheduleRules1.join(", ");
+  return result;
 }

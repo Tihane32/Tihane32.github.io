@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:testuus4/funktsioonid/graafikGen1.dart';
 import 'package:testuus4/funktsioonid/graafikGen2.dart';
 import 'package:testuus4/lehed/SeadmeGraafikLeht.dart';
 import 'package:testuus4/widgets/hoitatus.dart';
@@ -555,40 +556,12 @@ SeadmeGraafikKontrollimineGen1() async {
   String graafik = '';
   seadmeteMap.forEach((key, value) async {
     if (value['Seadme_generatsioon'] == 1) {
-      var headers = {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      };
+      String seadmeGraafik1 = await graafikGen1Lugemine(key);
 
-      var data = {
-        'channel': '0',
-        'id': key,
-        'auth_key': value["Cloud_key"],
-      };
+     int paev = getCurrentDayOfWeek();
 
-      var url = Uri.parse('https://shelly-64-eu.shelly.cloud/device/settings');
-
-      var res = await http.post(url, headers: headers, body: data);
-
-      //Kui post läheb läbi siis:
-
-      final httpPackageJson = json.decode(res.body) as Map<String, dynamic>;
-
-      var seadmeGraafik1 = httpPackageJson['data']['device_settings']['relays']
-          [0]['schedule_rules'];
-
-      int paev = 0;
-
-      if (now.weekday == 7) {
-        paev = 0;
-      } else {
-        paev = now.weekday - 1;
-      }
-
-      for (var i = 0; i < seadmeGraafik1.length; i++) {
-        String mainString = seadmeGraafik1[i];
-        if (mainString.contains("-$paev-")) {
-          grafikOlems = true;
-        }
+      if (seadmeGraafik1.contains("-$paev-")) {
+        grafikOlems = true;
       }
 
       if (grafikOlems) {
@@ -614,8 +587,24 @@ SeadmeGraafikKontrollimineGen2() async {
   seadmeteMap.forEach((key, value) async {
     if (value['Seadme_generatsioon'] == 2) {
       List<dynamic> jobs = List.empty(growable: true);
-      jobs = await graafikGen2Lugemine(jobs);
-      graafik= await graafikGen2ToGraafikGen1(jobs);
+      jobs = await graafikGen2Lugemine(key);
+      graafik = await graafikGen2ToGraafikGen1(jobs);
+      await graafikGen1ToGraafikGen2(graafik);
+      int today = getCurrentDayOfWeek();
+      print("paev $today");
+      if (graafik.contains("-$today-")) {
+        print("olemas");
+        seadmeteMap[key]["Graafik"] = 'jah';
+      } else {
+        seadmeteMap[key]["Graafik"] = 'ei';
+      }
     }
   });
+}
+
+int getCurrentDayOfWeek() {
+  int paev;
+  final now = DateTime.now();
+  paev = now.weekday - 1;
+  return paev; // Adjust for 0-based index
 }
