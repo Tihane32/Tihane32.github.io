@@ -8,7 +8,7 @@ import 'GraafikusseSeadmeteValik.dart';
 import 'dynamicKoduLeht.dart';
 import 'koduleht.dart';
 import 'dart:math';
-import 'package:testuus4/lehed/kaksTabelit.dart';
+import 'package:testuus4/Arhiiv/kaksTabelit.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'keskimiseHinnaAluselTundideValimine.dart';
 import 'kopeeeriGraafikTundideValimine.dart';

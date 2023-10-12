@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:testuus4/funktsioonid/graafikGen2.dart';
-import 'package:testuus4/lehed/energiaGraafik.dart';
+import 'package:testuus4/Arhiiv/energiaGraafik.dart';
 import 'dart:convert';
 import 'token.dart';
-import 'package:testuus4/lehed/kaksTabelit.dart';
+import 'package:testuus4/Arhiiv/kaksTabelit.dart';
 import 'package:http/http.dart' as http;
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:testuus4/funktsioonid/Elering.dart';
@@ -114,10 +114,10 @@ seadmeMaksumus(String value, [Function? setPaevamaksumus]) async {
   }
 
   //print(paevaMaksumus);
-  if(setPaevamaksumus!=null){
+  if (setPaevamaksumus != null) {
     setPaevamaksumus(paevaMaksumus);
   }
-  
+
   print("seadmemaksusmus $value $maksumusSeade");
   return maksumusSeade;
 }

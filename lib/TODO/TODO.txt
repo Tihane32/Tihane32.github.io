@@ -7,6 +7,6 @@
 
 29.09.2023 Eesmärgid
     Proovida taustal töötamine tööle saada
-    Luua taustal töötamise leht
+    Luua taustal töötamise leht                                         TEHTUD
     Päeva tarbimisgraafiku kuvamine                                     TEHTUD, vaja otsustada kas graafik püsti või külili
     Seadme graafiku kopeerimine tööle 

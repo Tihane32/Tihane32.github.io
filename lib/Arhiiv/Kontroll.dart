@@ -5,7 +5,7 @@ TalTech
 import 'package:flutter/material.dart';
 import '../main.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'koduleht.dart';
+import '../lehed/koduleht.dart';
 
 //Kontroll lehe loomine
 class Kontroll extends StatefulWidget {

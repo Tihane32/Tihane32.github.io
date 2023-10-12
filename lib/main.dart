@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 import 'funktsioonid/backroundTask.dart';
 import 'lehed/dynamicKoduLeht.dart';
 import 'lehed/koduleht.dart';
-import 'lehed/kaksTabelit.dart';
+import 'Arhiiv/kaksTabelit.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'lehed/seadmeteList.dart';

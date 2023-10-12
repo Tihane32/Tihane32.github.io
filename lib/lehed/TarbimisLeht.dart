@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:testuus4/funktsioonid/maksumusSeadmeKohta.dart';
 import 'package:testuus4/lehed/SeadmeGraafikLeht.dart';
-import 'package:testuus4/lehed/SeadmeTarbimisLeht.dart';
+import 'package:testuus4/Arhiiv/SeadmeTarbimisLeht.dart';
 import 'SeadmeYldInfo.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
@@ -411,18 +411,17 @@ class _MGraafikState extends State<MGraafik> {
                                         widthFactor: 0.8,
                                         child: Material(
                                           color: Colors.white,
-                                         borderRadius: BorderRadius.circular(10),
-                                            //height: MediaQuery.of(context).size.height*0.5,
-                                            //width: MediaQuery.of(context).size.width,
-                                     
-                                              child: PaevaTarbimine(
-                                                date: dateTimes[rowIndex].toString(),
-                                                value: widget.value,
-                                                rowIndex: rowIndex,
-                                                paevaMaksumus: paevaMaksumus
-                                              ),
-                                           
-                                          
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          //height: MediaQuery.of(context).size.height*0.5,
+                                          //width: MediaQuery.of(context).size.width,
+
+                                          child: PaevaTarbimine(
+                                              date: dateTimes[rowIndex]
+                                                  .toString(),
+                                              value: widget.value,
+                                              rowIndex: rowIndex,
+                                              paevaMaksumus: paevaMaksumus),
                                         ),
                                       );
                                     },

@@ -50,9 +50,9 @@ class _AutoTundideValikState extends State<AutoTundideValik> {
     14: 'igavesti',
   };
   double bufferPerjood = 3;
-  
+
   TextEditingController _textController = TextEditingController();
- 
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -257,7 +257,6 @@ class _AutoTundideValikState extends State<AutoTundideValik> {
                       color: Colors.red,
                       size: 30,
                     ))),
-            
           ],
         ),
       ),

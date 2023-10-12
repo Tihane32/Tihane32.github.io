@@ -10,7 +10,7 @@ import 'AbiLeht.dart';
 import 'koduleht.dart';
 import 'hinnaPiiriAluselTunideValimine.dart';
 import 'dart:math';
-import 'package:testuus4/lehed/kaksTabelit.dart';
+import 'package:testuus4/Arhiiv/kaksTabelit.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 import 'kopeeeriGraafikTundideValimine.dart';

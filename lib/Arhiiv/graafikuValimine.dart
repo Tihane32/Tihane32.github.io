@@ -12,10 +12,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:testuus4/funktsioonid/Elering.dart';
 
 import 'Graafik.dart';
-import 'OnOff.dart';
-import 'Login.dart';
+import '../lehed/Login.dart';
 import 'kaksTabelit.dart';
-import 'koduleht.dart';
+import '../lehed/koduleht.dart';
 
 //Maini käivitamine, home on koduleht.
 
@@ -295,7 +294,8 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
 //Defineerime homsete tundide valimise lehe
 
 class tundideValimineHomme extends StatelessWidget {
-  tundideValimineHomme({Key? key, required this.soovitudTunnid, required this.value})
+  tundideValimineHomme(
+      {Key? key, required this.soovitudTunnid, required this.value})
       : super(key: key);
 
   final int soovitudTunnid;

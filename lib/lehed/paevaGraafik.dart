@@ -35,7 +35,7 @@ class PaevaTarbimine extends StatefulWidget {
 class _PaevaTarbimineState extends State<PaevaTarbimine> {
   List<double> paevaTarbimine = [];
   List<double> paevaHind = [];
-  String formattedDate='';
+  String formattedDate = '';
   getList() async {
     String dateTimeString =
         '${widget.date}'; // Replace with your widget.date value
@@ -111,13 +111,10 @@ class _PaevaTarbimineState extends State<PaevaTarbimine> {
     double maxYValue = findMaximumYValue(dataPoints);
     double maxYValue2 = findMaximumYValue(dataPoints2);
     return Container(
-      
-       
       child: Scaffold(
         appBar: AppBar(
           title: Container(
             child: Align(
-              
               child: Text(
                 '${formattedDate}',
                 style: fontSuur,

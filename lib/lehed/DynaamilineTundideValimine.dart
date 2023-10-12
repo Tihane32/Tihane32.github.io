@@ -10,6 +10,7 @@ import 'package:testuus4/lehed/GraafikusseSeadmeteValik.dart';
 import 'package:testuus4/lehed/dynamicKoduLeht.dart';
 import '../funktsioonid/genMaaramine.dart';
 import '../main.dart';
+import '../widgets/kinnitus.dart';
 import 'AbiLeht.dart';
 import 'AutoTuniValik.dart';
 import 'keelatudTunnid.dart';
@@ -267,32 +268,10 @@ class _DynamilineTundideValimineState extends State<DynamilineTundideValimine> {
                               graafikuteSaatmine(
                                   valitudSeadmed, lulitusMap, paev);
                             }
-
-                            showDialog(
-                                context: context,
-                                builder: (context) => AlertDialog(
-                                      content: Column(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              // Add some spacing between icon and text
-                                              Text("Kinnitatud",
-                                                  style: fontSuur),
-                                              SizedBox(width: 8),
-                                              Icon(
-                                                Icons
-                                                    .check_circle_outline_outlined,
-                                                size: 35,
-                                              ),
-                                            ],
-                                          ),
-                                          // Add other content of the dialog if needed
-                                        ],
-                                      ),
-                                    ));
+                            Kinnitus(
+                              context,
+                              'Graafik seadmetele saadetud',
+                            );
                             HapticFeedback.vibrate();
                             Future.delayed(Duration(seconds: 5), () {
                               Navigator.of(context)

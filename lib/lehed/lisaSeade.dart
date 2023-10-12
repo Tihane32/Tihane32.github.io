@@ -5,11 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:testuus4/lehed/Login.dart';
 import 'package:testuus4/lehed/dynamicKoduLeht.dart';
-import 'package:testuus4/lehed/kaksTabelit.dart';
+import 'package:testuus4/Arhiiv/kaksTabelit.dart';
 //import '/SeadmeSeaded.dart';
 import 'package:testuus4/lehed/seadmeSeaded.dart';
 import 'package:testuus4/main.dart';
-import 'energiaGraafik.dart';
+import '../Arhiiv/energiaGraafik.dart';
 import 'package:testuus4/funktsioonid/seisukord.dart';
 import 'package:testuus4/lehed/koduleht.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -25,7 +25,6 @@ class _LisaSeadeState extends State<LisaSeade> {
   final TextEditingController parool = TextEditingController();
   final GlobalKey<ScaffoldMessengerState> _scaffoldMessengerKey =
       GlobalKey<ScaffoldMessengerState>();
-
 
   Future<void> _submitForm() async {
     String ajutineParool = parool.text;
