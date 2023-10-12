@@ -9,6 +9,7 @@ import 'package:testuus4/funktsioonid/graafikGen2.dart';
 import 'package:testuus4/lehed/GraafikusseSeadmeteValik.dart';
 import 'package:testuus4/lehed/dynamicKoduLeht.dart';
 import '../funktsioonid/genMaaramine.dart';
+import '../funktsioonid/token.dart';
 import '../main.dart';
 import '../widgets/kinnitus.dart';
 import 'AbiLeht.dart';
@@ -335,11 +336,45 @@ graafikuKopeerimine(
         await Future.delayed(const Duration(seconds: 2));
         //Kui post läheb läbi siis:
 
+        print(res.body.toString());
+       
+        if (res.body.toString() ==
+            """{"isok":false,"errors":{"max_req":"Request limit reached!"}}""") {
+          await Future.delayed(const Duration(seconds: 2));
+          url = Uri.parse('${seadmeteMap[key]['api_url']}/device/settings');
+          res = await http.post(url, headers: headers, body: data);
+        }
         final httpPackageJson = json.decode(res.body) as Map<String, dynamic>;
-
         scheduleRules1 = httpPackageJson['data']['device_settings']['relays'][0]
             ['schedule_rules'];
         print(scheduleRules1);
+      } else {
+        String token = await getToken2();
+        var headers = {
+          'Authorization': 'Bearer $token',
+        };
+
+        var data = {
+          'id': key,
+          'method': 'schedule.list',
+        };
+
+        var url = Uri.parse(
+            '${seadmeteMap[key]['api_url']}/fast/device/gen2_generic_command');
+        var res = await http.post(url, headers: headers, body: data);
+        if (res.statusCode == 200) {
+          var resJSON = jsonDecode(res.body) as Map<String, dynamic>;
+          if (resJSON == null) {
+            return; // stop the function if resJSON is null
+          }
+          var jobs = resJSON['data']['jobs'];
+          if (jobs == null) {
+            // handle the case where jobs is null
+            return;
+          }
+          jobs = resJSON['data']['jobs'] as List<dynamic>;
+          print(jobs);
+        }
       }
     }
   });
@@ -358,7 +393,7 @@ graafikuKopeerimine(
           'id': key,
           'auth_key': seadmeteMap[key]['Cloud_key'],
         };
-
+        await Future.delayed(const Duration(seconds: 2));
         var url1 = Uri.parse(
             '${seadmeteMap[key]['api_url']}/device/relay/settings/schedule_rules');
         var res1 = await http.post(url1, headers: headers1, body: data1);
