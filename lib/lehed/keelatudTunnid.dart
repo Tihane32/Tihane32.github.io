@@ -88,6 +88,7 @@ class _KeelatudTunnidState extends State<KeelatudTunnid> {
                 } else {
                   _selectedHours.add(index);
                 }
+                print(_selectedHours);
               });
             },
           );
