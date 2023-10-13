@@ -44,6 +44,16 @@
             return List<dynamic>;
           }
 
+      saadab generatsioon 2 seadmele graafiku. 
+      graafik peab olema kujul mis tuleb graafikGen1ToGraafikGen2 funktsioonist.
+        graafik = graafik kujul, mis tuleb graafikGen1ToGraafikGen2 funktsioonist.
+          graafikGen2SaatmineGraafikuga(List<dynamic> graafikGen2, String key) async {
+          }
+
+      kustutab generatsioon 2 seadme kogu graafiku.
+        id = seadme id
+          graafikGen2DeleteAll(String id) async {
+          }
 
 LISA FUNKTSIOONID
 

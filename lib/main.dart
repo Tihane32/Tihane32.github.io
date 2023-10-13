@@ -119,8 +119,8 @@ Future<void> main() async {
     "simplePeriodicTask",
     frequency: Duration(seconds: 5),
   );*/
-  SeadmeGraafikKontrollimineGen2();
-  
+  graafikGen2DeleteAll("30c6f7828098");
+
   //graafikGen1Lugemine("80646f81ad9a");
 }
 

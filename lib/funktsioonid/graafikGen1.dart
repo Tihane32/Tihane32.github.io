@@ -150,7 +150,7 @@ graafikGen1Lugemine(String id) async {
 
   var scheduleRules1 =
       httpPackageJson['data']['device_settings']['relays'][0]['schedule_rules'];
-
+  print(res.body);
   return scheduleRules1;
 }
 
