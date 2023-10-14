@@ -173,7 +173,7 @@ graafikGen1Saatmine(List<dynamic> graafik, String id) async {
   var res1 = await http.post(url1, headers: headers1, body: data1);
 }
 
-graafikGen1filtreerimine(List<dynamic> graafik, List<int> paevad) {
+graafikGen1Filtreerimine(List<dynamic> graafik, List<int> paevad) {
   List<String> newList = [];
   List<String> newGraafik = [];
   for (String item in graafik) {
