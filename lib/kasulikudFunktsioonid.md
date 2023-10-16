@@ -34,7 +34,7 @@ return List<dynamic>;
 }
 ```
 
-Loeb shelly api-st generatsioon 1 seadme graafiku
+Loeb shelly api-st generatsioon 1 seadme graafiku.
 
 id = seadme id, mille graafikut soovitakse saada.  
 
@@ -50,6 +50,7 @@ graafikGen1Saatmine(List<dynamic> graafik, String id) async {
 Saadab graafiku generatsioon 1 seadmele
 
 graafik = generatsioon 1 kujul graafik
+
 id = seade, millele saadatakse graafik
 
 ---
