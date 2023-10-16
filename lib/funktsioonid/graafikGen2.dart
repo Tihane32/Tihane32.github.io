@@ -1,6 +1,8 @@
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:testuus4/funktsioonid/graafikGen1.dart';
+import 'package:testuus4/lehed/GraafikusseSeadmeteValik.dart';
 import 'token.dart';
 import 'package:intl/intl.dart';
 import 'package:testuus4/main.dart';
@@ -16,14 +18,24 @@ import 'package:testuus4/main.dart';
 /// two possible values: "täna" (today) or "homme" (tomorrow).
 ///   value (String): The value parameter is a string that represents a specific value or identifier. It
 /// is used in various parts of the code to retrieve or manipulate data related to that value.
-gen2GraafikuLoomine(var selected, var valitudPaev, String value) async {
-  var graafikud = Map<String, dynamic>();
-  List temp = List.empty(growable: true);
-  await graafikuteSaamine(graafikud, value, temp, valitudPaev);
+gen2GraafikuLoomine(Map<int, dynamic> lulitus, String valitudPaev, String id) async {
+  print("Selected: $lulitus");
+  print(valitudPaev);
+  List<int> paevad = [];
+  if (valitudPaev == "täna") {
+    int i = getTommorowDayOfWeek();
+    paevad.add(i);
+  }
+  List<dynamic> graafik = await graafikGen2Lugemine(id);
+  await graafikGen2DeleteAll(id);
+  graafik = graafikGen2ToGraafikGen1(graafik);
+  print("uus graafik");
+  print(graafik);
+  graafik = graafikGen1Filtreerimine(graafik, paevad);
+ 
+  //await graafikuloomine(graafikud, selected, valitudPaev, value);
 
-  await graafikuloomine(graafikud, selected, valitudPaev, value);
-
-  await delete(value, temp);
+  //await delete(value, temp);
 }
 
 graafikuteSaamine(Map<String, dynamic> graafikud, String value, List temp,

@@ -600,3 +600,13 @@ int getCurrentDayOfWeek() {
   paev = now.weekday - 1;
   return paev; // Adjust for 0-based index
 }
+
+int getTommorowDayOfWeek() {
+  int paev;
+  final now = DateTime.now();
+  paev = now.weekday;
+  if (paev == 7) {
+    paev = 0;
+  }
+  return paev; // Adjust for 0-based index
+}

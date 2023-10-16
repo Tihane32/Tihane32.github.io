@@ -113,7 +113,7 @@ Future<void> main() async {
     "simplePeriodicTask",
     frequency: Duration(seconds: 5),
   );*/
-  graafikGen2DeleteAll("30c6f7828098");
+  //graafikGen2DeleteAll("30c6f7828098");
 
   //graafikGen1Lugemine("80646f81ad9a");
 }

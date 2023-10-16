@@ -16,6 +16,7 @@ import 'package:testuus4/main.dart';
 ///   value (String): The value parameter is a string that represents the ID of a device.
 gen1GraafikLoomine(
     Map<int, dynamic> lulitus, String valitudPaev, String value) async {
+  print("lulitus $lulitus");
   DateTime now = DateTime.now();
   int tundtana = now.hour;
   SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -198,4 +199,9 @@ graafikGen1Filtreerimine(List<dynamic> graafik, List<int> paevad) {
     }
   }
   return newGraafik;
+}
+
+graafikGen1Koostamine(Map<int, dynamic> lulitus){
+
+
 }

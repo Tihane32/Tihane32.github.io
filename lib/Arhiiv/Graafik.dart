@@ -213,7 +213,7 @@ class Graafik extends StatelessWidget {
           break;
         }
       } else {
-        gen2GraafikuLoomine(selected, valitudPaev, value);
+        //gen2GraafikuLoomine(selected, valitudPaev, value);
         break;
       }
     }
