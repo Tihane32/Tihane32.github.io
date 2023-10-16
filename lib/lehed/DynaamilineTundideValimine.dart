@@ -317,86 +317,39 @@ graafikuteSaatmine(Map<String, bool> valitudSeadmed,
 graafikuKopeerimine(
     Map<String, bool> valitudGraafik, Map<String, bool> valitudSeadmed) async {
   //Graafiku saamise osa
-  var scheduleRules1;
-  valitudGraafik.forEach((key, value) async {
-    if (value == true) {
-      if (seadmeteMap[key]['Seadme_generatsioon'] == 1) {
-        var headers = {
-          'Content-Type': 'application/x-www-form-urlencoded',
-        };
-
-        var data = {
-          'channel': '0',
-          'id': key,
-          'auth_key': seadmeteMap[key]['Cloud_key'],
-        };
-
-        var url = Uri.parse('${seadmeteMap[key]['api_url']}/device/settings');
-        var res = await http.post(url, headers: headers, body: data);
-        await Future.delayed(const Duration(seconds: 2));
-        //Kui post läheb läbi siis:
-
-        print(res.body.toString());
-       
-        if (res.body.toString() ==
-            """{"isok":false,"errors":{"max_req":"Request limit reached!"}}""") {
-          await Future.delayed(const Duration(seconds: 2));
-          url = Uri.parse('${seadmeteMap[key]['api_url']}/device/settings');
-          res = await http.post(url, headers: headers, body: data);
-        }
-        final httpPackageJson = json.decode(res.body) as Map<String, dynamic>;
-        scheduleRules1 = httpPackageJson['data']['device_settings']['relays'][0]
-            ['schedule_rules'];
-        print(scheduleRules1);
-      } else {
-        String token = await getToken2();
-        var headers = {
-          'Authorization': 'Bearer $token',
-        };
-
-        var data = {
-          'id': key,
-          'method': 'schedule.list',
-        };
-
-        var url = Uri.parse(
-            '${seadmeteMap[key]['api_url']}/fast/device/gen2_generic_command');
-        var res = await http.post(url, headers: headers, body: data);
-        if (res.statusCode == 200) {
-          var resJSON = jsonDecode(res.body) as Map<String, dynamic>;
-          if (resJSON == null) {
-            return; // stop the function if resJSON is null
-          }
-          var jobs = resJSON['data']['jobs'];
-          if (jobs == null) {
-            // handle the case where jobs is null
-            return;
-          }
-          jobs = resJSON['data']['jobs'] as List<dynamic>;
-          print(jobs);
-        }
-      }
+  List<dynamic> graafik = [];
+  List<dynamic> graafikGen1 = [];
+  List<dynamic> graafikGen2 = [];
+  await Future.forEach(valitudGraafik.keys, (key) async {
+  bool? value = valitudGraafik[key];
+  if (value == true) {
+    if (seadmeteMap[key]['Seadme_generatsioon'] == 1) {
+      graafik = await graafikGen1Lugemine(key);
+      print("peaks olema siin");
+      print(graafik);
+    } else {
+      graafik = await graafikGen2Lugemine(key);
+      graafik = graafikGen2ToGraafikGen1(graafik);
+       print("peaks olema siin");
+      print(graafik);
     }
-  });
-  //Graafiku saatmise osa
+  }
+});
+  graafikGen1 = graafik;
+  graafikGen2 = graafik;
+  print("miks");
+  print(graafik);
+  int k = 0;
   valitudSeadmed.forEach((key, value) async {
     if (value == true) {
       if (seadmeteMap[key]['Seadme_generatsioon'] == 1) {
-        var headers1 = {
-          'Content-Type': 'application/x-www-form-urlencoded',
-        };
-
-        var data1 = {
-          'channel': '0',
-          'enabled': "1",
-          'schedule_rules': scheduleRules1.toString(),
-          'id': key,
-          'auth_key': seadmeteMap[key]['Cloud_key'],
-        };
-        await Future.delayed(const Duration(seconds: 2));
-        var url1 = Uri.parse(
-            '${seadmeteMap[key]['api_url']}/device/relay/settings/schedule_rules');
-        var res1 = await http.post(url1, headers: headers1, body: data1);
+        await graafikGen1Saatmine(graafikGen1, key);
+      } else {
+        if (k == 0) {
+          graafikGen2 = graafikGen1ToGraafikGen2(graafikGen2);
+          k = 1;
+        }
+        await graafikGen2SaatmineGraafikuga(graafikGen2, key);
       }
     }
   });

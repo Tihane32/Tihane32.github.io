@@ -19,7 +19,6 @@ import 'lehed/seadmeteList.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:workmanager/workmanager.dart';
-import 'package:background_fetch/background_fetch.dart';
 
 //Maini käivitamine, home on koduleht.
 //bool graafikuNahtavus = true;
@@ -106,12 +105,7 @@ Future<void> main() async {
     theme: ThemeData(brightness: Brightness.light),
     home: DynaamilenieKoduLeht(i: 1), //Alustab appi kodulehest
   ));
-  BackgroundFetch.registerHeadlessTask(backgroundFetchHeadlessTask);
-  BackgroundFetch.start().then((int status) {
-    print('[BackgroundFetch] start success: $status');
-  }).catchError((e) {
-    print('[BackgroundFetch] start FAILURE: $e');
-  });
+  
 
   /*Workmanager().initialize(callbackDispatcher);
   Workmanager().registerPeriodicTask(
@@ -119,17 +113,8 @@ Future<void> main() async {
     "simplePeriodicTask",
     frequency: Duration(seconds: 5),
   );*/
-  SeadmeGraafikKontrollimineGen2();
-  
+  graafikGen2DeleteAll("30c6f7828098");
+
   //graafikGen1Lugemine("80646f81ad9a");
 }
 
-backgroundFetchHeadlessTask(String taskId) async {
-  // Evaluate all the tasks which you want to perform in
-
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  prefs.setString('backround', taskId);
-  prefs.setString('kell', DateTime.now().toString());
-  BackgroundFetch.finish(taskId);
-  // write the code to be run in background BackgroundFetch.finish(taskId);
-}

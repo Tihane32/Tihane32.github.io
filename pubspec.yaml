@@ -46,7 +46,6 @@ dependencies:
   get: ^4.6.5
   fl_chart: ^0.62.0
   workmanager: ^0.5.1
-  background_fetch: ^1.2.1
 
 
 dev_dependencies:

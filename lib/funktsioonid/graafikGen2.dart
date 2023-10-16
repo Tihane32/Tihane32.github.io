@@ -371,6 +371,8 @@ delete(value, List temp) async {
     var url = Uri.parse(
         '${seadmeteMap[value]['api_url']}/fast/device/gen2_generic_command');
     var res1 = await http.post(url, headers: headers, body: data);
+    print(res1.body);
+    await Future.delayed(const Duration(seconds: 2));
   }
 }
 
@@ -449,11 +451,11 @@ graafikGen2ToGraafikGen1(List<dynamic> graafik) {
   print("reuslt");
   print(result);
   // Join the result list into a single string using commas
-  return result.join(', ');
+  return result;
 }
 
-graafikGen1ToGraafikGen2(String graafik) {
-  
+graafikGen1ToGraafikGen2(List<dynamic> graafik) {
+  String graafikString = graafik.join(", ");
 
   final dayMap = {
     0: 'MON',
@@ -466,8 +468,8 @@ graafikGen1ToGraafikGen2(String graafik) {
   };
 
   // Split the input string by commas to get individual job entries
-  List<String> entries = graafik.split(', ');
-  List<dynamic> jobs = List.empty(growable: true);
+  List<String> entries = graafikString.split(', ');
+  List<String> jobs = List.empty(growable: true);
   for (var entry in entries) {
     // Split each entry by the dash '-' to get its components
     List<String> parts = entry.split('-');
@@ -481,25 +483,53 @@ graafikGen1ToGraafikGen2(String graafik) {
       String? day = dayMap[dayNumber];
 
       // Create a map for the job and add it to the result list
-     
+
       if (time[0] == "0") {
         time = time.substring(1, 2);
-      }else{
-        time = time.substring(0,2);
+      } else {
+        time = time.substring(0, 2);
       }
       jobs.add({
-        "enable": true,
-        "timespec": "0 0 $time * * $day",
-        "calls": [
-          {
-            "method": "Switch.Set",
-            "params": {"id": 0, "on": '$switchState'}
-          }
-        ]
-      });
-      
+        '"enable":true,"timespec":"0 0 $time * * $day","calls":[{"method":"Switch.Set","params":{"id":0,"on":$switchState}}]'
+      }.toString());
     }
   }
-  
+
   return jobs;
+}
+
+graafikGen2DeleteAll(String id) async {
+  List<dynamic> graafik = [];
+  List temp = [];
+  graafik = await graafikGen2Lugemine(id);
+  print("graafik delete");
+
+  print(graafik.length);
+  for (int i = 0; i < graafik.length; i++) {
+    temp.add(graafik[i]["id"]);
+  }
+  await delete(id, temp);
+}
+
+graafikGen2SaatmineGraafikuga(List<dynamic> graafik, String key) async {
+  await graafikGen2DeleteAll(key);
+  String token = await getToken2();
+  print("graafikgen2 $graafik");
+  for (int i = 0; i < graafik.length; i++) {
+    print(graafik[i]);
+    var headers = {
+      'Authorization': 'Bearer $token',
+      'Content-Type': 'application/x-www-form-urlencoded',
+    };
+
+    var data = {
+      'id': key,
+      'method': 'schedule.create',
+      'params': '${graafik[i]}',
+    };
+    var url = Uri.parse(
+        '${seadmeteMap[key]['api_url']}/fast/device/gen2_generic_command');
+    var res = await http.post(url, headers: headers, body: data);
+    print(res.body);
+  }
 }
