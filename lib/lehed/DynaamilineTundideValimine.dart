@@ -82,6 +82,9 @@ class _DynamilineTundideValimineState extends State<DynamilineTundideValimine> {
   Color boxColor = sinineKast;
   late List<Widget> lehedMenu;
   Color paev = Colors.green; // Declare the list
+  Map<String, dynamic> graafikuSeaded = {};
+  double maxTunnid = 7;
+  bool seadista = false;
 
   @override
   void initState() {
@@ -106,7 +109,8 @@ class _DynamilineTundideValimineState extends State<DynamilineTundideValimine> {
       KeelatudTunnid(valitudSeadmed: valitudSeadmed, luba: luba),
       TunniSeaded(
           valitudSeadmed: valitudSeadmed,
-          updateValitudSeadmed: updateValitudSeamded),
+          uptateMaxTunnid: uptateMaxValjas,
+          uptateRakendaSeadistus: uptateRakendaSeadistus),
       AbiLeht(),
     ];
   }
@@ -123,6 +127,18 @@ class _DynamilineTundideValimineState extends State<DynamilineTundideValimine> {
   updateValitudSeamded(Map<String, bool> ValitudGraafikuus) {
     setState(() {
       ValitudGraafik = ValitudGraafikuus;
+    });
+  }
+
+  uptateMaxValjas(double maxTunnid) {
+    setState(() {
+      maxTunnid = maxTunnid;
+    });
+  }
+
+  uptateRakendaSeadistus(bool seadista) {
+    setState(() {
+      seadista = seadista;
     });
   }
 
@@ -212,6 +228,8 @@ class _DynamilineTundideValimineState extends State<DynamilineTundideValimine> {
                               color: Color.fromARGB(255, 157, 214, 171),
                             ),
                             onPressed: () {
+                              graafikuSeadedVaartustamine(
+                                  graafikuSeaded, maxTunnid, seadista);
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
@@ -326,20 +344,20 @@ graafikuKopeerimine(
   List<dynamic> graafikGen1 = [];
   List<dynamic> graafikGen2 = [];
   await Future.forEach(valitudGraafik.keys, (key) async {
-  bool? value = valitudGraafik[key];
-  if (value == true) {
-    if (seadmeteMap[key]['Seadme_generatsioon'] == 1) {
-      graafik = await graafikGen1Lugemine(key);
-      print("peaks olema siin");
-      print(graafik);
-    } else {
-      graafik = await graafikGen2Lugemine(key);
-      graafik = graafikGen2ToGraafikGen1(graafik);
-       print("peaks olema siin");
-      print(graafik);
+    bool? value = valitudGraafik[key];
+    if (value == true) {
+      if (seadmeteMap[key]['Seadme_generatsioon'] == 1) {
+        graafik = await graafikGen1Lugemine(key);
+        print("peaks olema siin");
+        print(graafik);
+      } else {
+        graafik = await graafikGen2Lugemine(key);
+        graafik = graafikGen2ToGraafikGen1(graafik);
+        print("peaks olema siin");
+        print(graafik);
+      }
     }
-  }
-});
+  });
   graafikGen1 = graafik;
   graafikGen2 = graafik;
   print("miks");
@@ -358,4 +376,11 @@ graafikuKopeerimine(
       }
     }
   });
+}
+
+graafikuSeadedVaartustamine(
+    Map<String, dynamic> graafikuSeaded, double maxTunnid, bool seadista) {
+  graafikuSeaded['Seadistus_lubatud'] = seadista;
+  graafikuSeaded['Max_jarjest_valjas'] = maxTunnid + 1;
+  print(graafikuSeaded);
 }

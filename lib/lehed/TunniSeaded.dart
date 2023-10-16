@@ -5,23 +5,30 @@ import 'DynaamilineTundideValimine.dart';
 import 'package:intl/intl.dart';
 
 class TunniSeaded extends StatefulWidget {
-  final Function updateValitudSeadmed;
+  final Function uptateMaxTunnid;
+  final Function uptateRakendaSeadistus;
   TunniSeaded(
-      {Key? key, this.valitudSeadmed, required this.updateValitudSeadmed})
+      {Key? key,
+      this.valitudSeadmed,
+      required this.uptateMaxTunnid,
+      required this.uptateRakendaSeadistus})
       : super(key: key);
   final valitudSeadmed;
   @override
   _TunniSeadedState createState() => _TunniSeadedState(
       valitudSeadmed: valitudSeadmed,
-      updateValitudSeadmed: updateValitudSeadmed);
+      uptateMaxTunnid: uptateMaxTunnid,
+      uptateRakendaSeadistus: uptateRakendaSeadistus);
 }
 
 class _TunniSeadedState extends State<TunniSeaded> {
   _TunniSeadedState(
       {Key? key,
       required this.valitudSeadmed,
-      required this.updateValitudSeadmed});
-  Function updateValitudSeadmed;
+      required this.uptateMaxTunnid,
+      required this.uptateRakendaSeadistus});
+  Function uptateMaxTunnid;
+  Function uptateRakendaSeadistus;
   var valitudSeadmed;
   int koduindex = 1;
   bool isLoading = true;
@@ -31,6 +38,7 @@ class _TunniSeadedState extends State<TunniSeaded> {
   double hinnapiir = 50.50;
   Color boxColor = sinineKast;
   bool _notificationsEnabled = false;
+  bool seadista = false;
   String _selectedTheme = 'Odavaimad Tunnid';
   double maxtunnid = 7;
   Map<int, int> tunniMap = {
@@ -47,6 +55,7 @@ class _TunniSeadedState extends State<TunniSeaded> {
     11: 12
   };
   double bufferPerjood = 3;
+  Map<String, String> graafikuSeaded = {};
 
   TextEditingController _textController = TextEditingController();
 
@@ -59,14 +68,15 @@ class _TunniSeadedState extends State<TunniSeaded> {
           children: <Widget>[
             ListTile(
               title: Text(
-                'Saada teavitus kui seade ei ole kättesaadav',
+                'Rakenda seaded graafikule',
                 style: font,
               ),
               trailing: Switch(
-                value: _notificationsEnabled,
+                value: seadista,
                 onChanged: (bool value) {
                   setState(() {
-                    _notificationsEnabled = value;
+                    seadista = value;
+                    uptateRakendaSeadistus(seadista);
                   });
                 },
               ),
@@ -123,12 +133,13 @@ class _TunniSeadedState extends State<TunniSeaded> {
                 onChanged: (newValue) {
                   setState(() {
                     maxtunnid = newValue;
+                    uptateMaxTunnid(maxtunnid);
                   });
                 },
                 divisions: 10,
                 min: 1,
                 max: 11,
-                label: tunniMap[maxtunnid].toString() + 'tundi',
+                label: tunniMap[maxtunnid].toString(),
               ),
             ),
           ],

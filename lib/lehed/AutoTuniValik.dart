@@ -75,6 +75,27 @@ class _AutoTundideValikState extends State<AutoTundideValik> {
               ),
             ),
             ListTile(
+                title: Text(
+                  'Häälestuse seaded:',
+                  style: font,
+                ),
+                trailing: IconButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => DynamilineTundideValimine(
+                                valitudSeadmed: valitudSeadmed,
+                                i: 5,
+                                luba: '')),
+                      );
+                    },
+                    icon: Icon(
+                      Icons.settings,
+                      color: Colors.black,
+                      size: 30.0,
+                    ))),
+            ListTile(
               title: Text(
                 'Automaatjuhtimise kestus: ${tootamisMap[tootamisAeg]}',
                 style: font,
@@ -214,48 +235,6 @@ class _AutoTundideValikState extends State<AutoTundideValik> {
                 ),
               ),
             ),
-            ListTile(
-                title: Text(
-                  'Tunnid kus seade peab töötama',
-                  style: font,
-                ),
-                trailing: IconButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => DynamilineTundideValimine(
-                                valitudSeadmed: valitudSeadmed,
-                                i: 4,
-                                luba: 'jah')),
-                      );
-                    },
-                    icon: Icon(
-                      Icons.more_time_rounded,
-                      color: Colors.green,
-                      size: 30,
-                    ))),
-            ListTile(
-                title: Text(
-                  'Tunnid kus seade ei tohi töödata',
-                  style: font,
-                ),
-                trailing: IconButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => DynamilineTundideValimine(
-                                valitudSeadmed: valitudSeadmed,
-                                i: 4,
-                                luba: 'ei')),
-                      );
-                    },
-                    icon: Icon(
-                      Icons.more_time_rounded,
-                      color: Colors.red,
-                      size: 30,
-                    ))),
           ],
         ),
       ),
