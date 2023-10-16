@@ -1,15 +1,9 @@
-import 'dart:convert';
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:testuus4/funktsioonid/graafikGen1.dart';
 import 'package:testuus4/funktsioonid/graafikGen2.dart';
 import 'package:testuus4/lehed/GraafikusseSeadmeteValik.dart';
 import 'package:testuus4/lehed/dynamicKoduLeht.dart';
-import '../funktsioonid/genMaaramine.dart';
-import '../funktsioonid/token.dart';
 import '../main.dart';
 import '../widgets/kinnitus.dart';
 import 'AbiLeht.dart';
@@ -19,7 +13,6 @@ import 'keelatudTunnid.dart';
 import 'keskimiseHinnaAluselTundideValimine.dart';
 import 'hinnaPiiriAluselTunideValimine.dart';
 import 'kopeeeriGraafikTundideValimine.dart';
-import 'package:http/http.dart' as http;
 
 class DynamilineTundideValimine extends StatefulWidget {
   DynamilineTundideValimine(
@@ -74,6 +67,7 @@ class _DynamilineTundideValimineState extends State<DynamilineTundideValimine> {
       required this.luba});
   String luba;
   int leht;
+  int eelmineLeht = 0;
   var valitudSeadmed;
   Map<String, bool> ValitudGraafik = {};
   String selectedPage = 'Odavaimad tunnid';
@@ -173,12 +167,16 @@ class _DynamilineTundideValimineState extends State<DynamilineTundideValimine> {
                     selectedPage = newValue!;
                   });
                   if (selectedPage == 'Odavaimad tunnid') {
+                    eelmineLeht = leht;
                     leht = 0;
                   } else if (selectedPage == 'Hinnapiir') {
+                    eelmineLeht = leht;
                     leht = 1;
                   } else if (selectedPage == 'Kopeeri graafik') {
+                    eelmineLeht = leht;
                     leht = 2;
                   } else if (selectedPage == 'Automaatne') {
+                    eelmineLeht = leht;
                     leht = 3;
                   }
                 },
@@ -236,7 +234,7 @@ class _DynamilineTundideValimineState extends State<DynamilineTundideValimine> {
                                   builder: (context) =>
                                       DynamilineTundideValimine(
                                           valitudSeadmed: valitudSeadmed,
-                                          i: 3,
+                                          i: eelmineLeht,
                                           luba: ''),
                                 ),
                               );
