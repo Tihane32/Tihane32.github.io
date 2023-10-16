@@ -201,7 +201,35 @@ graafikGen1Filtreerimine(List<dynamic> graafik, List<int> paevad) {
   return newGraafik;
 }
 
-graafikGen1Koostamine(Map<int, dynamic> lulitus){
-
-
+graafikGen1Koostamine(Map<int, dynamic> lulitus, int paev) {
+  for (int i = 0; i < 24; i++) {
+    String temp = lulitus[i][0];
+    temp = temp.replaceAll(".", '');
+    lulitus[i][0] = temp;
+  }
+  for (int i = 0; i < 24; i++) {
+    bool temp = lulitus[i][2];
+    String temp1;
+    if (temp == true) {
+      temp1 = 'on';
+    } else {
+      temp1 = 'off';
+    }
+    lulitus[i][2] = temp1;
+  }
+  List<String> graafik = [];
+  for (int i = 0; i < 24; i++) {
+    if (i != 0) {
+      if (lulitus[i][2] != lulitus[i - 1][2]) {
+        String temp = lulitus[i][0] + '-$paev-' + lulitus[i][2];
+        graafik.add(temp);
+      }
+    } else {
+      String temp = lulitus[i][0] + '-$paev-' + lulitus[i][2];
+      graafik.add(temp);
+    }
+  }
+  print("good graafik");
+  print(graafik);
+  return graafik;
 }
