@@ -14,6 +14,7 @@ import '../main.dart';
 import '../widgets/kinnitus.dart';
 import 'AbiLeht.dart';
 import 'AutoTuniValik.dart';
+import 'TunniSeaded.dart';
 import 'keelatudTunnid.dart';
 import 'keskimiseHinnaAluselTundideValimine.dart';
 import 'hinnaPiiriAluselTunideValimine.dart';
@@ -75,7 +76,7 @@ class _DynamilineTundideValimineState extends State<DynamilineTundideValimine> {
   int leht;
   var valitudSeadmed;
   Map<String, bool> ValitudGraafik = {};
-  String selectedPage = 'Keskmine hind';
+  String selectedPage = 'Odavaimad tunnid';
   double vahe = 10;
   int valitudTunnid = 10;
   Color boxColor = sinineKast;
@@ -89,9 +90,13 @@ class _DynamilineTundideValimineState extends State<DynamilineTundideValimine> {
     // Initialize lehedMenu in initState
     lehedMenu = [
       KeskmiseHinnaAluselTundideValimine(
-          lulitusMap: lulitusMap, updateLulitusMap: updateLulitusMap),
+          valitudSeadmed: valitudSeadmed,
+          lulitusMap: lulitusMap,
+          updateLulitusMap: updateLulitusMap),
       HinnaPiiriAluselTundideValimine(
-          lulitusMap: lulitusMap, updateLulitusMap: updateLulitusMap),
+          valitudSeadmed: valitudSeadmed,
+          lulitusMap: lulitusMap,
+          updateLulitusMap: updateLulitusMap),
       KopeeriGraafikTundideValik(
           valitudSeadmed: valitudSeadmed,
           updateValitudSeadmed: updateValitudSeamded),
@@ -99,6 +104,9 @@ class _DynamilineTundideValimineState extends State<DynamilineTundideValimine> {
           valitudSeadmed: valitudSeadmed,
           updateValitudSeadmed: updateValitudSeamded),
       KeelatudTunnid(valitudSeadmed: valitudSeadmed, luba: luba),
+      TunniSeaded(
+          valitudSeadmed: valitudSeadmed,
+          updateValitudSeadmed: updateValitudSeamded),
       AbiLeht(),
     ];
   }
@@ -148,7 +156,7 @@ class _DynamilineTundideValimineState extends State<DynamilineTundideValimine> {
                   setState(() {
                     selectedPage = newValue!;
                   });
-                  if (selectedPage == 'Keskmine hind') {
+                  if (selectedPage == 'Odavaimad tunnid') {
                     leht = 0;
                   } else if (selectedPage == 'Hinnapiir') {
                     leht = 1;
@@ -156,17 +164,14 @@ class _DynamilineTundideValimineState extends State<DynamilineTundideValimine> {
                     leht = 2;
                   } else if (selectedPage == 'Automaatne') {
                     leht = 3;
-                  } else if (selectedPage == 'Minu eelistused') {
-                    leht = 5;
                   }
                 },
                 underline: Container(), // or SizedBox.shrink()
                 items: <String>[
-                  'Keskmine hind',
+                  'Odavaimad tunnid',
                   'Hinnapiir',
                   'Kopeeri graafik',
                   'Automaatne',
-                  'Minu eelistused',
                 ].map((String value) {
                   return DropdownMenuItem<String>(
                     value: value,
@@ -193,7 +198,7 @@ class _DynamilineTundideValimineState extends State<DynamilineTundideValimine> {
               top: -5,
               left: 0,
               right: 0,
-              child: leht == 4
+              child: leht == 4 || leht == 5
                   ? Container(
                       height: 60,
                       color: Color.fromARGB(255, 115, 162, 195),

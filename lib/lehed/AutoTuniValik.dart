@@ -117,7 +117,6 @@ class _AutoTundideValikState extends State<AutoTundideValik> {
                     items: <String>[
                       'Odavaimad Tunnid',
                       'Hinnapiir',
-                      'Minu eelistusd',
                       'Tarbimis muster',
                     ].map<DropdownMenuItem<String>>((String value) {
                       return DropdownMenuItem<String>(
