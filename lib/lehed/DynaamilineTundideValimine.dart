@@ -326,20 +326,25 @@ graafikuKopeerimine(
   List<dynamic> graafikGen1 = [];
   List<dynamic> graafikGen2 = [];
   await Future.forEach(valitudGraafik.keys, (key) async {
-  bool? value = valitudGraafik[key];
-  if (value == true) {
-    if (seadmeteMap[key]['Seadme_generatsioon'] == 1) {
-      graafik = await graafikGen1Lugemine(key);
-      print("peaks olema siin");
-      print(graafik);
-    } else {
-      graafik = await graafikGen2Lugemine(key);
-      graafik = graafikGen2ToGraafikGen1(graafik);
-       print("peaks olema siin");
-      print(graafik);
+    bool? value = valitudGraafik[key];
+    if (value == true) {
+      if (seadmeteMap[key]['Seadme_generatsioon'] == 1) {
+        graafik = await graafikGen1Lugemine(key);
+        print("peaks olema siin");
+        print(graafik);
+      } else {
+        graafik = await graafikGen2Lugemine(key);
+        graafik = graafikGen2ToGraafikGen1(graafik);
+        print("peaks olema siin");
+        print(graafik);
+      }
     }
-  }
-});
+  });
+
+  int tana = getCurrentDayOfWeek();
+  int homme = getTommorowDayOfWeek();
+  List<int> paevad = [tana, homme];
+  graafik = graafikGen1Filtreerimine(graafik, paevad);
   graafikGen1 = graafik;
   graafikGen2 = graafik;
   print("miks");
@@ -354,6 +359,7 @@ graafikuKopeerimine(
           graafikGen2 = graafikGen1ToGraafikGen2(graafikGen2);
           k = 1;
         }
+        print("saadetud $graafikGen2");
         await graafikGen2SaatmineGraafikuga(graafikGen2, key);
       }
     }

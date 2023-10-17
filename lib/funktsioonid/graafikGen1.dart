@@ -229,7 +229,38 @@ graafikGen1Koostamine(Map<int, dynamic> lulitus, int paev) {
       graafik.add(temp);
     }
   }
-  print("good graafik");
-  print(graafik);
   return graafik;
+}
+
+graafikGen1ToLulitusMap(Map<int, dynamic> lulitus, List<dynamic> graafik) {
+  Map<int, dynamic> lulitusUus = lulitus;
+  for (int i = 0; i < 24; i++) {
+    String asendus = '$i';
+    if (i < 10) {
+      asendus = '0' + asendus + '00';
+    } else {
+      asendus = asendus + '00';
+    }
+    for (int j = 0; j < graafik.length; j++) {
+      List<String> parts = graafik[j].split('-');
+      String timeString = parts[0];
+      print(timeString);
+      print(asendus);
+      if (timeString == asendus) {
+        print("siin");
+        if (parts[2] == 'on') {
+          lulitusUus[i][2] = true;
+        } else {
+          lulitusUus[i][2] = false;
+        }
+        break;
+      } else {
+        if (i != 0) {
+          lulitusUus[i][2] = lulitusUus[i - 1][2];
+        }
+      }
+    }
+  }
+  print("lõppLulitus $lulitus $graafik");
+  return lulitusUus;
 }

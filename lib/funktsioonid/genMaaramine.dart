@@ -19,10 +19,10 @@ genMaaramine(
   String paev,
   //Map<String, dynamic> seadmeteMap,
   String seadmeNimi,
-) {
+) async {
   if (seadmeteMap[seadmeNimi]["Seadme_generatsioon"] == 1) {
-    gen1GraafikLoomine(lulitus, paev, seadmeNimi);
+    await gen1GraafikLoomine(lulitus, paev, seadmeNimi);
   } else {
-    gen2GraafikuLoomine(lulitus, paev, seadmeNimi);
+    await gen2GraafikuLoomine(lulitus, paev, seadmeNimi);
   }
 }

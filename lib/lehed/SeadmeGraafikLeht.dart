@@ -5,6 +5,7 @@ import 'package:testuus4/funktsioonid/graafikGen1.dart';
 import 'package:testuus4/funktsioonid/graafikGen2.dart';
 import 'package:testuus4/lehed/AbiLeht.dart';
 import 'package:testuus4/Arhiiv/SeadmeTarbimisLeht.dart';
+import 'package:testuus4/lehed/GraafikusseSeadmeteValik.dart';
 import 'package:testuus4/lehed/TarbimisLeht.dart';
 import 'package:testuus4/lehed/dynamicKoduLeht.dart';
 import 'package:testuus4/lehed/dynamicSeadmeInfo.dart';
@@ -170,7 +171,29 @@ class _SeadmeGraafikuLehtState extends State<SeadmeGraafikuLeht> {
       keskHind = keskmineHindMapVaartustamine(hindAVG, keskHind, lulitus);
     });
 
-    SharedPreferences prefs = await SharedPreferences.getInstance();
+    List<dynamic> graafik = [];
+    if (seadmeteMap[seadmeNimi]["Seadme_generatsioon"] == 1) {
+      graafik = await graafikGen1Lugemine(seadmeNimi);
+    } else {
+      graafik = await graafikGen2Lugemine(seadmeNimi);
+      graafik = graafikGen2ToGraafikGen1(graafik);
+    }
+
+    int tana = getCurrentDayOfWeek();
+    int homme = getTommorowDayOfWeek();
+
+    List<int> paevadTana = [tana];
+    List<dynamic> graafikTana = [];
+    List<int> paevadHomme = [homme];
+    List<dynamic> graafikHomme = [];
+    graafikTana = graafikGen1Filtreerimine(graafik, paevadTana);
+    graafikHomme = graafikGen1Filtreerimine(graafik, paevadHomme);
+    setState(() {
+      lulitus = graafikGen1ToLulitusMap(lulitus, graafikTana);
+    lulitusHomme = graafikGen1ToLulitusMap(lulitusHomme, graafikHomme);
+    });
+    
+    /*SharedPreferences prefs = await SharedPreferences.getInstance();
 
     []; //Võtab mälust 'users'-i asukohast väärtused
     var seadmedJSONmap = prefs.getString('seadmed');
@@ -281,7 +304,7 @@ class _SeadmeGraafikuLehtState extends State<SeadmeGraafikuLeht> {
         lulitus = graafikud;
         lulitusHomme = graafikud1;
       });
-    }
+    }*/
   }
 
   @override
