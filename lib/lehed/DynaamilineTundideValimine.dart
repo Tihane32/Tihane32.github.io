@@ -79,6 +79,8 @@ class _DynamilineTundideValimineState extends State<DynamilineTundideValimine> {
   Map<String, dynamic> graafikuSeaded = {};
   double maxTunnid = 7;
   bool seadista = false;
+  Set<int> lubatud = {};
+  Set<int> keelatud = {};
 
   @override
   void initState() {
@@ -100,7 +102,11 @@ class _DynamilineTundideValimineState extends State<DynamilineTundideValimine> {
       AutoTundideValik(
           valitudSeadmed: valitudSeadmed,
           updateValitudSeadmed: updateValitudSeamded),
-      KeelatudTunnid(valitudSeadmed: valitudSeadmed, luba: luba),
+      KeelatudTunnid(
+          valitudSeadmed: valitudSeadmed,
+          luba: luba,
+          uptateLubatudTunnid: uptateLubatudTunnid,
+          uptateKeelatudTunnid: uptateKeelatudTunnid),
       TunniSeaded(
           valitudSeadmed: valitudSeadmed,
           uptateMaxTunnid: uptateMaxValjas,
@@ -124,15 +130,27 @@ class _DynamilineTundideValimineState extends State<DynamilineTundideValimine> {
     });
   }
 
-  uptateMaxValjas(double maxTunnid) {
+  uptateMaxValjas(double Tunnid) {
     setState(() {
-      maxTunnid = maxTunnid;
+      maxTunnid = Tunnid;
     });
   }
 
-  uptateRakendaSeadistus(bool seadista) {
+  uptateRakendaSeadistus(bool seadistus) {
     setState(() {
-      seadista = seadista;
+      seadista = seadistus;
+    });
+  }
+
+  uptateLubatudTunnid(Set<int> lubatudTunnid) {
+    setState(() {
+      lubatud = lubatudTunnid;
+    });
+  }
+
+  uptateKeelatudTunnid(Set<int> keelatudTunnid) {
+    setState(() {
+      keelatud = keelatudTunnid;
     });
   }
 
@@ -226,8 +244,8 @@ class _DynamilineTundideValimineState extends State<DynamilineTundideValimine> {
                               color: Color.fromARGB(255, 157, 214, 171),
                             ),
                             onPressed: () {
-                              graafikuSeadedVaartustamine(
-                                  graafikuSeaded, maxTunnid, seadista);
+                              graafikuSeadedVaartustamine(graafikuSeaded,
+                                  maxTunnid, seadista, keelatud, lubatud);
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
@@ -376,9 +394,11 @@ graafikuKopeerimine(
   });
 }
 
-graafikuSeadedVaartustamine(
-    Map<String, dynamic> graafikuSeaded, double maxTunnid, bool seadista) {
+graafikuSeadedVaartustamine(Map<String, dynamic> graafikuSeaded,
+    double maxTunnid, bool seadista, Set<int> keelatud, Set<int> lubatud) {
   graafikuSeaded['Seadistus_lubatud'] = seadista;
   graafikuSeaded['Max_jarjest_valjas'] = maxTunnid + 1;
+  graafikuSeaded['Kelleatud_tunnid'] = keelatud.toSet();
+  graafikuSeaded['Lubatud_tunnid'] = lubatud.toSet();
   print(graafikuSeaded);
 }
