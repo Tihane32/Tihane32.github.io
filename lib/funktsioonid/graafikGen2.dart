@@ -39,6 +39,10 @@ gen2GraafikuLoomine(
   graafik.addAll(graafikUus);
   graafik = graafikGen1ToGraafikGen2(graafik);
   await graafikGen2SaatmineGraafikuga(graafik, id);
+
+  mitmeSeadmeKinnitus.add(true);
+  seadmeKinnitus = true;
+  //abi = true;
   //await delete(value, temp);
 }
 
@@ -509,6 +513,7 @@ graafikGen1ToGraafikGen2(List<dynamic> graafik) {
 
   return jobs;
 }
+
 // 1.1.2.4 graafikGen2DeleteAll
 graafikGen2DeleteAll(String id) async {
   List<dynamic> graafik = [];

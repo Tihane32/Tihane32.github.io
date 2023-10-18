@@ -172,6 +172,9 @@ graafikGen1Saatmine(List<dynamic> graafik, String id) async {
   var url1 = Uri.parse(
       '${seadmeteMap[id]['api_url']}/device/relay/settings/schedule_rules');
   var res1 = await http.post(url1, headers: headers1, body: data1);
+  //abi = true;
+  mitmeSeadmeKinnitus.add(true);
+  seadmeKinnitus = true;
 }
 
 graafikGen1Filtreerimine(List<dynamic> graafik, List<int> paevad) {

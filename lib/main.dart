@@ -3,6 +3,7 @@ Trevor Uuna, Jaakob Lambot 27.03.2023
 TalTech
 */
 //Kit test
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -22,6 +23,8 @@ import 'package:workmanager/workmanager.dart';
 
 //Maini käivitamine, home on koduleht.
 //bool graafikuNahtavus = true;
+bool seadmeKinnitus = false;
+List<bool> mitmeSeadmeKinnitus = [];
 Map<String, dynamic> seadmeteMap = {};
 double vahe = 20;
 double navBarHeight = 55;
@@ -105,7 +108,6 @@ Future<void> main() async {
     theme: ThemeData(brightness: Brightness.light),
     home: DynaamilenieKoduLeht(i: 1), //Alustab appi kodulehest
   ));
-  
 
   /*Workmanager().initialize(callbackDispatcher);
   Workmanager().registerPeriodicTask(
@@ -117,4 +119,3 @@ Future<void> main() async {
 
   //graafikGen1Lugemine("80646f81ad9a");
 }
-

@@ -46,6 +46,7 @@ dependencies:
   get: ^4.6.5
   fl_chart: ^0.62.0
   workmanager: ^0.5.1
+  dcdg: ^4.1.0
 
 
 dev_dependencies:
@@ -89,6 +90,7 @@ flutter:
     - assets/saun1.jpg
     - assets/TeslaModel31.jpg
     - assets/vesinik1.jpg
+    - assets/valge.png
 
     
     

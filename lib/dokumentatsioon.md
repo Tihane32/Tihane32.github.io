@@ -17,6 +17,7 @@
       - [1.1.2.4 graafikGen2DeleteAll](#1124-graafikgen2deleteall)
   - [1.2 Seadmete muud funktsioonid](#12-seadmete-muud-funktsioonid)
     - [1.2.1 lulitamine](#121-lulitamine)
+    - [1.2.2 graafikGen1ToLulitusMap](#122-graafikgen1tolulitusmap)
 - [Lisa funktsioonid](#lisa-funktsioonid)
 - [2. Muutujate kujud](#2-muutujate-kujud)
   - [2.1 lulitus](#21-lulitus)
@@ -175,6 +176,22 @@ Seade = seadme id, mida lulitatakse
 
 ---
 
+### 1.2.2 graafikGen1ToLulitusMap
+
+```dart
+graafikGen1ToLulitusMap(Map<int, dynamic> lulitus, List<dynamic> graafik) {
+  return Map<int, dynamic>;
+}
+```
+
+Generatsioon 1 graafik muudab lulitus map-i lülitused true-ks või false-ks.
+
+lulitus = olemasolev lulitus map.
+
+graafik = generatsioon 1 kujul graafik.
+
+---
+
 # Lisa funktsioonid
 
 ```dart
@@ -207,8 +224,16 @@ lulitus = {0: [00.00, 44.85, false], 1: [01.00, 64.69, false], 2: [02.00, 55.95,
 
 ## 2.2 seadmeteMap
 
+```dart
 Map<String, dynamic> seadmeteMap;
 
-seadmeteMap = [String: String, String: String, String: int, String: String, String: String,String: String, String: String];
+seadmeteMap = String : {String: String, String: String, String: int, String: String, String: String,String: String, String: String};
+//Seadme_generatsioon on ainuke int
+seadmeteMap = Seadme_ID : {Seadme_nimi, Seadme_pistik, Seadme_generatsioon, api_url, Seadme_pilt, Cloud_key, Seadme_olek, Graafik}
+```
 
-seadmeteMap =
+Näiteks:
+
+```dart
+1234abc: {Seadme_nimi: Shelly Pro PM, Seadme_pistik: Shelly Pro PM, Seadme_generatsioon: 2, api_url: api, Seadme_pilt: assets/boiler1.jpg, Cloud_key: 422aaasfww, Seadme_olek: on, Graafik: jah}, 1234bvc: {Seadme_nimi: Shelly Plug S, Seadme_pistik: Shelly Plug S, Seadme_generatsioon: 1, api_url: api, Seadme_pilt: assets/boiler1.jpg, Cloud_key: 2335djgs, Seadme_olek: on, Graafik: jah}
+```

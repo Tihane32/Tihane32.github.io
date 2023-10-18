@@ -9,6 +9,7 @@ import 'package:testuus4/lehed/GraafikusseSeadmeteValik.dart';
 import 'package:testuus4/lehed/TarbimisLeht.dart';
 import 'package:testuus4/lehed/dynamicKoduLeht.dart';
 import 'package:testuus4/lehed/dynamicSeadmeInfo.dart';
+import '../widgets/kinnitus.dart';
 import 'SeadmeYldInfo.dart';
 import 'seadmeteList.dart';
 import 'package:flutter/services.dart';
@@ -26,6 +27,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:testuus4/funktsioonid/lulitamine.dart';
 import 'package:testuus4/funktsioonid/token.dart';
+import 'package:testuus4/main.dart';
 
 class SeadmeGraafikuLeht extends StatefulWidget {
   const SeadmeGraafikuLeht(
@@ -52,6 +54,7 @@ class _SeadmeGraafikuLehtState extends State<SeadmeGraafikuLeht> {
   final String seadmeNimi;
   late Map<int, dynamic> lulitusMap;
   int selectedRowIndex = -1;
+
   late double hindAVG = 0;
   String paevNupp = 'Täna';
   String selectedPage = 'Lülitusgraafik';
@@ -190,9 +193,9 @@ class _SeadmeGraafikuLehtState extends State<SeadmeGraafikuLeht> {
     graafikHomme = graafikGen1Filtreerimine(graafik, paevadHomme);
     setState(() {
       lulitus = graafikGen1ToLulitusMap(lulitus, graafikTana);
-    lulitusHomme = graafikGen1ToLulitusMap(lulitusHomme, graafikHomme);
+      lulitusHomme = graafikGen1ToLulitusMap(lulitusHomme, graafikHomme);
     });
-    
+
     /*SharedPreferences prefs = await SharedPreferences.getInstance();
 
     []; //Võtab mälust 'users'-i asukohast väärtused
@@ -309,6 +312,7 @@ class _SeadmeGraafikuLehtState extends State<SeadmeGraafikuLeht> {
 
   @override
   void initState() {
+    seadmeKinnitus = false;
     norm();
 
     super.initState();
@@ -1060,7 +1064,7 @@ class _SeadmeGraafikuLehtState extends State<SeadmeGraafikuLeht> {
           child: Align(
             alignment: Alignment.bottomCenter,
             child: GestureDetector(
-              onTap: () {
+              onTap: () async {
                 if (tana == green) {
                   genMaaramine(lulitus, 'täna', seadmeNimi);
                 } else {
@@ -1068,27 +1072,19 @@ class _SeadmeGraafikuLehtState extends State<SeadmeGraafikuLeht> {
                 }
 
                 showDialog(
-                    context: context,
-                    builder: (context) => AlertDialog(
-                          content: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  // Add some spacing between icon and text
-                                  Text("Kinnitatud", style: fontSuur),
-                                  SizedBox(width: 8),
-                                  Icon(
-                                    Icons.check_circle_outline_outlined,
-                                    size: 35,
-                                  ),
-                                ],
-                              ),
-                              // Add other content of the dialog if needed
-                            ],
-                          ),
-                        ));
+                            context: context,
+                            builder: (BuildContext context) {
+                              return Center(
+                                child: CircularProgressIndicator(),
+                              );
+                            },
+                          );
+                  while(seadmeKinnitus==false){
+                    await Future.delayed(Duration(seconds: 1));
+                  }
+Navigator.pop(context);
+Kinnitus(context, "Graafik seadmele saadetud");
+
                 HapticFeedback.vibrate();
                 Future.delayed(Duration(seconds: 5), () {
                   Navigator.of(context).pop(); // Close the AlertDialog
