@@ -1,6 +1,8 @@
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:testuus4/funktsioonid/graafikGen1.dart';
+import 'package:testuus4/lehed/GraafikusseSeadmeteValik.dart';
 import 'token.dart';
 import 'package:intl/intl.dart';
 import 'package:testuus4/main.dart';
@@ -16,14 +18,32 @@ import 'package:testuus4/main.dart';
 /// two possible values: "täna" (today) or "homme" (tomorrow).
 ///   value (String): The value parameter is a string that represents a specific value or identifier. It
 /// is used in various parts of the code to retrieve or manipulate data related to that value.
-gen2GraafikuLoomine(var selected, var valitudPaev, String value) async {
-  var graafikud = Map<String, dynamic>();
-  List temp = List.empty(growable: true);
-  await graafikuteSaamine(graafikud, value, temp, valitudPaev);
+gen2GraafikuLoomine(
+    Map<int, dynamic> lulitus, String valitudPaev, String id) async {
+  List<int> paevad = [];
+  int paev;
+  if (valitudPaev == "täna") {
+    int i = getTommorowDayOfWeek();
+    paevad.add(i);
+    paev = getCurrentDayOfWeek();
+  } else {
+    int i = getCurrentDayOfWeek();
+    paevad.add(i);
+    paev = getTommorowDayOfWeek();
+  }
+  List<dynamic> graafik = await graafikGen2Lugemine(id);
+  await graafikGen2DeleteAll(id);
+  graafik = graafikGen2ToGraafikGen1(graafik);
+  graafik = graafikGen1Filtreerimine(graafik, paevad);
+  List<dynamic> graafikUus = graafikGen1Koostamine(lulitus, paev);
+  graafik.addAll(graafikUus);
+  graafik = graafikGen1ToGraafikGen2(graafik);
+  await graafikGen2SaatmineGraafikuga(graafik, id);
 
-  await graafikuloomine(graafikud, selected, valitudPaev, value);
-
-  await delete(value, temp);
+  mitmeSeadmeKinnitus.add(true);
+  seadmeKinnitus = true;
+  //abi = true;
+  //await delete(value, temp);
 }
 
 graafikuteSaamine(Map<String, dynamic> graafikud, String value, List temp,
@@ -371,7 +391,6 @@ delete(value, List temp) async {
     var url = Uri.parse(
         '${seadmeteMap[value]['api_url']}/fast/device/gen2_generic_command');
     var res1 = await http.post(url, headers: headers, body: data);
-    print(res1.body);
     await Future.delayed(const Duration(seconds: 2));
   }
 }
@@ -402,12 +421,12 @@ graafikGen2Lugemine(String id) async {
       return;
     }
     tuhiGraafik = resJSON['data']['jobs'] as List<dynamic>;
-    print(tuhiGraafik);
   }
 
   return tuhiGraafik;
 }
 
+// 1.1.2.2 graafikGen2ToGraafikGen1
 graafikGen2ToGraafikGen1(List<dynamic> graafik) {
   List<String> result = [];
 
@@ -436,7 +455,6 @@ graafikGen2ToGraafikGen1(List<dynamic> graafik) {
 
         // Convert the day name to a number using the dayMap
         int? dayNumber = dayMap[day];
-        print(int.parse(time));
         if (int.parse(time) < 10) {
           time = "0${time}00";
         } else {
@@ -448,8 +466,6 @@ graafikGen2ToGraafikGen1(List<dynamic> graafik) {
       }
     }
   }
-  print("reuslt");
-  print(result);
   // Join the result list into a single string using commas
   return result;
 }
@@ -498,38 +514,35 @@ graafikGen1ToGraafikGen2(List<dynamic> graafik) {
   return jobs;
 }
 
+// 1.1.2.4 graafikGen2DeleteAll
 graafikGen2DeleteAll(String id) async {
   List<dynamic> graafik = [];
   List temp = [];
   graafik = await graafikGen2Lugemine(id);
-  print("graafik delete");
 
-  print(graafik.length);
   for (int i = 0; i < graafik.length; i++) {
     temp.add(graafik[i]["id"]);
   }
   await delete(id, temp);
 }
 
-graafikGen2SaatmineGraafikuga(List<dynamic> graafik, String key) async {
-  await graafikGen2DeleteAll(key);
+// 1.1.2.3 graafikGen2SaatmineGraafikuga
+graafikGen2SaatmineGraafikuga(List<dynamic> graafik, String id) async {
+  await graafikGen2DeleteAll(id);
   String token = await getToken2();
-  print("graafikgen2 $graafik");
   for (int i = 0; i < graafik.length; i++) {
-    print(graafik[i]);
     var headers = {
       'Authorization': 'Bearer $token',
       'Content-Type': 'application/x-www-form-urlencoded',
     };
 
     var data = {
-      'id': key,
+      'id': id,
       'method': 'schedule.create',
       'params': '${graafik[i]}',
     };
     var url = Uri.parse(
-        '${seadmeteMap[key]['api_url']}/fast/device/gen2_generic_command');
+        '${seadmeteMap[id]['api_url']}/fast/device/gen2_generic_command');
     var res = await http.post(url, headers: headers, body: data);
-    print(res.body);
   }
 }

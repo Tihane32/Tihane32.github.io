@@ -16,6 +16,7 @@ import 'package:testuus4/main.dart';
 ///   value (String): The value parameter is a string that represents the ID of a device.
 gen1GraafikLoomine(
     Map<int, dynamic> lulitus, String valitudPaev, String value) async {
+  print("lulitus $lulitus");
   DateTime now = DateTime.now();
   int tundtana = now.hour;
   SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -171,6 +172,9 @@ graafikGen1Saatmine(List<dynamic> graafik, String id) async {
   var url1 = Uri.parse(
       '${seadmeteMap[id]['api_url']}/device/relay/settings/schedule_rules');
   var res1 = await http.post(url1, headers: headers1, body: data1);
+  //abi = true;
+  mitmeSeadmeKinnitus.add(true);
+  seadmeKinnitus = true;
 }
 
 graafikGen1Filtreerimine(List<dynamic> graafik, List<int> paevad) {
@@ -198,4 +202,68 @@ graafikGen1Filtreerimine(List<dynamic> graafik, List<int> paevad) {
     }
   }
   return newGraafik;
+}
+
+graafikGen1Koostamine(Map<int, dynamic> lulitus, int paev) {
+  for (int i = 0; i < 24; i++) {
+    String temp = lulitus[i][0];
+    temp = temp.replaceAll(".", '');
+    lulitus[i][0] = temp;
+  }
+  for (int i = 0; i < 24; i++) {
+    bool temp = lulitus[i][2];
+    String temp1;
+    if (temp == true) {
+      temp1 = 'on';
+    } else {
+      temp1 = 'off';
+    }
+    lulitus[i][2] = temp1;
+  }
+  List<String> graafik = [];
+  for (int i = 0; i < 24; i++) {
+    if (i != 0) {
+      if (lulitus[i][2] != lulitus[i - 1][2]) {
+        String temp = lulitus[i][0] + '-$paev-' + lulitus[i][2];
+        graafik.add(temp);
+      }
+    } else {
+      String temp = lulitus[i][0] + '-$paev-' + lulitus[i][2];
+      graafik.add(temp);
+    }
+  }
+  return graafik;
+}
+
+graafikGen1ToLulitusMap(Map<int, dynamic> lulitus, List<dynamic> graafik) {
+  Map<int, dynamic> lulitusUus = lulitus;
+  for (int i = 0; i < 24; i++) {
+    String asendus = '$i';
+    if (i < 10) {
+      asendus = '0' + asendus + '00';
+    } else {
+      asendus = asendus + '00';
+    }
+    for (int j = 0; j < graafik.length; j++) {
+      List<String> parts = graafik[j].split('-');
+      String timeString = parts[0];
+      print(timeString);
+      print(asendus);
+      if (timeString == asendus) {
+        print("siin");
+        if (parts[2] == 'on') {
+          lulitusUus[i][2] = true;
+        } else {
+          lulitusUus[i][2] = false;
+        }
+        break;
+      } else {
+        if (i != 0) {
+          lulitusUus[i][2] = lulitusUus[i - 1][2];
+        }
+      }
+    }
+  }
+  print("lõppLulitus $lulitus $graafik");
+  return lulitusUus;
 }

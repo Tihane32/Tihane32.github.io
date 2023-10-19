@@ -61,6 +61,7 @@ class _SeadmePildiMuutmineState extends State<SeadmePildiMuutmine> {
     'assets/saun1.jpg',
     'assets/TeslaModel31.jpg',
     'assets/vesinik1.jpg',
+    'assets/valge.png'
   ];
   String algnePilt = '';
 

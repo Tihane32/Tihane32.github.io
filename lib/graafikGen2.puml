@@ -1,0 +1,50 @@
+@startuml graafik
+
+participant Application as App
+participant Map as Map
+participant List as List
+participant String as String
+participant int as int
+participant GraafikGen2 as GraafikGen2
+
+App -> Map: gen2GraafikuLoomine(lulitus, valitudPaev, id)
+activate App
+
+App -> Map: Map<int, dynamic> lulitus
+App -> String: String valitudPaev
+App -> String: String id
+
+App -> List: List<int> paevad
+App -> int: int paev
+activate List
+
+alt valitudPaev == "täna"
+    App -> App: i = getTommorowDayOfWeek()
+    App -> List: paevad.add(i)
+    App -> int: paev = getCurrentDayOfWeek()
+else
+    App -> int: int i = getCurrentDayOfWeek()
+    App -> List: paevad.add(i)
+    App -> int: paev = getTommorowDayOfWeek()
+end
+
+App -> GraafikGen2: graafik = graafikGen2Lugemine(id)
+activate GraafikGen2
+
+App -> GraafikGen2: graafikGen2DeleteAll(id)
+
+App -> GraafikGen2: graafik = graafikGen2ToGraafikGen1(graafik)
+App -> GraafikGen2: graafik = graafikGen1Filtreerimine(graafik, paevad)
+App -> List: graafikUus = graafikGen1Koostamine(lulitus, paev)
+App -> List: graafik.addAll(graafikUus)
+App -> GraafikGen2: graafik = graafikGen1ToGraafikGen2(graafik)
+App -> GraafikGen2: graafikGen2SaatmineGraafikuga(graafik, id)
+deactivate GraafikGen2
+
+App -> App: mitmeSeadmeKinnitus.add(true)
+App -> App: seadmeKinnitus = true
+
+deactivate List
+deactivate App
+
+@enduml

@@ -37,7 +37,7 @@ class _SeadmeteListState extends State<SeadmeteList> {
   //String onoffNupp = 'Shelly ON';
   @override
   void initState() {
-    //seisukord();
+    seisukord();
     SeadmeGraafikKontrollimineGen1();
     SeadmeGraafikKontrollimineGen2();
 

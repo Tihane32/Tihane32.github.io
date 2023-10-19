@@ -554,7 +554,7 @@ SeadmeGraafikKontrollimineGen1() async {
       List<dynamic> seadmeGraafik1 = await graafikGen1Lugemine(key);
       graafik = seadmeGraafik1.join(", ");
       int paev = getCurrentDayOfWeek();
-
+      print("seadme graafik: $graafik");
       if (graafik.contains("-$paev-")) {
         grafikOlems = true;
       }
@@ -598,5 +598,15 @@ int getCurrentDayOfWeek() {
   int paev;
   final now = DateTime.now();
   paev = now.weekday - 1;
+  return paev; // Adjust for 0-based index
+}
+
+int getTommorowDayOfWeek() {
+  int paev;
+  final now = DateTime.now();
+  paev = now.weekday;
+  if (paev == 7) {
+    paev = 0;
+  }
   return paev; // Adjust for 0-based index
 }

@@ -4,8 +4,8 @@ import 'package:testuus4/funktsioonid/graafikGen1.dart';
 import 'package:testuus4/funktsioonid/graafikGen2.dart';
 import 'package:testuus4/lehed/GraafikusseSeadmeteValik.dart';
 import 'package:testuus4/lehed/dynamicKoduLeht.dart';
+import 'package:testuus4/widgets/kinnitus.dart';
 import '../main.dart';
-import '../widgets/kinnitus.dart';
 import 'AbiLeht.dart';
 import 'AutoTuniValik.dart';
 import 'TunniSeaded.dart';
@@ -84,6 +84,7 @@ class _DynamilineTundideValimineState extends State<DynamilineTundideValimine> {
 
   @override
   void initState() {
+    mitmeSeadmeKinnitus = [];
     super.initState();
 
     // Initialize lehedMenu in initState
@@ -118,8 +119,6 @@ class _DynamilineTundideValimineState extends State<DynamilineTundideValimine> {
   updateLulitusMap(Map<int, dynamic> updatedMap, Color updatedPaev) {
     setState(() {
       lulitusMap = updatedMap;
-      print("uus paev");
-      print(updatedPaev);
       paev = updatedPaev;
     });
   }
@@ -289,44 +288,59 @@ class _DynamilineTundideValimineState extends State<DynamilineTundideValimine> {
                         ),
                       ],
                       currentIndex: koduindex,
-                      onTap: (int kodu) {
-                        setState(() {
-                          koduindex = kodu;
-                          if (koduindex == 0) {
+                      onTap: (int kodu) async {
+                        koduindex = kodu;
+                        if (koduindex == 0) {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => SeadmeteListValimine(),
+                            ),
+                          );
+                        } else if (koduindex == 1) {
+                          if (selectedPage == "Kopeeri graafik") {
+                            await graafikuKopeerimine(
+                                ValitudGraafik, valitudSeadmed);
+                          } else {
+                            await graafikuteSaatmine(
+                                valitudSeadmed, lulitusMap, paev);
+                          }
+
+                          // Show CircularProgressIndicator
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return Center(
+                                child: CircularProgressIndicator(),
+                              );
+                            },
+                          );
+
+                          while (mitmeSeadmeKinnitus.length !=
+                              valitudSeadmed.values
+                                  .where((value) => value == true)
+                                  .length) {
+                            await Future.delayed(Duration(seconds: 1));
+                          }
+
+                          // Close the CircularProgressIndicator dialog
+                          Navigator.pop(context);
+
+                          Kinnitus(context, "Graafik seadmetele saadetud");
+                          HapticFeedback.vibrate();
+
+                          Future.delayed(Duration(seconds: 5), () {
+                            Navigator.of(context)
+                                .pop(); // Close the AlertDialog
                             Navigator.push(
-                              //Kui vajutatakse Hinnagraafiku ikooni peale, siis viiakse Hinnagraafiku lehele
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => SeadmeteListValimine()),
+                                builder: (context) =>
+                                    DynaamilenieKoduLeht(i: 1),
+                              ),
                             );
-                          } else if (koduindex == 1) {
-                            if (selectedPage == "Kopeeri graafik") {
-                              print("siin2");
-                              graafikuKopeerimine(
-                                  ValitudGraafik, valitudSeadmed);
-                            } else {
-                              graafikuteSaatmine(
-                                  valitudSeadmed, lulitusMap, paev);
-                            }
-                            Kinnitus(
-                              context,
-                              'Graafik seadmetele saadetud',
-                            );
-                            HapticFeedback.vibrate();
-                            Future.delayed(Duration(seconds: 5), () {
-                              Navigator.of(context)
-                                  .pop(); // Close the AlertDialog
-                              Navigator.push(
-                                //Kui vajutatakse Teie seade ikooni peale, siis viiakse Seadmetelisamine lehele
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => DynaamilenieKoduLeht(
-                                          i: 1,
-                                        )),
-                              );
-                            });
-                          }
-                        });
+                          });
+                        }
                       }),
             ),
           ],
@@ -336,7 +350,7 @@ class _DynamilineTundideValimineState extends State<DynamilineTundideValimine> {
   }
 }
 
-graafikuteSaatmine(Map<String, bool> valitudSeadmed,
+Future graafikuteSaatmine(Map<String, bool> valitudSeadmed,
     Map<int, dynamic> lulitusMap, Color paev) async {
   String valitudPaev = "homme";
   if (paev == Colors.green) {
@@ -364,20 +378,19 @@ graafikuKopeerimine(
     if (value == true) {
       if (seadmeteMap[key]['Seadme_generatsioon'] == 1) {
         graafik = await graafikGen1Lugemine(key);
-        print("peaks olema siin");
-        print(graafik);
       } else {
         graafik = await graafikGen2Lugemine(key);
         graafik = graafikGen2ToGraafikGen1(graafik);
-        print("peaks olema siin");
-        print(graafik);
       }
     }
   });
+
+  int tana = getCurrentDayOfWeek();
+  int homme = getTommorowDayOfWeek();
+  List<int> paevad = [tana, homme];
+  graafik = graafikGen1Filtreerimine(graafik, paevad);
   graafikGen1 = graafik;
   graafikGen2 = graafik;
-  print("miks");
-  print(graafik);
   int k = 0;
   valitudSeadmed.forEach((key, value) async {
     if (value == true) {
