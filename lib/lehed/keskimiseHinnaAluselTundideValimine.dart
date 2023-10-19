@@ -306,6 +306,7 @@ class _KeskmiseHinnaAluselTundideValimineState
                           onTap: () {
                             setState(() {
                               if (tana == valge) {
+                                paevAbi = "täna";
                                 lulitus = lulitusTana;
                                 tana = green;
                                 tanaFont = fontValge;
@@ -365,6 +366,7 @@ class _KeskmiseHinnaAluselTundideValimineState
                                     onTap: () {
                                       setState(() {
                                         if (homme == valge) {
+                                          paevAbi = "homme";
                                           lulitus = lulitusHomme;
                                           homme = green;
                                           hommeFont = fontValge;
@@ -591,7 +593,6 @@ class _KeskmiseHinnaAluselTundideValimineState
                                           rowIndex, lulitusMapParem);
                                       lulitusMap = lulitusMapParem;
                                     });
-                                    print("tana $tana");
                                     updateLulitusMap(lulitusMap, tana);
                                   },
                                   borderRadius: BorderRadius.only(

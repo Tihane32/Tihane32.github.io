@@ -32,12 +32,27 @@ gen2GraafikuLoomine(
     paev = getTommorowDayOfWeek();
   }
   List<dynamic> graafik = await graafikGen2Lugemine(id);
-  //await graafikGen2DeleteAll(id);
+  List<dynamic> abi = graafik;
+
+  await graafikGen2DeleteAll(id);
   graafik = graafikGen2ToGraafikGen1(graafik);
   graafik = graafikGen1Filtreerimine(graafik, paevad);
   List<dynamic> graafikUus = graafikGen1Koostamine(lulitus, paev);
   graafik.addAll(graafikUus);
+
   graafik = graafikGen1ToGraafikGen2(graafik);
+
+  Set<String> abigraafik = Set<String>.from(graafik);
+  graafik = abigraafik.toList();
+
+  print(graafik);
+  print(abi);
+
+  for (int i = 0; i < graafik.length; i++) {
+    print(abi[i]);
+    print(graafik[i]);
+  }
+  await graafikGen2DeleteSome(id, graafik);
   await graafikGen2SaatmineGraafikuga(graafik, id);
 
   mitmeSeadmeKinnitus.add(true);
@@ -422,8 +437,6 @@ graafikGen2Lugemine(String id) async {
     }
     tuhiGraafik = resJSON['data']['jobs'] as List<dynamic>;
   }
-  print("graafikGen2");
-  print(tuhiGraafik);
   return tuhiGraafik;
 }
 
@@ -511,8 +524,6 @@ graafikGen1ToGraafikGen2(List<dynamic> graafik) {
       }.toString());
     }
   }
-  print("jobs");
-  print(jobs);
   return jobs;
 }
 
@@ -521,7 +532,6 @@ graafikGen2DeleteAll(String id) async {
   List<dynamic> graafik = [];
   List temp = [];
   graafik = await graafikGen2Lugemine(id);
-  print("graafik vanal kujul: $graafik");
   for (int i = 0; i < graafik.length; i++) {
     temp.add(graafik[i]["id"]);
   }
@@ -532,37 +542,56 @@ graafikGen2DeleteSome(String id, List<dynamic> graafikUus) async {
   List<dynamic> graafik = [];
   List temp = [];
   graafik = await graafikGen2Lugemine(id);
-  print("graafik vanal kujul: $graafik");
   for (int i = 0; i < graafik.length; i++) {
     int k = 0;
     String abi = "";
     abi = graafik[i].toString();
     for (int j = 0; j < graafikUus.length; j++) {
       var abi2 = jsonDecode(graafikUus[j]);
-      print(abi2["timespec"]);
-      print(graafik[i]["timespec"]);
-      print(graafik[i]["calls"][0]["params"]);
-      print(abi2["calls"][0]["params"]);
-      if (graafik[i]["timespec"] == abi2["timespec"]&&abi2["calls"][0]["params"]["on"]==graafik[i]["calls"][0]["params"]["on"]) {
-        print("siin sama");
+      if (graafik[i]["timespec"] == abi2["timespec"] &&
+          abi2["calls"][0]["params"]["on"] ==
+              graafik[i]["calls"][0]["params"]["on"]) {
         k = 1;
         break;
       }
     }
     if (k == 0) {
       temp.add(graafik[i]["id"]);
-      print("siin add");
-      print(graafik[i]);
     }
   }
-  print("siin $temp");
   await delete(id, temp);
+}
+
+graafikGen2Filtreerimine(String id, List<dynamic> graafikUus) async {
+  List<dynamic> graafik = [];
+  List<dynamic> temp = [];
+  int s = 0;
+  graafik = await graafikGen2Lugemine(id);
+  for (int i = 0; i < graafik.length; i++) {
+    int k = 0;
+    s = 0;
+    String abi = "";
+    abi = graafik[i].toString();
+    for (int j = 0; j < graafikUus.length; j++) {
+      var abi2 = jsonDecode(graafikUus[j]);
+      if (graafik[i]["timespec"] == abi2["timespec"] &&
+          abi2["calls"][0]["params"]["on"] ==
+              graafik[i]["calls"][0]["params"]["on"]) {
+        k = 1;
+        break;
+      }
+      s++;
+    }
+    if (k == 0) {
+      temp.add(graafikUus[s]);
+    }
+  }
+  return temp;
 }
 
 // 1.1.2.3 graafikGen2SaatmineGraafikuga
 graafikGen2SaatmineGraafikuga(List<dynamic> graafik, String id) async {
-  print("graafik uuel kujul: $graafik");
-  await graafikGen2DeleteSome(id, graafik);
+  print(graafik);
 
   String token = await getToken2();
   for (int i = 0; i < graafik.length; i++) {
@@ -579,5 +608,7 @@ graafikGen2SaatmineGraafikuga(List<dynamic> graafik, String id) async {
     var url = Uri.parse(
         '${seadmeteMap[id]['api_url']}/fast/device/gen2_generic_command');
     var res = await http.post(url, headers: headers, body: data);
+    print(res.body);
+    print("sent this: ${graafik[i]}");
   }
 }

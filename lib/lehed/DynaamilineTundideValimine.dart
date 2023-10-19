@@ -84,6 +84,7 @@ class _DynamilineTundideValimineState extends State<DynamilineTundideValimine> {
 
   @override
   void initState() {
+    paevAbi = "täna";
     mitmeSeadmeKinnitus = [];
     super.initState();
 
@@ -356,12 +357,13 @@ Future graafikuteSaatmine(Map<String, bool> valitudSeadmed,
   if (paev == Colors.green) {
     valitudPaev = "täna";
   }
+  print(paevAbi);
   valitudSeadmed.forEach((key, value) async {
     if (value == true) {
       if (seadmeteMap[key]['Seadme_generatsioon'] == 1) {
-        await gen1GraafikLoomine(lulitusMap, valitudPaev, key);
+        await gen1GraafikLoomine(lulitusMap, paevAbi, key);
       } else {
-        await gen2GraafikuLoomine(lulitusMap, valitudPaev, key);
+        await gen2GraafikuLoomine(lulitusMap, paevAbi, key);
       }
     }
   });
@@ -413,5 +415,4 @@ graafikuSeadedVaartustamine(Map<String, dynamic> graafikuSeaded,
   graafikuSeaded['Max_jarjest_valjas'] = maxTunnid + 1;
   graafikuSeaded['Kelleatud_tunnid'] = keelatud.toSet();
   graafikuSeaded['Lubatud_tunnid'] = lubatud.toSet();
-  print(graafikuSeaded);
 }
