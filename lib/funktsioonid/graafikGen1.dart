@@ -149,9 +149,9 @@ graafikGen1Lugemine(String id) async {
   //Kui post läheb läbi siis:
   final httpPackageJson = json.decode(res.body) as Map<String, dynamic>;
 
-  var scheduleRules1 =
+  List<dynamic> scheduleRules1 =
       httpPackageJson['data']['device_settings']['relays'][0]['schedule_rules'];
-  print(res.body);
+  print(scheduleRules1);
   return scheduleRules1;
 }
 
@@ -201,6 +201,7 @@ graafikGen1Filtreerimine(List<dynamic> graafik, List<int> paevad) {
       }
     }
   }
+  print(newGraafik);
   return newGraafik;
 }
 
@@ -210,15 +211,19 @@ graafikGen1Koostamine(Map<int, dynamic> lulitus, int paev) {
     temp = temp.replaceAll(".", '');
     lulitus[i][0] = temp;
   }
+  print(lulitus);
   for (int i = 0; i < 24; i++) {
-    bool temp = lulitus[i][2];
+
+    if(lulitus[i][2]!="on"&&lulitus[i][2]!="off"){  bool temp = lulitus[i][2];
+
     String temp1;
     if (temp == true) {
       temp1 = 'on';
     } else {
       temp1 = 'off';
     }
-    lulitus[i][2] = temp1;
+    lulitus[i][2] = temp1;}
+  
   }
   List<String> graafik = [];
   for (int i = 0; i < 24; i++) {
