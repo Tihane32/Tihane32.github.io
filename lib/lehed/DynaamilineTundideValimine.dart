@@ -67,6 +67,7 @@ class _DynamilineTundideValimineState extends State<DynamilineTundideValimine> {
       required this.luba});
   String luba;
   int leht;
+  int eelmineLeht = 0;
   var valitudSeadmed;
   Map<String, bool> ValitudGraafik = {};
   String selectedPage = 'Odavaimad tunnid';
@@ -75,6 +76,11 @@ class _DynamilineTundideValimineState extends State<DynamilineTundideValimine> {
   Color boxColor = sinineKast;
   late List<Widget> lehedMenu;
   Color paev = Colors.green; // Declare the list
+  Map<String, dynamic> graafikuSeaded = {};
+  double maxTunnid = 7;
+  bool seadista = false;
+  Set<int> lubatud = {};
+  Set<int> keelatud = {};
 
   @override
   void initState() {
@@ -97,10 +103,15 @@ class _DynamilineTundideValimineState extends State<DynamilineTundideValimine> {
       AutoTundideValik(
           valitudSeadmed: valitudSeadmed,
           updateValitudSeadmed: updateValitudSeamded),
-      KeelatudTunnid(valitudSeadmed: valitudSeadmed, luba: luba),
+      KeelatudTunnid(
+          valitudSeadmed: valitudSeadmed,
+          luba: luba,
+          uptateLubatudTunnid: uptateLubatudTunnid,
+          uptateKeelatudTunnid: uptateKeelatudTunnid),
       TunniSeaded(
           valitudSeadmed: valitudSeadmed,
-          updateValitudSeadmed: updateValitudSeamded),
+          uptateMaxTunnid: uptateMaxValjas,
+          uptateRakendaSeadistus: uptateRakendaSeadistus),
       AbiLeht(),
     ];
   }
@@ -115,6 +126,30 @@ class _DynamilineTundideValimineState extends State<DynamilineTundideValimine> {
   updateValitudSeamded(Map<String, bool> ValitudGraafikuus) {
     setState(() {
       ValitudGraafik = ValitudGraafikuus;
+    });
+  }
+
+  uptateMaxValjas(double Tunnid) {
+    setState(() {
+      maxTunnid = Tunnid;
+    });
+  }
+
+  uptateRakendaSeadistus(bool seadistus) {
+    setState(() {
+      seadista = seadistus;
+    });
+  }
+
+  uptateLubatudTunnid(Set<int> lubatudTunnid) {
+    setState(() {
+      lubatud = lubatudTunnid;
+    });
+  }
+
+  uptateKeelatudTunnid(Set<int> keelatudTunnid) {
+    setState(() {
+      keelatud = keelatudTunnid;
     });
   }
 
@@ -149,12 +184,16 @@ class _DynamilineTundideValimineState extends State<DynamilineTundideValimine> {
                     selectedPage = newValue!;
                   });
                   if (selectedPage == 'Odavaimad tunnid') {
+                    eelmineLeht = leht;
                     leht = 0;
                   } else if (selectedPage == 'Hinnapiir') {
+                    eelmineLeht = leht;
                     leht = 1;
                   } else if (selectedPage == 'Kopeeri graafik') {
+                    eelmineLeht = leht;
                     leht = 2;
                   } else if (selectedPage == 'Automaatne') {
+                    eelmineLeht = leht;
                     leht = 3;
                   }
                 },
@@ -204,13 +243,15 @@ class _DynamilineTundideValimineState extends State<DynamilineTundideValimine> {
                               color: Color.fromARGB(255, 157, 214, 171),
                             ),
                             onPressed: () {
+                              graafikuSeadedVaartustamine(graafikuSeaded,
+                                  maxTunnid, seadista, keelatud, lubatud);
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                   builder: (context) =>
                                       DynamilineTundideValimine(
                                           valitudSeadmed: valitudSeadmed,
-                                          i: 3,
+                                          i: eelmineLeht,
                                           luba: ''),
                                 ),
                               );
@@ -364,4 +405,13 @@ graafikuKopeerimine(
       }
     }
   });
+}
+
+graafikuSeadedVaartustamine(Map<String, dynamic> graafikuSeaded,
+    double maxTunnid, bool seadista, Set<int> keelatud, Set<int> lubatud) {
+  graafikuSeaded['Seadistus_lubatud'] = seadista;
+  graafikuSeaded['Max_jarjest_valjas'] = maxTunnid + 1;
+  graafikuSeaded['Kelleatud_tunnid'] = keelatud.toSet();
+  graafikuSeaded['Lubatud_tunnid'] = lubatud.toSet();
+  print(graafikuSeaded);
 }
