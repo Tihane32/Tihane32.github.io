@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:testuus4/funktsioonid/graafikGen1.dart';
 import 'package:testuus4/funktsioonid/graafikGen2.dart';
 import 'package:testuus4/lehed/GraafikusseSeadmeteValik.dart';
@@ -182,20 +183,20 @@ class _DynamilineTundideValimineState extends State<DynamilineTundideValimine> {
                 onChanged: (String? newValue) {
                   setState(() {
                     selectedPage = newValue!;
+                    if (selectedPage == 'Odavaimad tunnid') {
+                      eelmineLeht = leht;
+                      leht = 0;
+                    } else if (selectedPage == 'Hinnapiir') {
+                      eelmineLeht = leht;
+                      leht = 1;
+                    } else if (selectedPage == 'Kopeeri graafik') {
+                      eelmineLeht = leht;
+                      leht = 2;
+                    } else if (selectedPage == 'Automaatne') {
+                      eelmineLeht = leht;
+                      leht = 3;
+                    }
                   });
-                  if (selectedPage == 'Odavaimad tunnid') {
-                    eelmineLeht = leht;
-                    leht = 0;
-                  } else if (selectedPage == 'Hinnapiir') {
-                    eelmineLeht = leht;
-                    leht = 1;
-                  } else if (selectedPage == 'Kopeeri graafik') {
-                    eelmineLeht = leht;
-                    leht = 2;
-                  } else if (selectedPage == 'Automaatne') {
-                    eelmineLeht = leht;
-                    leht = 3;
-                  }
                 },
                 underline: Container(), // or SizedBox.shrink()
                 items: <String>[
@@ -245,16 +246,29 @@ class _DynamilineTundideValimineState extends State<DynamilineTundideValimine> {
                             onPressed: () {
                               graafikuSeadedVaartustamine(graafikuSeaded,
                                   maxTunnid, seadista, keelatud, lubatud);
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                      DynamilineTundideValimine(
-                                          valitudSeadmed: valitudSeadmed,
-                                          i: eelmineLeht,
-                                          luba: ''),
-                                ),
-                              );
+                              if (leht == 4) {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        DynamilineTundideValimine(
+                                            valitudSeadmed: valitudSeadmed,
+                                            i: 5,
+                                            luba: ''),
+                                  ),
+                                );
+                              } else {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        DynamilineTundideValimine(
+                                            valitudSeadmed: valitudSeadmed,
+                                            i: eelmineLeht,
+                                            luba: ''),
+                                  ),
+                                );
+                              }
                             },
                           ),
                           Text(
@@ -407,11 +421,37 @@ graafikuKopeerimine(
   });
 }
 
-graafikuSeadedVaartustamine(Map<String, dynamic> graafikuSeaded,
-    double maxTunnid, bool seadista, Set<int> keelatud, Set<int> lubatud) {
+graafikuSeadedVaartustamine(
+    Map<String, dynamic> graafikuSeaded,
+    double maxTunnid,
+    bool seadista,
+    Set<int> keelatud,
+    Set<int> lubatud) async {
   graafikuSeaded['Seadistus_lubatud'] = seadista;
   graafikuSeaded['Max_jarjest_valjas'] = maxTunnid + 1;
-  graafikuSeaded['Kelleatud_tunnid'] = keelatud.toSet();
-  graafikuSeaded['Lubatud_tunnid'] = lubatud.toSet();
-  print(graafikuSeaded);
+  graafikuSeaded['Kelleatud_tunnid'] = keelatud;
+  graafikuSeaded['Lubatud_tunnid'] = lubatud;
+
+  final prefs = await SharedPreferences.getInstance();
+  await prefs.setBool('Seadistus_lubatud', seadista);
+  await prefs.setDouble('Max_jarjest_valjas', maxTunnid + 1);
+  await prefs.setStringList(
+      'Kelleatud_tunnid', keelatud.map((e) => e.toString()).toList());
+  await prefs.setStringList(
+      'Lubatud_tunnid', lubatud.map((e) => e.toString()).toList());
+}
+
+Future<Map<String, dynamic>> loadGraafikuSeaded() async {
+  final prefs = await SharedPreferences.getInstance();
+  bool? seadista = prefs.getBool('Seadistus_lubatud');
+  double? maxTunnid = prefs.getDouble('Max_jarjest_valjas');
+  List<String>? keelatudList = prefs.getStringList('Kelleatud_tunnid');
+  List<String>? lubatudList = prefs.getStringList('Lubatud_tunnid');
+
+  return {
+    'Seadistus_lubatud': seadista,
+    'Max_jarjest_valjas': maxTunnid,
+    'Kelleatud_tunnid': keelatudList?.map((e) => int.parse(e)).toSet(),
+    'Lubatud_tunnid': lubatudList?.map((e) => int.parse(e)).toSet(),
+  };
 }
