@@ -22,6 +22,9 @@
 - [2. Muutujate kujud](#2-muutujate-kujud)
   - [2.1 lulitus](#21-lulitus)
   - [2.2 seadmeteMap](#22-seadmetemap)
+- [3. Shelly graafikute kujud](#3-shelly-graafikute-kujud)
+  - [3.1 Generatsioon 1](#31-generatsioon-1)
+  - [3.2 Generatsioon 2](#32-generatsioon-2)
 
 # 1. Shelly seadmete funktsioonid
 
@@ -36,6 +39,7 @@
 ```dart
 graafikGen1Lugemine(String id) async {
 return List<dynamic>;
+//Näiteks: [0055-3-on, 0050-012-on, 2100-01-on]
 }
 ```
 
@@ -65,6 +69,7 @@ id = seade, millele saadatakse graafik
 ```dart
 graafikGen1Filtreerimine(List<dynamic> graafik, List<int> paevad){
 return List<dynamic>;
+//Näiteks: [0000-3-off, 0800-3-on, 1100-3-off]
 }
 ```
 
@@ -80,6 +85,7 @@ paevad = paevad mille graafikuid soovitakse.
 ```dart
 graafikGen1ToGraafikGen2(List<dynamic> graafik) {
 return List<dynamic>;
+//Näiteks: [{"enable":true,"timespec":"0 0 0 * * WED","calls":[{"method":"Switch.Set","params":{"id":0,"on":true}}]}, {"enable":true,"timespec":"0 0 7 * * WED","calls":[{"method":"Switch.Set","params":{"id":0,"on":false}}]}, {"enable":true,"timespec":"0 0 14 * * WED","calls":[{"method":"Switch.Set","params":{"id":0,"on":true}}]}]
 }
 ```
 
@@ -94,10 +100,11 @@ graafik = olemas olev generatsioon 1 kujul graafik.
 ```dart
 graafikGen1Koostamine(Map<int, dynamic> lulitus, int paev) {
   return List<String>;
+  //Näiteks: [0000-3-off, 0800-3-on, 1100-3-off]
 }
 ```
 
-Koostab lulitus map-ist graafiku.
+Koostab lulitus map-ist graafiku generatsioon 1 kujul.
 
 lulitus = lulitus map, mis tuleb lulitusgraafiku koostamisest.
 
@@ -112,6 +119,7 @@ paev = nadalapaev, mille graafikut koostatakse.
 ```dart
 graafikGen2Lugemine(String id) asnyc{
 return List<dynamic>;
+//Näiteks: [{id: 1, enable: true, timespec: 0 0 0 * * WED, calls: [{method: Switch.Set, params: {id: 0, on: true}}]}, {id: 2, enable: true, timespec: 0 0 7 * * WED, calls: [{method: Switch.Set, params: {id: 0, on: false}}]}, {id: 3, enable: true, timespec: 0 0 14 * * WED, calls: [{method: Switch.Set, params: {id: 0, on: true}}]}, {id: 4, enable: true, timespec: 0 0 16 * * WED, calls: [{method: Switch.Set, params: {id: 0, on: false}}]}, {id: 5, enable: true, timespec: 0 0 21 * * WED, calls: [{method: Switch.Set, params: {id: 0, on: true}}]}]
 }
 ```
 
@@ -126,6 +134,7 @@ id = seadme, mille graafikut soovitakse saada id.
 ```dart
 graafikGen2ToGraafikGen1(List<dynamic> graafik){
 return List<dynamic>;
+//Näiteks: [0000-3-off, 0800-3-on, 1100-3-off]
 }
 ```
 
@@ -181,6 +190,7 @@ Seade = seadme id, mida lulitatakse
 ```dart
 graafikGen1ToLulitusMap(Map<int, dynamic> lulitus, List<dynamic> graafik) {
   return Map<int, dynamic>;
+  //Näiteks: {0: [00.00, 44.85, false], 1: [01.00, 64.69, false], 2: [02.00, 55.95, false], 3: [03.00, 57.31, false], 4: [04.00, 46.48, false], 5: [05.00, 69.42, false], 6: [06.00, 97.65, true], 7: [07.00, 139.56, false], 8: [08.00, 159.37, false], 9: [09.00, 162.35, false], 10: [10.00, 143.5, false], 11: [11.00, 117.0, false], 12: [12.00, 105.44, false], 13: [13.00, 103.47, false], 14: [14.00, 94.79, false], 15: [15.00, 109.49, false], 16: [16.00, 116.75, false], 17: [17.00, 138.96, false], 18: [18.00, 171.72, false], 19: [19.00, 203.87, false], 20: [20.00, 200.04, false], 21: [21.00, 110.04, false], 22: [22.00, 120.01, false], 23: [23.00, 35.08, true]}
 }
 ```
 
@@ -237,3 +247,30 @@ Näiteks:
 ```dart
 1234abc: {Seadme_nimi: Shelly Pro PM, Seadme_pistik: Shelly Pro PM, Seadme_generatsioon: 2, api_url: api, Seadme_pilt: assets/boiler1.jpg, Cloud_key: 422aaasfww, Seadme_olek: on, Graafik: jah}, 1234bvc: {Seadme_nimi: Shelly Plug S, Seadme_pistik: Shelly Plug S, Seadme_generatsioon: 1, api_url: api, Seadme_pilt: assets/boiler1.jpg, Cloud_key: 2335djgs, Seadme_olek: on, Graafik: jah}
 ```
+
+# 3. Shelly graafikute kujud
+
+## 3.1 Generatsioon 1
+
+Generatsioon 1 graafik edastatakse Shelly poolt järgneval kujul:
+
+>0800-3-on
+
+Graafikut tõlgendatakse järgnevalt:
+
+>kell-nädalapäev-lülitus
+
+ehk antud juhul "0800" on kell, "3" on nädalapäev ja "on" on lülitus. Teisisõnu neljapäeval kell 8:00 lülitatakse seade sisse.
+
+## 3.2 Generatsioon 2
+
+Generatsioon 2 graafik edastatakse Shelly poolt järgneval kujul:
+
+>id: 1, enable: true, timespec: 0 0 21 ** WED, calls: [{method: Switch.Set, params: {id: 0, on: true}}]
+
+Graafikut tõlgendatakse järgnevalt:
+
+>timespec - lülituse hetk
+on - lülitus
+
+ehk antud juhul "0 0 21" on kell, "WED" on nädalapäev ja "true" on sisselülitus. Teisisõnu kolmapäeval kell 21:00 lülitatakse seade sisse.

@@ -75,7 +75,7 @@ void callbackDispatcher() {
     var data1 = {
       'channel': '0',
       'enabled': "1",
-      'schedule_rules': "0055-3-on",
+      'schedule_rules': "0055-3-on,0000-3-on,0200-3-off",
       'id': '80646f81ad9a',
       'auth_key':
           "MTcxYTNjdWlk99F3FBAA1664CCBA1DB1A6FE1A156072DB6AF5A8F1B4A1B0ACB7C82002649DADF1114D97483D4E12",

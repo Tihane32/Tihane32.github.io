@@ -358,7 +358,7 @@ class _KeskmiseHinnaAluselTundideValimineState
                           ),
                         )),
                         SizedBox(
-                            width: MediaQuery.of(context).size.width * 0.3),
+                            width: MediaQuery.of(context).size.width * 0.1),
                         Center(
                             child: hommeNahtav
                                 ? GestureDetector(
