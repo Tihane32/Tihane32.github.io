@@ -66,7 +66,6 @@ class _HinnaPiiriAluselTundideValimineState
   late Map<int, dynamic> lulitusTana;
   late Map<int, dynamic> lulitusHomme;
   late double hindAVG;
-  Map<String, dynamic> graafikuSeaded = {};
 
   Map<int, dynamic> hindPiirMap = {
     0: ['00.00', 0, false],
@@ -278,12 +277,6 @@ class _HinnaPiiriAluselTundideValimineState
   void initState() {
     norm();
     super.initState();
-    _loadGraafikuSeaded;
-  }
-
-  _loadGraafikuSeaded() async {
-    graafikuSeaded = await loadGraafikuSeaded();
-    setState(() {}); // To rebuild the widget once data is loaded
   }
 
   @override
@@ -294,231 +287,247 @@ class _HinnaPiiriAluselTundideValimineState
           automaticallyImplyLeading: false,
           backgroundColor: Colors.white,
           pinned: true,
-          title: Column(
-            children: [
-              Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Center(
-                          child: GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            if (tana == valge) {
-                              lulitus = lulitusTana;
-                              tana = green;
-                              tanaFont = fontValge;
-                              homme = valge;
-                              hommeFont = font;
-                              hindAVG = keskmineHindArvutaus(lulitus);
-                              hind = KeskHindString(hind, hindAVG);
-                              lulitusMapVasakHP = LulitusMapVasakVaartustamine(
-                                  hinnaPiir, lulitus, lulitusMapVasakHP);
-                              lulitusMapParemHP = LulitusMapParemVaartustamine(
-                                  hinnaPiir, lulitus, lulitusMapParemHP);
-                              temp = hindAVG / 4;
-                              if (temp < 40 && hindAVG > 40) {
-                                temp = 40;
-                              } else if (hindAVG < 40) {
-                                temp = hindAVG / 2;
-                              }
-                              HapticFeedback.vibrate();
-                            } /*else {
-                                lulitus = lulitusHomme;
-                                tana = valge;
-                                tanaFont = font;
-                                homme = green;
-                                hommeFont = fontValge;
-                              }*/
-                          });
-                        },
-                        child: Container(
-                          width: 100,
-                          height: 30,
-                          decoration: BoxDecoration(
-                              color: tana,
-                              borderRadius: BorderRadius.circular(20.0),
-                              border: Border.all(
-                                color: Colors.green,
-                                width: 3,
-                              )),
-                          child: Center(
-                              child: RichText(
+          title: Center(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Column(
+                  children: [
+                    Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            SizedBox(width: 50.0),
+                            Center(
+                                child: GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  if (tana == valge) {
+                                    lulitus = lulitusTana;
+                                    tana = green;
+                                    tanaFont = fontValge;
+                                    homme = valge;
+                                    hommeFont = font;
+                                    hindAVG = keskmineHindArvutaus(lulitus);
+                                    hind = KeskHindString(hind, hindAVG);
+                                    lulitusMapVasakHP =
+                                        LulitusMapVasakVaartustamine(hinnaPiir,
+                                            lulitus, lulitusMapVasakHP);
+                                    lulitusMapParemHP =
+                                        LulitusMapParemVaartustamine(hinnaPiir,
+                                            lulitus, lulitusMapParemHP);
+                                    temp = hindAVG / 4;
+                                    if (temp < 40 && hindAVG > 40) {
+                                      temp = 40;
+                                    } else if (hindAVG < 40) {
+                                      temp = hindAVG / 2;
+                                    }
+                                    HapticFeedback.vibrate();
+                                  } /*else {
+                                      lulitus = lulitusHomme;
+                                      tana = valge;
+                                      tanaFont = font;
+                                      homme = green;
+                                      hommeFont = fontValge;
+                                    }*/
+                                });
+                              },
+                              child: Container(
+                                width: 100,
+                                height: 30,
+                                decoration: BoxDecoration(
+                                    color: tana,
+                                    borderRadius: BorderRadius.circular(20.0),
+                                    border: Border.all(
+                                      color: Colors.green,
+                                      width: 3,
+                                    )),
+                                child: Center(
+                                    child: RichText(
+                                  text: TextSpan(
+                                    text: 'Täna',
+                                    style: tanaFont,
+                                  ),
+                                  textAlign: TextAlign.center,
+                                )),
+                              ),
+                            )),
+                            SizedBox(
+                                width: MediaQuery.of(context).size.width * 0.3),
+                            Center(
+                                child: hommeNahtav
+                                    ? GestureDetector(
+                                        onTap: () {
+                                          setState(() {
+                                            if (homme == valge) {
+                                              lulitus = lulitusHomme;
+                                              homme = green;
+                                              hommeFont = fontValge;
+                                              tana = valge;
+                                              tanaFont = font;
+                                              hindAVG =
+                                                  keskmineHindArvutaus(lulitus);
+                                              hind =
+                                                  KeskHindString(hind, hindAVG);
+                                              lulitusMapVasakHP =
+                                                  LulitusMapVasakVaartustamine(
+                                                      hinnaPiir,
+                                                      lulitus,
+                                                      lulitusMapVasakHP);
+                                              lulitusMapParemHP =
+                                                  LulitusMapParemVaartustamine(
+                                                      hinnaPiir,
+                                                      lulitus,
+                                                      lulitusMapParemHP);
+                                              temp = hindAVG / 4;
+                                              if (temp < 40 && hindAVG > 40) {
+                                                temp = 40;
+                                              } else if (hindAVG < 40) {
+                                                temp = hindAVG / 2;
+                                              }
+                                              HapticFeedback.vibrate();
+                                            } /*else {
+                                        lulitus = lulitusTana;
+                                        homme = valge;
+                                        hommeFont = font;
+                                        tana = green;
+                                        tanaFont = fontValge;
+                                      }*/
+                                          });
+                                        },
+                                        child: Container(
+                                          width: 100,
+                                          height: 30,
+                                          decoration: BoxDecoration(
+                                              color: homme,
+                                              borderRadius:
+                                                  BorderRadius.circular(30.0),
+                                              border: Border.all(
+                                                color: Colors.green,
+                                                width: 3,
+                                              )),
+                                          child: Center(
+                                              child: RichText(
+                                            text: TextSpan(
+                                              text: 'Homme',
+                                              style: hommeFont,
+                                            ),
+                                            textAlign: TextAlign.center,
+                                          )),
+                                        ),
+                                      )
+                                    : GestureDetector(
+                                        onTap: () {
+                                          showDialog(
+                                              context: context,
+                                              builder: (context) => AlertDialog(
+                                                    title: Text(
+                                                        'Homne graafik ei ole hetkel kättesaadav \n Proovige uuesti kell 15.00'),
+                                                  ));
+                                        },
+                                        child: Container(
+                                          width: 100,
+                                          height: 30,
+                                          decoration: BoxDecoration(
+                                              color: Color.fromARGB(
+                                                  255, 209, 205, 205),
+                                              borderRadius:
+                                                  BorderRadius.circular(30.0),
+                                              border: Border.all(
+                                                color: Color.fromARGB(
+                                                    255, 12, 12, 12),
+                                                width: 3,
+                                              )),
+                                          child: Center(
+                                              child: RichText(
+                                            text: TextSpan(
+                                                text: 'Homme', style: font),
+                                            textAlign: TextAlign.center,
+                                          )),
+                                        ),
+                                      ))
+                          ],
+                        ),
+                        Container(
+                          height: 20,
+                          alignment: Alignment.center,
+                          child: RichText(
                             text: TextSpan(
-                              text: 'Täna',
-                              style: tanaFont,
-                            ),
-                            textAlign: TextAlign.center,
-                          )),
-                        ),
-                      )),
-                      SizedBox(width: MediaQuery.of(context).size.width * 0.1),
-                      Center(
-                          child: hommeNahtav
-                              ? GestureDetector(
-                                  onTap: () {
-                                    setState(() {
-                                      if (homme == valge) {
-                                        lulitus = lulitusHomme;
-                                        homme = green;
-                                        hommeFont = fontValge;
-                                        tana = valge;
-                                        tanaFont = font;
-                                        hindAVG = keskmineHindArvutaus(lulitus);
-                                        hind = KeskHindString(hind, hindAVG);
-                                        lulitusMapVasakHP =
-                                            LulitusMapVasakVaartustamine(
-                                                hinnaPiir,
-                                                lulitus,
-                                                lulitusMapVasakHP);
-                                        lulitusMapParemHP =
-                                            LulitusMapParemVaartustamine(
-                                                hinnaPiir,
-                                                lulitus,
-                                                lulitusMapParemHP);
-                                        temp = hindAVG / 4;
-                                        if (temp < 40 && hindAVG > 40) {
-                                          temp = 40;
-                                        } else if (hindAVG < 40) {
-                                          temp = hindAVG / 2;
-                                        }
-                                        HapticFeedback.vibrate();
-                                      } /*else {
-                                  lulitus = lulitusTana;
-                                  homme = valge;
-                                  hommeFont = font;
-                                  tana = green;
-                                  tanaFont = fontValge;
-                                }*/
-                                    });
-                                  },
-                                  child: Container(
-                                    width: 100,
-                                    height: 30,
-                                    decoration: BoxDecoration(
-                                        color: homme,
-                                        borderRadius:
-                                            BorderRadius.circular(30.0),
-                                        border: Border.all(
-                                          color: Colors.green,
-                                          width: 3,
-                                        )),
-                                    child: Center(
-                                        child: RichText(
-                                      text: TextSpan(
-                                        text: 'Homme',
-                                        style: hommeFont,
-                                      ),
-                                      textAlign: TextAlign.center,
-                                    )),
-                                  ),
-                                )
-                              : GestureDetector(
-                                  onTap: () {
-                                    showDialog(
-                                        context: context,
-                                        builder: (context) => AlertDialog(
-                                              title: Text(
-                                                  'Homne graafik ei ole hetkel kättesaadav \n Proovige uuesti kell 15.00'),
-                                            ));
-                                  },
-                                  child: Container(
-                                    width: 100,
-                                    height: 30,
-                                    decoration: BoxDecoration(
-                                        color:
-                                            Color.fromARGB(255, 209, 205, 205),
-                                        borderRadius:
-                                            BorderRadius.circular(30.0),
-                                        border: Border.all(
-                                          color:
-                                              Color.fromARGB(255, 12, 12, 12),
-                                          width: 3,
-                                        )),
-                                    child: Center(
-                                        child: RichText(
-                                      text:
-                                          TextSpan(text: 'Homme', style: font),
-                                      textAlign: TextAlign.center,
-                                    )),
-                                  ),
-                                ))
-                    ],
-                  ),
-                  Container(
-                    height: 20,
-                    alignment: Alignment.center,
-                    child: RichText(
-                      text: TextSpan(
-                        style: TextStyle(
-                          fontSize: 20,
-                          color: Colors.black,
-                        ),
-                        children: [
-                          TextSpan(text: ' Sisesta hinnapiir:  ', style: font),
-                          WidgetSpan(
-                            alignment: PlaceholderAlignment.bottom,
-                            child: Container(
-                              height: 20,
-                              width: 45,
-                              decoration: BoxDecoration(
-                                border: Border.all(color: Colors.grey),
-                                borderRadius: BorderRadius.circular(4.0),
+                              style: TextStyle(
+                                fontSize: 20,
+                                color: Colors.black,
                               ),
-                              child: Center(
-                                child: TextField(
-                                    keyboardType: TextInputType.number,
-                                    onSubmitted: (value) {
-                                      setState(() {
-                                        hinnaPiir = double.tryParse(value) ?? 0;
-                                        lulitusMapParemHP =
-                                            LulitusMapParemVaartustamine(
-                                                hinnaPiir,
-                                                lulitus,
-                                                lulitusMapParemHP);
-                                        lulitusMapVasakHP =
-                                            LulitusMapVasakVaartustamine(
-                                                hinnaPiir,
-                                                lulitus,
-                                                lulitusMapVasakHP);
-                                      });
-                                    },
-                                    decoration: InputDecoration(
-                                      border: InputBorder.none,
-                                      isDense: true,
-                                      hintText: hinnaPiir.toString(),
-                                      contentPadding:
-                                          EdgeInsets.symmetric(vertical: 3.0),
+                              children: [
+                                TextSpan(
+                                    text: ' Sisesta hinnapiir:  ', style: font),
+                                WidgetSpan(
+                                  alignment: PlaceholderAlignment.bottom,
+                                  child: Container(
+                                    height: 20,
+                                    width: 45,
+                                    decoration: BoxDecoration(
+                                      border: Border.all(color: Colors.grey),
+                                      borderRadius: BorderRadius.circular(4.0),
                                     ),
-                                    style: font),
-                              ),
+                                    child: Center(
+                                      child: TextField(
+                                          keyboardType: TextInputType.number,
+                                          onSubmitted: (value) {
+                                            setState(() {
+                                              hinnaPiir =
+                                                  double.tryParse(value) ?? 0;
+                                              lulitusMapParemHP =
+                                                  LulitusMapParemVaartustamine(
+                                                      hinnaPiir,
+                                                      lulitus,
+                                                      lulitusMapParemHP);
+                                              lulitusMapVasakHP =
+                                                  LulitusMapVasakVaartustamine(
+                                                      hinnaPiir,
+                                                      lulitus,
+                                                      lulitusMapVasakHP);
+                                            });
+                                          },
+                                          decoration: InputDecoration(
+                                            border: InputBorder.none,
+                                            isDense: true,
+                                            hintText: hinnaPiir.toString(),
+                                            contentPadding:
+                                                EdgeInsets.symmetric(
+                                                    vertical: 3.0),
+                                          ),
+                                          style: font),
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
-                  ),
-                ],
-              ),
-            ],
+                  ],
+                ),
+                IconButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => DynamilineTundideValimine(
+                                valitudSeadmed: valitudSeadmed,
+                                i: 5,
+                                luba: '')),
+                      );
+                    },
+                    icon: Icon(
+                      Icons.settings,
+                      color: Colors.black,
+                      size: 30.0,
+                    ))
+              ],
+            ),
           ),
-          actions: [
-            IconButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => DynamilineTundideValimine(
-                            valitudSeadmed: valitudSeadmed, i: 5, luba: '')),
-                  );
-                },
-                icon: Icon(
-                  Icons.settings,
-                  color: Colors.black,
-                  size: 30.0,
-                ))
-          ],
         ),
         SliverList(
           delegate: SliverChildBuilderDelegate(
