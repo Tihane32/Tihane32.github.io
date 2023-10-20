@@ -294,72 +294,74 @@ class _KeskmiseHinnaAluselTundideValimineState
     return CustomScrollView(
       slivers: <Widget>[
         SliverAppBar(
+          centerTitle: true,
           automaticallyImplyLeading: false,
           backgroundColor: Colors.white,
           pinned: true,
           title: Column(
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Center(
-                      child: GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        if (tana == valge) {
-                          paevAbi = "täna";
-                          lulitus = lulitusTana;
-                          tana = green;
-                          tanaFont = fontValge;
-                          homme = valge;
-                          hommeFont = font;
-                          hindAVG = keskmineHindArvutaus(lulitus);
-                          hind = KeskHindString(hind, hindAVG);
-                          keskHind = keskmineHindMapVaartustamine(
-                              hindAVG, keskHind, lulitus);
-                          lulitus = OdavimadTunnidOn(lulitus, valitudTunnid);
-                          lulitusMapVasak = LulitusMapVasakVaartustamine(
-                              hindAVG, lulitus, lulitusMapVasak);
-                          lulitusMapParem = LulitusParemVaartustamine(
-                              hindAVG, lulitus, lulitusMapParem);
-                          temp = hindAVG / 4;
-                          if (temp < 40 && hindAVG > 40) {
-                            temp = 40;
-                          } else if (hindAVG < 40) {
-                            temp = hindAVG / 2;
-                          }
-                          HapticFeedback.vibrate();
-                        } /*else {
-                              lulitus = lulitusHomme;
-                              tana = valge;
-                              tanaFont = font;
-                              homme = green;
-                              hommeFont = fontValge;
-                            }*/
-                      });
-                    },
-                    child: Container(
-                      width: 100,
-                      height: 30,
-                      decoration: BoxDecoration(
-                          color: tana,
-                          borderRadius: BorderRadius.circular(20.0),
-                          border: Border.all(
-                            color: Colors.green,
-                            width: 3,
-                          )),
-                      child: Center(
-                          child: RichText(
-                        text: TextSpan(
-                          text: 'Täna',
-                          style: tanaFont,
-                        ),
-                        textAlign: TextAlign.center,
-                      )),
+              Padding(
+                padding: const EdgeInsets.only(left: 50),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          if (tana == valge) {
+                            paevAbi = "täna";
+                            lulitus = lulitusTana;
+                            tana = green;
+                            tanaFont = fontValge;
+                            homme = valge;
+                            hommeFont = font;
+                            hindAVG = keskmineHindArvutaus(lulitus);
+                            hind = KeskHindString(hind, hindAVG);
+                            keskHind = keskmineHindMapVaartustamine(
+                                hindAVG, keskHind, lulitus);
+                            lulitus = OdavimadTunnidOn(lulitus, valitudTunnid);
+                            lulitusMapVasak = LulitusMapVasakVaartustamine(
+                                hindAVG, lulitus, lulitusMapVasak);
+                            lulitusMapParem = LulitusParemVaartustamine(
+                                hindAVG, lulitus, lulitusMapParem);
+                            temp = hindAVG / 4;
+                            if (temp < 40 && hindAVG > 40) {
+                              temp = 40;
+                            } else if (hindAVG < 40) {
+                              temp = hindAVG / 2;
+                            }
+                            HapticFeedback.vibrate();
+                          } /*else {
+                            lulitus = lulitusHomme;
+                            tana = valge;
+                            tanaFont = font;
+                            homme = green;
+                            hommeFont = fontValge;
+                          }*/
+                        });
+                      },
+                      child: Container(
+                        width: 100,
+                        height: 30,
+                        decoration: BoxDecoration(
+                            color: tana,
+                            borderRadius: BorderRadius.circular(20.0),
+                            border: Border.all(
+                              color: Colors.green,
+                              width: 3,
+                            )),
+                        child: Center(
+                            child: RichText(
+                          text: TextSpan(
+                            text: 'Täna',
+                            style: tanaFont,
+                          ),
+                          textAlign: TextAlign.center,
+                        )),
+                      ),
                     ),
-                  )),
-                  SizedBox(width: MediaQuery.of(context).size.width * 0.1),
-                  Center(
+                    SizedBox(width: MediaQuery.of(context).size.width * 0.1),
+                    Container(
                       child: hommeNahtav
                           ? GestureDetector(
                               onTap: () {
@@ -443,8 +445,10 @@ class _KeskmiseHinnaAluselTundideValimineState
                                   textAlign: TextAlign.center,
                                 )),
                               ),
-                            ))
-                ],
+                            ),
+                    )
+                  ],
+                ),
               ),
               Container(
                 height: 20,
