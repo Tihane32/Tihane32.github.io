@@ -118,11 +118,11 @@ class _DynamilineTundideValimineState extends State<DynamilineTundideValimine> {
     ];
   }
 
-  updateLulitusMap(Map<int, dynamic> updatedMap, Color updatedPaev) {
+  updateLulitusMap(Map<int, dynamic> updatedMap) {
     setState(() {
       lulitusMap = updatedMap;
-      paev = updatedPaev;
     });
+    print("dynaamiline $lulitusMap");
   }
 
   updateValitudSeamded(Map<String, bool> ValitudGraafikuus) {

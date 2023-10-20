@@ -6,6 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:testuus4/lehed/SeadmeGraafikLeht.dart';
 import 'package:testuus4/lehed/TarbimisLeht.dart';
+import 'package:testuus4/lehed/dynamicKoduLeht.dart';
 import 'package:testuus4/main.dart';
 import 'SeadmePildiMuutmine.dart';
 import 'SeadmeYldInfo.dart';
@@ -79,20 +80,33 @@ class _DunaamilineSeadmeLehtState extends State<DunaamilineSeadmeLeht> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color.fromARGB(255, 255, 255, 255), //TaustavÃ¤rv
+      backgroundColor: const Color.fromARGB(255, 255, 255, 255), //TaustavÃ¤rv
 
       appBar: AppBar(
-        backgroundColor: Color.fromARGB(255, 115, 162, 195),
+        automaticallyImplyLeading: false,
+        backgroundColor: const Color.fromARGB(255, 115, 162, 195),
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
+            IconButton(onPressed: () {
+              Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => DynaamilenieKoduLeht(i: 1,
+
+                       
+                      ),
+                    ),
+                  );
+            }, icon: const Icon(Icons.arrow_back)),
+
             Text(
               seadmeteMap[seadmeNimi]["Seadme_nimi"],
               style: GoogleFonts.roboto(
                 textStyle: const TextStyle(fontSize: 25),
               ),
             ),
-            Spacer(),
+            const Spacer(),
           ],
         ),
         actions: [
@@ -102,9 +116,9 @@ class _DunaamilineSeadmeLehtState extends State<DunaamilineSeadmeLeht> {
                 borderRadius: BorderRadius.circular(10),
                 color: boxColor,
               ),
-              padding: EdgeInsets.symmetric(horizontal: 10),
+              padding: const EdgeInsets.symmetric(horizontal: 10),
               child: DropdownButton<String>(
-                icon: Icon(Icons.menu),
+                icon: const Icon(Icons.menu),
                 value: selectedPage, style: font,
                 onChanged: (String? newValue) {
                   setState(() {
@@ -125,7 +139,7 @@ class _DunaamilineSeadmeLehtState extends State<DunaamilineSeadmeLeht> {
                     value: value,
                     child: Text(
                       value,
-                      style: TextStyle(color: Colors.black),
+                      style: const TextStyle(color: Colors.black),
                     ),
                   );
                 }).toList(),
@@ -141,11 +155,11 @@ class _DunaamilineSeadmeLehtState extends State<DunaamilineSeadmeLeht> {
       bottomNavigationBar: Visibility(
         visible: valitud == 3,
         child: BottomNavigationBar(
-            backgroundColor: Color.fromARGB(255, 115, 162, 195),
-            fixedColor: Color.fromARGB(255, 157, 214, 171),
+            backgroundColor: const Color.fromARGB(255, 115, 162, 195),
+            fixedColor: const Color.fromARGB(255, 157, 214, 171),
             unselectedItemColor: Colors.white,
-            selectedIconTheme: IconThemeData(size: 40),
-            unselectedIconTheme: IconThemeData(size: 30),
+            selectedIconTheme: const IconThemeData(size: 40),
+            unselectedIconTheme: const IconThemeData(size: 30),
             items: const <BottomNavigationBarItem>[
               BottomNavigationBarItem(
                 label: 'Tagasi',
@@ -190,8 +204,8 @@ class _DunaamilineSeadmeLehtState extends State<DunaamilineSeadmeLeht> {
                                   children: [
                                     // Add some spacing between icon and text
                                     Text("Kinnitatud", style: fontSuur),
-                                    SizedBox(width: 8),
-                                    Icon(
+                                    const SizedBox(width: 8),
+                                    const Icon(
                                       Icons.check_circle_outline_outlined,
                                       size: 35,
                                     ),
@@ -202,7 +216,7 @@ class _DunaamilineSeadmeLehtState extends State<DunaamilineSeadmeLeht> {
                             ),
                           ));
                   HapticFeedback.vibrate();
-                  Future.delayed(Duration(seconds: 5), () {
+                  Future.delayed(const Duration(seconds: 5), () {
                     Navigator.of(context).pop(); // Close the AlertDialog
                     Navigator.push(
                       context,
