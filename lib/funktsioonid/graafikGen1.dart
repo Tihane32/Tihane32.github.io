@@ -16,7 +16,6 @@ import 'package:testuus4/main.dart';
 ///   value (String): The value parameter is a string that represents the ID of a device.
 gen1GraafikLoomine(
     Map<int, dynamic> lulitus, String valitudPaev, String value) async {
-  print("lulitus $lulitus");
   DateTime now = DateTime.now();
   int tundtana = now.hour;
   SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -151,7 +150,6 @@ graafikGen1Lugemine(String id) async {
 
   List<dynamic> scheduleRules1 =
       httpPackageJson['data']['device_settings']['relays'][0]['schedule_rules'];
-  print(scheduleRules1);
   return scheduleRules1;
 }
 
@@ -201,7 +199,6 @@ graafikGen1Filtreerimine(List<dynamic> graafik, List<int> paevad) {
       }
     }
   }
-  print(newGraafik);
   return newGraafik;
 }
 
@@ -211,7 +208,6 @@ graafikGen1Koostamine(Map<int, dynamic> lulitus, int paev) {
     temp = temp.replaceAll(".", '');
     lulitus[i][0] = temp;
   }
-  print(lulitus);
   for (int i = 0; i < 24; i++) {
 
     if(lulitus[i][2]!="on"&&lulitus[i][2]!="off"){  bool temp = lulitus[i][2];
@@ -252,10 +248,7 @@ graafikGen1ToLulitusMap(Map<int, dynamic> lulitus, List<dynamic> graafik) {
     for (int j = 0; j < graafik.length; j++) {
       List<String> parts = graafik[j].split('-');
       String timeString = parts[0];
-      print(timeString);
-      print(asendus);
       if (timeString == asendus) {
-        print("siin");
         if (parts[2] == 'on') {
           lulitusUus[i][2] = true;
         } else {
@@ -269,6 +262,5 @@ graafikGen1ToLulitusMap(Map<int, dynamic> lulitus, List<dynamic> graafik) {
       }
     }
   }
-  print("lõppLulitus $lulitus $graafik");
   return lulitusUus;
 }

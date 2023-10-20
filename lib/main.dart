@@ -23,6 +23,7 @@ import 'package:workmanager/workmanager.dart';
 
 //Maini käivitamine, home on koduleht.
 //bool graafikuNahtavus = true;
+String paevAbi = "";
 bool seadmeKinnitus = false;
 List<bool> mitmeSeadmeKinnitus = [];
 Map<String, dynamic> seadmeteMap = {};
@@ -66,7 +67,6 @@ Border border = Border.all(
 );
 void callbackDispatcher() {
   Workmanager().executeTask((task, inputData) async {
-    print("Background task executed at ${DateTime.now()}");
 
     var headers1 = {
       'Content-Type': 'application/x-www-form-urlencoded',
@@ -84,7 +84,6 @@ void callbackDispatcher() {
     var url1 = Uri.parse(
         'https://shelly-64-eu.shelly.cloud/device/relay/settings/schedule_rules');
     var res1 = await http.post(url1, headers: headers1, body: data1);
-    print(res1.body);
 
     return Future.value(true);
   });
