@@ -197,7 +197,7 @@ class _KopeeriGraafikTundideValikState
                                     padding: EdgeInsets.symmetric(vertical: 8),
                                     child: Center(
                                       child: Text(
-                                        seade,
+                                        seadmeteMap[seade]["Seadme_nimi"],
                                         style: TextStyle(
                                           color: Colors.white,
                                           fontSize: 18,

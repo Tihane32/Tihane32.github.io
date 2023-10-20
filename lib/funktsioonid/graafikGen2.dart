@@ -45,13 +45,6 @@ gen2GraafikuLoomine(
   Set<String> abigraafik = Set<String>.from(graafik);
   graafik = abigraafik.toList();
 
-  print(graafik);
-  print(abi);
-
-  for (int i = 0; i < graafik.length; i++) {
-    print(abi[i]);
-    print(graafik[i]);
-  }
   await graafikGen2DeleteSome(id, graafik);
   await graafikGen2SaatmineGraafikuga(graafik, id);
 
@@ -406,7 +399,8 @@ delete(value, List temp) async {
     var url = Uri.parse(
         '${seadmeteMap[value]['api_url']}/fast/device/gen2_generic_command');
     var res1 = await http.post(url, headers: headers, body: data);
-    await Future.delayed(const Duration(seconds: 2));
+    //await Future.delayed(const Duration(seconds: 2));
+    print(res1.body);
   }
 }
 
@@ -611,4 +605,6 @@ graafikGen2SaatmineGraafikuga(List<dynamic> graafik, String id) async {
     print(res.body);
     print("sent this: ${graafik[i]}");
   }
+   mitmeSeadmeKinnitus.add(true);
+  seadmeKinnitus = true;
 }

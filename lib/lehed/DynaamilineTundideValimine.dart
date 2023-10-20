@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:testuus4/funktsioonid/graafikGen1.dart';
 import 'package:testuus4/funktsioonid/graafikGen2.dart';
 import 'package:testuus4/lehed/GraafikusseSeadmeteValik.dart';
@@ -403,16 +404,44 @@ graafikuKopeerimine(
           graafikGen2 = graafikGen1ToGraafikGen2(graafikGen2);
           k = 1;
         }
+        await graafikGen2DeleteAll(key);
         await graafikGen2SaatmineGraafikuga(graafikGen2, key);
       }
     }
   });
 }
 
-graafikuSeadedVaartustamine(Map<String, dynamic> graafikuSeaded,
-    double maxTunnid, bool seadista, Set<int> keelatud, Set<int> lubatud) {
+graafikuSeadedVaartustamine(
+    Map<String, dynamic> graafikuSeaded,
+    double maxTunnid,
+    bool seadista,
+    Set<int> keelatud,
+    Set<int> lubatud) async {
   graafikuSeaded['Seadistus_lubatud'] = seadista;
   graafikuSeaded['Max_jarjest_valjas'] = maxTunnid + 1;
-  graafikuSeaded['Kelleatud_tunnid'] = keelatud.toSet();
-  graafikuSeaded['Lubatud_tunnid'] = lubatud.toSet();
+  graafikuSeaded['Kelleatud_tunnid'] = keelatud;
+  graafikuSeaded['Lubatud_tunnid'] = lubatud;
+
+  final prefs = await SharedPreferences.getInstance();
+  await prefs.setBool('Seadistus_lubatud', seadista);
+  await prefs.setDouble('Max_jarjest_valjas', maxTunnid + 1);
+  await prefs.setStringList(
+      'Kelleatud_tunnid', keelatud.map((e) => e.toString()).toList());
+  await prefs.setStringList(
+      'Lubatud_tunnid', lubatud.map((e) => e.toString()).toList());
+}
+
+Future<Map<String, dynamic>> loadGraafikuSeaded() async {
+  final prefs = await SharedPreferences.getInstance();
+  bool? seadista = prefs.getBool('Seadistus_lubatud');
+  double? maxTunnid = prefs.getDouble('Max_jarjest_valjas');
+  List<String>? keelatudList = prefs.getStringList('Kelleatud_tunnid');
+  List<String>? lubatudList = prefs.getStringList('Lubatud_tunnid');
+
+  return {
+    'Seadistus_lubatud': seadista,
+    'Max_jarjest_valjas': maxTunnid,
+    'Kelleatud_tunnid': keelatudList?.map((e) => int.parse(e)).toSet(),
+    'Lubatud_tunnid': lubatudList?.map((e) => int.parse(e)).toSet(),
+  };
 }
