@@ -232,41 +232,52 @@ class _DynamilineTundideValimineState extends State<DynamilineTundideValimine> {
               left: 0,
               right: 0,
               child: leht == 4 || leht == 5
-                  ? Container(
-                      height: 60,
-                      color: Color.fromARGB(255, 115, 162, 195),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: <Widget>[
-                          IconButton(
-                            icon: Icon(
-                              Icons.check_circle_outline_outlined,
-                              size: 30,
-                              color: Color.fromARGB(255, 157, 214, 171),
-                            ),
-                            onPressed: () {
-                              graafikuSeadedVaartustamine(graafikuSeaded,
-                                  maxTunnid, seadista, keelatud, lubatud);
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                      DynamilineTundideValimine(
-                                          valitudSeadmed: valitudSeadmed,
-                                          i: eelmineLeht,
-                                          luba: ''),
-                                ),
-                              );
-                            },
+                  ? BottomNavigationBar(
+                      backgroundColor: Color.fromARGB(255, 115, 162, 195),
+                      fixedColor: Color.fromARGB(255, 157, 214, 171),
+                      unselectedLabelStyle: TextStyle(color: Color.fromARGB(255, 157, 214, 171),),
+                      selectedLabelStyle: TextStyle(color: Color.fromARGB(255, 157, 214, 171),),
+                      items: const <BottomNavigationBarItem>[
+                       BottomNavigationBarItem(
+                          label: '',
+                          icon: Icon(
+                            Icons.check_circle_outlined,
+                            size: 0,
                           ),
-                          Text(
-                            ' Kinnita',
-                            style: TextStyle(
-                                color: Color.fromARGB(255, 157, 214, 171)),
-                          )
-                        ],
-                      ),
-                    )
+                        ),
+                        BottomNavigationBarItem(
+                          label: 'Kinnita',
+                          
+                          icon: Icon(
+                            Icons.check_circle_outlined,
+                            size: 30,
+                            color: Color.fromARGB(255, 157, 214, 171),
+                          ),
+                        ),
+                        BottomNavigationBarItem(
+                          label: '',
+                          icon: Icon(
+                            Icons.check_circle_outlined,
+                            size: 0,
+                          ),
+                        ),
+                      ],
+                     
+                      onTap: (int kodu) {
+                       
+                        
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => DynamilineTundideValimine(i: eelmineLeht, luba: '', valitudSeadmed: valitudSeadmed,),
+                            ),
+                          );
+                    
+                     
+
+                         
+                        }
+                      )
                   : BottomNavigationBar(
                       backgroundColor: Color.fromARGB(255, 115, 162, 195),
                       fixedColor: Color.fromARGB(255, 157, 214, 171),

@@ -303,7 +303,7 @@ class _KeskmiseHinnaAluselTundideValimineState
               Padding(
                 padding: const EdgeInsets.only(left: 50),
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     GestureDetector(
                       onTap: () {
@@ -360,7 +360,7 @@ class _KeskmiseHinnaAluselTundideValimineState
                         )),
                       ),
                     ),
-                    SizedBox(width: MediaQuery.of(context).size.width * 0.1),
+                    //SizedBox(width: MediaQuery.of(context).size.width * 0.1),
                     Container(
                       child: hommeNahtav
                           ? GestureDetector(
