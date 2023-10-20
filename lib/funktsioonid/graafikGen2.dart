@@ -48,8 +48,7 @@ gen2GraafikuLoomine(
   await graafikGen2DeleteSome(id, graafik);
   await graafikGen2SaatmineGraafikuga(graafik, id);
 
-  mitmeSeadmeKinnitus.add(true);
-  seadmeKinnitus = true;
+  
   //abi = true;
   //await delete(value, temp);
 }
@@ -400,7 +399,7 @@ delete(value, List temp) async {
         '${seadmeteMap[value]['api_url']}/fast/device/gen2_generic_command');
     var res1 = await http.post(url, headers: headers, body: data);
     //await Future.delayed(const Duration(seconds: 2));
-    print(res1.body);
+    print("delete this:  ${res1.body}");
   }
 }
 

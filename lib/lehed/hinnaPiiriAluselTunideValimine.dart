@@ -271,6 +271,7 @@ class _HinnaPiiriAluselTundideValimineState
       lulitusMap = lulitusMapParemHP;
     });
     updateLulitusMap(lulitusMap);
+    print("hinnapiir: $lulitusMap");
   }
 
   @override
