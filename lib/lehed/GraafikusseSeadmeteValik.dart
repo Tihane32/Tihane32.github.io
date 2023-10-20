@@ -551,7 +551,9 @@ SeadmeGraafikKontrollimineGen1() async {
   String graafik = '';
   seadmeteMap.forEach((key, value) async {
     if (value['Seadme_generatsioon'] == 1) {
+      print("saadab $key");
       List<dynamic> seadmeGraafik1 = await graafikGen1Lugemine(key);
+      print("sai $key");
       graafik = seadmeGraafik1.join(", ");
       int paev = getCurrentDayOfWeek();
       print("seadme graafik: $graafik");

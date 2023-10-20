@@ -51,15 +51,18 @@ gen1GraafikLoomine(
   }
 
   for (int i = 0; i < 24; i++) {
-    bool temp = selected[i][2];
-    String temp1;
-    if (temp == true) {
-      temp1 = 'on';
-    } else {
-      temp1 = 'off';
+    if (selected[i][2] != "on" && selected[i][2] != "off") {
+      bool temp = selected[i][2];
+      String temp1;
+      if (temp == true) {
+        temp1 = 'on';
+      } else {
+        temp1 = 'off';
+      }
+      selected[i][2] = temp1;
     }
-    selected[i][2] = temp1;
   }
+
   List<String> graafik = [];
   for (int i = 0; i < 24; i++) {
     if (i != 0) {
@@ -88,8 +91,20 @@ gen1GraafikLoomine(
   await Future.delayed(const Duration(seconds: 2));
   //Kui post läheb läbi siis:
   List<String> newList = [];
-  final httpPackageJson = json.decode(res.body) as Map<String, dynamic>;
 
+  if (res.body.toString() ==
+      """{"isok":false,"errors":{"max_req":"Request limit reached!"}}""") {
+    print("ootab");
+
+    await Future.delayed(Duration(seconds: 2));
+
+    res = await http.post(url, headers: headers, body: data);
+    //Kui post läheb läbi siis:
+    print("ootas ära");
+  }
+
+  final httpPackageJson = json.decode(res.body) as Map<String, dynamic>;
+  print(res.body);
   var scheduleRules1 =
       httpPackageJson['data']['device_settings']['relays'][0]['schedule_rules'];
   for (String item in scheduleRules1) {
@@ -115,14 +130,16 @@ gen1GraafikLoomine(
 
   graafikGen1Saatmine(graafik, value);
   for (int i = 0; i < 24; i++) {
-    String temp = selected[i][2];
-    bool temp1;
-    if (temp == 'on') {
-      temp1 = true;
-    } else {
-      temp1 = false;
+    if (selected[i][2] != "on" && selected[i][2] != "off") {
+      bool temp = selected[i][2];
+      String temp1;
+      if (temp == true) {
+        temp1 = 'on';
+      } else {
+        temp1 = 'off';
+      }
+      selected[i][2] = temp1;
     }
-    selected[i][2] = temp1;
   }
   for (int i = 0; i < 24; i++) {
     String temp = selected[i][0];
@@ -143,17 +160,40 @@ graafikGen1Lugemine(String id) async {
   };
 
   var url = Uri.parse('${seadmeteMap[id]['api_url']}/device/settings');
-  var res = await http.post(url, headers: headers, body: data);
-  await Future.delayed(const Duration(seconds: 2));
-  //Kui post läheb läbi siis:
-  final httpPackageJson = json.decode(res.body) as Map<String, dynamic>;
 
+  var res = await http.post(url, headers: headers, body: data);
+  //Kui post läheb läbi siis:
+  if (res.body.toString() ==
+      """{"isok":false,"errors":{"max_req":"Request limit reached!"}}""") {
+    print("ootab");
+
+    await Future.delayed(Duration(seconds: 2));
+
+    res = await http.post(url, headers: headers, body: data);
+    //Kui post läheb läbi siis:
+    print("ootas ära");
+  }
+
+  while (res.body.toString() ==
+      """{"isok":false,"errors":{"max_req":"Request limit reached!"}}""") {
+    await Future.delayed(Duration(seconds: 2));
+
+    res = await http.post(url, headers: headers, body: data);
+    //Kui post läheb läbi siis:
+    print("ootas ära");
+  }
+
+  final httpPackageJson = json.decode(res.body) as Map<String, dynamic>;
+  print(id);
+  print(res.body);
   List<dynamic> scheduleRules1 =
       httpPackageJson['data']['device_settings']['relays'][0]['schedule_rules'];
+
   return scheduleRules1;
 }
 
 graafikGen1Saatmine(List<dynamic> graafik, String id) async {
+  print("saadetud graafik $graafik");
   String graafikString = graafik.join(',');
   var headers1 = {
     'Content-Type': 'application/x-www-form-urlencoded',
@@ -209,17 +249,17 @@ graafikGen1Koostamine(Map<int, dynamic> lulitus, int paev) {
     lulitus[i][0] = temp;
   }
   for (int i = 0; i < 24; i++) {
+    if (lulitus[i][2] != "on" && lulitus[i][2] != "off") {
+      bool temp = lulitus[i][2];
 
-    if(lulitus[i][2]!="on"&&lulitus[i][2]!="off"){  bool temp = lulitus[i][2];
-
-    String temp1;
-    if (temp == true) {
-      temp1 = 'on';
-    } else {
-      temp1 = 'off';
+      String temp1;
+      if (temp == true) {
+        temp1 = 'on';
+      } else {
+        temp1 = 'off';
+      }
+      lulitus[i][2] = temp1;
     }
-    lulitus[i][2] = temp1;}
-  
   }
   List<String> graafik = [];
   for (int i = 0; i < 24; i++) {
