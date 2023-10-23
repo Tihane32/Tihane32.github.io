@@ -85,8 +85,8 @@ Future<void> main() async {
     theme: ThemeData(brightness: Brightness.light),
     home: DynaamilenieKoduLeht(i: 1), //Alustab appi kodulehest
   ));
-  //energia();
-    //energia2();
+  energia();
+  energia2();
   /*Workmanager().initialize(callbackDispatcher);
   Workmanager().registerPeriodicTask(
     "1",

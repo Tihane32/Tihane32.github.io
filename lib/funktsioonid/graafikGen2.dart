@@ -602,7 +602,7 @@ graafikGen2SaatmineGraafikuga(List<dynamic> graafik, String id) async {
         '${seadmeteMap[id]['api_url']}/fast/device/gen2_generic_command');
     var res = await http.post(url, headers: headers, body: data);
     print(res.body);
-    print("sent this: ${graafik[i]}");
+    print("sent this: $id ${graafik[i]}");
   }
    mitmeSeadmeKinnitus.add(true);
   seadmeKinnitus = true;
