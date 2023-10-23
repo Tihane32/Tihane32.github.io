@@ -12,35 +12,26 @@ import 'hinnaPiiriAluselTunideValimine.dart';
 import 'package:http/http.dart' as http;
 
 class KeelatudTunnid extends StatefulWidget {
-  final Function uptateKeelatudTunnid;
-  final Function uptateLubatudTunnid;
-  KeelatudTunnid(
-      {Key? key,
-      this.valitudSeadmed,
-      required this.luba,
-      required this.uptateKeelatudTunnid,
-      required this.uptateLubatudTunnid})
-      : super(key: key);
+  KeelatudTunnid({
+    Key? key,
+    this.valitudSeadmed,
+    required this.luba,
+  }) : super(key: key);
   String luba;
   final valitudSeadmed;
   @override
   _KeelatudTunnidState createState() => _KeelatudTunnidState(
-      valitudSeadmed: valitudSeadmed,
-      luba: luba,
-      uptateKeelatudTunnid: uptateKeelatudTunnid,
-      uptateLubatudTunnid: uptateLubatudTunnid);
+        valitudSeadmed: valitudSeadmed,
+        luba: luba,
+      );
 }
 
 class _KeelatudTunnidState extends State<KeelatudTunnid> {
-  _KeelatudTunnidState(
-      {Key? key,
-      required this.valitudSeadmed,
-      required this.luba,
-      required this.uptateKeelatudTunnid,
-      required this.uptateLubatudTunnid});
-
-  Function uptateKeelatudTunnid;
-  Function uptateLubatudTunnid;
+  _KeelatudTunnidState({
+    Key? key,
+    required this.valitudSeadmed,
+    required this.luba,
+  });
 
   String luba;
   var valitudSeadmed;
@@ -103,9 +94,9 @@ class _KeelatudTunnidState extends State<KeelatudTunnid> {
                   _selectedHours.add(index);
                 }
                 if (luba == 'ei') {
-                  uptateKeelatudTunnid(_selectedHours);
+                  graafikuSeaded['Kelleatud_tunnid'] = _selectedHours;
                 } else {
-                  uptateLubatudTunnid(_selectedHours);
+                  graafikuSeaded['Lubatud_tunnid'] = _selectedHours;
                 }
               });
             },

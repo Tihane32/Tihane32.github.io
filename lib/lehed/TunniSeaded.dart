@@ -5,30 +5,22 @@ import 'DynaamilineTundideValimine.dart';
 import 'package:intl/intl.dart';
 
 class TunniSeaded extends StatefulWidget {
-  final Function uptateMaxTunnid;
-  final Function uptateRakendaSeadistus;
-  TunniSeaded(
-      {Key? key,
-      this.valitudSeadmed,
-      required this.uptateMaxTunnid,
-      required this.uptateRakendaSeadistus})
-      : super(key: key);
+  TunniSeaded({
+    Key? key,
+    this.valitudSeadmed,
+  }) : super(key: key);
   final valitudSeadmed;
   @override
   _TunniSeadedState createState() => _TunniSeadedState(
-      valitudSeadmed: valitudSeadmed,
-      uptateMaxTunnid: uptateMaxTunnid,
-      uptateRakendaSeadistus: uptateRakendaSeadistus);
+        valitudSeadmed: valitudSeadmed,
+      );
 }
 
 class _TunniSeadedState extends State<TunniSeaded> {
-  _TunniSeadedState(
-      {Key? key,
-      required this.valitudSeadmed,
-      required this.uptateMaxTunnid,
-      required this.uptateRakendaSeadistus});
-  Function uptateMaxTunnid;
-  Function uptateRakendaSeadistus;
+  _TunniSeadedState({
+    Key? key,
+    required this.valitudSeadmed,
+  });
   var valitudSeadmed;
   int koduindex = 1;
   bool isLoading = true;
@@ -38,26 +30,18 @@ class _TunniSeadedState extends State<TunniSeaded> {
   double hinnapiir = 50.50;
   Color boxColor = sinineKast;
   bool _notificationsEnabled = false;
-  bool seadista = false;
   String _selectedTheme = 'Odavaimad Tunnid';
-  double maxtunnid = 7;
-  Map<int, int> tunniMap = {
-    1: 2,
-    2: 3,
-    3: 4,
-    4: 5,
-    5: 6,
-    6: 7,
-    7: 8,
-    8: 9,
-    9: 10,
-    10: 11,
-    11: 12
-  };
-  double bufferPerjood = 3;
-  Map<String, String> graafikuSeaded = {};
+  bool seadista = false;
+  double maxTunnid = 1;
 
   TextEditingController _textController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    seadista = graafikuSeaded['Seadistus_lubatud'];
+    maxTunnid = graafikuSeaded['Max_jarjest_valjas'];
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -76,7 +60,7 @@ class _TunniSeadedState extends State<TunniSeaded> {
                 onChanged: (bool value) {
                   setState(() {
                     seadista = value;
-                    uptateRakendaSeadistus(seadista);
+                    graafikuSeaded['Seadistus_lubatud'] = seadista.toString();
                   });
                 },
               ),
@@ -92,9 +76,11 @@ class _TunniSeadedState extends State<TunniSeaded> {
                         context,
                         MaterialPageRoute(
                             builder: (context) => DynamilineTundideValimine(
-                                valitudSeadmed: valitudSeadmed,
-                                i: 4,
-                                luba: 'jah')),
+                                  valitudSeadmed: valitudSeadmed,
+                                  i: 4,
+                                  luba: 'jah',
+                                  eelmineleht: 0,
+                                )),
                       );
                     },
                     icon: Icon(
@@ -113,9 +99,11 @@ class _TunniSeadedState extends State<TunniSeaded> {
                         context,
                         MaterialPageRoute(
                             builder: (context) => DynamilineTundideValimine(
-                                valitudSeadmed: valitudSeadmed,
-                                i: 4,
-                                luba: 'ei')),
+                                  valitudSeadmed: valitudSeadmed,
+                                  i: 4,
+                                  luba: 'ei',
+                                  eelmineleht: 0,
+                                )),
                       );
                     },
                     icon: Icon(
@@ -125,21 +113,21 @@ class _TunniSeadedState extends State<TunniSeaded> {
                     ))),
             ListTile(
               title: Text(
-                'Maksimum järjest väljas: ${tunniMap[maxtunnid]} tundi',
+                'Maksimum järjest väljas: ${maxTunnid} tundi',
                 style: font,
               ),
               subtitle: Slider(
-                value: maxtunnid,
+                value: maxTunnid,
                 onChanged: (newValue) {
                   setState(() {
-                    maxtunnid = newValue;
-                    uptateMaxTunnid(maxtunnid);
+                    maxTunnid = newValue;
+                    graafikuSeaded['Max_jarjest_valjas'] = maxTunnid;
                   });
                 },
-                divisions: 10,
+                divisions: 11,
                 min: 1,
-                max: 11,
-                label: tunniMap[maxtunnid].toString(),
+                max: 12,
+                label: maxTunnid.toString(),
               ),
             ),
           ],

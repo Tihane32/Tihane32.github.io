@@ -20,16 +20,21 @@ class DynamilineTundideValimine extends StatefulWidget {
       {Key? key,
       required this.valitudSeadmed,
       required this.i,
-      required this.luba})
+      required this.luba,
+      required this.eelmineleht})
       : super(key: key);
   int i;
+  int eelmineleht;
   String luba;
   var valitudSeadmed;
 
   @override
   _DynamilineTundideValimineState createState() =>
       _DynamilineTundideValimineState(
-          valitudSeadmed: valitudSeadmed, leht: i, luba: luba);
+          valitudSeadmed: valitudSeadmed,
+          leht: i,
+          luba: luba,
+          eelmineLeht: eelmineleht);
 }
 
 int koduindex = 1;
@@ -65,10 +70,11 @@ class _DynamilineTundideValimineState extends State<DynamilineTundideValimine> {
       {Key? key,
       required this.valitudSeadmed,
       required this.leht,
-      required this.luba});
+      required this.luba,
+      required this.eelmineLeht});
+  int eelmineLeht;
   String luba;
   int leht;
-  int eelmineLeht = 0;
   var valitudSeadmed;
   Map<String, bool> ValitudGraafik = {};
   String selectedPage = 'Odavaimad tunnid';
@@ -78,16 +84,22 @@ class _DynamilineTundideValimineState extends State<DynamilineTundideValimine> {
   late List<Widget> lehedMenu;
   Color paev = Colors.green; // Declare the list
   Map<String, dynamic> graafikuSeaded = {};
-  double maxTunnid = 7;
-  bool seadista = false;
-  Set<int> lubatud = {};
-  Set<int> keelatud = {};
 
   @override
   void initState() {
     paevAbi = "täna";
     mitmeSeadmeKinnitus = [];
     super.initState();
+
+    if (leht == 0) {
+      selectedPage = 'Odavaimad tunnid';
+    } else if (leht == 1) {
+      selectedPage = 'Hinnapiir';
+    } else if (leht == 2) {
+      selectedPage = 'Kopeeri graafik';
+    } else if (leht == 3) {
+      selectedPage = 'Automaatne';
+    }
 
     // Initialize lehedMenu in initState
     lehedMenu = [
@@ -106,14 +118,12 @@ class _DynamilineTundideValimineState extends State<DynamilineTundideValimine> {
           valitudSeadmed: valitudSeadmed,
           updateValitudSeadmed: updateValitudSeamded),
       KeelatudTunnid(
-          valitudSeadmed: valitudSeadmed,
-          luba: luba,
-          uptateLubatudTunnid: uptateLubatudTunnid,
-          uptateKeelatudTunnid: uptateKeelatudTunnid),
+        valitudSeadmed: valitudSeadmed,
+        luba: luba,
+      ),
       TunniSeaded(
-          valitudSeadmed: valitudSeadmed,
-          uptateMaxTunnid: uptateMaxValjas,
-          uptateRakendaSeadistus: uptateRakendaSeadistus),
+        valitudSeadmed: valitudSeadmed,
+      ),
       AbiLeht(),
     ];
   }
@@ -131,30 +141,6 @@ class _DynamilineTundideValimineState extends State<DynamilineTundideValimine> {
     });
   }
 
-  uptateMaxValjas(double Tunnid) {
-    setState(() {
-      maxTunnid = Tunnid;
-    });
-  }
-
-  uptateRakendaSeadistus(bool seadistus) {
-    setState(() {
-      seadista = seadistus;
-    });
-  }
-
-  uptateLubatudTunnid(Set<int> lubatudTunnid) {
-    setState(() {
-      lubatud = lubatudTunnid;
-    });
-  }
-
-  uptateKeelatudTunnid(Set<int> keelatudTunnid) {
-    setState(() {
-      keelatud = keelatudTunnid;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -168,52 +154,51 @@ class _DynamilineTundideValimineState extends State<DynamilineTundideValimine> {
           ],
         ),
         actions: [
-          Center(
-            child: Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                color: boxColor,
-              ),
-              padding: EdgeInsets.symmetric(horizontal: 10),
-              child: DropdownButton<String>(
-                icon: Icon(Icons.menu),
-                value: selectedPage,
-                style: font,
-                dropdownColor: sinineKast,
-                borderRadius: borderRadius,
-                onChanged: (String? newValue) {
-                  setState(() {
-                    selectedPage = newValue!;
-                  });
-                  if (selectedPage == 'Odavaimad tunnid') {
-                    eelmineLeht = leht;
-                    leht = 0;
-                  } else if (selectedPage == 'Hinnapiir') {
-                    eelmineLeht = leht;
-                    leht = 1;
-                  } else if (selectedPage == 'Kopeeri graafik') {
-                    eelmineLeht = leht;
-                    leht = 2;
-                  } else if (selectedPage == 'Automaatne') {
-                    eelmineLeht = leht;
-                    leht = 3;
-                  }
-                },
-                underline: Container(), // or SizedBox.shrink()
-                items: <String>[
-                  'Odavaimad tunnid',
-                  'Hinnapiir',
-                  'Kopeeri graafik',
-                  'Automaatne',
-                ].map((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(
-                      value,
-                      style: font,
-                    ),
-                  );
-                }).toList(),
+          Visibility(
+            visible: leht <= 3,
+            child: Center(
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: boxColor,
+                ),
+                padding: EdgeInsets.symmetric(horizontal: 10),
+                child: DropdownButton<String>(
+                  icon: Icon(Icons.menu),
+                  value: selectedPage,
+                  style: font,
+                  dropdownColor: sinineKast,
+                  borderRadius: borderRadius,
+                  onChanged: (String? newValue) {
+                    setState(() {
+                      selectedPage = newValue!;
+                    });
+                    if (selectedPage == 'Odavaimad tunnid') {
+                      leht = 0;
+                    } else if (selectedPage == 'Hinnapiir') {
+                      leht = 1;
+                    } else if (selectedPage == 'Kopeeri graafik') {
+                      leht = 2;
+                    } else if (selectedPage == 'Automaatne') {
+                      leht = 3;
+                    }
+                  },
+                  underline: Container(), // or SizedBox.shrink()
+                  items: <String>[
+                    'Odavaimad tunnid',
+                    'Hinnapiir',
+                    'Kopeeri graafik',
+                    'Automaatne',
+                  ].map((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(
+                        value,
+                        style: font,
+                      ),
+                    );
+                  }).toList(),
+                ),
               ),
             ),
           ),
@@ -235,10 +220,14 @@ class _DynamilineTundideValimineState extends State<DynamilineTundideValimine> {
                   ? BottomNavigationBar(
                       backgroundColor: Color.fromARGB(255, 115, 162, 195),
                       fixedColor: Color.fromARGB(255, 157, 214, 171),
-                      unselectedLabelStyle: TextStyle(color: Color.fromARGB(255, 157, 214, 171),),
-                      selectedLabelStyle: TextStyle(color: Color.fromARGB(255, 157, 214, 171),),
+                      unselectedLabelStyle: TextStyle(
+                        color: Color.fromARGB(255, 157, 214, 171),
+                      ),
+                      selectedLabelStyle: TextStyle(
+                        color: Color.fromARGB(255, 157, 214, 171),
+                      ),
                       items: const <BottomNavigationBarItem>[
-                       BottomNavigationBarItem(
+                        BottomNavigationBarItem(
                           label: '',
                           icon: Icon(
                             Icons.check_circle_outlined,
@@ -247,7 +236,6 @@ class _DynamilineTundideValimineState extends State<DynamilineTundideValimine> {
                         ),
                         BottomNavigationBarItem(
                           label: 'Kinnita',
-                          
                           icon: Icon(
                             Icons.check_circle_outlined,
                             size: 30,
@@ -262,22 +250,20 @@ class _DynamilineTundideValimineState extends State<DynamilineTundideValimine> {
                           ),
                         ),
                       ],
-                     
                       onTap: (int kodu) {
-                       
-                        
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => DynamilineTundideValimine(i: eelmineLeht, luba: '', valitudSeadmed: valitudSeadmed,),
+                        graafikuSeadedVaartustamine(graafikuSeaded);
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => DynamilineTundideValimine(
+                              i: eelmineLeht,
+                              luba: '',
+                              valitudSeadmed: valitudSeadmed,
+                              eelmineleht: leht,
                             ),
-                          );
-                    
-                     
-
-                         
-                        }
-                      )
+                          ),
+                        );
+                      })
                   : BottomNavigationBar(
                       backgroundColor: Color.fromARGB(255, 115, 162, 195),
                       fixedColor: Color.fromARGB(255, 157, 214, 171),
@@ -423,19 +409,16 @@ graafikuKopeerimine(
 }
 
 graafikuSeadedVaartustamine(
-    Map<String, dynamic> graafikuSeaded,
-    double maxTunnid,
-    bool seadista,
-    Set<int> keelatud,
-    Set<int> lubatud) async {
-  graafikuSeaded['Seadistus_lubatud'] = seadista;
-  graafikuSeaded['Max_jarjest_valjas'] = maxTunnid + 1;
-  graafikuSeaded['Kelleatud_tunnid'] = keelatud;
-  graafikuSeaded['Lubatud_tunnid'] = lubatud;
+  Map<String, dynamic> graafikuSeaded,
+) async {
+  String seadista = graafikuSeaded['Seadistus_lubatud'];
+  String maxTunnid = graafikuSeaded['Max_jarjest_valjas'];
+  Set<int> keelatud = graafikuSeaded['Kelleatud_tunnid'];
+  Set<int> lubatud = graafikuSeaded['Lubatud_tunnid'];
 
   final prefs = await SharedPreferences.getInstance();
-  await prefs.setBool('Seadistus_lubatud', seadista);
-  await prefs.setDouble('Max_jarjest_valjas', maxTunnid + 1);
+  await prefs.setString('Seadistus_lubatud', seadista);
+  await prefs.setString('Max_jarjest_valjas', maxTunnid);
   await prefs.setStringList(
       'Kelleatud_tunnid', keelatud.map((e) => e.toString()).toList());
   await prefs.setStringList(
