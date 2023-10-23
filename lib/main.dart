@@ -11,6 +11,7 @@ import 'package:testuus4/funktsioonid/graafikGen2.dart';
 import 'package:testuus4/lehed/GraafikusseSeadmeteValik.dart';
 import 'funktsioonid/backroundTask.dart';
 import 'funktsioonid/graafikGen1.dart';
+import 'funktsioonid/voimsus.dart';
 import 'lehed/dynamicKoduLeht.dart';
 import 'lehed/koduleht.dart';
 import 'Arhiiv/kaksTabelit.dart';
@@ -66,7 +67,6 @@ Border border = Border.all(
   width: 2,
 );
 
-
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 //backround start
@@ -85,7 +85,8 @@ Future<void> main() async {
     theme: ThemeData(brightness: Brightness.light),
     home: DynaamilenieKoduLeht(i: 1), //Alustab appi kodulehest
   ));
-
+  energia();
+    energia2();
   /*Workmanager().initialize(callbackDispatcher);
   Workmanager().registerPeriodicTask(
     "1",

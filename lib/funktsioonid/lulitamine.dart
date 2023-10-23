@@ -57,6 +57,8 @@ void lulitamine(String seade) async {
       var url = Uri.parse('${value["api_url"]}/device/relay/control');
       var res = await http.post(url, headers: headers, body: data);
       print(res.body);
+      print("switch");
+      print(res.body);
       String seadmedMap = json.encode(seadmeteMap);
       await prefs.setString('seadmed', seadmedMap);
     }
