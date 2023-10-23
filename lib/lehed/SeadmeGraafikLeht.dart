@@ -1274,7 +1274,7 @@ Future graafik(
       'auth_key': authKey,
     };
 
-    var url = Uri.parse('https://shelly-64-eu.shelly.cloud/device/settings');
+    var url = Uri.parse('${seadmeteMap[seadmeNimi]["api_url"]}/device/settings');
     var res = await http.post(url, headers: headers, body: data);
     await Future.delayed(const Duration(seconds: 2));
     //Kui post läheb läbi siis:

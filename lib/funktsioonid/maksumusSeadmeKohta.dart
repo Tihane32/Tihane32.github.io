@@ -3,6 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:testuus4/funktsioonid/graafikGen2.dart';
 import 'package:testuus4/Arhiiv/energiaGraafik.dart';
 import 'dart:convert';
+import '../main.dart';
 import 'token.dart';
 import 'package:testuus4/Arhiiv/kaksTabelit.dart';
 import 'package:http/http.dart' as http;
@@ -67,7 +68,7 @@ seadmeMaksumus(String value, [Function? setPaevamaksumus]) async {
     };
 
     var url = Uri.parse(
-        'https://shelly-64-eu.shelly.cloud/statistics/relay/consumption');
+        '${seadmeteMap[value]["api_url"]}/statistics/relay/consumption');
     var res = await http.post(url, headers: headers, body: data);
     formattedDate = formattedDate + 'T20';
     String abi = test;

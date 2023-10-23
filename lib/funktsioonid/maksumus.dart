@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:testuus4/funktsioonid/graafikGen2.dart';
 import 'package:testuus4/Arhiiv/energiaGraafik.dart';
+import 'package:testuus4/main.dart';
 import 'dart:convert';
 import 'token.dart';
 import 'package:testuus4/Arhiiv/kaksTabelit.dart';
@@ -72,7 +73,7 @@ Future maksumus(String vahemik) async {
         };
 
         var url = Uri.parse(
-            'https://shelly-64-eu.shelly.cloud/statistics/relay/consumption');
+            '${seadmeteMap[asendus]["api_url"]}/statistics/relay/consumption');
         var res = await http.post(url, headers: headers, body: data);
         formattedDate = formattedDate + 'T20';
         test = test + 'T20';
@@ -179,7 +180,7 @@ Future maksumus(String vahemik) async {
         };
 
         var url = Uri.parse(
-            'https://shelly-64-eu.shelly.cloud/statistics/relay/consumption');
+            '${seadmeteMap[asendus]["api_url"]}/statistics/relay/consumption');
         var res = await http.post(url, headers: headers, body: data);
         formattedDate = formattedDate + 'T20';
         test = test + 'T20';
@@ -308,7 +309,7 @@ Future maksumus(String vahemik) async {
         };
 
         var url = Uri.parse(
-            'https://shelly-64-eu.shelly.cloud/statistics/relay/consumption');
+            '${seadmeteMap[asendus]["api_url"]}/statistics/relay/consumption');
         var res = await http.post(url, headers: headers, body: data);
         formattedDate = formattedDate + 'T20';
         test = test + 'T20';

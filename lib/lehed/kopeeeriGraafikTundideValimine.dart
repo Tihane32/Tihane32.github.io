@@ -283,11 +283,11 @@ SeadmeGraafikKoostamineGen1(String value) async {
 
   var data = {
     'channel': '0',
-    'id': '80646f81ad9a',
-    'auth_key': storedKeyString,
+    'id': value,
+    'auth_key': seadmeteMap[value]["Cloud_key"],
   };
 
-  var url = Uri.parse('https://shelly-64-eu.shelly.cloud/device/settings');
+  var url = Uri.parse('${seadmeteMap[value]["api_url"]}/device/settings');
 
   var res = await http.post(url, headers: headers, body: data);
 

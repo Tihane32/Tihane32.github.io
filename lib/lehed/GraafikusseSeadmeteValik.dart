@@ -384,7 +384,7 @@ SeadmeGraafikKoostamineGen1(String value) async {
     'auth_key': storedKeyString,
   };
 
-  var url = Uri.parse('https://shelly-64-eu.shelly.cloud/device/settings');
+  var url = Uri.parse('${seadmeteMap[value]["api_url"]}/device/settings');
 
   var res = await http.post(url, headers: headers, body: data);
 
@@ -499,7 +499,7 @@ SeadmeGraafikKoostamineGen2(
   };
 
   var url = Uri.parse(
-      'https://shelly-64-eu.shelly.cloud/fast/device/gen2_generic_command');
+      '${seadmeteMap[value]["api_url"]}/fast/device/gen2_generic_command');
   var res = await http.post(url, headers: headers, body: data);
   if (res.statusCode == 200) {
     var resJSON = jsonDecode(res.body) as Map<String, dynamic>;

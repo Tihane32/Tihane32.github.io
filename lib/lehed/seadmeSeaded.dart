@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:testuus4/funktsioonid/graafikGen2.dart';
 import 'dart:convert';
+import '../main.dart';
 import 'graafikuKoostamine.dart';
 import 'package:testuus4/Arhiiv/kaksTabelit.dart';
 import 'package:http/http.dart' as http;
@@ -258,7 +259,7 @@ class _LulitusGraafikState extends State<_LulitusGraafik> {
           };
 
           var url =
-              Uri.parse('https://shelly-64-eu.shelly.cloud/device/settings');
+              Uri.parse('${seadmeteMap[value]["api_url"]}/device/settings');
           var res = await http.post(url, headers: headers, body: data);
           await Future.delayed(const Duration(seconds: 2));
           //Kui post läheb läbi siis:
@@ -430,7 +431,7 @@ class _EGraafikState extends State<EGraafik> {
     };
 
     var url = Uri.parse(
-        'https://shelly-64-eu.shelly.cloud/statistics/relay/consumption');
+        '${seadmeteMap[value]["api_url"]}/statistics/relay/consumption');
     var res = await http.post(url, headers: headers, body: data);
     if (res.statusCode != 200)
       throw Exception('http.post error: statusCode= ${res.statusCode}');

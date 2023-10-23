@@ -29,7 +29,7 @@ getTarbimine(String seadmeID, String algusPaev, String vahemik) async {
   };
 
   var url = Uri.parse(
-      'https://shelly-64-eu.shelly.cloud/statistics/relay/consumption');
+      '${seadmeteMap[seadmeID]["api_url"]}/statistics/relay/consumption');
   var res = await http.post(url, headers: headers, body: data);
   print(res.body);
   final jsonData = json.decode(res.body);
