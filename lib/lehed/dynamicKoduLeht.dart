@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:testuus4/lehed/GraafikusseSeadmeteValik.dart';
 import 'package:testuus4/lehed/koduleht.dart';
-import 'package:testuus4/lehed/seadmeteList.dart';
+import 'package:testuus4/lehed/seadmeteListDynaamiline.dart';
 import 'package:testuus4/main.dart';
 import 'AbiLeht.dart';
 import 'Login.dart';

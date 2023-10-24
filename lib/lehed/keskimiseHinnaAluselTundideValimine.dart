@@ -294,6 +294,7 @@ class _KeskmiseHinnaAluselTundideValimineState
     return CustomScrollView(
       slivers: <Widget>[
         SliverAppBar(
+          elevation: 0.0,
           centerTitle: true,
           automaticallyImplyLeading: false,
           backgroundColor: Colors.white,

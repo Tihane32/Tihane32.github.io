@@ -15,23 +15,14 @@ import 'package:get/get.dart';
 
 import 'dynamicSeadmeInfo.dart';
 
-class SeadmeteListPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return GetMaterialApp(
-      home: SeadmeteList(),
-    );
-  }
-}
-
-class SeadmeteList extends StatefulWidget {
-  const SeadmeteList({Key? key}) : super(key: key);
+class SeadmeteList_gruppid extends StatefulWidget {
+  const SeadmeteList_gruppid({Key? key}) : super(key: key);
 
   @override
-  State<SeadmeteList> createState() => _SeadmeteListState();
+  State<SeadmeteList_gruppid> createState() => _SeadmeteList_gruppidState();
 }
 
-class _SeadmeteListState extends State<SeadmeteList> {
+class _SeadmeteList_gruppidState extends State<SeadmeteList_gruppid> {
   bool isLoading = false;
   late Map<String, List<String>> minuSeadmedK = {};
   //String onoffNupp = 'Shelly ON';
@@ -46,8 +37,12 @@ class _SeadmeteListState extends State<SeadmeteList> {
   }
 
   int koduindex = 1;
-
   Set<String> selectedPictures = Set<String>();
+  double xAlign = -1;
+  double signInAlign = 1;
+  double loginAlign = -1;
+  double width = 200;
+  double height = 40;
 
   void toggleSelection(String pictureName) {
     setState(() {
@@ -112,7 +107,9 @@ class _SeadmeteListState extends State<SeadmeteList> {
             : GridView.builder(
                 physics: BouncingScrollPhysics(),
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
+                  crossAxisCount: 1,
+                  childAspectRatio: MediaQuery.of(context).size.width /
+                      (MediaQuery.of(context).size.height / 3),
                 ),
                 itemCount: seadmeteMap.length + 1,
                 itemBuilder: (context, index) {
@@ -151,7 +148,6 @@ class _SeadmeteListState extends State<SeadmeteList> {
                   final seade = seadmeteMap.keys.elementAt(index);
                   final pilt = seadmeteMap[seade]["Seadme_pilt"];
                   final staatus = seadmeteMap[seade]["Seadme_olek"];
-                  print('Staatus: $staatus');
                   return GestureDetector(
                     onTap: () {
                       Navigator.push(
@@ -166,86 +162,69 @@ class _SeadmeteListState extends State<SeadmeteList> {
                       );
                     },
                     child: Padding(
-                      padding: const EdgeInsets.all(1),
+                      padding: const EdgeInsets.all(8.0),
                       child: Container(
                         decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(15),
                           border: border,
-                        ),
-                        child: Container(
-                          width: double.infinity,
-                          height: double.infinity,
-                          decoration: BoxDecoration(
-                            border: Border.all(
-                              color: staatus == 'on'
-                                  ? Colors.green
-                                  : staatus == 'off'
-                                      ? Colors.red
-                                      : Colors.grey,
-                              width: 8,
+                          image: DecorationImage(
+                            image: AssetImage(pilt),
+                            fit: BoxFit.cover,
+                          ),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.withOpacity(0.3),
+                              spreadRadius: 2,
+                              blurRadius: 7,
+                              offset: Offset(0, 3),
                             ),
-                          ),
-                          child: Stack(
-                            children: [
-                              AspectRatio(
-                                aspectRatio: 1,
-                                child: ClipRRect(
-                                  child: Image.asset(
-                                    pilt,
-                                    fit: BoxFit.cover,
-                                  ),
-                                ),
-                              ),
-                              Positioned(
-                                top: 8,
-                                right: 8,
-                                child: Container(
-                                  width: 80,
-                                  height: 80,
-                                  decoration: BoxDecoration(
-                                    color: staatus == 'on'
-                                        ? Colors.green.withOpacity(0.6)
-                                        : staatus == 'off'
-                                            ? Colors.red.withOpacity(0.6)
-                                            : Colors.grey.withOpacity(0.6),
-                                    shape: BoxShape.circle,
-                                  ),
-                                  child: staatus == 'Offline'
-                                      ? Icon(
-                                          Icons.wifi_off_outlined,
-                                          size: 60,
-                                          color: Colors.amber,
-                                        )
-                                      : IconButton(
-                                          iconSize: 60,
-                                          icon: Icon(Icons.power_settings_new),
-                                          color: Colors.white,
-                                          onPressed: () {
-                                            _handleButtonPress(seade);
-                                          },
-                                        ),
-                                ),
-                              ),
-                              Positioned(
-                                bottom: 0,
-                                left: 0,
-                                right: 0,
-                                child: Container(
+                          ],
+                        ),
+                        child: Stack(
+                          children: [
+                            Align(
+                              alignment: Alignment.bottomLeft,
+                              child: Container(
+                                margin: EdgeInsets.all(10),
+                                decoration: BoxDecoration(
                                   color: Colors.blue.withOpacity(0.6),
-                                  padding: EdgeInsets.symmetric(vertical: 8),
-                                  child: Center(
-                                    child: Text(
-                                      seadmeteMap[seade]["Seadme_nimi"],
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                padding: EdgeInsets.symmetric(
+                                    vertical: 8, horizontal: 10),
+                                child: Text(
+                                  seadmeteMap[seade]["Seadme_nimi"],
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
                                   ),
                                 ),
                               ),
-                            ],
-                          ),
+                            ),
+                            Align(
+                              alignment: Alignment.centerRight,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: <Widget>[
+                                  _buildIconButton(Icons.brightness_1, () {}),
+                                  SizedBox(height: 20),
+                                  _buildIconButton(Icons.brightness_1, () {}),
+                                ],
+                              ),
+                            ),
+                            Align(
+                              alignment: Alignment.centerLeft,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: <Widget>[
+                                  _buildInfoBox('23.5°C'),
+                                  SizedBox(height: 20),
+                                  _buildInfoBox('50.3W'),
+                                ],
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     ),
@@ -282,4 +261,38 @@ muudaSeadmeOlek(Map<String, dynamic> SeadmeteMap, SeadmeNimi) {
   lulitamine(SeadmeNimi);
 
   return seadmeteMap; // Device key not found in the map
+}
+
+Widget _buildIconButton(IconData icon, Function onTap) {
+  return Container(
+    decoration: BoxDecoration(
+      color: Colors.blue.withOpacity(0.6),
+      borderRadius: BorderRadius.circular(25),
+    ),
+    width: 50,
+    height: 50,
+    child: IconButton(
+      padding: EdgeInsets.all(0),
+      iconSize: 40,
+      color: Colors.white,
+      icon: Icon(icon),
+      onPressed: () {},
+    ),
+  );
+}
+
+Widget _buildInfoBox(String info) {
+  return Container(
+    decoration: BoxDecoration(
+      color: Colors.blue.withOpacity(0.6),
+      borderRadius: BorderRadius.circular(10),
+    ),
+    width: 70,
+    height: 50,
+    alignment: Alignment.center,
+    child: Text(
+      info,
+      style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+    ),
+  );
 }

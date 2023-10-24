@@ -17,7 +17,7 @@ import 'lehed/koduleht.dart';
 import 'Arhiiv/kaksTabelit.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'lehed/seadmeteList.dart';
+import 'lehed/seadmeteListDynaamiline.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:workmanager/workmanager.dart';
@@ -92,7 +92,7 @@ Future<void> main() async {
     home: DynaamilenieKoduLeht(i: 1), //Alustab appi kodulehest
   ));
   //energia();
-    //energia2();
+  //energia2();
   /*Workmanager().initialize(callbackDispatcher);
   Workmanager().registerPeriodicTask(
     "1",
