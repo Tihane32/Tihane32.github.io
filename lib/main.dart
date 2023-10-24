@@ -24,6 +24,12 @@ import 'package:workmanager/workmanager.dart';
 
 //Maini käivitamine, home on koduleht.
 //bool graafikuNahtavus = true;
+Map<String, dynamic> graafikuSeaded = {
+  'Seadistus_lubatud': false,
+  'Max_jarjest_valjas': 1,
+  'Kelleatud_tunnid': [],
+  'Lubatud_tunnid': [],
+};
 String paevAbi = "";
 bool seadmeKinnitus = false;
 List<bool> mitmeSeadmeKinnitus = [];

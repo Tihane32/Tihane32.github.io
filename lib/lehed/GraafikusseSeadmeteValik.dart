@@ -336,7 +336,11 @@ class _SeadmeteListValimineState extends State<SeadmeteListValimine> {
                     context,
                     MaterialPageRoute(
                         builder: (context) => DynamilineTundideValimine(
-                            valitudSeadmed: ValitudSeadmed, i: 0, luba: '')),
+                              valitudSeadmed: ValitudSeadmed,
+                              i: 0,
+                              luba: '',
+                              eelmineleht: 0,
+                            )),
                   );
                 } else {
                   Hoiatus(
