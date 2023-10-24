@@ -8,6 +8,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:testuus4/funktsioonid/graafikGen2.dart';
+import 'package:testuus4/funktsioonid/token.dart';
 import 'package:testuus4/lehed/GraafikusseSeadmeteValik.dart';
 import 'funktsioonid/backroundTask.dart';
 import 'funktsioonid/graafikGen1.dart';
@@ -24,6 +25,7 @@ import 'package:workmanager/workmanager.dart';
 
 //Maini käivitamine, home on koduleht.
 //bool graafikuNahtavus = true;
+Map<String, String> tokenMap = {};
 String paevAbi = "";
 bool seadmeKinnitus = false;
 List<bool> mitmeSeadmeKinnitus = [];
@@ -78,15 +80,18 @@ Future<void> main() async {
   if (seadmedJSONmap != null) {
     seadmeteMap = json.decode(seadmedJSONmap);
   }
-
+  await getToken3();
+  print("------------");
+  print(tokenMap);
+  print("------------");
 //backround end
 
   runApp(MaterialApp(
     theme: ThemeData(brightness: Brightness.light),
     home: DynaamilenieKoduLeht(i: 1), //Alustab appi kodulehest
   ));
-  energia();
-  energia2();
+  //energia();
+  //energia2();
   /*Workmanager().initialize(callbackDispatcher);
   Workmanager().registerPeriodicTask(
     "1",

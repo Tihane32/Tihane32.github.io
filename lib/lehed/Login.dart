@@ -85,40 +85,42 @@ class _LoginPageState extends State<LoginPage> {
         await http.post(seadmeteSaamiseUrl, headers: headers1);
     var seadmeteSaamiseVastusJSON =
         json.decode(seadmeteSaamiseVastus.body) as Map<String, dynamic>;
-    var seadmeteMap = seadmeteSaamiseVastusJSON['data']['devices'];
-    print(seadmeteMap);
+    var seadedKasutajalt = seadmeteSaamiseVastusJSON['data']['devices'];
+    print(seadedKasutajalt);
     var i = 0;
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var storedJsonMap = prefs.getString('seadmed');
     var keySaamiseUrl = Uri.parse('$apiUrl/user/get_user_key');
     var keyVastus = await http.post(keySaamiseUrl, headers: headers1);
     var keyVastusJSON = json.decode(keyVastus.body);
-    String keyMap = keyVastusJSON['data']['key'];
 
     if (storedJsonMap != null) {
-      seadmed = json.decode(storedJsonMap);
-
-      var j = 0;
-
-      for (var device in seadmeteMap.values) {
+      var keySaamiseUrl = Uri.parse('$apiUrl/user/get_user_key');
+      var keyVastus = await http.post(keySaamiseUrl, headers: headers1);
+      var keyVastusJSON = json.decode(keyVastus.body);
+      String keyMap = keyVastusJSON['data']['key'];
+      seadmed = new Map<String, dynamic>();
+      i = 0;
+      print("----------------");
+      print(seadedKasutajalt);
+      print("----------------");
+      print(seadmeteMap);
+      print("----------------");
+      for (var device in seadedKasutajalt.values) {
         var seade = new Map<String, dynamic>();
-        seade['Seadme_ID'] = device['id'];
-        for (var test = seadmed.keys.length; j < test; j++) {
-          if (seade['Seadme_ID'] == seadmed['Seade$j']['Seadme_ID']) {
-            j++;
-            break;
-          }
-
-          seade['Seadme_nimi'] = device['name'];
-          seade['Seadme_pistik'] = device['name'];
-          seade['Seadme_generatsioon'] = device['gen'];
-          seade['api_url'] = apiUrl;
-          seade['Cloud_key'] = keyMap;
-          seadmed['Seade$i'] = seade;
-          uuedSeadmedString.add(device['name']);
-        }
-
+        //seade['Seadme_ID'] = device['id'];
+        seade['Seadme_nimi'] = device['name'];
+        seade['Seadme_pistik'] = device['name'];
+        seade['Seadme_generatsioon'] = device['gen'];
+        seade['api_url'] = apiUrl;
+        seade['Seadme_pilt'] = "assets/boiler1.jpg";
+        seade['Cloud_key'] = keyMap;
+        seade['Username'] = ajutineKastuajanimi;
+        seade['Password'] = sha1Hash;
+        seadmed['${device['id']}'] = seade;
         i++;
+
+        uuedSeadmedString.add(device['name']);
       }
 
       String seadmedMap = json.encode(seadmed);
@@ -136,7 +138,7 @@ class _LoginPageState extends State<LoginPage> {
       String keyMap = keyVastusJSON['data']['key'];
       seadmed = new Map<String, dynamic>();
       i = 0;
-      for (var device in seadmeteMap.values) {
+      for (var device in seadedKasutajalt.values) {
         var seade = new Map<String, dynamic>();
         //seade['Seadme_ID'] = device['id'];
         seade['Seadme_nimi'] = device['name'];
@@ -145,6 +147,8 @@ class _LoginPageState extends State<LoginPage> {
         seade['api_url'] = apiUrl;
         seade['Seadme_pilt'] = "assets/boiler1.jpg";
         seade['Cloud_key'] = keyMap;
+        seade['Username'] = ajutineKastuajanimi;
+        seade['Password'] = sha1Hash;
         seadmed['${device['id']}'] = seade;
         i++;
 
