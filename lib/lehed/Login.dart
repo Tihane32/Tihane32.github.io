@@ -71,8 +71,6 @@ class _LoginPageState extends State<LoginPage> {
     }
     var vastusJSON =
         json.decode(sisselogimiseVastus.body) as Map<String, dynamic>;
-    print(vastusJSON);
-    print(vastusJSON['data']["user_api_url"]);
     var token = vastusJSON['data']['token'];
     String apiUrl = vastusJSON['data']["user_api_url"].toString();
     var headers1 = {
@@ -85,8 +83,7 @@ class _LoginPageState extends State<LoginPage> {
         await http.post(seadmeteSaamiseUrl, headers: headers1);
     var seadmeteSaamiseVastusJSON =
         json.decode(seadmeteSaamiseVastus.body) as Map<String, dynamic>;
-    var seadedKasutajalt = seadmeteSaamiseVastusJSON['data']['devices'];
-    print(seadedKasutajalt);
+    var seadmeteMap = seadmeteSaamiseVastusJSON['data']['devices'];
     var i = 0;
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var storedJsonMap = prefs.getString('seadmed');
@@ -164,7 +161,6 @@ class _LoginPageState extends State<LoginPage> {
       //  context, seadmedMap, uuedSeadmed, uuedSeadmedString);
     }
     //seisukord();
-    print(seadmed);
     Future.delayed(Duration(seconds: 3), () {
       Navigator.pushReplacement(
         context,

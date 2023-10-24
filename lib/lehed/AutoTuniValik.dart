@@ -85,9 +85,11 @@ class _AutoTundideValikState extends State<AutoTundideValik> {
                         context,
                         MaterialPageRoute(
                             builder: (context) => DynamilineTundideValimine(
-                                valitudSeadmed: valitudSeadmed,
-                                i: 5,
-                                luba: '')),
+                                  valitudSeadmed: valitudSeadmed,
+                                  i: 5,
+                                  luba: '',
+                                  eelmineleht: 3,
+                                )),
                       );
                     },
                     icon: Icon(
