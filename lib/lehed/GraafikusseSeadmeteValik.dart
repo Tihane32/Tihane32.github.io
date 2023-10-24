@@ -492,9 +492,9 @@ SeadmeGraafikKoostamineGen2(
   var graafikud = Map<String, dynamic>();
   List temp = List.empty(growable: true);
 
-  String token = await getToken();
+  
   var headers = {
-    'Authorization': 'Bearer $token',
+    'Authorization': 'Bearer ${tokenMap[value]}',
   };
 
   var data = {

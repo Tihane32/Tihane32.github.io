@@ -197,19 +197,11 @@ Future<void> sort(List<bool> checkboxValues,
   SharedPreferences prefs = await SharedPreferences.getInstance();
   var seadmedJSON = prefs.getString('seadmed');
   if (seadmedJSON != null) {
-    Map<String, dynamic> seadmed = json.decode(seadmedJSON);
-    num pikkus = seadmed.length + uuedSeadmedString.length;
-
-    final reindexedMap = <String, dynamic>{};
-    i = 0;
-    for (var k = seadmed.length; k < pikkus; k++) {
-      int newIndex = k;
-      seadmed['Seade$k'] = uuedSeadmedString['Seade$i'];
-
-      i++;
+    for (var innerMap in uuedSeadmedString.values) {
+      seadmeteMap.addAll(innerMap);
     }
-    seadmeteMap = seadmed;
-    String seadmedMap = json.encode(seadmed);
+
+    String seadmedMap = json.encode(seadmeteMap);
     await prefs.setString('seadmed', seadmedMap);
     await seisukord();
   } else {
@@ -223,4 +215,7 @@ Future<void> sort(List<bool> checkboxValues,
     await prefs.setString('seadmed', seadmedMap);
     await seisukord();
   }
+  print("---------------------");
+  print(seadmeteMap);
+    print("---------------------");
 }

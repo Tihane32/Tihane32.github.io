@@ -1,5 +1,6 @@
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import '../main.dart';
 import 'token.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -24,7 +25,7 @@ Future<double> tarbimine(tarbimiseMap, Function updateTarbimine) async {
       DateTime(currentDateTime.year, currentDateTime.month + 1, 0);
   var j = 0;
   var tarbimine = 0.0;
-  String token = await getToken();
+
   await Future.forEach(storedMap.entries, (entry) async {
     String key = entry.key;
     Map<String, dynamic> value = entry.value;
@@ -33,7 +34,7 @@ Future<double> tarbimine(tarbimiseMap, Function updateTarbimine) async {
     String asendus1 = value['Seadme_nimi'].toString();
 
     var headers = {
-      'Authorization': 'Bearer $token',
+      'Authorization': 'Bearer ${tokenMap[asendus]}',
     };
     var data = {
       'id': asendus,

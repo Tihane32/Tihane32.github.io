@@ -186,27 +186,8 @@ class _MGraafikState extends State<MGraafik> {
     });
 
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? ajutineKasutajanimi = prefs.getString('Kasutajanimi');
-    String? sha1Hash = prefs.getString('Kasutajaparool');
-
-    var headers1 = {
-      'Content-Type': 'application/x-www-form-urlencoded',
-    };
-
-    var kasutajaAndmed = {
-      'email': ajutineKasutajanimi,
-      'password': sha1Hash,
-      'var': '2',
-    };
-    var sisselogimiseUrl = Uri.parse('https://api.shelly.cloud/auth/login');
-    var sisselogimiseVastus = await http.post(sisselogimiseUrl,
-        headers: headers1, body: kasutajaAndmed);
-    var vastusJSON =
-        json.decode(sisselogimiseVastus.body) as Map<String, dynamic>;
-    var token = vastusJSON['data']['token'];
-    //Todo peab lisama beareri saamise
     var headers = {
-      'Authorization': 'Bearer $token',
+      'Authorization': 'Bearer ${tokenMap[value]}',
     };
     var data = {
       'id': value,

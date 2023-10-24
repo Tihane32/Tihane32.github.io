@@ -8,10 +8,10 @@ import 'package:testuus4/main.dart';
 import 'package:http/http.dart' as http;
 
 getTarbimine(String seadmeID, String algusPaev, String vahemik) async {
-  String token = await getToken2();
+  
 
   var headers = {
-    'Authorization': 'Bearer $token',
+    'Authorization': 'Bearer ${tokenMap[seadmeID]}',
   };
   print(algusPaev);
   DateFormat format = DateFormat("yyyy-MM-dd HH:mm:ss");
