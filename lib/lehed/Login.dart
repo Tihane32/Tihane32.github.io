@@ -83,7 +83,7 @@ class _LoginPageState extends State<LoginPage> {
         await http.post(seadmeteSaamiseUrl, headers: headers1);
     var seadmeteSaamiseVastusJSON =
         json.decode(seadmeteSaamiseVastus.body) as Map<String, dynamic>;
-    var seadmeteMap = seadmeteSaamiseVastusJSON['data']['devices'];
+    var seadedKasutajalt = seadmeteSaamiseVastusJSON['data']['devices'];
     var i = 0;
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var storedJsonMap = prefs.getString('seadmed');
@@ -101,7 +101,7 @@ class _LoginPageState extends State<LoginPage> {
       print("----------------");
       print(seadedKasutajalt);
       print("----------------");
-      print(seadmeteMap);
+      print(seadedKasutajalt);
       print("----------------");
       for (var device in seadedKasutajalt.values) {
         var seade = new Map<String, dynamic>();

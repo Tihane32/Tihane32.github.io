@@ -86,9 +86,11 @@ Future<void> main() async {
   if (seadmedJSONmap != null) {
     seadmeteMap = json.decode(seadmedJSONmap);
   }
+
   await getToken3();
   print("------------");
   print(tokenMap);
+  print(seadmeteMap);
   print("------------");
 //backround end
 

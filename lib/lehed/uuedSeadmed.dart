@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:testuus4/funktsioonid/seisukord.dart';
+import 'package:testuus4/funktsioonid/token.dart';
 import 'package:testuus4/lehed/dynamicKoduLeht.dart';
 import 'package:testuus4/lehed/koduleht.dart';
 import 'package:testuus4/Arhiiv/seadmedKontoltNim.dart';
@@ -214,8 +215,9 @@ Future<void> sort(List<bool> checkboxValues,
     String seadmedMap = json.encode(convertedMap);
     await prefs.setString('seadmed', seadmedMap);
     await seisukord();
+    await getToken3();
   }
   print("---------------------");
   print(seadmeteMap);
-    print("---------------------");
+  print("---------------------");
 }
