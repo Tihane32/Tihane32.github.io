@@ -6,30 +6,25 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 seisukord() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  var token =
-      await getToken(); //Kutsub funktsiooni getTokeni, mis on vajalik sisselogimiseks
+  //Kutsub funktsiooni getTokeni, mis on vajalik sisselogimiseks
 
   seadmeteMap.forEach((key, value) async {
     var headers = {
-    'Authorization': 'Bearer $token',
-    'Content-Type': 'application/x-www-form-urlencoded',
-  };
- var url = Uri.parse('${seadmeteMap[key]['api_url']}/device/all_status');
-  var res = await http.post(url, headers: headers);
-  if (res.statusCode != 200)
-    throw Exception('http.post error: statusCode= ${res.statusCode}');
-  var vastus = json.decode(res.body);
-  vastus as Map<String, dynamic>;
+      'Authorization': 'Bearer ${tokenMap[key]}',
+      'Content-Type': 'application/x-www-form-urlencoded',
+    };
+    var url = Uri.parse('${seadmeteMap[key]['api_url']}/device/all_status');
+    var res = await http.post(url, headers: headers);
+    if (res.statusCode != 200)
+      throw Exception('http.post error: statusCode= ${res.statusCode}');
+    var vastus = json.decode(res.body);
+    vastus as Map<String, dynamic>;
 
-  
-
-seadmeteMap.forEach((key, value) async {
     var id = key;
 
     if (vastus['data']['devices_status']['$id'] == null) {
       value['Seadme_olek'] = 'Offline';
-await prefs.setString('seadmed', json.encode(seadmeteMap));
-      
+      await prefs.setString('seadmed', json.encode(seadmeteMap));
     } else {
       if (value['Seadme_generatsioon'] == 1) {
         var asendus = vastus['data']['devices_status']['$id']['relays'];
@@ -42,8 +37,7 @@ await prefs.setString('seadmed', json.encode(seadmeteMap));
         }
         value['Seadme_olek'] = olek;
 
-       await prefs.setString('seadmed', json.encode(seadmeteMap));
-        
+        await prefs.setString('seadmed', json.encode(seadmeteMap));
       } else {
         var asendus =
             vastus['data']['devices_status']['$id']['switch:0']['output'];
@@ -56,18 +50,10 @@ await prefs.setString('seadmed', json.encode(seadmeteMap));
         value['Seadme_olek'] = olek;
 
         await prefs.setString('seadmed', json.encode(seadmeteMap));
-        
       }
     }
   });
-
-  });
   //Kutsub kasutaja
-  
-
- 
-
-  
 
   print('seisukordmap: $seadmeteMap');
 }

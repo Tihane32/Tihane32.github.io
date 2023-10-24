@@ -59,9 +59,9 @@ graafikuteSaamine(Map<String, dynamic> graafikud, String value, List temp,
   String? ajutineKasutajanimi = prefs.getString('Kasutajanimi');
   String? sha1Hash = prefs.getString('Kasutajaparool');
 
-  String token = await getToken2();
+  
   var headers = {
-    'Authorization': 'Bearer $token',
+    'Authorization': 'Bearer ${tokenMap[value]}',
   };
 
   var data = {
@@ -118,7 +118,7 @@ graafikuteSaamine(Map<String, dynamic> graafikud, String value, List temp,
     }
   }
 }
-
+/*
 graafikuloomine(
     Map<String, dynamic> graafikud, selected, valitudPaev, String value) async {
   var j = 1;
@@ -291,13 +291,13 @@ graafikuKustutamine(Map<String, dynamic> graafikud, String value) async {
     j++;
   }
 }
-
+*/
 Future<Map<int, dynamic>> gen2GraafikSaamine(
     String value, Map<int, dynamic> onOff, String paev) async {
-  String token = await getToken();
+  
   var graafikud = Map<int, dynamic>();
   var headers = {
-    'Authorization': 'Bearer $token',
+    'Authorization': 'Bearer ${tokenMap[value]}',
   };
 
   var data = {
@@ -382,10 +382,10 @@ Future<Map<int, dynamic>> gen2GraafikSaamine(
 
 delete(value, List temp) async {
   for (var i = 0; i < temp.length; i++) {
-    String token = await getToken2();
+    
 
     var headers = {
-      'Authorization': 'Bearer $token',
+      'Authorization': 'Bearer ${tokenMap[value]}',
       'Content-Type': 'application/x-www-form-urlencoded',
     };
 
@@ -405,9 +405,9 @@ delete(value, List temp) async {
 
 graafikGen2Lugemine(String id) async {
   List<dynamic> tuhiGraafik = List.empty(growable: true);
-  String token = await getToken2();
+  
   var headers = {
-    'Authorization': 'Bearer $token',
+    'Authorization': 'Bearer ${tokenMap[id]}',
   };
 
   var data = {
@@ -420,7 +420,7 @@ graafikGen2Lugemine(String id) async {
   var res = await http.post(url, headers: headers, body: data);
   if (res.statusCode == 200) {
     var resJSON = jsonDecode(res.body) as Map<String, dynamic>;
-    if (resJSON == null) {
+    if (resJSON['data']['jobs'] == null) {
       return; // stop the function if resJSON is null
     }
     tuhiGraafik = resJSON['data']['jobs'];
@@ -586,10 +586,10 @@ graafikGen2Filtreerimine(String id, List<dynamic> graafikUus) async {
 graafikGen2SaatmineGraafikuga(List<dynamic> graafik, String id) async {
   print(graafik);
 
-  String token = await getToken2();
+  
   for (int i = 0; i < graafik.length; i++) {
     var headers = {
-      'Authorization': 'Bearer $token',
+      'Authorization': 'Bearer ${tokenMap[id]}',
       'Content-Type': 'application/x-www-form-urlencoded',
     };
 
@@ -602,7 +602,7 @@ graafikGen2SaatmineGraafikuga(List<dynamic> graafik, String id) async {
         '${seadmeteMap[id]['api_url']}/fast/device/gen2_generic_command');
     var res = await http.post(url, headers: headers, body: data);
     print(res.body);
-    print("sent this: ${graafik[i]}");
+    print("sent this: $id ${graafik[i]}");
   }
    mitmeSeadmeKinnitus.add(true);
   seadmeKinnitus = true;

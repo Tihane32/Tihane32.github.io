@@ -33,7 +33,7 @@ seadmeMaksumus(String value, [Function? setPaevamaksumus]) async {
 
   SharedPreferences prefs = await SharedPreferences.getInstance();
 
-  var token = await getToken2();
+  
   double katse = 0;
   double hind = 0;
   var k = 0;
@@ -57,7 +57,7 @@ seadmeMaksumus(String value, [Function? setPaevamaksumus]) async {
     k++;
 
     var headers = {
-      'Authorization': 'Bearer $token',
+      'Authorization': 'Bearer ${tokenMap[value]}',
     };
     var data = {
       'id': value,

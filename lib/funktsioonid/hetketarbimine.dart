@@ -36,7 +36,7 @@ Future voimus() async {
       //print(storedMap['Seade$j']['Seadme_ID']);
       String asendus = key as String;
       var headers = {
-        'Authorization': 'Bearer $getToken',
+        'Authorization': 'Bearer ${tokenMap[asendus]}',
       };
       var data = {'id': asendus, 'auth_key': authKey};
 

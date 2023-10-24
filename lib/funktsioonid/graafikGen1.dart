@@ -211,6 +211,8 @@ graafikGen1Saatmine(List<dynamic> graafik, String id) async {
       '${seadmeteMap[id]['api_url']}/device/relay/settings/schedule_rules');
   var res1 = await http.post(url1, headers: headers1, body: data1);
   //abi = true;
+  print(res1.body);
+    print("sent this: $id $graafikString}");
   mitmeSeadmeKinnitus.add(true);
   seadmeKinnitus = true;
 }
