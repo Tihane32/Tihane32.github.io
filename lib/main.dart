@@ -18,7 +18,7 @@ import 'lehed/koduleht.dart';
 import 'Arhiiv/kaksTabelit.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'lehed/seadmeteList.dart';
+import 'lehed/seadmeteListDynaamiline.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:workmanager/workmanager.dart';

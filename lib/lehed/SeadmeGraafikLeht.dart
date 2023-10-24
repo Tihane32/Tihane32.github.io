@@ -11,7 +11,7 @@ import 'package:testuus4/lehed/dynamicKoduLeht.dart';
 import 'package:testuus4/lehed/dynamicSeadmeInfo.dart';
 import '../widgets/kinnitus.dart';
 import 'SeadmeYldInfo.dart';
-import 'seadmeteList.dart';
+import 'seadmeteListDynaamiline.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:testuus4/Arhiiv/seadmedKontoltNim.dart';
@@ -1072,18 +1072,18 @@ class _SeadmeGraafikuLehtState extends State<SeadmeGraafikuLeht> {
                 }
 
                 showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return Center(
-                                child: CircularProgressIndicator(),
-                              );
-                            },
-                          );
-                  while(seadmeKinnitus==false){
-                    await Future.delayed(Duration(seconds: 1));
-                  }
-Navigator.pop(context);
-Kinnitus(context, "Graafik seadmele saadetud");
+                  context: context,
+                  builder: (BuildContext context) {
+                    return Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  },
+                );
+                while (seadmeKinnitus == false) {
+                  await Future.delayed(Duration(seconds: 1));
+                }
+                Navigator.pop(context);
+                Kinnitus(context, "Graafik seadmele saadetud");
 
                 HapticFeedback.vibrate();
                 Future.delayed(Duration(seconds: 5), () {
@@ -1274,7 +1274,8 @@ Future graafik(
       'auth_key': authKey,
     };
 
-    var url = Uri.parse('${seadmeteMap[seadmeNimi]["api_url"]}/device/settings');
+    var url =
+        Uri.parse('${seadmeteMap[seadmeNimi]["api_url"]}/device/settings');
     var res = await http.post(url, headers: headers, body: data);
     await Future.delayed(const Duration(seconds: 2));
     //Kui post läheb läbi siis:

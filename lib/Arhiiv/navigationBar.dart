@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:testuus4/lehed/GraafikusseSeadmeteValik.dart';
 import 'package:testuus4/lehed/koduleht.dart';
-import 'package:testuus4/lehed/seadmeteList.dart';
+import 'package:testuus4/lehed/seadmeteListDynaamiline.dart';
 import 'package:testuus4/main.dart';
 import '../lehed/dynamicKoduLeht.dart';
 import 'kaksTabelit.dart';

@@ -61,6 +61,7 @@ class _KeelatudTunnidState extends State<KeelatudTunnid> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        elevation: 0.0,
         toolbarHeight: 40,
         automaticallyImplyLeading: false,
         backgroundColor: Colors.white,
