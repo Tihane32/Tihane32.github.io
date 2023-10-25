@@ -7,7 +7,7 @@ import 'package:testuus4/lehed/seadmeteListDynaamiline.dart';
 import 'package:testuus4/main.dart';
 import 'AbiLeht.dart';
 import 'Login.dart';
-import 'drawer.dart';
+import '../Arhiiv/drawer.dart';
 import '../Arhiiv/kaksTabelit.dart';
 import 'hindJoonise.dart';
 import 'package:get/get.dart';
@@ -100,6 +100,7 @@ class _DynaamilenieKoduLehtState extends State<DynaamilenieKoduLeht> {
                       i = 2;
                       appBarText = 'Seadme lisamine';
                     });
+                    Navigator.pop(context);
                   },
                 ),
                 /*ListTile(
@@ -149,6 +150,7 @@ class _DynaamilenieKoduLehtState extends State<DynaamilenieKoduLeht> {
                       i = 3;
                       appBarText = 'Seaded';
                     });
+                    Navigator.pop(context);
                   },
                 ),
                 ListTile(
@@ -176,6 +178,7 @@ class _DynaamilenieKoduLehtState extends State<DynaamilenieKoduLeht> {
                       i = 4;
                       appBarText = 'Elektri börsihind';
                     });
+                    Navigator.pop(context);
                   },
                 ),
                 ListTile(
@@ -201,6 +204,7 @@ class _DynaamilenieKoduLehtState extends State<DynaamilenieKoduLeht> {
                       context,
                       MaterialPageRoute(builder: (context) => AbiLeht()),
                     );
+                    Navigator.pop(context);
                   },
                 ),
               ],

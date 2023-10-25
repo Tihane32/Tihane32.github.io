@@ -10,7 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:testuus4/funktsioonid/KeskmineHind.dart';
 import 'package:testuus4/lehed/Login.dart';
 import 'package:testuus4/lehed/abiLeht.dart';
-import 'package:testuus4/lehed/drawer.dart';
+import 'package:testuus4/Arhiiv/drawer.dart';
 import 'package:testuus4/lehed/uuedSeadmed.dart';
 import 'package:testuus4/lehed/lisaSeade.dart';
 import 'package:testuus4/lehed/rakenduseSeaded.dart';
@@ -204,6 +204,7 @@ Future<void> sort(List<bool> checkboxValues,
 
     String seadmedMap = json.encode(seadmeteMap);
     await prefs.setString('seadmed', seadmedMap);
+    await getToken3();
     await seisukord();
   } else {
     Map<String, dynamic> convertedMap = {};
@@ -214,8 +215,9 @@ Future<void> sort(List<bool> checkboxValues,
     seadmeteMap = convertedMap;
     String seadmedMap = json.encode(convertedMap);
     await prefs.setString('seadmed', seadmedMap);
-    await seisukord();
     await getToken3();
+    await seisukord();
+    
   }
   print("---------------------");
   print(seadmeteMap);

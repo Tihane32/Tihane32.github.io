@@ -41,23 +41,31 @@ void lulitamine(String seade) async {
       String? storedKey = prefs.getString('key');
 
       String storedKeyString = jsonDecode(storedKey!);
+      var res;
+      do {
+        var headers = {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        };
 
-      var headers = {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      };
+        var data = {
+          'channel': '0',
+          'turn': olek,
+          'id': id,
+          'auth_key': value["Cloud_key"],
+        };
+        print(data);
+        print(value["api_url"]);
+        var url = Uri.parse('${value["api_url"]}/device/relay/control');
+        res = await http.post(url, headers: headers, body: data);
+        print(res.body);
+        if(res.body.toString() ==
+          """{"isok":false,"errors":{"max_req":"Request limit reached!"}}"""){
+          await Future.delayed(Duration(seconds: 2));
+        }
+      } while (res.body.toString() ==
+          """{"isok":false,"errors":{"max_req":"Request limit reached!"}}""");
 
-      var data = {
-        'channel': '0',
-        'turn': olek,
-        'id': id,
-        'auth_key': value["Cloud_key"],
-      };
-      print(data);
-      print(value["api_url"]);
-      var url = Uri.parse('${value["api_url"]}/device/relay/control');
-      var res = await http.post(url, headers: headers, body: data);
-      print(res.body);
-      print("switch");
+      print("switch $olek");
       print(res.body);
       String seadmedMap = json.encode(seadmeteMap);
       await prefs.setString('seadmed', seadmedMap);

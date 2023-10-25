@@ -13,4 +13,5 @@
 
 xx.xx.xxxx Eesmärgid
     Seadme mudel ja nimi erinevateks lahtriteks seadmete mapis
+    Burger menu korda
     
