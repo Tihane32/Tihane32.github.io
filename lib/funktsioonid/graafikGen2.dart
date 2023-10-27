@@ -426,7 +426,7 @@ graafikGen2Lugemine(String id) async {
     tuhiGraafik = resJSON['data']['jobs'];
     if (tuhiGraafik == null) {
       // handle the case where jobs is null
-      return;
+      return 0;
     }
     tuhiGraafik = resJSON['data']['jobs'] as List<dynamic>;
   }

@@ -39,23 +39,28 @@ class _TarbimiseGraafikState extends State<TarbimiseGraafik> {
       chartData = chartData1;
     });
 
-      double? findMaxY(List<ChartData> data) {
-  double? maxY;
-  for (var chartData in data) {
-    if (chartData.y != null) {
-      if (maxY == null || chartData.y! > maxY) {
-        maxY = chartData.y;
+    double? findMaxY(List<ChartData> data) {
+      double? maxY;
+      for (var chartData in data) {
+        if (chartData.y != null) {
+          if (maxY == null || chartData.y! > maxY) {
+            maxY = chartData.y;
+          }
+        }
       }
+      return maxY;
     }
-  }
-  return maxY;
-}
 
 // Now, you can call this method to get the maximum value.
     double? maxChartDataValue = findMaxY(chartData);
 
     setState(() {
-      asi = maxChartDataValue!;
+      if (maxChartDataValue == null) {
+        asi = 0;
+      }else{
+        asi = maxChartDataValue;
+      }
+      
     });
     //return chartData;
   }
@@ -121,13 +126,13 @@ class _TarbimiseGraafikState extends State<TarbimiseGraafik> {
                 dataSource: chartData,
                 xValueMapper: (ChartData data, _) => data.x,
                 yValueMapper: (ChartData data, _) {
-                                  final yValue = data.y;
-                                  return yValue == 0
-                                      ? 0
-                                      : yValue! < asi * 0.20
-                                          ? asi * 0.20
-                                          : yValue;
-                                },
+                  final yValue = data.y;
+                  return yValue == 0
+                      ? 0
+                      : yValue! < asi * 0.20
+                          ? asi * 0.20
+                          : yValue;
+                },
                 dataLabelSettings: DataLabelSettings(
                   isVisible: true,
                   labelAlignment: ChartDataLabelAlignment.bottom,
@@ -136,15 +141,14 @@ class _TarbimiseGraafikState extends State<TarbimiseGraafik> {
                 ),
                 color: Colors.blue,
                 dataLabelMapper: (ChartData data, _) {
-                                  // Display the data label only if the consumption is not 0
-                                  if (data.y == 0) {
-                                    return ''; // Customize this as needed
-                                  } else {
-                                    String temp3 =
-                                        data.y!.toStringAsFixed(3);
-                                    return ' $temp3';
-                                  }
-                                },
+                  // Display the data label only if the consumption is not 0
+                  if (data.y == 0) {
+                    return ''; // Customize this as needed
+                  } else {
+                    String temp3 = data.y!.toStringAsFixed(3);
+                    return ' $temp3';
+                  }
+                },
               ),
             ],
           ),

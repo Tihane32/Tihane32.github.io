@@ -74,8 +74,10 @@ seadmeMaksumus(String value, [Function? setPaevamaksumus]) async {
     String abi = test;
     test = test + 'T20';
 
-    if (res.statusCode != 200)
-      throw Exception('http.post error: statusCode= ${res.statusCode}');
+    if (res.statusCode != 200) {
+      return;
+      
+    }
     final jsonData = json.decode(res.body);
     var resJson = json.decode(res.body) as Map<String, dynamic>;
     //print(res.body);
@@ -83,8 +85,9 @@ seadmeMaksumus(String value, [Function? setPaevamaksumus]) async {
     var url1 = Uri.parse(
         'https://dashboard.elering.ee/api/nps/price?start=$formattedDate%3A59%3A59.999Z&end=$test%3A59%3A59.999Z');
     var res1 = await http.get(url1);
-    if (res1.statusCode != 200)
+    if (res1.statusCode != 200) {
       throw Exception('http.get error: statusCode= ${res1.statusCode}');
+    }
     //print(res1.body);
     final httpPackageJson = json.decode(res1.body) as Map<String, dynamic>;
     var entryList;

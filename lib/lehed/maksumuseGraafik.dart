@@ -105,7 +105,11 @@ class _MaksumuseGraafikState extends State<MaksumuseGraafik> {
     double? maxChartDataValue = findMaxY(chartData);
 
     setState(() {
-      asi = maxChartDataValue!;
+       if (maxChartDataValue == null) {
+        asi = 0;
+      }else{
+        asi = maxChartDataValue;
+      }
     });
   }
 

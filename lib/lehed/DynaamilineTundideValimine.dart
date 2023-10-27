@@ -124,7 +124,7 @@ class _DynamilineTundideValimineState extends State<DynamilineTundideValimine> {
       TunniSeaded(
         valitudSeadmed: valitudSeadmed,
       ),
-      AbiLeht(),
+      //AbiLeht(),
     ];
   }
 

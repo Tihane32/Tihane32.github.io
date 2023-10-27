@@ -47,7 +47,10 @@ Future<double> tarbimine(tarbimiseMap, Function updateTarbimine) async {
     var url = Uri.parse('${value["api_url"]}/statistics/relay/consumption');
     var res = await http.post(url, headers: headers, body: data);
     var resJson = json.decode(res.body) as Map<String, dynamic>;
-
+    if (resJson == null || resJson.toString()=="{isok: false, errors: {device_not_found: Your device has not been connected to the cloud!}}") {
+      return 0;
+    }
+    print(resJson);
     if (resJson['data']['units']['consumption'] == 'Wh') {
       double ajutine = resJson['data']['total'] / 1000.0;
       tarbimine += ajutine;

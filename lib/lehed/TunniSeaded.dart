@@ -40,7 +40,7 @@ class _TunniSeadedState extends State<TunniSeaded> {
   void initState() {
     super.initState();
     seadista = graafikuSeaded['Seadistus_lubatud'];
-    maxTunnid = graafikuSeaded['Max_jarjest_valjas'];
+    //asi laheb katki: maxTunnid = graafikuSeaded['Max_jarjest_valjas'];
   }
 
   @override
