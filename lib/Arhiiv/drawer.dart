@@ -7,8 +7,6 @@ import 'package:testuus4/lehed/lisaSeade.dart';
 import 'package:testuus4/lehed/rakenduseSeaded.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-
-
 class drawer extends StatelessWidget {
   const drawer({Key? key}) : super(key: key);
 
@@ -47,6 +45,7 @@ class drawer extends StatelessWidget {
                   context,
                   MaterialPageRoute(builder: (context) => LoginPage()),
                 );
+                Navigator.pop(context);
               },
             ),
             /*ListTile(
@@ -97,6 +96,7 @@ class drawer extends StatelessWidget {
                   context,
                   MaterialPageRoute(builder: (context) => KasutajaSeaded()),
                 );
+                Navigator.pop(context);
               },
             ),
             ListTile(
@@ -125,6 +125,7 @@ class drawer extends StatelessWidget {
                   context,
                   MaterialPageRoute(builder: (context) => TulpDiagramm()),
                 );
+                Navigator.pop(context);
               },
             ),
             ListTile(
@@ -146,10 +147,12 @@ class drawer extends StatelessWidget {
               ),
               onTap: () {
                 // Navigate to the home page
+
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => AbiLeht()),
                 );
+                Navigator.pop(context);
               },
             ),
           ],

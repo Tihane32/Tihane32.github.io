@@ -17,7 +17,7 @@ import 'package:testuus4/Arhiiv/kaksTabelit.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import '../Arhiiv/navigationBar.dart';
 import 'package:testuus4/main.dart';
-import 'drawer.dart';
+import '../Arhiiv/drawer.dart';
 
 class TulpDiagramm extends StatefulWidget {
   const TulpDiagramm({Key? key}) : super(key: key);

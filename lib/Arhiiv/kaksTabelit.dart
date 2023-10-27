@@ -13,7 +13,7 @@ import 'package:testuus4/main.dart';
 import '../lehed/kasutajaSeaded.dart';
 import '../lehed/rakenduseSeaded.dart';
 import '../lehed/AbiLeht.dart';
-import '../lehed/drawer.dart';
+import 'drawer.dart';
 import 'navigationBar.dart';
 
 class MinuSeadmed extends StatelessWidget {
