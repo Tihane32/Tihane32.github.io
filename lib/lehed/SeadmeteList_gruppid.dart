@@ -162,70 +162,150 @@ class _SeadmeteList_gruppidState extends State<SeadmeteList_gruppid> {
                       );
                     },
                     child: Padding(
-                      padding: const EdgeInsets.all(8.0),
+                      padding: const EdgeInsets.all(1),
                       child: Container(
                         decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(15),
                           border: border,
                           image: DecorationImage(
                             image: AssetImage(pilt),
-                            fit: BoxFit.cover,
+                            fit: BoxFit
+                                .cover, // this will make sure image covers entire container
                           ),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey.withOpacity(0.3),
-                              spreadRadius: 2,
-                              blurRadius: 7,
-                              offset: Offset(0, 3),
-                            ),
-                          ],
                         ),
-                        child: Stack(
-                          children: [
-                            Align(
-                              alignment: Alignment.bottomLeft,
-                              child: Container(
-                                margin: EdgeInsets.all(10),
-                                decoration: BoxDecoration(
-                                  color: Colors.blue.withOpacity(0.6),
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                padding: EdgeInsets.symmetric(
-                                    vertical: 8, horizontal: 10),
-                                child: Text(
-                                  seadmeteMap[seade]["Seadme_nimi"],
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
+                        child: Stack(children: [
+                          Positioned(
+                            top: 8,
+                            right: 8,
+                            child: Container(
+                              width: 80,
+                              height: 80,
+                              decoration: BoxDecoration(
+                                color: staatus == 'on'
+                                    ? Colors.green.withOpacity(0.6)
+                                    : staatus == 'off'
+                                        ? Colors.red.withOpacity(0.6)
+                                        : Colors.grey.withOpacity(0.6),
+                                shape: BoxShape.circle,
+                              ),
+                              child: staatus == 'Offline'
+                                  ? Icon(
+                                      Icons.wifi_off_outlined,
+                                      size: 60,
+                                      color: Colors.amber,
+                                    )
+                                  : IconButton(
+                                      iconSize: 60,
+                                      icon: Icon(Icons.power_settings_new),
+                                      color: Colors.white,
+                                      onPressed: () {
+                                        _handleButtonPress(seade);
+                                      },
+                                    ),
+                            ),
+                          ),
+                          Positioned(
+                            top: 8,
+                            left: MediaQuery.of(context).size.width / 2 - 40,
+                            child: Container(
+                              width: 80,
+                              height: 80,
+                              decoration: BoxDecoration(
+                                color: Colors.blue.withOpacity(0.6),
+                                shape: BoxShape.circle,
+                              ),
+                              child: IconButton(
+                                iconSize: 60,
+                                icon: Icon(Icons.crop_5_4_outlined),
+                                color: Colors.white,
+                                onPressed: () {},
+                              ),
+                            ),
+                          ),
+                          Positioned(
+                            top: 8,
+                            left: 8,
+                            child: Container(
+                              width: 80,
+                              height: 80,
+                              decoration: BoxDecoration(
+                                color: Colors.blue.withOpacity(0.6),
+                                shape: BoxShape.circle,
+                              ),
+                              child: IconButton(
+                                iconSize: 60,
+                                icon: Icon(Icons.crop_5_4_outlined),
+                                color: Colors.white,
+                                onPressed: () {},
+                              ),
+                            ),
+                          ),
+                          Positioned(
+                            bottom: 0,
+                            left: 0,
+                            right: 0,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: <Widget>[
+                                // Temperature (moved to the left side)
+                                Container(
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 8),
+                                  decoration: BoxDecoration(
+                                    color: Colors.black.withOpacity(
+                                        0.5), // changed background to black
+                                  ),
+                                  child: Center(
+                                    child: Text(
+                                      ' 23.5° C ',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
                                   ),
                                 ),
-                              ),
+                                // Seadme Name Container (centered)
+                                Expanded(
+                                  child: Container(
+                                    color: Colors.blue.withOpacity(0.6),
+                                    padding: EdgeInsets.symmetric(vertical: 8),
+                                    child: Center(
+                                      child: Text(
+                                        seadmeteMap[seade]["Seadme_nimi"],
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+
+                                // Power Button (moved to the right side)
+                                Container(
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 8),
+                                  decoration: BoxDecoration(
+                                    color: Colors.black.withOpacity(
+                                        0.5), // changed background to black
+                                  ),
+                                  child: Center(
+                                    child: Text(
+                                      ' 50,3 W ',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
-                            Align(
-                              alignment: Alignment.centerRight,
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: <Widget>[
-                                  _buildIconButton(Icons.brightness_1, () {}),
-                                  SizedBox(height: 20),
-                                  _buildIconButton(Icons.brightness_1, () {}),
-                                ],
-                              ),
-                            ),
-                            Align(
-                              alignment: Alignment.centerLeft,
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: <Widget>[
-                                  _buildInfoBox('23.5°C'),
-                                  SizedBox(height: 20),
-                                  _buildInfoBox('50.3W'),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
+                          ),
+                        ]),
                       ),
                     ),
                   );
