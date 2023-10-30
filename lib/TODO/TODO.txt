@@ -9,7 +9,7 @@
     Proovida taustal töötamine tööle saada
     Luua taustal töötamise leht                                         TEHTUD
     Päeva tarbimisgraafiku kuvamine                                     TEHTUD, vaja otsustada kas graafik püsti või külili
-    Seadme graafiku kopeerimine tööle 
+    Seadme graafiku kopeerimine tööle                                   TEHTUD
 
 xx.xx.xxxx Eesmärgid
     Seadme mudel ja nimi erinevateks lahtriteks seadmete mapis
