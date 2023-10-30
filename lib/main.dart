@@ -32,6 +32,18 @@ Map<String, dynamic> graafikuSeaded = {
   'Kelleatud_tunnid': [],
   'Lubatud_tunnid': [],
 };
+Map<String, dynamic> gruppiMap = {
+  'Minu Seadmed': {
+    'Gruppi_pilt': 'assets/saun1.jpg',
+    'Grupi_Liikmed': [],
+    'Gruppi_olek': 'on',
+  },
+  'Saun': {
+    'Gruppi_pilt': 'assets/saun1.jpg',
+    'Grupi_Liikmed': [],
+    'Gruppi_olek': 'off',
+  },
+};
 
 String paevAbi = "";
 bool seadmeKinnitus = false;
