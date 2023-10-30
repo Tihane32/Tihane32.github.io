@@ -249,7 +249,10 @@ class _SeadmeteList_gruppidState extends State<SeadmeteList_gruppid> {
                                   ),
                                   child: Center(
                                     child: Text(
-                                      ' 23.5° C ',
+                                      '' +
+                                          gruppiMap[grupp]['Grupi_temp']
+                                              .toString() +
+                                          '° C ',
                                       style: TextStyle(
                                         color: Colors.white,
                                         fontSize: 18,

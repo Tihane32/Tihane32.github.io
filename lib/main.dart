@@ -33,15 +33,12 @@ Map<String, dynamic> graafikuSeaded = {
   'Lubatud_tunnid': [],
 };
 Map<String, dynamic> gruppiMap = {
-  'Minu Seadmed': {
+  'Kõik Seadmed': {
     'Gruppi_pilt': 'assets/saun1.jpg',
-    'Grupi_Liikmed': [],
+    'Grupi_Seadmed': [],
+    'Grupi_andurid': [],
+    'Grupi_temp': 27.3,
     'Gruppi_olek': 'on',
-  },
-  'Saun': {
-    'Gruppi_pilt': 'assets/saun1.jpg',
-    'Grupi_Liikmed': [],
-    'Gruppi_olek': 'off',
   },
 };
 
@@ -99,6 +96,8 @@ Future<void> main() async {
   if (seadmedJSONmap != null) {
     seadmeteMap = json.decode(seadmedJSONmap);
   }
+
+  gruppiMap['Kõik Seadmed']['Grupi_Seadmed'] = seadmeteMap.keys.toList();
 
   await getToken3();
   print("------------");
