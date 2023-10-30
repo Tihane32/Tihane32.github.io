@@ -32,6 +32,7 @@ Map<String, dynamic> graafikuSeaded = {
   'Kelleatud_tunnid': [],
   'Lubatud_tunnid': [],
 };
+
 String paevAbi = "";
 bool seadmeKinnitus = false;
 List<bool> mitmeSeadmeKinnitus = [];

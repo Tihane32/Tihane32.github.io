@@ -24,8 +24,18 @@ class SeadmeteList_gruppid extends StatefulWidget {
 
 class _SeadmeteList_gruppidState extends State<SeadmeteList_gruppid> {
   bool isLoading = false;
-  late Map<String, List<String>> minuSeadmedK = {};
-  //String onoffNupp = 'Shelly ON';
+  Map<String, dynamic> gruppiMap = {
+    'Minu Seadmed': {
+      'Gruppi_pilt': 'assets/saun1.jpg',
+      'Grupi_Liikmed': [],
+      'Gruppi_olek': 'on',
+    },
+    'Saun': {
+      'Gruppi_pilt': 'assets/saun1.jpg',
+      'Grupi_Liikmed': [],
+      'Gruppi_olek': 'off',
+    },
+  };
   @override
   void initState() {
     seisukord();
@@ -59,9 +69,18 @@ class _SeadmeteList_gruppidState extends State<SeadmeteList_gruppid> {
   void _handleButtonPress(seade) {
     if (!canPressButton) return;
 
+    /*
     setState(() {
       canPressButton = false;
       seadmeteMap = muudaSeadmeOlek(seadmeteMap, seade);
+    });
+    */
+    setState(() {
+      if (gruppiMap[seade]["Gruppi_olek"] == 'on') {
+        gruppiMap[seade]["Gruppi_olek"] = 'off';
+      } else {
+        gruppiMap[seade]["Gruppi_olek"] = 'on';
+      }
     });
 
     Timer(Duration(seconds: 3), () {
@@ -111,9 +130,9 @@ class _SeadmeteList_gruppidState extends State<SeadmeteList_gruppid> {
                   childAspectRatio: MediaQuery.of(context).size.width /
                       (MediaQuery.of(context).size.height / 3),
                 ),
-                itemCount: seadmeteMap.length + 1,
+                itemCount: gruppiMap.length + 1,
                 itemBuilder: (context, index) {
-                  if (index == seadmeteMap.length) {
+                  if (index == gruppiMap.length) {
                     return GestureDetector(
                       onTap: () {
                         Navigator.push(
@@ -145,11 +164,13 @@ class _SeadmeteList_gruppidState extends State<SeadmeteList_gruppid> {
                     );
                   }
 
-                  final seade = seadmeteMap.keys.elementAt(index);
-                  final pilt = seadmeteMap[seade]["Seadme_pilt"];
-                  final staatus = seadmeteMap[seade]["Seadme_olek"];
+                  final seade = gruppiMap.keys.elementAt(index);
+                  final pilt = gruppiMap[seade]["Gruppi_pilt"];
+                  final staatus = gruppiMap[seade]["Gruppi_olek"];
+
                   return GestureDetector(
                     onTap: () {
+                      /*
                       Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -160,6 +181,7 @@ class _SeadmeteList_gruppidState extends State<SeadmeteList_gruppid> {
                           ),
                         ),
                       );
+                    */
                     },
                     child: Padding(
                       padding: const EdgeInsets.all(1),
@@ -272,7 +294,7 @@ class _SeadmeteList_gruppidState extends State<SeadmeteList_gruppid> {
                                     padding: EdgeInsets.symmetric(vertical: 8),
                                     child: Center(
                                       child: Text(
-                                        seadmeteMap[seade]["Seadme_nimi"],
+                                        gruppiMap[seade],
                                         style: TextStyle(
                                           color: Colors.white,
                                           fontSize: 18,
