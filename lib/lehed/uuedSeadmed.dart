@@ -106,6 +106,8 @@ class _uuedSeadmedState extends State<uuedSeadmed> {
                                 setState(() {
                                   if (Newvalue == false) {}
                                   checkboxValues[index] = Newvalue!;
+                                  print(checkboxValues);
+                                  print("new valueeeee");
                                 });
                               },
                             ),
@@ -173,27 +175,22 @@ class _uuedSeadmedState extends State<uuedSeadmed> {
 
 Future<void> sort(List<bool> checkboxValues,
     Map<int, Map<String, dynamic>> uuedSeadmedString) async {
-  int i = 0;
+  int i = uuedSeadmedString.length;
   int j = 0;
-  for (j = 0; j < uuedSeadmedString.length; j++) {
-    if (checkboxValues[i] == false) {
-      uuedSeadmedString.remove(i);
+  Map<int, Map<String, dynamic>> reindexedMap = {};
+  for (j = 0; j < i; j++) {
+    print("$j $checkboxValues");
+    if (checkboxValues[j] == false) {
+      print("this is false $j");
+      print("uuedSeadmed $uuedSeadmedString");
+      uuedSeadmedString.remove(j);
 
-// Re-index the remaining entries
-      Map<int, Map<String, dynamic>> reindexedMap = {};
-      int newIndex = 0;
-
-      uuedSeadmedString.forEach((key, value) {
-        final newKey = newIndex;
-        reindexedMap[newKey] = value;
-        newIndex++;
-      });
 
 // Update the original map with the reindexed map
-      uuedSeadmedString = reindexedMap;
     }
-    i++;
+    
   }
+  uuedSeadmedString;
   print("optsi $uuedSeadmedString");
   SharedPreferences prefs = await SharedPreferences.getInstance();
   var seadmedJSON = prefs.getString('seadmed');
@@ -217,7 +214,6 @@ Future<void> sort(List<bool> checkboxValues,
     await prefs.setString('seadmed', seadmedMap);
     await getToken3();
     await seisukord();
-    
   }
   print("---------------------");
   print(seadmeteMap);

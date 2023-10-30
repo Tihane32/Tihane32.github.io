@@ -48,7 +48,6 @@ gen2GraafikuLoomine(
   await graafikGen2DeleteSome(id, graafik);
   await graafikGen2SaatmineGraafikuga(graafik, id);
 
-  
   //abi = true;
   //await delete(value, temp);
 }
@@ -59,7 +58,6 @@ graafikuteSaamine(Map<String, dynamic> graafikud, String value, List temp,
   String? ajutineKasutajanimi = prefs.getString('Kasutajanimi');
   String? sha1Hash = prefs.getString('Kasutajaparool');
 
-  
   var headers = {
     'Authorization': 'Bearer ${tokenMap[value]}',
   };
@@ -118,6 +116,7 @@ graafikuteSaamine(Map<String, dynamic> graafikud, String value, List temp,
     }
   }
 }
+
 /*
 graafikuloomine(
     Map<String, dynamic> graafikud, selected, valitudPaev, String value) async {
@@ -294,7 +293,6 @@ graafikuKustutamine(Map<String, dynamic> graafikud, String value) async {
 */
 Future<Map<int, dynamic>> gen2GraafikSaamine(
     String value, Map<int, dynamic> onOff, String paev) async {
-  
   var graafikud = Map<int, dynamic>();
   var headers = {
     'Authorization': 'Bearer ${tokenMap[value]}',
@@ -382,8 +380,6 @@ Future<Map<int, dynamic>> gen2GraafikSaamine(
 
 delete(value, List temp) async {
   for (var i = 0; i < temp.length; i++) {
-    
-
     var headers = {
       'Authorization': 'Bearer ${tokenMap[value]}',
       'Content-Type': 'application/x-www-form-urlencoded',
@@ -405,7 +401,7 @@ delete(value, List temp) async {
 
 graafikGen2Lugemine(String id) async {
   List<dynamic> tuhiGraafik = List.empty(growable: true);
-  
+
   var headers = {
     'Authorization': 'Bearer ${tokenMap[id]}',
   };
@@ -522,13 +518,28 @@ graafikGen1ToGraafikGen2(List<dynamic> graafik) {
 
 // 1.1.2.4 graafikGen2DeleteAll
 graafikGen2DeleteAll(String id) async {
-  List<dynamic> graafik = [];
+  /*List<dynamic> graafik = [];
   List temp = [];
   graafik = await graafikGen2Lugemine(id);
   for (int i = 0; i < graafik.length; i++) {
     temp.add(graafik[i]["id"]);
   }
-  await delete(id, temp);
+  await delete(id, temp);*/
+  var headers = {
+    'Authorization': 'Bearer ${tokenMap[id]}',
+    'Content-Type': 'application/x-www-form-urlencoded',
+  };
+
+  var data = {
+    'id': id,
+    'method': 'Schedule.DeleteAll',
+  };
+
+  var url = Uri.parse(
+      '${seadmeteMap[id]['api_url']}/fast/device/gen2_generic_command');
+  var res1 = await http.post(url, headers: headers, body: data);
+  print("delete all");
+  print(res1.body);
 }
 
 graafikGen2DeleteSome(String id, List<dynamic> graafikUus) async {
@@ -586,7 +597,6 @@ graafikGen2Filtreerimine(String id, List<dynamic> graafikUus) async {
 graafikGen2SaatmineGraafikuga(List<dynamic> graafik, String id) async {
   print(graafik);
 
-  
   for (int i = 0; i < graafik.length; i++) {
     var headers = {
       'Authorization': 'Bearer ${tokenMap[id]}',
@@ -604,6 +614,6 @@ graafikGen2SaatmineGraafikuga(List<dynamic> graafik, String id) async {
     print(res.body);
     print("sent this: $id ${graafik[i]}");
   }
-   mitmeSeadmeKinnitus.add(true);
+  mitmeSeadmeKinnitus.add(true);
   seadmeKinnitus = true;
 }
