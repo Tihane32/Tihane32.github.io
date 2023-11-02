@@ -12,6 +12,7 @@ import 'package:testuus4/main.dart';
 import 'dynamicKoduLeht.dart';
 import 'minuPakett.dart';
 import 'maksumuseGraafik.dart';
+import 'package:table_calendar/table_calendar.dart';
 
 import '../Arhiiv/navigationBar.dart';
 
@@ -23,6 +24,15 @@ class KoduLeht extends StatefulWidget {
 }
 
 class _KoduLehtState extends State<KoduLeht> {
+  CalendarFormat _calendarFormat = CalendarFormat.month;
+  RangeSelectionMode _rangeSelectionMode = RangeSelectionMode
+      .enforced; // Can be toggled on/off by longpressing a date
+  DateTime _focusedDay = DateTime.now();
+  DateTime? _selectedDay;
+  DateTime? _rangeStart;
+  DateTime? _rangeEnd;
+  DateTime firstDay = DateTime(DateTime.now().year, DateTime.now().month, 1);
+  DateTime lastDay = DateTime(DateTime.now().year, DateTime.now().month, 30);
   String onoffNupp = 'Shelly ON';
   bool tarbimineBool = true;
   int koduindex = 1;
@@ -129,72 +139,58 @@ class _KoduLehtState extends State<KoduLeht> {
               ),*/
                   ),
               child: Padding(
-                padding: const EdgeInsets.fromLTRB(0, 14, 0, 8),
+                padding: const EdgeInsets.fromLTRB(0, 0, 0, 8),
                 child: Center(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Center(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            Align(
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.only(right: 2.0),
-                                    child:
-                                        Icon(Icons.expand_circle_down_outlined),
-                                  ),
-                                  DropdownButton<String>(
-                                    underline: Container(
-                                      // Replace the default underline
-                                      height: 0,
-
-                                      color: Colors
-                                          .black, // Customize the underline color
-                                    ),
-                                    dropdownColor: sinineKast,
-                                    borderRadius: borderRadius,
-                                    value: selectedOption2,
-                                    iconSize: 0,
-                                    icon: const Icon(
-                                        Icons.expand_circle_down_outlined,
-                                        color: Color.fromARGB(0, 0, 0, 0)),
-                                    onChanged: (String? newValue) async {
-                                      // Use an async function
-                                      setState(() {
-                                        selectedOption2 = newValue!;
-                                        /*isLoading =
-                                            true; // Show the loading animation
-      
-                                        // Call the async function and wait for the result
-                                        maksumus(selectedOption).then((result) {
-                                          setState(() {
-                                            kulu = result.toString();
-                                            isLoading =
-                                                false; // Hide the loading animation
-                                          });
-                                        });*/
-                                      });
-                                    },
-                                    items: dropdownOptions2
-                                        .map<DropdownMenuItem<String>>(
-                                            (String value) {
-                                      return DropdownMenuItem<String>(
-                                        value: value,
-                                        child: Text(value + ' tarbimine',
-                                            style: fontSuur),
-                                      );
-                                    }).toList(),
-                                  ),
-                                  //Text(" $kulu €", style: fontLaadimine()),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
+                      TableCalendar(
+                         //availableCalendarFormats: const {},
+                        startingDayOfWeek :StartingDayOfWeek.monday,
+                        rowHeight: 35,
+                        firstDay: firstDay,
+                        lastDay: lastDay,
+                        focusedDay: _focusedDay,
+                        selectedDayPredicate: (day) =>
+                            isSameDay(_selectedDay, day),
+                        rangeStartDay: _rangeStart,
+                        rangeEndDay: _rangeEnd,
+                        calendarFormat: _calendarFormat,
+                        rangeSelectionMode: _rangeSelectionMode,
+                        onDaySelected: (selectedDay, focusedDay) {
+                          if (!isSameDay(
+                              _selectedDay, selectedDay)) {
+                            setState(() {
+                              _selectedDay = selectedDay;
+                              _focusedDay = focusedDay;
+                              _rangeStart =
+                                  null; // Important to clean those
+                              _rangeEnd = null;
+                              _rangeSelectionMode =
+                                  RangeSelectionMode.toggledOff;
+                            });
+                          }
+                        },
+                        onRangeSelected: (start, end, focusedDay) {
+                          setState(() {
+                            _selectedDay = null;
+                            _focusedDay = focusedDay;
+                            _rangeStart = start;
+                            _rangeEnd = end;
+                            _rangeSelectionMode =
+                                RangeSelectionMode.toggledOn;
+                          });
+                        },
+                        onFormatChanged: (format) {
+                          if (_calendarFormat != format) {
+                            setState(() {
+                              _calendarFormat = format;
+                            });
+                          }
+                        },
+                        onPageChanged: (focusedDay) {
+                          _focusedDay = focusedDay;
+                        },
                       ),
                       //SizedBox(height: vahe / 4),
                       Container(
@@ -348,53 +344,7 @@ class _KoduLehtState extends State<KoduLeht> {
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  Padding(
-                                    padding: const EdgeInsets.only(right: 2.0),
-                                    child:
-                                        Icon(Icons.expand_circle_down_outlined),
-                                  ),
-                                  DropdownButton<String>(
-                                    underline: Container(
-                                      // Replace the default underline
-                                      height: 0,
-
-                                      color: Colors
-                                          .black, // Customize the underline color
-                                    ),
-                                    dropdownColor: sinineKast,
-                                    borderRadius: borderRadius,
-                                    value: selectedOption,
-                                    iconSize: 0,
-                                    icon: const Icon(
-                                        Icons.expand_circle_down_outlined,
-                                        color: Color.fromARGB(255, 0, 0, 0)),
-                                    onChanged: (String? newValue) async {
-                                      // Use an async function
-                                      setState(() {
-                                        selectedOption = newValue!;
-                                        isLoading =
-                                            true; // Show the loading animation
-
-                                        // Call the async function and wait for the result
-                                        maksumus(selectedOption).then((result) {
-                                          setState(() {
-                                            kulu = result.toString();
-                                            isLoading =
-                                                false; // Hide the loading animation
-                                          });
-                                        });
-                                      });
-                                    },
-                                    items: dropdownOptions
-                                        .map<DropdownMenuItem<String>>(
-                                            (String value) {
-                                      return DropdownMenuItem<String>(
-                                        value: value,
-                                        child: Text(value + ' maksumus',
-                                            style: fontSuur),
-                                      );
-                                    }).toList(),
-                                  ),
+                                  
                                   //Text(" $kulu €", style: fontLaadimine()),
                                 ],
                               ),
