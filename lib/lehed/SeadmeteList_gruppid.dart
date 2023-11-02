@@ -15,6 +15,7 @@ import 'package:testuus4/main.dart';
 import 'package:get/get.dart';
 
 import 'dynamicSeadmeInfo.dart';
+import 'gruppiKoostamine.dart';
 
 class SeadmeteList_gruppid extends StatefulWidget {
   const SeadmeteList_gruppid({Key? key}) : super(key: key);
@@ -117,8 +118,7 @@ class _SeadmeteList_gruppidState extends State<SeadmeteList_gruppid> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) =>
-                                    DynaamilenieKoduLeht(i: 2)));
+                                builder: (context) => GruppiKoostamine()));
                       },
                       child: Padding(
                         padding: const EdgeInsets.all(1),
@@ -146,6 +146,7 @@ class _SeadmeteList_gruppidState extends State<SeadmeteList_gruppid> {
                   final grupp = gruppiMap.keys.elementAt(index);
                   final gruppiPilt = gruppiMap[grupp]["Gruppi_pilt"];
                   final grupiOlek = gruppiMap[grupp]["Gruppi_olek"];
+                  final grupiTemp = gruppiMap[grupp]['Grupi_temp'];
 
                   return GestureDetector(
                     onTap: () {
@@ -249,10 +250,7 @@ class _SeadmeteList_gruppidState extends State<SeadmeteList_gruppid> {
                                   ),
                                   child: Center(
                                     child: Text(
-                                      '' +
-                                          gruppiMap[grupp]['Grupi_temp']
-                                              .toString() +
-                                          '° C ',
+                                      '' + grupiTemp.toString() + '° C ',
                                       style: TextStyle(
                                         color: Colors.white,
                                         fontSize: 18,

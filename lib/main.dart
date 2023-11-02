@@ -28,7 +28,7 @@ import 'package:workmanager/workmanager.dart';
 Map<String, String> tokenMap = {};
 Map<String, dynamic> graafikuSeaded = {
   'Seadistus_lubatud': false,
-  'Max_jarjest_valjas': 1,
+  'Max_jarjest_valjas': 1.0,
   'Kelleatud_tunnid': [],
   'Lubatud_tunnid': [],
 };

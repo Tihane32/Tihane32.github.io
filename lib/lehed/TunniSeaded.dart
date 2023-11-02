@@ -31,8 +31,8 @@ class _TunniSeadedState extends State<TunniSeaded> {
   Color boxColor = sinineKast;
   bool _notificationsEnabled = false;
   String _selectedTheme = 'Odavaimad Tunnid';
-  bool seadista = false;
-  double maxTunnid = 1;
+  late bool seadista;
+  late double maxTunnid;
 
   TextEditingController _textController = TextEditingController();
 
@@ -40,7 +40,7 @@ class _TunniSeadedState extends State<TunniSeaded> {
   void initState() {
     super.initState();
     seadista = graafikuSeaded['Seadistus_lubatud'];
-    //asi laheb katki: maxTunnid = graafikuSeaded['Max_jarjest_valjas'];
+    maxTunnid = graafikuSeaded['Max_jarjest_valjas'];
   }
 
   @override
@@ -60,7 +60,7 @@ class _TunniSeadedState extends State<TunniSeaded> {
                 onChanged: (bool value) {
                   setState(() {
                     seadista = value;
-                    graafikuSeaded['Seadistus_lubatud'] = seadista.toString();
+                    graafikuSeaded['Seadistus_lubatud'] = seadista;
                   });
                 },
               ),

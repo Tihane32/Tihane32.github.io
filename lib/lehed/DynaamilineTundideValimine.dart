@@ -83,7 +83,6 @@ class _DynamilineTundideValimineState extends State<DynamilineTundideValimine> {
   Color boxColor = sinineKast;
   late List<Widget> lehedMenu;
   Color paev = Colors.green; // Declare the list
-  Map<String, dynamic> graafikuSeaded = {};
 
   @override
   void initState() {
@@ -251,7 +250,8 @@ class _DynamilineTundideValimineState extends State<DynamilineTundideValimine> {
                         ),
                       ],
                       onTap: (int kodu) {
-                        graafikuSeadedVaartustamine(graafikuSeaded);
+                        print("graafikuseaded $graafikuSeaded");
+                        //graafikuSeadedVaartustamine(graafikuSeaded);
                         Navigator.push(
                           context,
                           MaterialPageRoute(
