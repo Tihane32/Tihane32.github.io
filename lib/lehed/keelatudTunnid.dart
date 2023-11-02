@@ -32,26 +32,24 @@ class _KeelatudTunnidState extends State<KeelatudTunnid> {
     required this.valitudSeadmed,
     required this.luba,
   });
-
   String luba;
   var valitudSeadmed;
   int koduindex = 1;
-  Set<int> aktiivTunnid = {};
+  List<int> aktiivTunnid = [];
   Color valitudvarv = Colors.red;
   String valitudSuund = 'Lubatud';
+  List<int> valjasTunnid = graafikuSeaded['Lubatud_tunnid'];
+  List<int> seesTunnid = graafikuSeaded['Kelleatud_tunnid'];
 
   @override
   void initState() {
     super.initState();
-
     if (luba == 'ei') {
       valitudvarv = Colors.red;
       valitudSuund = 'Keelatud';
-      //aktiivTunnid = graafikuSeaded['Kelleatud_tunnid'];
     } else {
       valitudvarv = Colors.green;
       valitudSuund = 'Lubatud';
-      //aktiivTunnid = graafikuSeaded['Lubatud_tunnid'];
     }
   }
 

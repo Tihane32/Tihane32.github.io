@@ -29,8 +29,8 @@ Map<String, String> tokenMap = {};
 Map<String, dynamic> graafikuSeaded = {
   'Seadistus_lubatud': false,
   'Max_jarjest_valjas': 1.0,
-  'Kelleatud_tunnid': [],
-  'Lubatud_tunnid': [],
+  'Kelleatud_tunnid': {},
+  'Lubatud_tunnid': {},
 };
 Map<String, dynamic> gruppiMap = {
   'Kõik Seadmed': {
