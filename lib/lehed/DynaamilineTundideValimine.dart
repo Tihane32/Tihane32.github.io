@@ -15,6 +15,8 @@ import 'keskimiseHinnaAluselTundideValimine.dart';
 import 'hinnaPiiriAluselTunideValimine.dart';
 import 'kopeeeriGraafikTundideValimine.dart';
 
+String selectedPageGlobal = "";
+
 class DynamilineTundideValimine extends StatefulWidget {
   DynamilineTundideValimine(
       {Key? key,
@@ -77,7 +79,7 @@ class _DynamilineTundideValimineState extends State<DynamilineTundideValimine> {
   int leht;
   var valitudSeadmed;
   Map<String, bool> ValitudGraafik = {};
-  String selectedPage = 'Odavaimad tunnid';
+
   double vahe = 10;
   int valitudTunnid = 10;
   Color boxColor = sinineKast;
@@ -87,18 +89,19 @@ class _DynamilineTundideValimineState extends State<DynamilineTundideValimine> {
 
   @override
   void initState() {
+    selectedPageGlobal = 'Odavaimad tunnid';
     paevAbi = "täna";
     mitmeSeadmeKinnitus = [];
     super.initState();
 
     if (leht == 0) {
-      selectedPage = 'Odavaimad tunnid';
+      selectedPageGlobal = 'Odavaimad tunnid';
     } else if (leht == 1) {
-      selectedPage = 'Hinnapiir';
+      selectedPageGlobal = 'Hinnapiir';
     } else if (leht == 2) {
-      selectedPage = 'Kopeeri graafik';
+      selectedPageGlobal = 'Kopeeri graafik';
     } else if (leht == 3) {
-      selectedPage = 'Automaatne';
+      selectedPageGlobal = 'Automaatne';
     }
 
     // Initialize lehedMenu in initState
@@ -128,11 +131,16 @@ class _DynamilineTundideValimineState extends State<DynamilineTundideValimine> {
     ];
   }
 
-  updateLulitusMap(Map<int, dynamic> updatedMap) {
-    setState(() {
-      lulitusMap = updatedMap;
-    });
-    print("dynaamiline $lulitusMap");
+  updateLulitusMap(Map<int, dynamic> updatedMap, String leht) {
+    print("valitud leht: $selectedPageGlobal");
+    if (leht == selectedPageGlobal) {
+      setState(() {
+        lulitusMap = updatedMap;
+      });
+      print("valitud uus leht: $leht");
+    }
+
+    print("lulitusmap update: $lulitusMap");
   }
 
   updateValitudSeamded(Map<String, bool> ValitudGraafikuus) {
@@ -165,21 +173,21 @@ class _DynamilineTundideValimineState extends State<DynamilineTundideValimine> {
                 padding: EdgeInsets.symmetric(horizontal: 10),
                 child: DropdownButton<String>(
                   icon: Icon(Icons.menu),
-                  value: selectedPage,
+                  value: selectedPageGlobal,
                   style: font,
                   dropdownColor: sinineKast,
                   borderRadius: borderRadius,
                   onChanged: (String? newValue) {
                     setState(() {
-                      selectedPage = newValue!;
+                      selectedPageGlobal = newValue!;
                     });
-                    if (selectedPage == 'Odavaimad tunnid') {
+                    if (selectedPageGlobal == 'Odavaimad tunnid') {
                       leht = 0;
-                    } else if (selectedPage == 'Hinnapiir') {
+                    } else if (selectedPageGlobal == 'Hinnapiir') {
                       leht = 1;
-                    } else if (selectedPage == 'Kopeeri graafik') {
+                    } else if (selectedPageGlobal == 'Kopeeri graafik') {
                       leht = 2;
-                    } else if (selectedPage == 'Automaatne') {
+                    } else if (selectedPageGlobal == 'Automaatne') {
                       leht = 3;
                     }
                   },
@@ -297,12 +305,12 @@ class _DynamilineTundideValimineState extends State<DynamilineTundideValimine> {
                             ),
                           );
                         } else if (koduindex == 1) {
-                          if (selectedPage == "Kopeeri graafik") {
+                          if (selectedPageGlobal == "Kopeeri graafik") {
                             await graafikuKopeerimine(
                                 ValitudGraafik, valitudSeadmed);
                           } else {
-                            await graafikuteSaatmine(
-                                valitudSeadmed, lulitusMap, paev);
+                            await graafikuteSaatmine(valitudSeadmed, lulitusMap,
+                                paev, selectedPageGlobal);
                           }
 
                           // Show CircularProgressIndicator
@@ -331,13 +339,13 @@ class _DynamilineTundideValimineState extends State<DynamilineTundideValimine> {
                           Future.delayed(Duration(seconds: 5), () {
                             Navigator.of(context)
                                 .pop(); // Close the AlertDialog
-                            Navigator.push(
+                           /* Navigator.push(
                               context,
                               MaterialPageRoute(
                                 builder: (context) =>
                                     DynaamilenieKoduLeht(i: 1),
                               ),
-                            );
+                            );*/
                           });
                         }
                       }),
@@ -350,7 +358,9 @@ class _DynamilineTundideValimineState extends State<DynamilineTundideValimine> {
 }
 
 Future graafikuteSaatmine(Map<String, bool> valitudSeadmed,
-    Map<int, dynamic> lulitusMap, Color paev) async {
+    Map<int, dynamic> lulitusMap, Color paev, String selectedPage) async {
+  print("lulitusmap valik: $selectedPage");
+  print("lulitusmap alguses: $lulitusMap");
   String valitudPaev = "homme";
   if (paev == Colors.green) {
     valitudPaev = "täna";

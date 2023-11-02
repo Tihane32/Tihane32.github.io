@@ -55,7 +55,7 @@ class _HinnaPiiriAluselTundideValimineState
   var valitudSeadmed;
   var lulitusMap;
   int selectedRowIndex = -1;
-  double hinnaPiir = 50.00;
+  double hinnaPiir = 0.0;
   String paevNupp = 'Täna';
   String selectedPage = 'Hinnapiir';
   double vahe = 10;
@@ -270,7 +270,7 @@ class _HinnaPiiriAluselTundideValimineState
           LulitusMapParemVaartustamine(hinnaPiir, lulitus, lulitusMapParemHP);
       lulitusMap = lulitusMapParemHP;
     });
-    updateLulitusMap(lulitusMap);
+    updateLulitusMap(lulitusMap,"Hinnapiir");
     print("hinnapiir: $lulitusMap");
   }
 
@@ -472,6 +472,7 @@ class _HinnaPiiriAluselTundideValimineState
                                         LulitusMapVasakVaartustamine(hinnaPiir,
                                             lulitus, lulitusMapVasakHP);
                                   });
+                                  updateLulitusMap(lulitusMap,"Hinnapiir");
                                 },
                                 decoration: InputDecoration(
                                   border: InputBorder.none,
@@ -560,7 +561,7 @@ class _HinnaPiiriAluselTundideValimineState
                                   TunniVarviMuutus(rowIndex, lulitusMapParemHP);
                               lulitusMap = lulitusMapParemHP;
                             });
-                            updateLulitusMap(lulitusMap);
+                            updateLulitusMap(lulitusMap,"Hinnapiir");
                           },
                           borderRadius: BorderRadius.only(
                               bottomLeft: Radius.circular(20),
@@ -599,7 +600,7 @@ class _HinnaPiiriAluselTundideValimineState
                                   TunniVarviMuutus(rowIndex, lulitusMapVasakHP);
                               lulitusMap = lulitusMapParemHP;
                             });
-                            updateLulitusMap(lulitusMap);
+                            updateLulitusMap(lulitusMap,"Hinnapiir");
                           },
                           borderRadius: BorderRadius.only(
                               topRight: Radius.circular(20),

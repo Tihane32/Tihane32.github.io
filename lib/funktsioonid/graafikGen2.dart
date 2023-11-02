@@ -31,6 +31,7 @@ gen2GraafikuLoomine(
     paevad.add(i);
     paev = getTommorowDayOfWeek();
   }
+  print("lulitusmap siin: $lulitus");
   List<dynamic> graafik = await graafikGen2Lugemine(id);
   List<dynamic> abi = graafik;
 

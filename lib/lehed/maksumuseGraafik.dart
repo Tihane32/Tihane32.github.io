@@ -44,26 +44,7 @@ class _MaksumuseGraafikState extends State<MaksumuseGraafik> {
     }
 
     int j = 0;
-    /*await Future.wait(seadmeteMap.keys.map((key) async {
-// Call seadmeMaksumus to get the map
-      print("--------------");
-      print(seadmeteMap[key]["Seadme_nimi"]);
-      print("--------------");
-      Map<DateTime, double> dataMap = await seadmeMaksumus(key);
-      print("--------------");
-      print("${seadmeteMap[key]["Seadme_nimi"]} datamap: $dataMap");
-      print("--------------");
-// Calculate the sum of the double values in the map
-      double temp = calculateSum(dataMap);
-      String abi = temp.toStringAsFixed(4);
-      temp = double.parse(abi);
-      maksumuseMap["${seadmeteMap[key]['Seadme_nimi']}"] = temp;
-   
-       print("--------------");
-      print("${seadmeteMap[key]["Seadme_nimi"]} siin : $maksumuseMap");
-      print("--------------");
-      
-    }));*/
+    
 
     for (var key in seadmeteMap.keys) {
       print("--------------");

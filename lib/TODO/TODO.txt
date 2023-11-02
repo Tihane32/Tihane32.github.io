@@ -16,3 +16,4 @@ xx.xx.xxxx Eesmärgid
     valitud tunnid mällu
     kahetariifne
     login korda
+    nii peale kinnitamist ei lähe ära
