@@ -327,6 +327,7 @@ class _KasutajaSeadedState extends State<KasutajaSeaded> {
                       'Mälu kustutatud',
                     );
                     maluClear();
+                    
                   },
                   child: Align(
                     alignment: Alignment.centerLeft,
@@ -375,4 +376,5 @@ class _KasutajaSeadedState extends State<KasutajaSeaded> {
 maluClear() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   prefs.clear();
+  
 }

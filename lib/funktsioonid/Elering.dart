@@ -30,9 +30,9 @@ Future<List> getElering(String paevtest) async {
   {
     date = now.add(new Duration(days: -1));
   }
-  String kell21 = 'T21'; //See läheb tänase päeva url-i.
+  String kell21 = 'T22'; //See läheb tänase päeva url-i.
   //Me tahame tegelikult kella 00:00, aga Elering on EU keskaja järgi
-  String kell20 = 'T20'; //See läheb homse päeva viimaseks tunniks
+  String kell20 = 'T21'; //See läheb homse päeva viimaseks tunniks
   var parispaev = date.day;
   var pariskuu = date.month;
 

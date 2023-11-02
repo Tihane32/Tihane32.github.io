@@ -73,26 +73,26 @@ class _KeskmiseHinnaAluselTundideValimineState
   Map<int, dynamic> keskHind = {
     0: ['00.00', 0, false],
     1: ['01.00', 0, false],
-    2: ['02.00', 0, true],
+    2: ['02.00', 0, false],
     3: ['03.00', 0, false],
-    4: ['04.00', 0, true],
-    5: ['05.00', 0, true],
+    4: ['04.00', 0, false],
+    5: ['05.00', 0, false],
     6: ['06.00', 0, false],
-    7: ['07.00', 0, true],
+    7: ['07.00', 0, false],
     8: ['08.00', 0, false],
-    9: ['09.00', 0, true],
+    9: ['09.00', 0, false],
     10: ['10.00', 0, false],
-    11: ['11.00', 0, true],
-    12: ['12.00', 0, true],
-    13: ['13.00', 0, true],
-    14: ['14.00', 0, true],
-    15: ['15.00', 0, true],
-    16: ['16.00', 0, true],
-    17: ['17.00', 0, true],
+    11: ['11.00', 0, false],
+    12: ['12.00', 0, false],
+    13: ['13.00', 0, false],
+    14: ['14.00', 0, false],
+    15: ['15.00', 0, false],
+    16: ['16.00', 0, false],
+    17: ['17.00', 0, false],
     18: ['18.00', 0, false],
-    19: ['19.00', 0, true],
+    19: ['19.00', 0, false],
     20: ['20.00', 0, false],
-    21: ['21.00', 0, true],
+    21: ['21.00', 0, false],
     22: ['22.00', 0, false],
     23: ['23.00', 0, false],
   };
@@ -128,26 +128,26 @@ class _KeskmiseHinnaAluselTundideValimineState
   Map<int, dynamic> lulitusMapVasak = {
     0: ['00.00', 0, false],
     1: ['01.00', 0, false],
-    2: ['02.00', 0, true],
+    2: ['02.00', 0, false],
     3: ['03.00', 0, false],
-    4: ['04.00', 0, true],
-    5: ['05.00', 0, true],
+    4: ['04.00', 0, false],
+    5: ['05.00', 0, false],
     6: ['06.00', 0, false],
-    7: ['07.00', 0, true],
+    7: ['07.00', 0, false],
     8: ['08.00', 0, false],
-    9: ['09.00', 0, true],
+    9: ['09.00', 0, false],
     10: ['10.00', 0, false],
-    11: ['11.00', 0, true],
-    12: ['12.00', 0, true],
-    13: ['13.00', 0, true],
-    14: ['14.00', 0, true],
-    15: ['15.00', 0, true],
-    16: ['16.00', 0, true],
-    17: ['17.00', 0, true],
+    11: ['11.00', 0, false],
+    12: ['12.00', 0, false],
+    13: ['13.00', 0, false],
+    14: ['14.00', 0, false],
+    15: ['15.00', 0, false],
+    16: ['16.00', 0, false],
+    17: ['17.00', 0, false],
     18: ['18.00', 0, false],
-    19: ['19.00', 0, true],
+    19: ['19.00', 0, false],
     20: ['20.00', 0, false],
-    21: ['21.00', 0, true],
+    21: ['21.00', 0, false],
     22: ['22.00', 0, false],
     23: ['23.00', 0, false],
   };
@@ -155,26 +155,26 @@ class _KeskmiseHinnaAluselTundideValimineState
   Map<int, dynamic> lulitusMapParem = {
     0: ['00.00', 0, false],
     1: ['01.00', 0, false],
-    2: ['02.00', 0, true],
+    2: ['02.00', 0, false],
     3: ['03.00', 0, false],
-    4: ['04.00', 0, true],
-    5: ['05.00', 0, true],
+    4: ['04.00', 0, false],
+    5: ['05.00', 0, false],
     6: ['06.00', 0, false],
-    7: ['07.00', 0, true],
+    7: ['07.00', 0, false],
     8: ['08.00', 0, false],
-    9: ['09.00', 0, true],
+    9: ['09.00', 0, false],
     10: ['10.00', 0, false],
-    11: ['11.00', 0, true],
-    12: ['12.00', 0, true],
-    13: ['13.00', 0, true],
-    14: ['14.00', 0, true],
-    15: ['15.00', 0, true],
-    16: ['16.00', 0, true],
-    17: ['17.00', 0, true],
+    11: ['11.00', 0, false],
+    12: ['12.00', 0, false],
+    13: ['13.00', 0, false],
+    14: ['14.00', 0, false],
+    15: ['15.00', 0, false],
+    16: ['16.00', 0, false],
+    17: ['17.00', 0, false],
     18: ['18.00', 0, false],
-    19: ['19.00', 0, true],
+    19: ['19.00', 0, false],
     20: ['20.00', 0, false],
-    21: ['21.00', 0, true],
+    21: ['21.00', 0, false],
     22: ['22.00', 0, false],
     23: ['23.00', 0, false],
   };
@@ -274,11 +274,16 @@ class _KeskmiseHinnaAluselTundideValimineState
           LulitusParemVaartustamine(hindAVG, lulitus, lulitusMapParem);
       lulitusMap = lulitusMapParem;
     });
-    updateLulitusMap(lulitusMap);
+    updateLulitusMap(lulitusMap,'Odavaimad tunnid');
+    print("lulitusmap veider: $lulitusMap");
   }
 
   @override
   void initState() {
+    for (int i = 0; i < 24; i++) {
+      String key = i < 10 ? '0$i.00' : '$i.00';
+      keskHind[i] = [key, 0, false];
+    }
     norm();
     super.initState();
     _loadGraafikuSeaded;
@@ -586,7 +591,7 @@ class _KeskmiseHinnaAluselTundideValimineState
                                       lulitusMap = lulitusMapParem;
                                     });
                                     print("tana $tana");
-                                    updateLulitusMap(lulitusMap);
+                                    updateLulitusMap(lulitusMap,'Odavaimad tunnid');
                                   },
                                   borderRadius: BorderRadius.only(
                                       bottomLeft: Radius.circular(20),
@@ -635,7 +640,7 @@ class _KeskmiseHinnaAluselTundideValimineState
                                           rowIndex, lulitusMapParem);
                                       lulitusMap = lulitusMapParem;
                                     });
-                                    updateLulitusMap(lulitusMap);
+                                    updateLulitusMap(lulitusMap,'Odavaimad tunnid');
                                   },
                                   borderRadius: const BorderRadius.only(
                                       topLeft: Radius.circular(20),

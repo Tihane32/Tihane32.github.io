@@ -38,9 +38,9 @@ void lulitamine(String seade) async {
       }
       value['Seadme_olek'] = olek;
 
-      String? storedKey = prefs.getString('key');
+      
 
-      String storedKeyString = jsonDecode(storedKey!);
+      
       var res;
       do {
         var headers = {

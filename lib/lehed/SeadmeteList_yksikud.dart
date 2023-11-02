@@ -23,17 +23,25 @@ class SeadmeteList_yksikud extends StatefulWidget {
 }
 
 class _SeadmeteList_yksikudState extends State<SeadmeteList_yksikud> {
-  bool isLoading = false;
+  bool isLoading = true;
   late Map<String, List<String>> minuSeadmedK = {};
   //String onoffNupp = 'Shelly ON';
   @override
   void initState() {
-    seisukord();
     SeadmeGraafikKontrollimineGen1();
     SeadmeGraafikKontrollimineGen2();
 
     super.initState();
-    bool isLoading = false;
+    fetchData();
+  }
+
+  Future<void> fetchData() async {
+    await seisukord();
+    // Add any other data fetching or initialization code here if needed.
+    // When done, set isLoading to false to display the content.
+    setState(() {
+      isLoading = false;
+    });
   }
 
   int koduindex = 1;

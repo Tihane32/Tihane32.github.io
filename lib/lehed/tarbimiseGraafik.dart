@@ -11,6 +11,8 @@ import 'package:testuus4/lehed/dynamicSeadmeInfo.dart';
 import 'package:testuus4/lehed/koduleht.dart';
 import 'package:testuus4/main.dart';
 
+import '../funktsioonid/maksumusSeadmeKohta.dart';
+
 class TarbimiseGraafik extends StatefulWidget {
   final Map<String, dynamic> tarbimiseMap;
 
@@ -27,6 +29,84 @@ class _TarbimiseGraafikState extends State<TarbimiseGraafik> {
   _TarbimiseGraafikState(this.tarbimiseMap);
   List<ChartData> chartData = [];
   double asi = 0;
+
+  List<ChartData> chartData2 = [];
+  num kokku = 0;
+  double asi2 = 0;
+
+
+
+ function() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    Map<String, dynamic> maksumuseMap = {};
+    //Võtab mälust 'users'-i asukohast väärtused
+
+    double calculateSum(Map<DateTime, double> data) {
+      double sum = 0.0;
+      data.values.forEach((value) {
+        sum += value;
+        print("sum: $sum");
+      });
+      kokku = kokku + sum;
+      print("kokku: $kokku");
+      return sum;
+    }
+
+    int j = 0;
+    
+
+    for (var key in seadmeteMap.keys) {
+      print("--------------");
+      print(seadmeteMap[key]["Seadme_nimi"]);
+      print("--------------");
+      Map<DateTime, double> dataMap = await seadmeMaksumus(key);
+      print("--------------");
+      print("${seadmeteMap[key]["Seadme_nimi"]} datamap: $dataMap");
+      print("--------------");
+      double temp = calculateSum(dataMap);
+      String abi = temp.toStringAsFixed(4);
+      temp = double.parse(abi);
+      maksumuseMap["${seadmeteMap[key]['Seadme_nimi']}"] = temp;
+      chartData.clear();
+      for (var entry in maksumuseMap.entries) {
+        chartData.add(ChartData(entry.key, entry.value));
+      }
+
+      print("siin: $chartData");
+      setState(() {
+        chartData = chartData;
+        kokku = kokku;
+      });
+    }
+
+  double? findMaxY(List<ChartData> data) {
+  double? maxY;
+  for (var chartData in data) {
+    if (chartData.y != null) {
+      if (maxY == null || chartData.y! > maxY) {
+        maxY = chartData.y;
+      }
+    }
+  }
+  return maxY;
+}
+
+// Now, you can call this method to get the maximum value.
+    double? maxChartDataValue = findMaxY(chartData);
+
+    setState(() {
+       if (maxChartDataValue == null) {
+        asi = 0;
+      }else{
+        asi = maxChartDataValue;
+      }
+    });
+  }
+
+
+
+
+
   getChartData() {
     print("tarbimiseMap: $tarbimiseMap");
     // Convert the tarbimiseMap data to a list of ChartData objects
