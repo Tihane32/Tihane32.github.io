@@ -4,6 +4,7 @@ import 'package:testuus4/funktsioonid/lulitamine.dart';
 import 'dart:async';
 import 'package:testuus4/lehed/SeadmeGraafikLeht.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:testuus4/lehed/abiLeht.dart';
 import 'GraafikusseSeadmeteValik.dart';
 import 'SeadmeYldInfo.dart';
 import 'dynamicKoduLeht.dart';
@@ -14,6 +15,7 @@ import 'package:testuus4/main.dart';
 import 'package:get/get.dart';
 
 import 'dynamicSeadmeInfo.dart';
+import 'gruppiKoostamine.dart';
 
 class SeadmeteList_gruppid extends StatefulWidget {
   const SeadmeteList_gruppid({Key? key}) : super(key: key);
@@ -24,8 +26,6 @@ class SeadmeteList_gruppid extends StatefulWidget {
 
 class _SeadmeteList_gruppidState extends State<SeadmeteList_gruppid> {
   bool isLoading = false;
-  late Map<String, List<String>> minuSeadmedK = {};
-  //String onoffNupp = 'Shelly ON';
   @override
   void initState() {
     seisukord();
@@ -44,24 +44,23 @@ class _SeadmeteList_gruppidState extends State<SeadmeteList_gruppid> {
   double width = 200;
   double height = 40;
 
-  void toggleSelection(String pictureName) {
-    setState(() {
-      if (selectedPictures.contains(pictureName)) {
-        selectedPictures.remove(pictureName);
-      } else {
-        selectedPictures.add(pictureName);
-      }
-    });
-  }
-
   bool canPressButton = true;
 
   void _handleButtonPress(seade) {
     if (!canPressButton) return;
 
+    /*
     setState(() {
       canPressButton = false;
       seadmeteMap = muudaSeadmeOlek(seadmeteMap, seade);
+    });
+    */
+    setState(() {
+      if (gruppiMap[seade]["Gruppi_olek"] == 'on') {
+        gruppiMap[seade]["Gruppi_olek"] = 'off';
+      } else {
+        gruppiMap[seade]["Gruppi_olek"] = 'on';
+      }
     });
 
     Timer(Duration(seconds: 3), () {
@@ -111,16 +110,15 @@ class _SeadmeteList_gruppidState extends State<SeadmeteList_gruppid> {
                   childAspectRatio: MediaQuery.of(context).size.width /
                       (MediaQuery.of(context).size.height / 3),
                 ),
-                itemCount: seadmeteMap.length + 1,
+                itemCount: gruppiMap.length + 1,
                 itemBuilder: (context, index) {
-                  if (index == seadmeteMap.length) {
+                  if (index == gruppiMap.length) {
                     return GestureDetector(
                       onTap: () {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) =>
-                                    DynaamilenieKoduLeht(i: 2)));
+                                builder: (context) => GruppiKoostamine()));
                       },
                       child: Padding(
                         padding: const EdgeInsets.all(1),
@@ -145,20 +143,16 @@ class _SeadmeteList_gruppidState extends State<SeadmeteList_gruppid> {
                     );
                   }
 
-                  final seade = seadmeteMap.keys.elementAt(index);
-                  final pilt = seadmeteMap[seade]["Seadme_pilt"];
-                  final staatus = seadmeteMap[seade]["Seadme_olek"];
+                  final grupp = gruppiMap.keys.elementAt(index);
+                  final gruppiPilt = gruppiMap[grupp]["Gruppi_pilt"];
+                  final grupiOlek = gruppiMap[grupp]["Gruppi_olek"];
+                  final grupiTemp = gruppiMap[grupp]['Grupi_temp'];
+
                   return GestureDetector(
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(
-                          builder: (context) => DunaamilineSeadmeLeht(
-                            seadmeNimi: seadmeteMap.keys.elementAt(index),
-                            SeadmeteMap: seadmeteMap,
-                            valitud: 0,
-                          ),
-                        ),
+                        MaterialPageRoute(builder: (context) => AbiLeht()),
                       );
                     },
                     child: Padding(
@@ -167,7 +161,7 @@ class _SeadmeteList_gruppidState extends State<SeadmeteList_gruppid> {
                         decoration: BoxDecoration(
                           border: border,
                           image: DecorationImage(
-                            image: AssetImage(pilt),
+                            image: AssetImage(gruppiPilt),
                             fit: BoxFit
                                 .cover, // this will make sure image covers entire container
                           ),
@@ -180,14 +174,14 @@ class _SeadmeteList_gruppidState extends State<SeadmeteList_gruppid> {
                               width: 80,
                               height: 80,
                               decoration: BoxDecoration(
-                                color: staatus == 'on'
+                                color: grupiOlek == 'on'
                                     ? Colors.green.withOpacity(0.6)
-                                    : staatus == 'off'
+                                    : grupiOlek == 'off'
                                         ? Colors.red.withOpacity(0.6)
                                         : Colors.grey.withOpacity(0.6),
                                 shape: BoxShape.circle,
                               ),
-                              child: staatus == 'Offline'
+                              child: grupiOlek == 'Offline'
                                   ? Icon(
                                       Icons.wifi_off_outlined,
                                       size: 60,
@@ -198,7 +192,7 @@ class _SeadmeteList_gruppidState extends State<SeadmeteList_gruppid> {
                                       icon: Icon(Icons.power_settings_new),
                                       color: Colors.white,
                                       onPressed: () {
-                                        _handleButtonPress(seade);
+                                        _handleButtonPress(grupp);
                                       },
                                     ),
                             ),
@@ -256,7 +250,7 @@ class _SeadmeteList_gruppidState extends State<SeadmeteList_gruppid> {
                                   ),
                                   child: Center(
                                     child: Text(
-                                      ' 23.5° C ',
+                                      '' + grupiTemp.toString() + '° C ',
                                       style: TextStyle(
                                         color: Colors.white,
                                         fontSize: 18,
@@ -272,7 +266,7 @@ class _SeadmeteList_gruppidState extends State<SeadmeteList_gruppid> {
                                     padding: EdgeInsets.symmetric(vertical: 8),
                                     child: Center(
                                       child: Text(
-                                        seadmeteMap[seade]["Seadme_nimi"],
+                                        grupp.toString(),
                                         style: TextStyle(
                                           color: Colors.white,
                                           fontSize: 18,
@@ -314,33 +308,6 @@ class _SeadmeteList_gruppidState extends State<SeadmeteList_gruppid> {
       ),
     );
   }
-}
-
-SaaSeadmePilt(Map<String, dynamic> SeadmeteMap, SeadmeNimi) {
-  String deviceInfo = seadmeteMap[SeadmeNimi]["Seadme_pilt"];
-  print("------");
-  print(SeadmeteMap[SeadmeNimi]);
-  if (deviceInfo != null) {
-    String pilt = deviceInfo;
-    return pilt;
-  }
-  return null; // Device key not found in the map
-}
-
-SaaSeadmeolek(Map<String, dynamic> SeadmeteMap, SeadmeNimi) {
-  print("seamdetMap $seadmeteMap");
-  String deviceInfo = seadmeteMap[SeadmeNimi]["Seadme_olek"];
-  if (deviceInfo != null) {
-    String pilt = deviceInfo;
-    return pilt;
-  }
-  return null; // Device key not found in the map
-}
-
-muudaSeadmeOlek(Map<String, dynamic> SeadmeteMap, SeadmeNimi) {
-  lulitamine(SeadmeNimi);
-
-  return seadmeteMap; // Device key not found in the map
 }
 
 Widget _buildIconButton(IconData icon, Function onTap) {

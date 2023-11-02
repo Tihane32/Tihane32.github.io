@@ -28,10 +28,20 @@ import 'package:workmanager/workmanager.dart';
 Map<String, String> tokenMap = {};
 Map<String, dynamic> graafikuSeaded = {
   'Seadistus_lubatud': false,
-  'Max_jarjest_valjas': 1,
+  'Max_jarjest_valjas': 1.0,
   'Kelleatud_tunnid': [],
   'Lubatud_tunnid': [],
 };
+Map<String, dynamic> gruppiMap = {
+  'Kõik Seadmed': {
+    'Gruppi_pilt': 'assets/saun1.jpg',
+    'Grupi_Seadmed': [],
+    'Grupi_andurid': [],
+    'Grupi_temp': 27.3,
+    'Gruppi_olek': 'on',
+  },
+};
+
 String paevAbi = "";
 bool seadmeKinnitus = false;
 List<bool> mitmeSeadmeKinnitus = [];
@@ -86,6 +96,8 @@ Future<void> main() async {
   if (seadmedJSONmap != null) {
     seadmeteMap = json.decode(seadmedJSONmap);
   }
+
+  gruppiMap['Kõik Seadmed']['Grupi_Seadmed'] = seadmeteMap.keys.toList();
 
   await getToken3();
   print("------------");

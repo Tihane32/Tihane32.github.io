@@ -32,28 +32,29 @@ class _KeelatudTunnidState extends State<KeelatudTunnid> {
     required this.valitudSeadmed,
     required this.luba,
   });
-
   String luba;
   var valitudSeadmed;
   int koduindex = 1;
-  Set<int> _selectedHours = {};
+  List aktiivTunnid = [];
   Color valitudvarv = Colors.red;
   String valitudSuund = 'Lubatud';
+  List valjasTunnid = [];
+  List seesTunnid = [];
 
   @override
   void initState() {
     super.initState();
+    seesTunnid = graafikuSeaded['Kelleatud_tunnid'];
+    valjasTunnid = graafikuSeaded['Lubatud_tunnid'];
 
     if (luba == 'ei') {
       valitudvarv = Colors.red;
+      valitudSuund = 'Keelatud';
+      aktiivTunnid = valjasTunnid;
     } else {
       valitudvarv = Colors.green;
-    }
-
-    if (luba == 'ei') {
-      valitudSuund = 'Keelatud';
-    } else {
       valitudSuund = 'Lubatud';
+      aktiivTunnid = seesTunnid;
     }
   }
 
@@ -84,20 +85,20 @@ class _KeelatudTunnidState extends State<KeelatudTunnid> {
         itemBuilder: (BuildContext context, int index) {
           return ListTile(
             title: Align(alignment: Alignment.center, child: Text('$index:00')),
-            tileColor: _selectedHours.contains(index)
+            tileColor: aktiivTunnid.contains(index)
                 ? valitudvarv
                 : Color.fromARGB(255, 218, 207, 207),
             onTap: () {
               setState(() {
-                if (_selectedHours.contains(index)) {
-                  _selectedHours.remove(index);
+                if (aktiivTunnid.contains(index)) {
+                  aktiivTunnid.remove(index);
                 } else {
-                  _selectedHours.add(index);
+                  aktiivTunnid.add(index);
                 }
                 if (luba == 'ei') {
-                  graafikuSeaded['Kelleatud_tunnid'] = _selectedHours;
+                  graafikuSeaded['Kelleatud_tunnid'] = aktiivTunnid;
                 } else {
-                  graafikuSeaded['Lubatud_tunnid'] = _selectedHours;
+                  graafikuSeaded['Lubatud_tunnid'] = aktiivTunnid;
                 }
               });
             },

@@ -285,7 +285,7 @@ class _KeskmiseHinnaAluselTundideValimineState
   }
 
   _loadGraafikuSeaded() async {
-    graafikuSeaded = await loadGraafikuSeaded();
+    //graafikuSeaded = await loadGraafikuSeaded();
     setState(() {}); // To rebuild the widget once data is loaded
   }
 
