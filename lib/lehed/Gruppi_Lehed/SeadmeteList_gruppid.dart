@@ -1,22 +1,15 @@
+
+
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:testuus4/funktsioonid/lulitamine.dart';
-import 'dart:async';
-import 'package:testuus4/lehed/Seadme_Lehed/SeadmeGraafikLeht.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:testuus4/lehed/abiLeht.dart';
-import '../GraafikusseSeadmeteValik.dart';
-import '../Seadme_Lehed/SeadmeYldInfo.dart';
-import 'dynaamilineGrupiLeht.dart';
-import '../Põhi_Lehed/dynamicKoduLeht.dart';
-import 'dart:convert';
 import 'package:testuus4/funktsioonid/seisukord.dart';
+import 'package:testuus4/lehed/GraafikusseSeadmeteValik.dart';
+import 'package:testuus4/lehed/Gruppi_Lehed/dynaamilineGrupiLeht.dart';
+import 'package:testuus4/lehed/Gruppi_Lehed/gruppiKoostamine.dart';
+import 'package:testuus4/lehed/P%C3%B5hi_Lehed/dynamicKoduLeht.dart';
 import 'package:testuus4/main.dart';
-
-import 'package:get/get.dart';
-
-import '../Seadme_Lehed/dynamicSeadmeInfo.dart';
-import 'gruppiKoostamine.dart';
 
 class SeadmeteList_gruppid extends StatefulWidget {
   const SeadmeteList_gruppid({Key? key}) : super(key: key);

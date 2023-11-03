@@ -1,13 +1,14 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'package:google_fonts/google_fonts.dart';
 import 'package:testuus4/funktsioonid/Elering.dart';
 import 'package:flutter/services.dart';
-import 'package:testuus4/lehed/P%C3%B5hi_Lehed/dynamicKoduLeht.dart';
+
 import 'GraafikusseSeadmeteValik.dart';
-import 'Põhi_Lehed/Login.dart';
+
 import 'package:vibration/vibration.dart';
-import 'Põhi_Lehed/koduleht.dart';
+import 'koduleht.dart';
 
 import 'dart:math';
 
@@ -46,6 +47,7 @@ class _TulpDiagrammState extends State<TulpDiagramm> {
   late double hindMax = 0;
   double vahe = 10;
   Color boxColor = sinineKast;
+  int tund = 0;
 
   Map<int, dynamic> keskHind = {
     0: ['0', 0, ''],
@@ -140,7 +142,7 @@ class _TulpDiagrammState extends State<TulpDiagramm> {
       lulitusTana[i][1] = data[i]['price'];
     }
 
-    if (date.hour >
+    if (date.hour >=
         15) //Kui kell on vähem, kui 15 või on saadetud String 'täna'
     {
       var data = await getElering('homme');
@@ -148,14 +150,13 @@ class _TulpDiagrammState extends State<TulpDiagramm> {
         lulitusHomme[i][1] = data[i]['price'];
       }
     }
+
     setState(() {
-      if (date.hour >
-          15) //Kui kell on vähem, kui 15 või on saadetud String 'täna'
-      {
+      if (date.hour >= 15) {
         hommeNahtav = true;
       }
       lulitus = lulitusTana;
-
+      tund = date.hour;
       hindMax = maxLeidmine(lulitusTana);
       hindMin = minLeidmine(lulitusTana);
       hindAVG = keskmineHindArvutaus(lulitus);
@@ -170,6 +171,8 @@ class _TulpDiagrammState extends State<TulpDiagramm> {
 
     super.initState();
   }
+
+  int i = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -709,8 +712,10 @@ class _TulpDiagrammState extends State<TulpDiagramm> {
 
 keskmineHindArvutaus(Map<int, dynamic> lulitus) {
   double summa = 0;
+
+  double AVG;
+
   int hindNr = 0;
-  num mod = pow(10.0, 2);
 
   num mod = pow(10.0, 2);
 

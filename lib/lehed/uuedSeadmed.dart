@@ -1,32 +1,13 @@
+
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:testuus4/funktsioonid/seisukord.dart';
 import 'package:testuus4/funktsioonid/token.dart';
 import 'package:testuus4/lehed/P%C3%B5hi_Lehed/dynamicKoduLeht.dart';
-import 'package:testuus4/lehed/P%C3%B5hi_Lehed/koduleht.dart';
-import 'package:testuus4/Arhiiv/seadmedKontoltNim.dart';
 import 'package:testuus4/main.dart';
-import 'package:flutter/material.dart';
-import 'package:testuus4/funktsioonid/KeskmineHind.dart';
-import 'package:testuus4/lehed/P%C3%B5hi_Lehed/Login.dart';
-import 'package:testuus4/lehed/abiLeht.dart';
-import 'package:testuus4/Arhiiv/drawer.dart';
-import 'package:testuus4/lehed/uuedSeadmed.dart';
-import 'package:testuus4/lehed/lisaSeade.dart';
-import 'package:testuus4/lehed/rakenduseSeaded.dart';
-import '../Arhiiv/kaksTabelit.dart';
-import '../Arhiiv/hinnaGraafik.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:testuus4/funktsioonid/hetketarbimine.dart';
-import 'package:testuus4/funktsioonid/tarbimine.dart';
-import 'package:testuus4/funktsioonid/maksumus.dart';
-import 'hindJoonise.dart';
-import '../funktsioonid/hetke_hind.dart';
-import 'package:testuus4/main.dart';
-import 'Põhi_Lehed/minuPakett.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import '../Arhiiv/navigationBar.dart';
-import 'dart:convert';
 
 class uuedSeadmed extends StatefulWidget {
   uuedSeadmed({required this.uuedSeadmedString});
