@@ -1,20 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:testuus4/lehed/DynaamilineTundideValimine.dart';
+import 'package:testuus4/lehed/Tundide_valimis_Lehed/DynaamilineTundideValimine.dart';
 import 'package:testuus4/lehed/GraafikusseSeadmeteValik.dart';
-import 'package:testuus4/lehed/dynamicKoduLeht.dart';
-import '../funktsioonid/Elering.dart';
-import '../main.dart';
-import 'AbiLeht.dart';
-import 'koduleht.dart';
+import 'package:testuus4/lehed/P%C3%B5hi_Lehed/dynamicKoduLeht.dart';
+import '../../funktsioonid/Elering.dart';
+import '../../funktsioonid/KeskmineHindArvutus.dart';
+import '../../main.dart';
+import '../../widgets/AbiLeht.dart';
+import '../Põhi_Lehed/koduleht.dart';
 import 'hinnaPiiriAluselTunideValimine.dart';
 import 'dart:math';
 import 'package:testuus4/Arhiiv/kaksTabelit.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 import 'kopeeeriGraafikTundideValimine.dart';
-import 'package:testuus4/lehed/DynaamilineTundideValimine.dart';
+import 'package:testuus4/lehed/Tundide_valimis_Lehed/DynaamilineTundideValimine.dart';
 
 class KeskmiseHinnaAluselTundideValimine extends StatefulWidget {
   final Function updateLulitusMap;
@@ -274,7 +275,7 @@ class _KeskmiseHinnaAluselTundideValimineState
           LulitusParemVaartustamine(hindAVG, lulitus, lulitusMapParem);
       lulitusMap = lulitusMapParem;
     });
-    updateLulitusMap(lulitusMap,'Odavaimad tunnid');
+    updateLulitusMap(lulitusMap, 'Odavaimad tunnid');
     print("lulitusmap veider: $lulitusMap");
   }
 
@@ -591,7 +592,8 @@ class _KeskmiseHinnaAluselTundideValimineState
                                       lulitusMap = lulitusMapParem;
                                     });
                                     print("tana $tana");
-                                    updateLulitusMap(lulitusMap,'Odavaimad tunnid');
+                                    updateLulitusMap(
+                                        lulitusMap, 'Odavaimad tunnid');
                                   },
                                   borderRadius: BorderRadius.only(
                                       bottomLeft: Radius.circular(20),
@@ -640,7 +642,8 @@ class _KeskmiseHinnaAluselTundideValimineState
                                           rowIndex, lulitusMapParem);
                                       lulitusMap = lulitusMapParem;
                                     });
-                                    updateLulitusMap(lulitusMap,'Odavaimad tunnid');
+                                    updateLulitusMap(
+                                        lulitusMap, 'Odavaimad tunnid');
                                   },
                                   borderRadius: const BorderRadius.only(
                                       topLeft: Radius.circular(20),
@@ -689,30 +692,6 @@ class _KeskmiseHinnaAluselTundideValimineState
         ),
       ],
     );
-  }
-}
-
-keskmineHindArvutaus(Map<int, dynamic> lulitus) {
-  double summa = 0;
-
-  double AVG;
-
-  int hindNr = 0;
-
-  num mod = pow(10.0, 2);
-
-  lulitus.values.forEach((data) {
-    summa += data[1];
-
-    hindNr++;
-  });
-
-  AVG = summa / hindNr;
-
-  if (hindNr > 0) {
-    return ((AVG * mod).round().toDouble() / mod);
-  } else {
-    return 0;
   }
 }
 

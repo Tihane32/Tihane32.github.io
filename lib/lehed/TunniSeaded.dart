@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../main.dart';
-import 'DynaamilineTundideValimine.dart';
+import 'Tundide_valimis_Lehed/DynaamilineTundideValimine.dart';
 import 'package:intl/intl.dart';
 
 class TunniSeaded extends StatefulWidget {

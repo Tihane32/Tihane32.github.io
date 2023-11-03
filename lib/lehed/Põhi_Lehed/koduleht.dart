@@ -7,14 +7,14 @@ import 'package:testuus4/funktsioonid/tarbimine.dart';
 import 'package:testuus4/funktsioonid/maksumus.dart';
 import 'package:testuus4/lehed/tarbimiseGraafik.dart';
 import 'package:testuus4/lehed/tarbimiseGraafikSpline.dart';
-import '../funktsioonid/hetke_hind.dart';
+import '../../funktsioonid/hetke_hind.dart';
 import 'package:testuus4/main.dart';
 import 'dynamicKoduLeht.dart';
 import 'minuPakett.dart';
-import 'maksumuseGraafik.dart';
+import '../maksumuseGraafik.dart';
 import 'package:table_calendar/table_calendar.dart';
 
-import '../Arhiiv/navigationBar.dart';
+import '../../Arhiiv/navigationBar.dart';
 
 class KoduLeht extends StatefulWidget {
   const KoduLeht({Key? key}) : super(key: key);
@@ -400,8 +400,8 @@ class _KoduLehtState extends State<KoduLeht> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     TableCalendar(
-                       //availableCalendarFormats: const {},
-                      startingDayOfWeek :StartingDayOfWeek.monday,
+                      //availableCalendarFormats: const {},
+                      startingDayOfWeek: StartingDayOfWeek.monday,
                       rowHeight: 35,
                       firstDay: firstDay,
                       lastDay: lastDay,
@@ -413,16 +413,13 @@ class _KoduLehtState extends State<KoduLeht> {
                       calendarFormat: _calendarFormat,
                       rangeSelectionMode: _rangeSelectionMode,
                       onDaySelected: (selectedDay, focusedDay) {
-                        if (!isSameDay(
-                            _selectedDay, selectedDay)) {
+                        if (!isSameDay(_selectedDay, selectedDay)) {
                           setState(() {
                             _selectedDay = selectedDay;
                             _focusedDay = focusedDay;
-                            _rangeStart =
-                                null; // Important to clean those
+                            _rangeStart = null; // Important to clean those
                             _rangeEnd = null;
-                            _rangeSelectionMode =
-                                RangeSelectionMode.toggledOff;
+                            _rangeSelectionMode = RangeSelectionMode.toggledOff;
                           });
                         }
                       },
@@ -432,8 +429,7 @@ class _KoduLehtState extends State<KoduLeht> {
                           _focusedDay = focusedDay;
                           _rangeStart = start;
                           _rangeEnd = end;
-                          _rangeSelectionMode =
-                              RangeSelectionMode.toggledOn;
+                          _rangeSelectionMode = RangeSelectionMode.toggledOn;
                         });
                       },
                       onFormatChanged: (format) {
@@ -575,11 +571,6 @@ class _KoduLehtState extends State<KoduLeht> {
                           return Visibility(
                             visible: tarbimineBool,
                             child: TarbimiseGraafik(tarbimiseMap),
-
-                            
-
-
-
                           );
                         }
                       },
@@ -604,7 +595,6 @@ class _KoduLehtState extends State<KoduLeht> {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                
                                 //Text(" $kulu €", style: fontLaadimine()),
                               ],
                             ),
@@ -621,12 +611,7 @@ class _KoduLehtState extends State<KoduLeht> {
                     ),
                     SizedBox(height: vahe / 4),
 
-
-
                     MaksumuseGraafik(),
-
-
-
 
                     Container(
                       height: 1,
@@ -641,11 +626,6 @@ class _KoduLehtState extends State<KoduLeht> {
         ));
   }
 }
-
-
-
-
-
 
 class ChartData {
   ChartData(this.x, this.y);

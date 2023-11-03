@@ -6,12 +6,12 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:testuus4/funktsioonid/graafikGen1.dart';
 import 'package:testuus4/funktsioonid/graafikGen2.dart';
-import 'package:testuus4/lehed/SeadmeGraafikLeht.dart';
+import 'package:testuus4/lehed/Seadme_Lehed/SeadmeGraafikLeht.dart';
 import 'package:testuus4/widgets/hoitatus.dart';
 import '../funktsioonid/seisukord.dart';
 import '../funktsioonid/token.dart';
-import 'DynaamilineTundideValimine.dart';
-import 'dynamicKoduLeht.dart';
+import 'Tundide_valimis_Lehed/DynaamilineTundideValimine.dart';
+import 'Põhi_Lehed/dynamicKoduLeht.dart';
 import 'package:testuus4/main.dart';
 import 'package:http/http.dart' as http;
 
@@ -492,7 +492,6 @@ SeadmeGraafikKoostamineGen2(
   var graafikud = Map<String, dynamic>();
   List temp = List.empty(growable: true);
 
-  
   var headers = {
     'Authorization': 'Bearer ${tokenMap[value]}',
   };

@@ -7,8 +7,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:testuus4/funktsioonid/maksumusSeadmeKohta.dart';
 import 'package:testuus4/main.dart';
-import 'dynamicSeadmeInfo.dart';
-import 'koduleht.dart';
+import 'Seadme_Lehed/dynamicSeadmeInfo.dart';
+import 'Põhi_Lehed/koduleht.dart';
 
 class MaksumuseGraafik extends StatefulWidget {
   @override
@@ -44,7 +44,6 @@ class _MaksumuseGraafikState extends State<MaksumuseGraafik> {
     }
 
     int j = 0;
-    
 
     for (var key in seadmeteMap.keys) {
       print("--------------");
@@ -70,25 +69,25 @@ class _MaksumuseGraafikState extends State<MaksumuseGraafik> {
       });
     }
 
-  double? findMaxY(List<ChartData> data) {
-  double? maxY;
-  for (var chartData in data) {
-    if (chartData.y != null) {
-      if (maxY == null || chartData.y! > maxY) {
-        maxY = chartData.y;
+    double? findMaxY(List<ChartData> data) {
+      double? maxY;
+      for (var chartData in data) {
+        if (chartData.y != null) {
+          if (maxY == null || chartData.y! > maxY) {
+            maxY = chartData.y;
+          }
+        }
       }
+      return maxY;
     }
-  }
-  return maxY;
-}
 
 // Now, you can call this method to get the maximum value.
     double? maxChartDataValue = findMaxY(chartData);
 
     setState(() {
-       if (maxChartDataValue == null) {
+      if (maxChartDataValue == null) {
         asi = 0;
-      }else{
+      } else {
         asi = maxChartDataValue;
       }
     });
@@ -188,13 +187,13 @@ class _MaksumuseGraafikState extends State<MaksumuseGraafik> {
                     dataSource: chartData,
                     xValueMapper: (ChartData data, _) => data.x,
                     yValueMapper: (ChartData data, _) {
-                                  final yValue = data.y;
-                                  return yValue == 0
-                                      ? 0
-                                      : yValue! < asi * 0.20
-                                          ? asi * 0.20
-                                          : yValue;
-                                },
+                      final yValue = data.y;
+                      return yValue == 0
+                          ? 0
+                          : yValue! < asi * 0.20
+                              ? asi * 0.20
+                              : yValue;
+                    },
                     color: Colors.green,
                     dataLabelSettings: DataLabelSettings(
                       isVisible: true,
@@ -202,16 +201,15 @@ class _MaksumuseGraafikState extends State<MaksumuseGraafik> {
                       textStyle: fontValgeVaike,
                       angle: 270,
                     ),
-                     dataLabelMapper: (ChartData data, _) {
-                                  // Display the data label only if the consumption is not 0
-                                  if (data.y == 0) {
-                                    return ''; // Customize this as needed
-                                  } else {
-                                    String temp3 =
-                                        data.y!.toStringAsFixed(3);
-                                    return ' $temp3';
-                                  }
-                                },
+                    dataLabelMapper: (ChartData data, _) {
+                      // Display the data label only if the consumption is not 0
+                      if (data.y == 0) {
+                        return ''; // Customize this as needed
+                      } else {
+                        String temp3 = data.y!.toStringAsFixed(3);
+                        return ' $temp3';
+                      }
+                    },
                   ),
                 ],
               ),

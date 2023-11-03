@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:testuus4/lehed/Login.dart';
+import 'package:testuus4/lehed/P%C3%B5hi_Lehed/Login.dart';
 import 'package:testuus4/lehed/abiLeht.dart';
 import 'package:testuus4/lehed/hindJoonise.dart';
 import 'package:testuus4/lehed/kasutajaSeaded.dart';

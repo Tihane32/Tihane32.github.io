@@ -4,13 +4,13 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:testuus4/funktsioonid/graafikGen1.dart';
 import 'package:testuus4/funktsioonid/graafikGen2.dart';
 import 'package:testuus4/lehed/GraafikusseSeadmeteValik.dart';
-import 'package:testuus4/lehed/dynamicKoduLeht.dart';
+import 'package:testuus4/lehed/P%C3%B5hi_Lehed/dynamicKoduLeht.dart';
 import 'package:testuus4/widgets/kinnitus.dart';
-import '../main.dart';
-import 'AbiLeht.dart';
+import '../../main.dart';
+import '../../widgets/AbiLeht.dart';
 import 'AutoTuniValik.dart';
-import 'TunniSeaded.dart';
-import 'keelatudTunnid.dart';
+import '../TunniSeaded.dart';
+import '../keelatudTunnid.dart';
 import 'keskimiseHinnaAluselTundideValimine.dart';
 import 'hinnaPiiriAluselTunideValimine.dart';
 import 'kopeeeriGraafikTundideValimine.dart';
@@ -339,7 +339,7 @@ class _DynamilineTundideValimineState extends State<DynamilineTundideValimine> {
                           Future.delayed(Duration(seconds: 5), () {
                             Navigator.of(context)
                                 .pop(); // Close the AlertDialog
-                           /* Navigator.push(
+                            /* Navigator.push(
                               context,
                               MaterialPageRoute(
                                 builder: (context) =>

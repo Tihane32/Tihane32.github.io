@@ -274,3 +274,33 @@ Graafikut tõlgendatakse järgnevalt:
 on - lülitus
 
 ehk antud juhul "0 0 21" on kell, "WED" on nädalapäev ja "true" on sisselülitus. Teisisõnu kolmapäeval kell 21:00 lülitatakse seade sisse.
+
+# 4. Graafiku koostamis funktsioonid
+
+## 4.1 keskmisehinna alusel graafiku loomine
+
+### 4.1.1 keskmisehinna arvutus
+
+```dart
+
+keskmineHindArvutaus(Map<int, dynamic> lulitus) {
+ return double;
+}
+
+```
+
+saadab tagasi keskmise hinna
+
+---
+
+## 4.2 Hinnapiiri alusel graafiku loomine
+
+```dart
+
+f
+
+```
+
+xxxx
+
+---

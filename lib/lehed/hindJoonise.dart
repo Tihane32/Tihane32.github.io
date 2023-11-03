@@ -4,11 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:testuus4/funktsioonid/Elering.dart';
 import 'package:flutter/services.dart';
-import 'package:testuus4/lehed/dynamicKoduLeht.dart';
+import 'package:testuus4/lehed/P%C3%B5hi_Lehed/dynamicKoduLeht.dart';
 import 'GraafikusseSeadmeteValik.dart';
-import 'Login.dart';
+import 'Põhi_Lehed/Login.dart';
 import 'package:vibration/vibration.dart';
-import 'koduleht.dart';
+import 'Põhi_Lehed/koduleht.dart';
 
 import 'dart:math';
 

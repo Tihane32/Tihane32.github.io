@@ -2,18 +2,18 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:testuus4/lehed/GraafikusseSeadmeteValik.dart';
-import 'package:testuus4/lehed/koduleht.dart';
-import 'package:testuus4/lehed/seadmeteListDynaamiline.dart';
+import 'package:testuus4/lehed/P%C3%B5hi_Lehed/koduleht.dart';
+import 'package:testuus4/lehed/P%C3%B5hi_Lehed/seadmeteListDynaamiline.dart';
 import 'package:testuus4/main.dart';
-import 'AbiLeht.dart';
+import '../../widgets/AbiLeht.dart';
 import 'Login.dart';
-import '../Arhiiv/drawer.dart';
-import '../Arhiiv/kaksTabelit.dart';
-import 'hindJoonise.dart';
+import '../../Arhiiv/drawer.dart';
+import '../../Arhiiv/kaksTabelit.dart';
+import '../hindJoonise.dart';
 import 'package:get/get.dart';
-import 'kasutajaSeaded.dart';
-import 'lisaSeade.dart';
-import '../Arhiiv/navigationBar.dart';
+import '../kasutajaSeaded.dart';
+import '../lisaSeade.dart';
+import '../../Arhiiv/navigationBar.dart';
 
 class DynaamilenieKoduLeht extends StatefulWidget {
   DynaamilenieKoduLeht({Key? key, required this.i}) : super(key: key);

@@ -6,7 +6,7 @@ class GruppiKoostamine extends StatelessWidget {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          title: Text('Draggable Boxes Example'),
+          title: Text('GruppiKoostamine'),
         ),
         body: Center(
           child: Column(

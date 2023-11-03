@@ -3,12 +3,12 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:testuus4/lehed/AbiLeht.dart';
-import 'package:testuus4/lehed/SeadmeGraafikLeht.dart';
+import 'package:testuus4/widgets/AbiLeht.dart';
+import 'package:testuus4/lehed/Seadme_Lehed/SeadmeGraafikLeht.dart';
 import 'package:testuus4/lehed/TarbimisLeht.dart';
 import 'package:testuus4/Arhiiv/seadmedKontoltNim.dart';
 import 'package:testuus4/main.dart';
-import '../Arhiiv/SeadmeTarbimisLeht.dart';
+import '../../Arhiiv/SeadmeTarbimisLeht.dart';
 
 class SeadmePildiMuutmine extends StatefulWidget {
   const SeadmePildiMuutmine(

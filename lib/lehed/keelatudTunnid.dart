@@ -3,12 +3,12 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:testuus4/lehed/GraafikusseSeadmeteValik.dart';
-import 'package:testuus4/lehed/dynamicKoduLeht.dart';
-import 'package:testuus4/lehed/keskimiseHinnaAluselTundideValimine.dart';
+import 'package:testuus4/lehed/P%C3%B5hi_Lehed/dynamicKoduLeht.dart';
+import 'package:testuus4/lehed/Tundide_valimis_Lehed/keskimiseHinnaAluselTundideValimine.dart';
 import '../funktsioonid/seisukord.dart';
 import '../main.dart';
-import 'AbiLeht.dart';
-import 'hinnaPiiriAluselTunideValimine.dart';
+import '../widgets/AbiLeht.dart';
+import 'Tundide_valimis_Lehed/hinnaPiiriAluselTunideValimine.dart';
 import 'package:http/http.dart' as http;
 
 class KeelatudTunnid extends StatefulWidget {

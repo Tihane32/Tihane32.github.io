@@ -4,7 +4,7 @@ import 'package:testuus4/Arhiiv/drawer.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:testuus4/funktsioonid/maksumus.dart';
 
-import '../Arhiiv/navigationBar.dart';
+import '../../Arhiiv/navigationBar.dart';
 
 class MinuPakett extends StatefulWidget {
   @override

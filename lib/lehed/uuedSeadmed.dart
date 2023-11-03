@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:testuus4/funktsioonid/seisukord.dart';
 import 'package:testuus4/funktsioonid/token.dart';
-import 'package:testuus4/lehed/dynamicKoduLeht.dart';
-import 'package:testuus4/lehed/koduleht.dart';
+import 'package:testuus4/lehed/P%C3%B5hi_Lehed/dynamicKoduLeht.dart';
+import 'package:testuus4/lehed/P%C3%B5hi_Lehed/koduleht.dart';
 import 'package:testuus4/Arhiiv/seadmedKontoltNim.dart';
 import 'package:testuus4/main.dart';
 import 'package:flutter/material.dart';
 import 'package:testuus4/funktsioonid/KeskmineHind.dart';
-import 'package:testuus4/lehed/Login.dart';
+import 'package:testuus4/lehed/P%C3%B5hi_Lehed/Login.dart';
 import 'package:testuus4/lehed/abiLeht.dart';
 import 'package:testuus4/Arhiiv/drawer.dart';
 import 'package:testuus4/lehed/uuedSeadmed.dart';
@@ -23,7 +23,7 @@ import 'package:testuus4/funktsioonid/maksumus.dart';
 import 'hindJoonise.dart';
 import '../funktsioonid/hetke_hind.dart';
 import 'package:testuus4/main.dart';
-import 'minuPakett.dart';
+import 'Põhi_Lehed/minuPakett.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../Arhiiv/navigationBar.dart';
 import 'dart:convert';
@@ -185,10 +185,8 @@ Future<void> sort(List<bool> checkboxValues,
       print("uuedSeadmed $uuedSeadmedString");
       uuedSeadmedString.remove(j);
 
-
 // Update the original map with the reindexed map
     }
-    
   }
   uuedSeadmedString;
   print("optsi $uuedSeadmedString");
