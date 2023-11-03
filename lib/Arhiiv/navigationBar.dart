@@ -1,10 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:testuus4/lehed/GraafikusseSeadmeteValik.dart';
-import 'package:testuus4/lehed/koduleht.dart';
-import 'package:testuus4/lehed/seadmeteListDynaamiline.dart';
+import 'package:testuus4/lehed/P%C3%B5hi_Lehed/koduleht.dart';
+import 'package:testuus4/lehed/P%C3%B5hi_Lehed/seadmeteListDynaamiline.dart';
 import 'package:testuus4/main.dart';
-import '../lehed/dynamicKoduLeht.dart';
+import '../lehed/Põhi_Lehed/dynamicKoduLeht.dart';
 import 'kaksTabelit.dart';
 import '../lehed/hindJoonise.dart';
 import 'package:get/get.dart';

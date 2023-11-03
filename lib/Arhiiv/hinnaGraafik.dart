@@ -7,9 +7,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:testuus4/funktsioonid/Elering.dart';
 
 import 'Graafik.dart';
-import '../lehed/Login.dart';
+import '../lehed/Põhi_Lehed/Login.dart';
 import 'kaksTabelit.dart';
-import '../lehed/koduleht.dart';
+import '../lehed/Põhi_Lehed/koduleht.dart';
 
 //Defineerime hinnagraafiku lehe
 

@@ -2,41 +2,32 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:testuus4/funktsioonid/lulitamine.dart';
 import 'dart:async';
-import 'package:testuus4/lehed/SeadmeGraafikLeht.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'GraafikusseSeadmeteValik.dart';
-import 'SeadmeYldInfo.dart';
-import 'dynamicKoduLeht.dart';
-import 'dart:convert';
+import '../GraafikusseSeadmeteValik.dart';
+import '../Põhi_Lehed/dynamicKoduLeht.dart';
 import 'package:testuus4/funktsioonid/seisukord.dart';
 import 'package:testuus4/main.dart';
+import '../Seadme_Lehed/dynamicSeadmeInfo.dart';
 
-import 'package:get/get.dart';
-
-import 'dynamicSeadmeInfo.dart';
-
-class SeadmeteList_yksikud extends StatefulWidget {
-  const SeadmeteList_yksikud({Key? key}) : super(key: key);
+class GruppiSeadmed extends StatefulWidget {
+  const GruppiSeadmed({Key? key}) : super(key: key);
 
   @override
-  State<SeadmeteList_yksikud> createState() => _SeadmeteList_yksikudState();
+  State<GruppiSeadmed> createState() => _GruppiSeadmedState();
 }
 
-class _SeadmeteList_yksikudState extends State<SeadmeteList_yksikud> {
+class _GruppiSeadmedState extends State<GruppiSeadmed> {
   bool isLoading = true;
-  late Map<String, List<String>> minuSeadmedK = {};
   //String onoffNupp = 'Shelly ON';
+  Map<String, dynamic> filteredDevices = {};
   @override
   void initState() {
-    SeadmeGraafikKontrollimineGen1();
-    SeadmeGraafikKontrollimineGen2();
-
     super.initState();
     fetchData();
   }
 
   Future<void> fetchData() async {
     await seisukord();
+    filteredDevices = filterDevices(gruppiMap);
     // Add any other data fetching or initialization code here if needed.
     // When done, set isLoading to false to display the content.
     setState(() {
@@ -69,7 +60,7 @@ class _SeadmeteList_yksikudState extends State<SeadmeteList_yksikud> {
 
     setState(() {
       canPressButton = false;
-      seadmeteMap = muudaSeadmeOlek(seadmeteMap, seade);
+      filteredDevices = muudaSeadmeOlek(filteredDevices, seade);
     });
 
     Timer(Duration(seconds: 3), () {
@@ -117,9 +108,9 @@ class _SeadmeteList_yksikudState extends State<SeadmeteList_yksikud> {
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
                 ),
-                itemCount: seadmeteMap.length + 1,
+                itemCount: filteredDevices.length + 1,
                 itemBuilder: (context, index) {
-                  if (index == seadmeteMap.length) {
+                  if (index == filteredDevices.length) {
                     return GestureDetector(
                       onTap: () {
                         Navigator.push(
@@ -151,9 +142,9 @@ class _SeadmeteList_yksikudState extends State<SeadmeteList_yksikud> {
                     );
                   }
 
-                  final seade = seadmeteMap.keys.elementAt(index);
-                  final pilt = seadmeteMap[seade]["Seadme_pilt"];
-                  final staatus = seadmeteMap[seade]["Seadme_olek"];
+                  final seade = filteredDevices.keys.elementAt(index);
+                  final pilt = filteredDevices[seade]["Seadme_pilt"];
+                  final staatus = filteredDevices[seade]["Seadme_olek"];
                   print('Staatus: $staatus');
                   return GestureDetector(
                     onTap: () {
@@ -161,8 +152,8 @@ class _SeadmeteList_yksikudState extends State<SeadmeteList_yksikud> {
                         context,
                         MaterialPageRoute(
                           builder: (context) => DunaamilineSeadmeLeht(
-                            seadmeNimi: seadmeteMap.keys.elementAt(index),
-                            SeadmeteMap: seadmeteMap,
+                            seadmeNimi: filteredDevices.keys.elementAt(index),
+                            SeadmeteMap: filteredDevices,
                             valitud: 0,
                           ),
                         ),
@@ -237,7 +228,7 @@ class _SeadmeteList_yksikudState extends State<SeadmeteList_yksikud> {
                                   padding: EdgeInsets.symmetric(vertical: 8),
                                   child: Center(
                                     child: Text(
-                                      seadmeteMap[seade]["Seadme_nimi"],
+                                      filteredDevices[seade]["Seadme_nimi"],
                                       style: TextStyle(
                                         color: Colors.white,
                                         fontSize: 18,
@@ -260,29 +251,21 @@ class _SeadmeteList_yksikudState extends State<SeadmeteList_yksikud> {
   }
 }
 
-SaaSeadmePilt(Map<String, dynamic> SeadmeteMap, SeadmeNimi) {
-  String deviceInfo = seadmeteMap[SeadmeNimi]["Seadme_pilt"];
-  print("------");
-  print(SeadmeteMap[SeadmeNimi]);
-  if (deviceInfo != null) {
-    String pilt = deviceInfo;
-    return pilt;
-  }
-  return null; // Device key not found in the map
-}
-
-SaaSeadmeolek(Map<String, dynamic> SeadmeteMap, SeadmeNimi) {
-  print("seamdetMap $seadmeteMap");
-  String deviceInfo = seadmeteMap[SeadmeNimi]["Seadme_olek"];
-  if (deviceInfo != null) {
-    String pilt = deviceInfo;
-    return pilt;
-  }
-  return null; // Device key not found in the map
-}
-
-muudaSeadmeOlek(Map<String, dynamic> SeadmeteMap, SeadmeNimi) {
+muudaSeadmeOlek(Map<String, dynamic> filteredDevices, SeadmeNimi) {
   lulitamine(SeadmeNimi);
 
   return seadmeteMap; // Device key not found in the map
+}
+
+Map<String, dynamic> filterDevices(Map<String, dynamic> gruppiMap) {
+  print('siin');
+  Map<String, dynamic> filteredDevices = {};
+
+  seadmeteMap.forEach((device, deviceData) {
+    if (gruppiMap['Kõik Seadmed']['Grupi_Seadmed'].contains(device)) {
+      filteredDevices[device] = deviceData;
+    }
+  });
+  print(filteredDevices);
+  return filteredDevices;
 }

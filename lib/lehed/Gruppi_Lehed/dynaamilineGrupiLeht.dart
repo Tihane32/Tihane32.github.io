@@ -4,37 +4,31 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:testuus4/lehed/SeadmeGraafikLeht.dart';
+import 'package:testuus4/widgets/AbiLeht.dart';
+import 'package:testuus4/lehed/Seadme_Lehed/SeadmeGraafikLeht.dart';
 import 'package:testuus4/lehed/TarbimisLeht.dart';
-import 'package:testuus4/lehed/dynamicKoduLeht.dart';
+import 'package:testuus4/lehed/P%C3%B5hi_Lehed/dynamicKoduLeht.dart';
 import 'package:testuus4/main.dart';
-import 'SeadmePildiMuutmine.dart';
-import 'SeadmeYldInfo.dart';
+import 'GrupiSeadmed.dart';
+import '../Seadme_Lehed/SeadmePildiMuutmine.dart';
+import '../Seadme_Lehed/SeadmeYldInfo.dart';
 
-class DunaamilineSeadmeLeht extends StatefulWidget {
-  DunaamilineSeadmeLeht(
-      {Key? key,
-      required this.seadmeNimi,
-      required this.SeadmeteMap,
-      required this.valitud})
+class DunaamilineGrupiLeht extends StatefulWidget {
+  DunaamilineGrupiLeht(
+      {Key? key, required this.gruppNimi, required this.valitud})
       : super(key: key);
 
-  final String seadmeNimi;
-  final Map<String, dynamic> SeadmeteMap;
+  final String gruppNimi;
   int valitud;
   @override
-  _DunaamilineSeadmeLehtState createState() => _DunaamilineSeadmeLehtState(
-      seadmeNimi: seadmeNimi, SeadmeteMap: SeadmeteMap, valitud: valitud);
+  _DunaamilineGrupiLehtState createState() =>
+      _DunaamilineGrupiLehtState(gruppNimi: gruppNimi, valitud: valitud);
 }
 
-class _DunaamilineSeadmeLehtState extends State<DunaamilineSeadmeLeht> {
-  _DunaamilineSeadmeLehtState(
-      {Key? key,
-      required this.seadmeNimi,
-      required this.SeadmeteMap,
-      required this.valitud});
-  String seadmeNimi;
-  Map<String, dynamic> SeadmeteMap;
+class _DunaamilineGrupiLehtState extends State<DunaamilineGrupiLeht> {
+  _DunaamilineGrupiLehtState(
+      {Key? key, required this.gruppNimi, required this.valitud});
+  String gruppNimi;
   int valitud;
   String selectedPage = 'Lülitusgraafik';
 
@@ -56,24 +50,10 @@ class _DunaamilineSeadmeLehtState extends State<DunaamilineSeadmeLeht> {
       selectedPage = "Seaded";
     }
     lehedSeadme = [
-      SeadmeGraafikuLeht(
-        SeadmeteMap: SeadmeteMap,
-        seadmeNimi: seadmeNimi,
-      ),
-      TarbimisLeht(
-        SeadmeteMap: SeadmeteMap,
-        seadmeNimi: seadmeNimi,
-      ),
-      SeadmeYldinfoLeht(
-        SeadmeteMap: SeadmeteMap,
-        seadmeNimi: seadmeNimi,
-      ),
-      SeadmePildiMuutmine(
-        pilt: pilt,
-        uusPilt: uusPilt,
-        SeadmeteMap: SeadmeteMap,
-        seadmeNimi: seadmeNimi,
-      ),
+      AbiLeht(),
+      AbiLeht(),
+      GruppiSeadmed(),
+      AbiLeht(),
     ];
   }
 
@@ -88,20 +68,20 @@ class _DunaamilineSeadmeLehtState extends State<DunaamilineSeadmeLeht> {
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            IconButton(onPressed: () {
-              Navigator.push(
+            IconButton(
+                onPressed: () {
+                  Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => DynaamilenieKoduLeht(i: 1,
-
-                       
+                      builder: (context) => DynaamilenieKoduLeht(
+                        i: 1,
                       ),
                     ),
                   );
-            }, icon: const Icon(Icons.arrow_back)),
-
+                },
+                icon: const Icon(Icons.arrow_back)),
             Text(
-              seadmeteMap[seadmeNimi]["Seadme_nimi"],
+              gruppNimi,
               style: GoogleFonts.roboto(
                 textStyle: const TextStyle(fontSize: 25),
               ),
@@ -119,7 +99,8 @@ class _DunaamilineSeadmeLehtState extends State<DunaamilineSeadmeLeht> {
               padding: const EdgeInsets.symmetric(horizontal: 10),
               child: DropdownButton<String>(
                 icon: const Icon(Icons.menu),
-                value: selectedPage, style: font,
+                value: selectedPage,
+                style: font,
                 onChanged: (String? newValue) {
                   setState(() {
                     selectedPage = newValue!;
@@ -128,13 +109,21 @@ class _DunaamilineSeadmeLehtState extends State<DunaamilineSeadmeLeht> {
                     valitud = 0;
                   } else if (selectedPage == 'Tarbimisgraafik') {
                     valitud = 1;
-                  } else if (selectedPage == 'Seaded') {
+                  } else if (selectedPage == 'Seadmed') {
                     valitud = 2;
+                    print(gruppiMap);
+                    print(seadmeteMap);
+                  } else if (selectedPage == 'Sätted') {
+                    valitud = 3;
                   }
                 },
-                underline: Container(), // or SizedBox.shrink()
-                items: <String>['Lülitusgraafik', 'Tarbimisgraafik', 'Seaded']
-                    .map((String value) {
+                underline: Container(),
+                items: <String>[
+                  'Lülitusgraafik',
+                  'Tarbimisgraafik',
+                  'Seadmed',
+                  'Sätted'
+                ].map((String value) {
                   return DropdownMenuItem<String>(
                     value: value,
                     child: Text(
@@ -181,18 +170,8 @@ class _DunaamilineSeadmeLehtState extends State<DunaamilineSeadmeLeht> {
               setState(() {
                 koduindex = kodu;
                 if (koduindex == 0) {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => DunaamilineSeadmeLeht(
-                        seadmeNimi: seadmeNimi,
-                        SeadmeteMap: SeadmeteMap,
-                        valitud: 2,
-                      ),
-                    ),
-                  );
                 } else if (koduindex == 1) {
-                  pildiMuutmine(seadmeNimi, uusPilt);
+                  //pildiMuutmine(seadmeNimi, uusPilt);
                   showDialog(
                       context: context,
                       builder: (context) => AlertDialog(
@@ -216,19 +195,7 @@ class _DunaamilineSeadmeLehtState extends State<DunaamilineSeadmeLeht> {
                             ),
                           ));
                   HapticFeedback.vibrate();
-                  Future.delayed(const Duration(seconds: 5), () {
-                    Navigator.of(context).pop(); // Close the AlertDialog
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => DunaamilineSeadmeLeht(
-                          seadmeNimi: seadmeNimi,
-                          SeadmeteMap: SeadmeteMap,
-                          valitud: 2,
-                        ),
-                      ),
-                    );
-                  });
+                  Future.delayed(const Duration(seconds: 5), () {});
                 }
               });
             }),

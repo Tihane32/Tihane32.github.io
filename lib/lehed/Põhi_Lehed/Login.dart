@@ -3,18 +3,18 @@ import 'dart:convert';
 import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:testuus4/lehed/dynamicKoduLeht.dart';
+import 'package:testuus4/lehed/P%C3%B5hi_Lehed/dynamicKoduLeht.dart';
 import 'package:testuus4/Arhiiv/kaksTabelit.dart';
 import 'package:testuus4/lehed/lisaSeade.dart';
 //import '/SeadmeSeaded.dart';
-import 'package:testuus4/lehed/seadmeSeaded.dart';
+import 'package:testuus4/lehed/Seadme_Lehed/seadmeSeaded.dart';
 import 'package:testuus4/lehed/uuedSeadmed.dart';
 import 'package:testuus4/main.dart';
-import '../Arhiiv/energiaGraafik.dart';
+import '../../Arhiiv/energiaGraafik.dart';
 import 'package:testuus4/funktsioonid/seisukord.dart';
-import 'package:testuus4/lehed/koduleht.dart';
+import 'package:testuus4/lehed/P%C3%B5hi_Lehed/koduleht.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'uuedSeadmed.dart';
+import '../uuedSeadmed.dart';
 
 class LoginPage extends StatefulWidget {
   @override

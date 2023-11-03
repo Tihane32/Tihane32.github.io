@@ -1,18 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '../funktsioonid/Elering.dart';
-import '../main.dart';
-import 'AbiLeht.dart';
+import '../../funktsioonid/Elering.dart';
+import '../../funktsioonid/KeskmineHindArvutus.dart';
+import '../../main.dart';
 import 'DynaamilineTundideValimine.dart';
-import 'GraafikusseSeadmeteValik.dart';
-import 'dynamicKoduLeht.dart';
-import 'koduleht.dart';
 import 'dart:math';
-import 'package:testuus4/Arhiiv/kaksTabelit.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
-import 'keskimiseHinnaAluselTundideValimine.dart';
-import 'kopeeeriGraafikTundideValimine.dart';
 
 class HinnaPiiriAluselTundideValimine extends StatefulWidget {
   final Function updateLulitusMap;
@@ -270,7 +264,7 @@ class _HinnaPiiriAluselTundideValimineState
           LulitusMapParemVaartustamine(hinnaPiir, lulitus, lulitusMapParemHP);
       lulitusMap = lulitusMapParemHP;
     });
-    updateLulitusMap(lulitusMap,"Hinnapiir");
+    updateLulitusMap(lulitusMap, "Hinnapiir");
     print("hinnapiir: $lulitusMap");
   }
 
@@ -472,7 +466,7 @@ class _HinnaPiiriAluselTundideValimineState
                                         LulitusMapVasakVaartustamine(hinnaPiir,
                                             lulitus, lulitusMapVasakHP);
                                   });
-                                  updateLulitusMap(lulitusMap,"Hinnapiir");
+                                  updateLulitusMap(lulitusMap, "Hinnapiir");
                                 },
                                 decoration: InputDecoration(
                                   border: InputBorder.none,
@@ -561,7 +555,7 @@ class _HinnaPiiriAluselTundideValimineState
                                   TunniVarviMuutus(rowIndex, lulitusMapParemHP);
                               lulitusMap = lulitusMapParemHP;
                             });
-                            updateLulitusMap(lulitusMap,"Hinnapiir");
+                            updateLulitusMap(lulitusMap, "Hinnapiir");
                           },
                           borderRadius: BorderRadius.only(
                               bottomLeft: Radius.circular(20),
@@ -600,7 +594,7 @@ class _HinnaPiiriAluselTundideValimineState
                                   TunniVarviMuutus(rowIndex, lulitusMapVasakHP);
                               lulitusMap = lulitusMapParemHP;
                             });
-                            updateLulitusMap(lulitusMap,"Hinnapiir");
+                            updateLulitusMap(lulitusMap, "Hinnapiir");
                           },
                           borderRadius: BorderRadius.only(
                               topRight: Radius.circular(20),
@@ -1034,30 +1028,6 @@ class _HinnaPiiriAluselTundideValimineState
         ),
       ),
     );
-  }
-}
-
-keskmineHindArvutaus(Map<int, dynamic> lulitus) {
-  double summa = 0;
-
-  double AVG;
-
-  int hindNr = 0;
-
-  num mod = pow(10.0, 2);
-
-  lulitus.values.forEach((data) {
-    summa += data[1];
-
-    hindNr++;
-  });
-
-  AVG = summa / hindNr;
-
-  if (hindNr > 0) {
-    return ((AVG * mod).round().toDouble() / mod);
-  } else {
-    return 0;
   }
 }
 

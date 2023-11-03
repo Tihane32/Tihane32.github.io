@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:testuus4/lehed/AbiLeht.dart';
-import 'package:testuus4/lehed/SeadmeGraafikLeht.dart';
+import 'package:testuus4/widgets/AbiLeht.dart';
+import 'package:testuus4/lehed/Seadme_Lehed/SeadmeGraafikLeht.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
@@ -10,14 +10,14 @@ import 'package:testuus4/funktsioonid/KeskmineHind.dart';
 import 'package:testuus4/funktsioonid/hetketarbimine.dart';
 import 'package:testuus4/funktsioonid/tarbimine.dart';
 import 'package:testuus4/funktsioonid/maksumus.dart';
-import 'package:testuus4/lehed/koduleht.dart';
+import 'package:testuus4/lehed/P%C3%B5hi_Lehed/koduleht.dart';
 import '../funktsioonid/hetke_hind.dart';
 import 'package:testuus4/main.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:testuus4/main.dart';
-import '../lehed/SeadmeYldInfo.dart';
+import '../lehed/Seadme_Lehed/SeadmeYldInfo.dart';
 
 class SeadmeTarbimineLeht extends StatefulWidget {
   const SeadmeTarbimineLeht({Key? key, required this.seadmeNimi})

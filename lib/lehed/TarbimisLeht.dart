@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:testuus4/funktsioonid/maksumusSeadmeKohta.dart';
-import 'package:testuus4/lehed/SeadmeGraafikLeht.dart';
+import 'package:testuus4/lehed/Seadme_Lehed/SeadmeGraafikLeht.dart';
 import 'package:testuus4/Arhiiv/SeadmeTarbimisLeht.dart';
-import 'SeadmeYldInfo.dart';
+import 'Seadme_Lehed/SeadmeYldInfo.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:testuus4/main.dart';

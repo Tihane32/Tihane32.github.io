@@ -4,11 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
-import 'package:testuus4/lehed/SeadmeGraafikLeht.dart';
+import 'package:testuus4/lehed/Seadme_Lehed/SeadmeGraafikLeht.dart';
 import 'package:testuus4/Arhiiv/SeadmeTarbimisLeht.dart';
 import 'package:testuus4/lehed/TarbimisLeht.dart';
-import 'package:testuus4/lehed/dynamicSeadmeInfo.dart';
-import 'package:testuus4/lehed/koduleht.dart';
+import 'package:testuus4/lehed/Seadme_Lehed/dynamicSeadmeInfo.dart';
+import 'package:testuus4/lehed/P%C3%B5hi_Lehed/koduleht.dart';
 import 'package:testuus4/main.dart';
 
 import '../funktsioonid/maksumusSeadmeKohta.dart';
@@ -34,9 +34,7 @@ class _TarbimiseGraafikState extends State<TarbimiseGraafik> {
   num kokku = 0;
   double asi2 = 0;
 
-
-
- function() async {
+  function() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     Map<String, dynamic> maksumuseMap = {};
     //Võtab mälust 'users'-i asukohast väärtused
@@ -53,7 +51,6 @@ class _TarbimiseGraafikState extends State<TarbimiseGraafik> {
     }
 
     int j = 0;
-    
 
     for (var key in seadmeteMap.keys) {
       print("--------------");
@@ -79,33 +76,29 @@ class _TarbimiseGraafikState extends State<TarbimiseGraafik> {
       });
     }
 
-  double? findMaxY(List<ChartData> data) {
-  double? maxY;
-  for (var chartData in data) {
-    if (chartData.y != null) {
-      if (maxY == null || chartData.y! > maxY) {
-        maxY = chartData.y;
+    double? findMaxY(List<ChartData> data) {
+      double? maxY;
+      for (var chartData in data) {
+        if (chartData.y != null) {
+          if (maxY == null || chartData.y! > maxY) {
+            maxY = chartData.y;
+          }
+        }
       }
+      return maxY;
     }
-  }
-  return maxY;
-}
 
 // Now, you can call this method to get the maximum value.
     double? maxChartDataValue = findMaxY(chartData);
 
     setState(() {
-       if (maxChartDataValue == null) {
+      if (maxChartDataValue == null) {
         asi = 0;
-      }else{
+      } else {
         asi = maxChartDataValue;
       }
     });
   }
-
-
-
-
 
   getChartData() {
     print("tarbimiseMap: $tarbimiseMap");
@@ -137,10 +130,9 @@ class _TarbimiseGraafikState extends State<TarbimiseGraafik> {
     setState(() {
       if (maxChartDataValue == null) {
         asi = 0;
-      }else{
+      } else {
         asi = maxChartDataValue;
       }
-      
     });
     //return chartData;
   }

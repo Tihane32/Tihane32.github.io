@@ -2,12 +2,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:testuus4/funktsioonid/lulitamine.dart';
 import 'dart:async';
-import 'package:testuus4/lehed/SeadmeGraafikLeht.dart';
+import 'package:testuus4/lehed/Seadme_Lehed/SeadmeGraafikLeht.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'GraafikusseSeadmeteValik.dart';
-import 'SeadmeYldInfo.dart';
-import 'SeadmeteList_gruppid.dart';
-import 'SeadmeteList_yksikud.dart';
+import '../GraafikusseSeadmeteValik.dart';
+import '../Seadme_Lehed/SeadmeYldInfo.dart';
+import '../Gruppi_Lehed/SeadmeteList_gruppid.dart';
+import '../Seadme_Lehed/SeadmeteList_yksikud.dart';
 import 'dynamicKoduLeht.dart';
 import 'dart:convert';
 import 'package:testuus4/funktsioonid/seisukord.dart';
@@ -15,7 +15,7 @@ import 'package:testuus4/main.dart';
 
 import 'package:get/get.dart';
 
-import 'dynamicSeadmeInfo.dart';
+import '../Seadme_Lehed/dynamicSeadmeInfo.dart';
 
 class SeadmeteListPage extends StatelessWidget {
   @override

@@ -2,19 +2,20 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:testuus4/funktsioonid/lulitamine.dart';
 import 'dart:async';
-import 'package:testuus4/lehed/SeadmeGraafikLeht.dart';
+import 'package:testuus4/lehed/Seadme_Lehed/SeadmeGraafikLeht.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:testuus4/lehed/abiLeht.dart';
-import 'GraafikusseSeadmeteValik.dart';
-import 'SeadmeYldInfo.dart';
-import 'dynamicKoduLeht.dart';
+import '../GraafikusseSeadmeteValik.dart';
+import '../Seadme_Lehed/SeadmeYldInfo.dart';
+import 'dynaamilineGrupiLeht.dart';
+import '../Põhi_Lehed/dynamicKoduLeht.dart';
 import 'dart:convert';
 import 'package:testuus4/funktsioonid/seisukord.dart';
 import 'package:testuus4/main.dart';
 
 import 'package:get/get.dart';
 
-import 'dynamicSeadmeInfo.dart';
+import '../Seadme_Lehed/dynamicSeadmeInfo.dart';
 import 'gruppiKoostamine.dart';
 
 class SeadmeteList_gruppid extends StatefulWidget {
@@ -152,7 +153,12 @@ class _SeadmeteList_gruppidState extends State<SeadmeteList_gruppid> {
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => AbiLeht()),
+                        MaterialPageRoute(
+                          builder: (context) => DunaamilineGrupiLeht(
+                            gruppNimi: gruppiMap.keys.elementAt(index),
+                            valitud: 0,
+                          ),
+                        ),
                       );
                     },
                     child: Padding(

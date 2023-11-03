@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:testuus4/funktsioonid/lulitamine.dart';
 import 'package:testuus4/lehed/hindJoonise.dart';
-import '../lehed/Login.dart';
-import '../lehed/koduleht.dart';
+import '../lehed/Põhi_Lehed/Login.dart';
+import '../lehed/Põhi_Lehed/koduleht.dart';
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../lehed/seadmeSeaded.dart';
+import '../lehed/Seadme_Lehed/seadmeSeaded.dart';
 import 'package:testuus4/funktsioonid/seisukord.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:testuus4/main.dart';
 import '../lehed/kasutajaSeaded.dart';
 import '../lehed/rakenduseSeaded.dart';
-import '../lehed/AbiLeht.dart';
+import '../widgets/AbiLeht.dart';
 import 'drawer.dart';
 import 'navigationBar.dart';
 
