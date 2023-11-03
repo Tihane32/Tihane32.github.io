@@ -1,33 +1,19 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:testuus4/lehed/Login.dart';
-import 'package:testuus4/lehed/SeadmeGraafikLeht.dart';
-import 'package:testuus4/lehed/abiLeht.dart';
-import 'package:testuus4/lehed/drawer.dart';
-import 'package:testuus4/lehed/kasutajaSeaded.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:testuus4/lehed/keskimiseHinnaAluselTundideValimine.dart';
-import 'package:testuus4/lehed/seadmeteList.dart';
+import 'package:testuus4/funktsioonid/graafikGen1.dart';
+import 'package:testuus4/funktsioonid/graafikGen2.dart';
+import 'package:testuus4/lehed/Seadme_Lehed/SeadmeGraafikLeht.dart';
+import 'package:testuus4/widgets/hoitatus.dart';
 import '../funktsioonid/seisukord.dart';
-import 'dynamicKoduLeht.dart';
-import 'navigationBar.dart';
+import '../funktsioonid/token.dart';
+import 'Tundide_valimis_Lehed/DynaamilineTundideValimine.dart';
+import 'Põhi_Lehed/dynamicKoduLeht.dart';
 import 'package:testuus4/main.dart';
-import 'package:flutter/material.dart';
-import '../funktsioonid/graafikGen2.dart';
 import 'package:http/http.dart' as http;
-import 'dart:convert';
-import 'package:shared_preferences/shared_preferences.dart';
-
-class SeadmeteValmisPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: SeadmeteListValimine(),
-    );
-  }
-}
 
 class SeadmeteListValimine extends StatefulWidget {
   const SeadmeteListValimine({Key? key}) : super(key: key);
@@ -38,20 +24,12 @@ class SeadmeteListValimine extends StatefulWidget {
 
 class _SeadmeteListValimineState extends State<SeadmeteListValimine> {
   Map<String, bool> ValitudSeadmed = {};
-  bool isLoading = true;
-  late Map<String, List<String>> minuSeadmedK = {};
+  bool isLoading = false;
+
   dynamic seadmeGraafik;
   @override
-  void initState() {
-    //seisukord();
-    _submitForm();
-    super.initState();
-    ValitudSeadmed = valitudSeadmeteNullimine(SeadmeteMap);
-  }
-
   int koduindex = 1;
 
-  Map<String, List<String>> SeadmeteMap = {};
   Set<String> selectedPictures = Set<String>();
 
   void toggleSelection(String pictureName) {
@@ -64,58 +42,26 @@ class _SeadmeteListValimineState extends State<SeadmeteListValimine> {
     });
   }
 
-  Future _submitForm() async {
-    minuSeadmedK.clear();
-    SharedPreferences prefs = await SharedPreferences.getInstance();
+  _submitForm() async {
+    await SeadmeGraafikKontrollimineGen1();
+
     //await prefs.clear();
 
-    String? storedJsonMap = prefs.getString('seadmed');
-    print(storedJsonMap);
-    if (storedJsonMap != null) {
-      await seisukord();
-      storedJsonMap = prefs.getString('seadmed');
-      Map<String, dynamic> storedMap = json.decode(storedJsonMap!);
-      await Future.delayed(const Duration(seconds: 3));
-      var i = 0;
-      for (String Seade in storedMap.keys) {
-        var id = storedMap['Seade$i']['Seadme_ID'];
-        var name = storedMap['Seade$i']['Seadme_nimi'];
-        var pistik = storedMap['Seade$i']['Seadme_pistik'];
-        var olek = storedMap['Seade$i']['Seadme_olek'];
-        print('olek: $olek');
-        Map<String, List<String>> ajutineMap = {
-          name: ['assets/boiler1.jpg', '$id', '$olek', '$pistik', 'jah'],
-        };
-        minuSeadmedK.addAll(ajutineMap);
-        i++;
-      }
-      //TODO: eemalda j'rgmine rida kui gen2 tgraafik tootab
-      minuSeadmedK['Shelly Pro PM']![4] = 'ei';
-      print('seadmed');
-      print(minuSeadmedK);
-      print(SeadmeteMap);
-    }
-    setState(() {
-      SeadmeteMap = minuSeadmedK;
-      isLoading = false;
-    });
+    /* minuSeadmedK.addAll(ajutineMap);
+        if (minuSeadmedK[name]![4] == '1') {
+          minuSeadmedK[name]![5] = await SeadmeGraafikKontrollimineGen1(id);
+        } else if (minuSeadmedK[name]![4] == '2') {
+          minuSeadmedK[name]![5] =
+              'ei'; //await SeadmeGraafikKontrollimineGen2(id);
+        }*/
   }
 
-  bool canPressButton = true;
+  @override
+  initState() {
+    //_submitForm();
+    ValitudSeadmed = valitudSeadmeteNullimine();
 
-  void _handleButtonPress(seade) {
-    if (!canPressButton) return;
-
-    setState(() {
-      canPressButton = false;
-      SeadmeteMap = muudaSeadmeOlek(SeadmeteMap, seade);
-    });
-
-    Timer(Duration(seconds: 3), () {
-      setState(() {
-        canPressButton = true;
-      });
-    });
+    super.initState();
   }
 
   @override
@@ -141,15 +87,15 @@ class _SeadmeteListValimineState extends State<SeadmeteListValimine> {
                   childAspectRatio: MediaQuery.of(context).size.width /
                       (MediaQuery.of(context).size.height / 5),
                 ),
-                itemCount: SeadmeteMap.length,
+                itemCount: seadmeteMap.length,
                 itemBuilder: (context, index) {
-                  final seade = SeadmeteMap.keys.elementAt(index);
-                  final pilt = SaaSeadmePilt(SeadmeteMap, seade);
-                  final staatus = SaaSeadmeolek(SeadmeteMap, seade);
-                  final graafik = SaaSeadmegraafik(SeadmeteMap, seade);
+                  final seade = seadmeteMap.keys.elementAt(index);
+                  final pilt = seadmeteMap[seade]["Seadme_pilt"];
+                  final staatus = seadmeteMap[seade]["Seadme_olek"];
+
                   return GestureDetector(
                     onTap: () {
-                      if (SeadmeteMap[seade]![2] != 'Offline') {
+                      if (seadmeteMap[seade]["Seadme_olek"] != 'Offline') {
                         setState(() {
                           if (ValitudSeadmed[seade] == false) {
                             ValitudSeadmed[seade] = true;
@@ -157,7 +103,6 @@ class _SeadmeteListValimineState extends State<SeadmeteListValimine> {
                             ValitudSeadmed[seade] = false;
                           }
                         });
-                        print(ValitudSeadmed[seade]);
                       } else {
                         showDialog(
                             context: context,
@@ -187,7 +132,7 @@ class _SeadmeteListValimineState extends State<SeadmeteListValimine> {
                           child: Stack(
                             children: [
                               Container(
-                                  color: ValitudSeadmed[seade] == true
+                                  color: ValitudSeadmed[index] == true
                                       ? Color.fromARGB(255, 177, 245, 180)
                                       : Color.fromARGB(255, 236, 228, 228)),
                               Center(
@@ -204,7 +149,7 @@ class _SeadmeteListValimineState extends State<SeadmeteListValimine> {
                               Positioned(
                                 top: 8,
                                 right: 8,
-                                child: graafik == 'ei'
+                                child: seadmeteMap[seade]["Graafik"] == 'ei'
                                     ? IconButton(
                                         iconSize: 60,
                                         icon: Icon(
@@ -229,23 +174,90 @@ class _SeadmeteListValimineState extends State<SeadmeteListValimine> {
                                           color: Colors.blue,
                                         ),
                                         onPressed: () async {
-                                          if (SeadmeteMap[seade]![2] !=
-                                              'Offline') {
-                                            var temp =
-                                                await SeadmeGraafikKoostamineGen1(
-                                                    SeadmeteMap[seade]![2]);
+                                          if (seadmeteMap[seade]
+                                                  ["Seadme_generatsioon"] ==
+                                              1) {
+                                            if (seadmeteMap[seade]
+                                                    ["Seadme_olek"] !=
+                                                'Offline') {
+                                              var temp =
+                                                  await SeadmeGraafikKoostamineGen1(
+                                                      seade);
 
-                                            setState(() {
-                                              seadmeGraafik = temp;
-                                            });
+                                              setState(() {
+                                                seadmeGraafik = temp;
+                                              });
+                                            }
+                                          } else {
+                                            if (seadmeteMap[seade]
+                                                    ["Seadme_olek"] !=
+                                                'Offline') {
+                                              var temp =
+                                                  await SeadmeGraafikKoostamineGen2(
+                                                      seade);
+
+                                              setState(() {
+                                                seadmeGraafik = temp;
+                                              });
+                                            }
                                           }
                                           showDialog(
-                                              context: context,
-                                              builder: (context) => AlertDialog(
-                                                    title: Text(
-                                                        '$seade graafik: \n' +
-                                                            seadmeGraafik),
-                                                  ));
+                                            context: context,
+                                            builder: (context) => AlertDialog(
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.all(
+                                                    Radius.circular(10.0)),
+                                              ),
+                                              titlePadding:
+                                                  EdgeInsets.only(top: 10.0),
+                                              contentPadding:
+                                                  EdgeInsets.only(top: 10.0),
+                                              title: Align(
+                                                alignment: Alignment.center,
+                                                child: Text(
+                                                    '${seadmeteMap[seade]["Seadme_nimi"]} graafik:'),
+                                              ),
+                                              content: Container(
+                                                height: 528,
+                                                child: Column(
+                                                  children: List.generate(
+                                                    seadmeGraafik.length,
+                                                    (index) {
+                                                      var item =
+                                                          seadmeGraafik[index];
+                                                      return Container(
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          color: item == 'on'
+                                                              ? Colors.green
+                                                              : Color.fromARGB(
+                                                                  255,
+                                                                  202,
+                                                                  200,
+                                                                  200),
+                                                          border: Border.all(
+                                                              color: Color
+                                                                  .fromARGB(82,
+                                                                      0, 0, 0),
+                                                              width: 0.5),
+                                                        ),
+                                                        child: Align(
+                                                          alignment:
+                                                              Alignment.center,
+                                                          child: Text(
+                                                            index < 10
+                                                                ? "0${index.toString()}:00"
+                                                                : "${index.toString()}:00",
+                                                            style: font,
+                                                          ),
+                                                        ),
+                                                      );
+                                                    },
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          );
                                         },
                                       ),
                               ),
@@ -274,7 +286,7 @@ class _SeadmeteListValimineState extends State<SeadmeteListValimine> {
                                   padding: EdgeInsets.symmetric(vertical: 8),
                                   child: Center(
                                     child: Text(
-                                      seade,
+                                      seadmeteMap[seade]["Seadme_nimi"],
                                       style: TextStyle(
                                         color: Colors.white,
                                         fontSize: 18,
@@ -319,13 +331,23 @@ class _SeadmeteListValimineState extends State<SeadmeteListValimine> {
                     MaterialPageRoute(
                         builder: (context) => DynaamilenieKoduLeht(i: 1)));
               } else if (koduindex == 1) {
-                Navigator.push(
-                  //Kui vajutatakse Teie seade ikooni peale, siis viiakse Seadmetelisamine lehele
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) =>
-                          KeskmiseHinnaAluselTundideValimine()),
-                );
+                if (ValitudSeadmed.values.any((value) => value == true)) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => DynamilineTundideValimine(
+                              valitudSeadmed: ValitudSeadmed,
+                              i: 0,
+                              luba: '',
+                              eelmineleht: 0,
+                            )),
+                  );
+                } else {
+                  Hoiatus(
+                    context,
+                    'Enne graafiku koostamist valige kaasatavad seadmed!',
+                  );
+                }
               }
             });
           }),
@@ -333,62 +355,26 @@ class _SeadmeteListValimineState extends State<SeadmeteListValimine> {
   }
 }
 
-SaaSeadmePilt(Map<String, List<String>> SeadmeteMap, SeadmeNimi) {
-  List<String>? deviceInfo = SeadmeteMap[SeadmeNimi];
-  if (deviceInfo != null) {
-    String pilt = deviceInfo[0];
-    return pilt;
-  }
-  return null; // Device key not found in the map
-}
-
-SaaSeadmeolek(Map<String, List<String>> SeadmeteMap, SeadmeNimi) {
-  List<String>? deviceInfo = SeadmeteMap[SeadmeNimi];
-  if (deviceInfo != null) {
-    String olek = deviceInfo[2];
-    return olek;
-  }
-  return null; // Device key not found in the map
-}
-
-muudaSeadmeOlek(Map<String, List<String>> SeadmeteMap, SeadmeNimi) {
-  List<String>? deviceInfo = SeadmeteMap[SeadmeNimi];
-  if (deviceInfo != null) {
-    String status = deviceInfo[2];
-
-    if (status == 'on') {
-      deviceInfo[2] = 'off';
-      SeadmeteMap[SeadmeNimi] = deviceInfo;
-    } else if (status == 'off') {
-      deviceInfo[2] = 'on';
-      SeadmeteMap[SeadmeNimi] = deviceInfo;
-    }
-    return SeadmeteMap;
-  }
-  return SeadmeteMap; // Device key not found in the map
-}
-
-Map<String, bool> valitudSeadmeteNullimine(
-    Map<String, List<String>> SeadmeteMap) {
+Map<String, bool> valitudSeadmeteNullimine() {
   Map<String, bool> ValitudSeadmed = {};
-  for (String seade in SeadmeteMap.keys) {
-    ValitudSeadmed[seade] = false;
-  }
-  print('ValitudSeadmed :');
-  print(ValitudSeadmed);
+  seadmeteMap.forEach((key, value) async {
+    ValitudSeadmed[key] = false;
+  });
   return ValitudSeadmed;
 }
 
-SaaSeadmegraafik(Map<String, List<String>> SeadmeteMap, SeadmeNimi) {
-  List<String>? deviceInfo = SeadmeteMap[SeadmeNimi];
+SaaSeadmegraafik(SeadmeNimi) {
+  String deviceInfo = seadmeteMap[SeadmeNimi];
   if (deviceInfo != null) {
-    String graafik = deviceInfo[4];
+    String graafik = deviceInfo[5];
     return graafik;
   }
   return null; // Device key not found in the map
 }
 
 SeadmeGraafikKoostamineGen1(String value) async {
+  bool grafikOlems = false;
+  DateTime now = DateTime.now();
   SharedPreferences prefs = await SharedPreferences.getInstance();
   String? storedKey = prefs.getString('key');
   String storedKeyString = jsonDecode(storedKey!);
@@ -398,11 +384,11 @@ SeadmeGraafikKoostamineGen1(String value) async {
 
   var data = {
     'channel': '0',
-    'id': '80646f81ad9a',
+    'id': value,
     'auth_key': storedKeyString,
   };
 
-  var url = Uri.parse('https://shelly-64-eu.shelly.cloud/device/settings');
+  var url = Uri.parse('${seadmeteMap[value]["api_url"]}/device/settings');
 
   var res = await http.post(url, headers: headers, body: data);
 
@@ -414,42 +400,218 @@ SeadmeGraafikKoostamineGen1(String value) async {
   var seadmeGraafik1 =
       httpPackageJson['data']['device_settings']['relays'][0]['schedule_rules'];
 
-  print('seadme graafik enne tootlemist');
-  print(seadmeGraafik1);
+  int paev = 0;
 
-  Map<int, String> map = {};
-
-  for (var item in seadmeGraafik1) {
-    var parts = item.split('-');
-    var time = int.parse(parts[0]);
-    var status = parts[2];
-    map[time] = status;
+  if (now.weekday == 7) {
+    paev = 0;
+  } else {
+    paev = now.weekday - 1;
   }
 
-  String? lastStatus;
-  List<String> seadmeGraafik2 = [];
-
-  for (int i = 0; i <= 2300; i += 100) {
-    if (map.containsKey(i)) {
-      lastStatus = map[i];
-    } else if (lastStatus != null) {
-      map[i] = lastStatus;
-    }
-
-    if (lastStatus != null) {
-      seadmeGraafik2
-          .add("${i.toString().padLeft(4, '0')}: \t \t \t \t $lastStatus \n");
+  for (var i = 0; i < seadmeGraafik1.length; i++) {
+    String mainString = seadmeGraafik1[i];
+    if (mainString.contains("-$paev-")) {
+      grafikOlems = true;
     }
   }
 
-  String seadmeGraafik3 = '';
+  if (grafikOlems) {
+    List<String> filledTimes = [];
+    List<String> graafikParis = [];
+    String? lastState;
 
-  for (var item in seadmeGraafik2) {
-    seadmeGraafik3 += item;
+    for (var i = 0; i < seadmeGraafik1.length; i++) {
+      var parts = seadmeGraafik1[i].split('-');
+      var currentTime = int.parse(parts[0]);
+      var state = parts[2];
+
+      if (i == 0) {
+        filledTimes.add(seadmeGraafik1[i]);
+      } else {
+        var prevParts = seadmeGraafik1[i - 1].split('-');
+        var prevTime = int.parse(prevParts[0]);
+        var timeDiff = currentTime - prevTime;
+
+        if (timeDiff > 100) {
+          for (var j = 1; j < timeDiff / 100; j++) {
+            filledTimes.add(
+                "${(prevTime + 100 * j).toString().padLeft(4, '0')}-0-$lastState");
+          }
+        }
+        filledTimes.add(seadmeGraafik1[i]);
+      }
+      lastState = state;
+    }
+
+    var lastParts = filledTimes.last.split('-');
+    var lastTime = int.parse(lastParts[0]);
+
+    while (lastTime < 2400) {
+      lastTime += 100;
+      filledTimes.add("${lastTime.toString().padLeft(4, '0')}-0-$lastState");
+    }
+    if (filledTimes[0] != '0000-$paev-on' ||
+        filledTimes[0] != '0000-$paev-off') {
+      int maramataPaevad = 24 - filledTimes.length;
+      for (int i = 0; i < 24; i++) {
+        String tunnike = '';
+        if (i < maramataPaevad + 1) {
+          if (i < 10) {
+            tunnike = '0$i';
+          } else {
+            tunnike = '$i';
+          }
+          graafikParis.add("${tunnike}00-0-off");
+        } else {
+          graafikParis.add(filledTimes[i - maramataPaevad - 1]);
+        }
+      }
+    }
+
+    List<String> onOffStatus = [];
+
+    for (var timeEntry in graafikParis) {
+      var parts = timeEntry.split('-');
+      var status = parts[2];
+
+      if (status == "on" || status == "off") {
+        onOffStatus.add(status);
+      }
+    }
+    return onOffStatus;
+  } else {
+    List<String> tuhi = ['pole graafikut'];
+    return tuhi;
   }
+}
 
-  print('seadme graafik peale tootlemist');
-  print(seadmeGraafik3);
+SeadmeGraafikKoostamineGen2(
+  String value,
+) async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  var graafikud = Map<String, dynamic>();
+  List temp = List.empty(growable: true);
 
-  return seadmeGraafik3.toString();
+  var headers = {
+    'Authorization': 'Bearer ${tokenMap[value]}',
+  };
+
+  var data = {
+    'id': value,
+    'method': 'schedule.list',
+  };
+
+  var url = Uri.parse(
+      '${seadmeteMap[value]["api_url"]}/fast/device/gen2_generic_command');
+  var res = await http.post(url, headers: headers, body: data);
+  if (res.statusCode == 200) {
+    var resJSON = jsonDecode(res.body) as Map<String, dynamic>;
+    if (resJSON == null) {
+      return; // stop the function if resJSON is null
+    }
+    var jobs = resJSON['data']['jobs'];
+    if (jobs == null) {
+      // handle the case where jobs is null
+      return;
+    }
+    jobs = resJSON['data']['jobs'] as List<dynamic>;
+    int k = 0;
+    for (var job in jobs) {
+      DateTime now = DateTime.now();
+
+      // Create a DateFormat instance to format the date
+      DateFormat dateFormat =
+          DateFormat('EEE'); // 'EEE' gives the abbreviated weekday name
+
+      // Format the current date to get the weekday abbreviation (e.g., "MON," "TUE," etc.)
+      String formattedWeekday = dateFormat.format(now);
+      formattedWeekday = formattedWeekday.toUpperCase();
+
+      String date = job['timespec'].split(" ")[5];
+      if (date == formattedWeekday) {
+        var id = job['id'] as int;
+        var timespec = job['timespec'] as String;
+        temp.add(id);
+
+        var calls = job['calls'] as List<dynamic>;
+        var graafik = Map<String, dynamic>();
+        for (var call in calls) {
+          var params = call['params']['on'];
+
+          graafik['Timespec'] = timespec;
+          graafik['On/Off'] = params;
+          graafikud['$id'] = graafik;
+        }
+      }
+      k++;
+    }
+  }
+}
+
+SeadmeGraafikKontrollimineGen1() async {
+  bool grafikOlems = false;
+
+  String graafik = '';
+  seadmeteMap.forEach((key, value) async {
+    if (value['Seadme_generatsioon'] == 1) {
+      print("saadab $key");
+      List<dynamic> seadmeGraafik1 = await graafikGen1Lugemine(key);
+      print("sai $key");
+      graafik = seadmeGraafik1.join(", ");
+      int paev = getCurrentDayOfWeek();
+      print("seadme graafik: $graafik");
+      if (graafik.contains("-$paev-")) {
+        grafikOlems = true;
+      }
+
+      if (grafikOlems) {
+        seadmeteMap[key]["Graafik"] = 'jah';
+
+        //return 'jah';
+      } else {
+        //return 'ei';
+        seadmeteMap[key]["Graafik"] = 'ei';
+      }
+    }
+  });
+}
+
+SeadmeGraafikKontrollimineGen2() async {
+  bool grafikOlems = false;
+  DateTime now = DateTime.now();
+
+  String graafik = '';
+  List<dynamic> graafikList;
+  seadmeteMap.forEach((key, value) async {
+    if (value['Seadme_generatsioon'] == 2) {
+      List<dynamic> jobs = List.empty(growable: true);
+      jobs = await graafikGen2Lugemine(key);
+      graafikList = await graafikGen2ToGraafikGen1(jobs);
+      graafik = graafikList.join(", ");
+      await graafikGen1ToGraafikGen2(graafikList);
+      int today = getCurrentDayOfWeek();
+      if (graafik.contains("-$today-")) {
+        seadmeteMap[key]["Graafik"] = 'jah';
+      } else {
+        seadmeteMap[key]["Graafik"] = 'ei';
+      }
+    }
+  });
+}
+
+int getCurrentDayOfWeek() {
+  int paev;
+  final now = DateTime.now();
+  paev = now.weekday - 1;
+  return paev; // Adjust for 0-based index
+}
+
+int getTommorowDayOfWeek() {
+  int paev;
+  final now = DateTime.now();
+  paev = now.weekday;
+  if (paev == 7) {
+    paev = 0;
+  }
+  return paev; // Adjust for 0-based index
 }

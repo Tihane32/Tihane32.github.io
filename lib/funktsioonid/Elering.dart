@@ -4,7 +4,18 @@ TalTech
 */
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
 
+/// The function `getElering` retrieves the price graph data for electricity in Estonia from the Elering
+/// API for a specified date.
+/// 
+/// Args:
+///   paevtest (String): The parameter "paevtest" is a string that determines whether to get the data
+/// for today or tomorrow. If the value of "paevtest" is "tana", it means to get the data for today.
+/// Otherwise, it will get the data for tomorrow.
+/// 
+/// Returns:
+///   a Future<List> object.
 Future<List> getElering(String paevtest) async {
   var entryList;
 
@@ -19,9 +30,9 @@ Future<List> getElering(String paevtest) async {
   {
     date = now.add(new Duration(days: -1));
   }
-  String kell21 = 'T21'; //See läheb tänase päeva url-i.
+  String kell21 = 'T22'; //See läheb tänase päeva url-i.
   //Me tahame tegelikult kella 00:00, aga Elering on EU keskaja järgi
-  String kell20 = 'T20'; //See läheb homse päeva viimaseks tunniks
+  String kell20 = 'T21'; //See läheb homse päeva viimaseks tunniks
   var parispaev = date.day;
   var pariskuu = date.month;
 
@@ -77,4 +88,38 @@ Future<List> getElering(String paevtest) async {
   var hinnagraafik = ajutine2[0].value;
 
   return hinnagraafik;
+}
+
+Future<List<double>> getEleringVahemik(String algusPaev, String vahemik) async {
+  var entryList;
+
+  DateFormat format = DateFormat("yyyy-MM-dd");
+  DateTime dateTime = format.parse(algusPaev);
+  dateTime = DateTime(dateTime.year, dateTime.month, dateTime.day - 1);
+  String formattedDate = DateFormat('yyyy-MM-dd').format(dateTime);
+  DateTime newDateTime =
+      DateTime(dateTime.year, dateTime.month, dateTime.day + 1);
+  String formattedDate2 = DateFormat('yyyy-MM-dd').format(newDateTime);
+  print(formattedDate);
+  String url =
+      'https://dashboard.elering.ee/api/nps/price?start=${formattedDate}T21%3A00%3A00Z&end=${formattedDate2}T20%3A00%3A00Z';
+  print(url);
+  final httpPackageUrl = Uri.parse(url);
+  final httpPackageInfo = await http.read(httpPackageUrl);
+  final httpPackageJson = json.decode(httpPackageInfo) as Map<String, dynamic>;
+
+  entryList = httpPackageJson.entries.toList();
+
+  //Võtab Listist Eesti hinnagraafiku
+  var ajutine = entryList[1].value;
+  var ajutine2 = ajutine.entries.toList();
+  var hinnagraafik = ajutine2[0].value;
+  List<double> prices = [];
+  for (int i = 0; i < hinnagraafik.length;) {
+    prices.add(hinnagraafik[i]["price"]);
+    
+    i++;
+  }
+
+  return prices;
 }

@@ -3,27 +3,20 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:testuus4/funktsioonid/Elering.dart';
 import 'package:flutter/services.dart';
-import 'Login.dart';
+import 'package:testuus4/lehed/P%C3%B5hi_Lehed/dynamicKoduLeht.dart';
+import 'GraafikusseSeadmeteValik.dart';
+import 'Põhi_Lehed/Login.dart';
 import 'package:vibration/vibration.dart';
-import 'SeadmeGraafikLeht.dart';
-import 'koduleht.dart';
-import 'dart:convert';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'seadmeSeaded.dart';
-import 'package:testuus4/funktsioonid/seisukord.dart';
-import 'SeadmeSeadedManuaalsed.dart';
-import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:testuus4/funktsioonid/graafikGen2.dart';
-import 'package:testuus4/lehed/energiaGraafik.dart';
-import 'dart:convert';
-import 'graafikuKoostamine.dart';
-import 'package:testuus4/lehed/kaksTabelit.dart';
-import 'package:http/http.dart' as http;
+import 'Põhi_Lehed/koduleht.dart';
+
+import 'dart:math';
+
+import 'package:testuus4/Arhiiv/kaksTabelit.dart';
+
 import 'package:syncfusion_flutter_charts/charts.dart';
-import 'navigationBar.dart';
+import '../Arhiiv/navigationBar.dart';
 import 'package:testuus4/main.dart';
-import 'drawer.dart';
+import '../Arhiiv/drawer.dart';
 
 class TulpDiagramm extends StatefulWidget {
   const TulpDiagramm({Key? key}) : super(key: key);
@@ -165,13 +158,10 @@ class _TulpDiagrammState extends State<TulpDiagramm> {
 
       hindMax = maxLeidmine(lulitusTana);
       hindMin = minLeidmine(lulitusTana);
-      print(lulitus);
       hindAVG = keskmineHindArvutaus(lulitus);
       temp = hindAVG / 4;
       keskHind = keskmineHindMapVaartustamine(hindAVG, keskHind, lulitus);
     });
-
-    print(data);
   }
 
   @override
@@ -184,288 +174,182 @@ class _TulpDiagrammState extends State<TulpDiagramm> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Color.fromARGB(255, 255, 255, 255),
-        appBar: AppBar(
-          backgroundColor: appbar,
-          title: Text(
-            'Elektri börsihind',
-            style: GoogleFonts.roboto(
-              textStyle: const TextStyle(fontSize: 25),
-            ),
-          ),
-          actions: [
-            Builder(
-              builder: (BuildContext context) {
-                return IconButton(
-                  padding: const EdgeInsets.only(right: 20),
-                  icon: const Icon(
-                    Icons.menu,
-                    size: 30,
-                  ),
-                  onPressed: () {
-                    Scaffold.of(context).openEndDrawer();
-                  },
-                );
-              },
-            ),
-          ],
-        ),
-        endDrawer: drawer(),
-        body: SingleChildScrollView(
-          child: Center(
-            child: Column(
-              children: [
-                SizedBox(height: vahe),
-                Center(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Center(
-                          child: GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            if (tana == valge) {
-                              lulitus = lulitusTana;
-                              tana = green;
-                              tanaFont = fontValge;
-                              homme = valge;
-                              hommeFont = font;
-                              hindMax = maxLeidmine(lulitus);
-                              hindMin = minLeidmine(lulitus);
-                              hindAVG = keskmineHindArvutaus(lulitus);
-                              HapticFeedback.vibrate();
-                            } /*else {
+      backgroundColor: Color.fromARGB(255, 255, 255, 255),
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(85),
+        child: Column(
+          children: [
+            SizedBox(height: vahe / 2),
+            Center(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Center(
+                      child: GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        if (tana == valge) {
+                          lulitus = lulitusTana;
+                          tana = green;
+                          tanaFont = fontValge;
+                          homme = valge;
+                          hommeFont = font;
+                          hindMax = maxLeidmine(lulitus);
+                          hindMin = minLeidmine(lulitus);
+                          hindAVG = keskmineHindArvutaus(lulitus);
+                          keskHind = keskmineHindMapVaartustamine(
+                              hindAVG, keskHind, lulitus);
+                          temp = hindAVG / 4;
+                          if (temp < 40 && hindAVG > 40) {
+                            temp = 40;
+                          } else if (hindAVG < 40) {
+                            temp = hindAVG / 2;
+                          }
+                          HapticFeedback.vibrate();
+                        } /*else {
                               lulitus = lulitusHomme;
                               tana = valge;
                               tanaFont = font;
                               homme = green;
                               hommeFont = fontValge;
                             }*/
-                          });
-                        },
-                        child: Container(
-                          width: 100,
-                          height: 30,
-                          decoration: BoxDecoration(
-                              color: tana,
-                              borderRadius: BorderRadius.circular(20.0),
-                              border: Border.all(
-                                color: Colors.green,
-                                width: 3,
-                              )),
-                          child: Center(
-                              child: RichText(
-                            text: TextSpan(
-                              text: 'Täna',
-                              style: tanaFont,
-                            ),
-                            textAlign: TextAlign.center,
+                      });
+                    },
+                    child: Container(
+                      width: 100,
+                      height: 30,
+                      decoration: BoxDecoration(
+                          color: tana,
+                          borderRadius: BorderRadius.circular(20.0),
+                          border: Border.all(
+                            color: Colors.green,
+                            width: 3,
                           )),
+                      child: Center(
+                          child: RichText(
+                        text: TextSpan(
+                          text: 'Täna',
+                          style: tanaFont,
                         ),
+                        textAlign: TextAlign.center,
                       )),
-                      if (hommeNahtav)
-                        Center(
-                            child: GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              if (homme == valge) {
-                                lulitus = lulitusHomme;
-                                homme = green;
-                                hommeFont = fontValge;
-                                tana = valge;
-                                tanaFont = font;
-                                hindMax = maxLeidmine(lulitus);
-                                hindMin = minLeidmine(lulitus);
-                                hindAVG = keskmineHindArvutaus(lulitus);
-                                HapticFeedback.vibrate();
-                              } /*else {
+                    ),
+                  )),
+                  Center(
+                      child: hommeNahtav
+                          ? GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  if (homme == valge) {
+                                    lulitus = lulitusHomme;
+                                    homme = green;
+                                    hommeFont = fontValge;
+                                    tana = valge;
+                                    tanaFont = font;
+                                    hindMax = maxLeidmine(lulitus);
+                                    hindMin = minLeidmine(lulitus);
+                                    hindAVG = keskmineHindArvutaus(lulitus);
+                                    keskHind = keskmineHindMapVaartustamine(
+                                        hindAVG, keskHind, lulitus);
+                                    temp = hindAVG / 4;
+                                    if (temp < 40 && hindAVG > 40) {
+                                      temp = 40;
+                                    } else if (hindAVG < 40) {
+                                      temp = hindAVG / 2;
+                                    }
+                                    HapticFeedback.vibrate();
+                                  } /*else {
                                 lulitus = lulitusTana;
                                 homme = valge;
                                 hommeFont = font;
                                 tana = green;
                                 tanaFont = fontValge;
                               }*/
-                            });
-                          },
-                          child: Container(
-                            width: 100,
-                            height: 30,
-                            decoration: BoxDecoration(
-                                color: homme,
-                                borderRadius: BorderRadius.circular(30.0),
-                                border: Border.all(
-                                  color: Colors.green,
-                                  width: 3,
+                                });
+                              },
+                              child: Container(
+                                width: 100,
+                                height: 30,
+                                decoration: BoxDecoration(
+                                    color: homme,
+                                    borderRadius: BorderRadius.circular(30.0),
+                                    border: Border.all(
+                                      color: Colors.green,
+                                      width: 3,
+                                    )),
+                                child: Center(
+                                    child: RichText(
+                                  text: TextSpan(
+                                    text: 'Homme',
+                                    style: hommeFont,
+                                  ),
+                                  textAlign: TextAlign.center,
                                 )),
-                            child: Center(
+                              ),
+                            )
+                          : GestureDetector(
+                              onTap: () {
+                                showDialog(
+                                    context: context,
+                                    builder: (context) => AlertDialog(
+                                          title: Text(
+                                              'Homne graafik ei ole hetkel kättesaadav\nProovige uuesti kell 15.00'),
+                                        ));
+                              },
+                              child: Container(
+                                width: 100,
+                                height: 30,
+                                decoration: BoxDecoration(
+                                    color: Color.fromARGB(255, 209, 205, 205),
+                                    borderRadius: BorderRadius.circular(30.0),
+                                    border: Border.all(
+                                      color: Color.fromARGB(255, 12, 12, 12),
+                                      width: 3,
+                                    )),
+                                child: Center(
+                                    child: RichText(
+                                  text: TextSpan(text: 'Homme', style: font),
+                                  textAlign: TextAlign.center,
+                                )),
+                              ),
+                            ))
+                ],
+              ),
+            ),
+            SizedBox(height: vahe / 2),
+            Center(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Align(
+                    alignment: Alignment.center,
+                    child: Container(
+                      alignment: Alignment.center,
+                      //width: 200,
+                      child: Center(
+                        child: Column(
+                          children: [
+                            Align(
+                              child: Container(
+                                alignment: Alignment.center,
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                ),
+                                //width: sinineKastLaius,
+                                //height: sinineKastKorgus,
                                 child: RichText(
-                              text: TextSpan(
-                                text: 'Homme',
-                                style: hommeFont,
+                                  text: TextSpan(
+                                    style: fontVaike,
+                                    children: [
+                                      TextSpan(
+                                          text: 'Min: $hindMin',
+                                          style: fontVaike),
+                                    ],
+                                  ),
+                                ),
                               ),
-                              textAlign: TextAlign.center,
-                            )),
-                          ),
-                        ))
-                    ],
-                  ),
-                ),
-                SizedBox(height: vahe),
-                Center(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Align(
-                        alignment: Alignment.center,
-                        child: Container(
-                          alignment: Alignment.center,
-                          //width: 200,
-                          child: Center(
-                            child: Column(
-                              children: [
-                                Align(
-                                  child: Container(
-                                    alignment: Alignment.center,
-                                    decoration: BoxDecoration(
-                                      color: Colors.white,
-                                    ),
-                                    //width: sinineKastLaius,
-                                    //height: sinineKastKorgus,
-                                    child: RichText(
-                                      text: TextSpan(
-                                        style: fontVaike,
-                                        children: [
-                                          TextSpan(
-                                              text: 'Päeva keskmine:',
-                                              style: fontVaike),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                Align(
-                                  child: Container(
-                                    alignment: Alignment.center,
-                                    decoration: BoxDecoration(
-                                      color: Colors.white,
-                                    ),
-                                    //width: sinineKastLaius,
-                                    //height: sinineKastKorgus,
-                                    child: RichText(
-                                      text: TextSpan(
-                                        style: fontVaike,
-                                        children: [
-                                          TextSpan(
-                                              text: '$hindAVG', style: font),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                Align(
-                                  child: Container(
-                                    alignment: Alignment.center,
-                                    decoration: BoxDecoration(
-                                      color: Colors.white,
-                                    ),
-                                    //width: sinineKastLaius,
-                                    //height: sinineKastKorgus,
-                                    child: RichText(
-                                      text: TextSpan(
-                                        style: fontVaike,
-                                        children: [
-                                          TextSpan(
-                                              text: 'EUR/MWh',
-                                              style: fontVaike),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                )
-                              ],
                             ),
-                          ),
-                        ),
-                      ),
-                      Align(
-                        alignment: Alignment.center,
-                        child: Container(
-                          //width: 200,
-                          child: Column(
-                            children: [
-                              Align(
-                                child: Container(
-                                  alignment: Alignment.center,
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                  ),
-                                  //width: sinineKastLaius,
-                                  //height: sinineKastKorgus,
-                                  child: RichText(
-                                    textAlign: TextAlign.center,
-                                    text: TextSpan(
-                                      style: fontVaike,
-                                      children: [
-                                        TextSpan(
-                                            text: '   Päeva miinimum:',
-                                            style: fontVaike),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              Align(
-                                child: Container(
-                                  alignment: Alignment.center,
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                  ),
-                                  //width: sinineKastLaius,
-                                  //height: sinineKastKorgus,
-                                  child: RichText(
-                                    textAlign: TextAlign.center,
-                                    text: TextSpan(
-                                      style: fontVaike,
-                                      children: [
-                                        TextSpan(
-                                            text: '   $hindMin', style: font),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              Align(
-                                child: Container(
-                                  alignment: Alignment.center,
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                  ),
-                                  //width: sinineKastLaius,
-                                  //height: sinineKastKorgus,
-                                  child: RichText(
-                                    textAlign: TextAlign.center,
-                                    text: TextSpan(
-                                      style: fontVaike,
-                                      children: [
-                                        TextSpan(
-                                            text: '   EUR/MWh',
-                                            style: fontVaike),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      Align(
-                        alignment: Alignment.center,
-                        child: Container(
-                          //width: 200,
-                          child: Column(
-                            children: [
-                              Align(
+                            /* Align(
                                 child: Container(
                                   alignment: Alignment.center,
                                   decoration: BoxDecoration(
@@ -477,27 +361,7 @@ class _TulpDiagrammState extends State<TulpDiagramm> {
                                     text: TextSpan(
                                       style: fontVaike,
                                       children: [
-                                        TextSpan(
-                                            text: 'Päeva maksimum:',
-                                            style: fontVaike),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              Align(
-                                child: Container(
-                                  alignment: Alignment.center,
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                  ),
-                                  //width: sinineKastLaius,
-                                  //height: sinineKastKorgus,
-                                  child: RichText(
-                                    text: TextSpan(
-                                      style: fontVaike,
-                                      children: [
-                                        TextSpan(text: '$hindMax', style: font),
+                                        TextSpan(text: '$hindAVG', style: font),
                                       ],
                                     ),
                                   ),
@@ -521,143 +385,325 @@ class _TulpDiagrammState extends State<TulpDiagramm> {
                                     ),
                                   ),
                                 ),
-                              )
-                            ],
-                          ),
+                              )*/
+                          ],
                         ),
                       ),
-                    ],
+                    ),
                   ),
-                ),
-                SizedBox(height: vahe * 2),
-                Center(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Align(
-                        child: Container(
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                          ),
-                          //width: sinineKastLaius,
-                          //height: sinineKastKorgus,
-                          child: RichText(
-                            textAlign: TextAlign.center,
-                            text: TextSpan(
-                              style: fontVaike,
-                              children: [
-                                TextSpan(text: 'EUR/MWh', style: fontVaike),
-                              ],
+                  Align(
+                    alignment: Alignment.center,
+                    child: Container(
+                      //width: 200,
+                      child: Column(
+                        children: [
+                          Align(
+                            child: Container(
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                              ),
+                              //width: sinineKastLaius,
+                              //height: sinineKastKorgus,
+                              child: RichText(
+                                textAlign: TextAlign.center,
+                                text: TextSpan(
+                                  style: fontVaike,
+                                  children: [
+                                    TextSpan(
+                                        text: 'Kesk: $hindAVG',
+                                        style: fontVaike),
+                                  ],
+                                ),
+                              ),
                             ),
                           ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Container(
-                  height: MediaQuery.of(context).size.height,
-                  child: Center(
-                      child: RotatedBox(
-                    quarterTurns: 1,
-                    child: Container(
-                      //width: double.infinity,
-                      //height: double.infinity,
-                      child: SfCartesianChart(
-                        primaryXAxis: CategoryAxis(
-                          majorGridLines: const MajorGridLines(width: 0),
-                          interval: 1,
-                          labelRotation: 270,
-                          visibleMinimum: -0.35,
-                          maximum: 23.5,
-                        ),
-                        primaryYAxis: NumericAxis(
-                          anchorRangeToVisiblePoints: true,
-                          axisLine: AxisLine(width: 0),
-                          isVisible: true,
-                          labelRotation: 270,
-                          /* title: AxisTitle(
-                              //text: 'EUR/MWh',
-                              textStyle: fontVaike,
-                              alignment: ChartAlignment.center),*/
-                          labelStyle: TextStyle(fontSize: 0),
-                        ),
-                        series: <ChartSeries>[
-                          ColumnSeries(
-                            width: 0.9,
-                            spacing: 0.1,
-                            onPointTap: (pointInteractionDetails) {
-                              int rowIndex =
-                                  pointInteractionDetails.pointIndex!;
-                              setState(() {
-                                tappedIndex = rowIndex;
-                              });
-                              showDialog(
-                                context: context,
-                                builder: (context) => AlertDialog(
-                                  title: Text(
-                                    "Kell $rowIndex töötavad seadmed: main boiler, veranda lamp",
+                          /* Align(
+                              child: Container(
+                                alignment: Alignment.center,
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                ),
+                                //width: sinineKastLaius,
+                                //height: sinineKastKorgus,
+                                child: RichText(
+                                  textAlign: TextAlign.center,
+                                  text: TextSpan(
+                                    style: fontVaike,
+                                    children: [
+                                      TextSpan(
+                                          text: '$hindMin', style: font),
+                                    ],
                                   ),
                                 ),
-                              ).then((value) {
-                                // Dialog dismissed
-                                setState(() {
-                                  tappedIndex =
-                                      null; // Reset tappedIndex to null
-                                });
-                              });
-                            },
-                            borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(20),
-                                topRight: Radius.circular(20)),
-                            dataSource: lulitus.values.toList(),
-                            xValueMapper: (data, _) => data[0],
-                            yValueMapper: (data, _) {
-                              final yValue = data[1];
-                              return yValue < temp ? temp : yValue;
-                            },
-                            dataLabelMapper: (data, _) => data[1].toString(),
-                            pointColorMapper: (data, index) {
-                              return tappedIndex == index
-                                  ? Colors.blue
-                                  : Colors.green;
-                            },
-                            dataLabelSettings: DataLabelSettings(
-                              isVisible: true,
-                              labelAlignment: ChartDataLabelAlignment.bottom,
-                              textStyle: fontVaike,
-                              angle: 270,
+                              ),
                             ),
-                          ),
-                          LineSeries(
-                            dataSource: keskHind.values.toList(),
-                            xValueMapper: (inf, _) => inf[0],
-                            yValueMapper: (inf, _) => inf[1],
-                            dataLabelMapper: (inf, _) => inf[2],
-                            color: Colors.red,
-                            dashArray: [20, 22],
-                            dataLabelSettings: DataLabelSettings(
-                              offset: Offset(-20, 0),
-                              isVisible: true,
-                              labelAlignment: ChartDataLabelAlignment.middle,
-                              textStyle: TextStyle(
-                                  fontSize: 15,
-                                  color: Color.fromARGB(255, 231, 17, 17)),
-                              angle: 270,
-                              alignment: ChartAlignment.center,
-                            ),
-                          ),
+                            Align(
+                              child: Container(
+                                alignment: Alignment.center,
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                ),
+                                //width: sinineKastLaius,
+                                //height: sinineKastKorgus,
+                                child: RichText(
+                                  textAlign: TextAlign.center,
+                                  text: TextSpan(
+                                    style: fontVaike,
+                                    children: [
+                                      TextSpan(
+                                          text: 'EUR/MWh', style: fontVaike),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),*/
                         ],
                       ),
                     ),
-                  )),
-                ),
-              ],
+                  ),
+                  Align(
+                    alignment: Alignment.center,
+                    child: Container(
+                      //width: 200,
+                      child: Column(
+                        children: [
+                          Align(
+                            child: Container(
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                              ),
+                              //width: sinineKastLaius,
+                              //height: sinineKastKorgus,
+                              child: RichText(
+                                text: TextSpan(
+                                  style: fontVaike,
+                                  children: [
+                                    TextSpan(
+                                        text: 'Max: $hindMax',
+                                        style: fontVaike),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                          /*Align(
+                              child: Container(
+                                alignment: Alignment.center,
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                ),
+                                //width: sinineKastLaius,
+                                //height: sinineKastKorgus,
+                                child: RichText(
+                                  text: TextSpan(
+                                    style: fontVaike,
+                                    children: [
+                                      TextSpan(text: '$hindMax', style: font),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Align(
+                              child: Container(
+                                alignment: Alignment.center,
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                ),
+                                //width: sinineKastLaius,
+                                //height: sinineKastKorgus,
+                                child: RichText(
+                                  text: TextSpan(
+                                    style: fontVaike,
+                                    children: [
+                                      TextSpan(
+                                          text: 'EUR/MWh', style: fontVaike),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            )*/
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
+            SizedBox(height: vahe / 2),
+            IntrinsicHeight(
+              child: Stack(
+                clipBehavior: Clip.none,
+                children: [
+                  Align(
+                      alignment: Alignment.bottomLeft,
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 8.0),
+                        child: Text(
+                          '€/MWh',
+                          style: fontVaike,
+                        ),
+                      )),
+                  Positioned(
+                    right: 0,
+                    top: -5,
+                    child: GestureDetector(
+                      onTap: () {
+                        showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                            title: Text("Hinna kujunemine"),
+                            content: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                CheckboxListTile(
+                                  title: Text("Marginaal"),
+                                  value: true,
+                                  onChanged: (newValue) {
+                                    setState(() {});
+                                  },
+                                ),
+                                CheckboxListTile(
+                                  title: Text("Kahetariifne"),
+                                  value: false,
+                                  onChanged: (newValue) {
+                                    setState(() {});
+                                  },
+                                ),
+                                // Add more CheckboxListTile widgets as needed
+                              ],
+                            ),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.pop(context); // Close the dialog
+                                },
+                                child: Text("Close"),
+                              ),
+                            ],
+                          ),
+                        );
+                      },
+                      child: Icon(Icons.settings),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
         ),
-        bottomNavigationBar: AppNavigationBar(i: 3));
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            SizedBox(
+              height: MediaQuery.of(context).size.height,
+              child: Center(
+                  child: RotatedBox(
+                quarterTurns: 1,
+                child: Container(
+                  //width: double.infinity,
+                  //height: double.infinity,
+                  child: SfCartesianChart(
+                    margin: EdgeInsets.all(0),
+                    primaryXAxis: CategoryAxis(
+                      majorGridLines: const MajorGridLines(width: 0),
+                      interval: 1,
+                      labelRotation: 270,
+                      visibleMinimum: -0.35,
+                      maximum: 23.5,
+                    ),
+                    primaryYAxis: NumericAxis(
+                      anchorRangeToVisiblePoints: true,
+                      axisLine: AxisLine(width: 0),
+                      isVisible: true,
+                      labelRotation: 270,
+                      /* title: AxisTitle(
+                            //text: 'EUR/MWh',
+                            textStyle: fontVaike,
+                            alignment: ChartAlignment.center),*/
+                      labelStyle: TextStyle(fontSize: 0),
+                    ),
+                    series: <ChartSeries>[
+                      ColumnSeries(
+                        width: 0.9,
+                        spacing: 0.1,
+                        onPointTap: (pointInteractionDetails) {
+                          int rowIndex = pointInteractionDetails.pointIndex!;
+                          setState(() {
+                            tappedIndex = rowIndex;
+                          });
+                          showDialog(
+                            context: context,
+                            builder: (context) => AlertDialog(
+                              title: Text(
+                                "Kell $rowIndex töötavad seadmed: main boiler, veranda lamp",
+                              ),
+                            ),
+                          ).then((value) {
+                            // Dialog dismissed
+                            setState(() {
+                              tappedIndex = null; // Reset tappedIndex to null
+                            });
+                          });
+                        },
+                        borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(20),
+                            topRight: Radius.circular(20)),
+                        dataSource: lulitus.values.toList(),
+                        xValueMapper: (data, _) => data[0],
+                        yValueMapper: (data, _) {
+                          final yValue = data[1];
+                          return yValue < temp ? temp : yValue;
+                        },
+                        dataLabelMapper: (data, _) => data[1].toString(),
+                        pointColorMapper: (data, index) {
+                          if (tappedIndex == index) {
+                            return Colors
+                                .blue; // Set the color to blue if tapped
+                          } else if (tund == index && tana == green) {
+                            return Colors
+                                .yellow; // Set the color to yellow if it corresponds to "tund" value
+                          } else {
+                            return Colors.green;
+                          }
+                        },
+                        dataLabelSettings: DataLabelSettings(
+                          isVisible: true,
+                          labelAlignment: ChartDataLabelAlignment.bottom,
+                          textStyle: fontVaike,
+                          angle: 270,
+                        ),
+                      ),
+                      LineSeries(
+                        dataSource: keskHind.values.toList(),
+                        xValueMapper: (inf, _) => inf[0],
+                        yValueMapper: (inf, _) => inf[1],
+                        dataLabelMapper: (inf, _) => inf[2],
+                        color: Colors.red,
+                        dashArray: [20, 22],
+                        dataLabelSettings: DataLabelSettings(
+                          offset: Offset(-20, 0),
+                          isVisible: true,
+                          labelAlignment: ChartDataLabelAlignment.middle,
+                          textStyle: TextStyle(
+                              fontSize: 15,
+                              color: Color.fromARGB(255, 231, 17, 17)),
+                          angle: 270,
+                          alignment: ChartAlignment.center,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              )),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }
 
@@ -699,7 +745,7 @@ keskmineHindMapVaartustamine(
     }
   }
 
-  keskHind[0] = [kell + '.00', hindAVG, 'Keskmine hind'];
+  keskHind[0] = [kell + '.00', hindAVG, 'Keskmine hind $hindAVG'];
 
   for (int i = 1; i < 24; i++) {
     if (i < 10) {
@@ -739,7 +785,6 @@ maxLeidmine(Map<int, dynamic> map) {
     }
   });
 
-  print('Highest double: $highest');
   return highest;
 }
 
@@ -754,6 +799,5 @@ minLeidmine(Map<int, dynamic> map) {
     }
   });
 
-  print('Lowest double: $highest');
   return highest;
 }

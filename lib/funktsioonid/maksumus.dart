@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:testuus4/funktsioonid/graafikGen2.dart';
-import 'package:testuus4/lehed/energiaGraafik.dart';
+import 'package:testuus4/Arhiiv/energiaGraafik.dart';
+import 'package:testuus4/main.dart';
 import 'dart:convert';
 import 'token.dart';
-import 'package:testuus4/lehed/kaksTabelit.dart';
+import 'package:testuus4/Arhiiv/kaksTabelit.dart';
 import 'package:http/http.dart' as http;
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:testuus4/funktsioonid/Elering.dart';
@@ -31,7 +32,7 @@ Future maksumus(String vahemik) async {
 
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    var token = await getToken();
+    
     double katse = 0;
     double hind = 0;
     var k = 0;
@@ -61,7 +62,7 @@ Future maksumus(String vahemik) async {
         k++;
 
         var headers = {
-          'Authorization': 'Bearer $token',
+          'Authorization': 'Bearer ${tokenMap[asendus]}',
         };
         var data = {
           'id': asendus,
@@ -72,7 +73,7 @@ Future maksumus(String vahemik) async {
         };
 
         var url = Uri.parse(
-            'https://shelly-64-eu.shelly.cloud/statistics/relay/consumption');
+            '${seadmeteMap[asendus]["api_url"]}/statistics/relay/consumption');
         var res = await http.post(url, headers: headers, body: data);
         formattedDate = formattedDate + 'T20';
         test = test + 'T20';
@@ -84,7 +85,6 @@ Future maksumus(String vahemik) async {
         final historyData = jsonData['data']['history'] as List<dynamic>;
         var url1 = Uri.parse(
             'https://dashboard.elering.ee/api/nps/price?start=$formattedDate%3A59%3A59.999Z&end=$test%3A59%3A59.999Z');
-        print(url1);
         var res1 = await http.get(url1);
         if (res1.statusCode != 200)
           throw Exception('http.get error: statusCode= ${res1.statusCode}');
@@ -139,7 +139,7 @@ Future maksumus(String vahemik) async {
 
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    var token = await getToken();
+    
     double katse = 0;
     double hind = 0;
     var k = 0;
@@ -169,7 +169,7 @@ Future maksumus(String vahemik) async {
         k++;
 
         var headers = {
-          'Authorization': 'Bearer $token',
+          'Authorization': 'Bearer ${tokenMap[asendus]}',
         };
         var data = {
           'id': asendus,
@@ -180,7 +180,7 @@ Future maksumus(String vahemik) async {
         };
 
         var url = Uri.parse(
-            'https://shelly-64-eu.shelly.cloud/statistics/relay/consumption');
+            '${seadmeteMap[asendus]["api_url"]}/statistics/relay/consumption');
         var res = await http.post(url, headers: headers, body: data);
         formattedDate = formattedDate + 'T20';
         test = test + 'T20';
@@ -231,7 +231,6 @@ Future maksumus(String vahemik) async {
     DateTime startOfYear = DateTime(now.year, 1, 1);
     DateTime algus = startOfYear.subtract(Duration(days: 1));
     DateTime endOfDay = now;
-    print('algus');
     String algus1 = DateFormat('yyyy-MM-dd').format(algus);
     algus1 = algus1 + 'T20';
     List<DateTime> yearDates = [];
@@ -248,8 +247,6 @@ Future maksumus(String vahemik) async {
         yearDates.map((date) => formatter.format(date)).toList();
 
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    print('kuupäev');
-    print(formattedDates[formattedDates.length - 1]);
     String temp = formattedDates[0] as String;
     temp = temp + 'T20';
     String temp1 = formattedDates[formattedDates.length - 1] as String;
@@ -269,7 +266,7 @@ Future maksumus(String vahemik) async {
     var ajutine2 = ajutine.entries.toList();
     var hinnagraafik = ajutine2[0].value;
 
-    var token = await getToken();
+    
     double katse = 0;
     double hind = 0;
     var k = 0;
@@ -285,8 +282,6 @@ Future maksumus(String vahemik) async {
     var u = 0;
     int asi = 0;
     for (var i in storedMap.values) {
-      print('object');
-      print(asi);
       asi++;
       String asendus = storedMap['Seade$u']['Seadme_ID'] as String;
       k = 0;
@@ -303,7 +298,7 @@ Future maksumus(String vahemik) async {
         k++;
 
         var headers = {
-          'Authorization': 'Bearer $token',
+          'Authorization': 'Bearer ${tokenMap[asendus]}',
         };
         var data = {
           'id': asendus,
@@ -314,7 +309,7 @@ Future maksumus(String vahemik) async {
         };
 
         var url = Uri.parse(
-            'https://shelly-64-eu.shelly.cloud/statistics/relay/consumption');
+            '${seadmeteMap[asendus]["api_url"]}/statistics/relay/consumption');
         var res = await http.post(url, headers: headers, body: data);
         formattedDate = formattedDate + 'T20';
         test = test + 'T20';
@@ -338,11 +333,6 @@ Future maksumus(String vahemik) async {
 
           hind = hind + (ajutineTarb * hinnagraafik[o]['price']);
 
-          print(o);
-          print(ajutineTarb);
-          print(historyData[i]['consumption']);
-          print(hinnagraafik[o]['price']);
-          print(hind);
           o++;
         }
       }
@@ -353,4 +343,3 @@ Future maksumus(String vahemik) async {
     return hind;
   }
 }
-

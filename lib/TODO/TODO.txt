@@ -1,0 +1,19 @@
+22.09.2023 Eesmärgid
+    Graafikutel päised paigale ja stiil korda                           TEHTUD
+    Seadme pildid ja nime muutmine                                      TEHTUD
+    Seadme graafiku kopeerimine tööle                                   OLEKS SEADMEID JUURDE VAJA
+    Seadme lisamise leht paremaks                                       TEHTUD
+    Shelly pärimise optimeerimine                                       TEHTUD
+
+29.09.2023 Eesmärgid
+    Proovida taustal töötamine tööle saada
+    Luua taustal töötamise leht                                         TEHTUD
+    Päeva tarbimisgraafiku kuvamine                                     TEHTUD, vaja otsustada kas graafik püsti või külili
+    Seadme graafiku kopeerimine tööle                                   TEHTUD
+
+xx.xx.xxxx Eesmärgid
+    Seadme mudel ja nimi erinevateks lahtriteks seadmete mapis
+    valitud tunnid mällu
+    kahetariifne
+    login korda
+    nii peale kinnitamist ei lähe ära

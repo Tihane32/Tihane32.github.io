@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:testuus4/funktsioonid/graafikGen2.dart';
-import 'package:testuus4/lehed/energiaGraafik.dart';
+import 'package:testuus4/Arhiiv/energiaGraafik.dart';
 import 'dart:convert';
+import '../main.dart';
 import 'token.dart';
-import 'package:testuus4/lehed/kaksTabelit.dart';
+import 'package:testuus4/Arhiiv/kaksTabelit.dart';
 import 'package:http/http.dart' as http;
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:testuus4/funktsioonid/Elering.dart';
 import 'package:intl/intl.dart';
 
-seadmeMaksumus(String value) async {
+seadmeMaksumus(String value, [Function? setPaevamaksumus]) async {
+  Map<int, List<double>> paevaMaksumus = {};
   Map<DateTime, double> maksumusSeade = {};
   DateTime now = DateTime.now();
   DateTime startOfMonth = DateTime(now.year, now.month, 1);
@@ -31,7 +33,7 @@ seadmeMaksumus(String value) async {
 
   SharedPreferences prefs = await SharedPreferences.getInstance();
 
-  var token = await getToken();
+  
   double katse = 0;
   double hind = 0;
   var k = 0;
@@ -55,7 +57,7 @@ seadmeMaksumus(String value) async {
     k++;
 
     var headers = {
-      'Authorization': 'Bearer $token',
+      'Authorization': 'Bearer ${tokenMap[value]}',
     };
     var data = {
       'id': value,
@@ -66,24 +68,26 @@ seadmeMaksumus(String value) async {
     };
 
     var url = Uri.parse(
-        'https://shelly-64-eu.shelly.cloud/statistics/relay/consumption');
+        '${seadmeteMap[value]["api_url"]}/statistics/relay/consumption');
     var res = await http.post(url, headers: headers, body: data);
     formattedDate = formattedDate + 'T20';
     String abi = test;
     test = test + 'T20';
 
-    if (res.statusCode != 200)
-      throw Exception('http.post error: statusCode= ${res.statusCode}');
+    if (res.statusCode != 200) {
+      return;
+      
+    }
     final jsonData = json.decode(res.body);
     var resJson = json.decode(res.body) as Map<String, dynamic>;
     //print(res.body);
     final historyData = jsonData['data']['history'] as List<dynamic>;
     var url1 = Uri.parse(
         'https://dashboard.elering.ee/api/nps/price?start=$formattedDate%3A59%3A59.999Z&end=$test%3A59%3A59.999Z');
-    print(url1);
     var res1 = await http.get(url1);
-    if (res1.statusCode != 200)
+    if (res1.statusCode != 200) {
       throw Exception('http.get error: statusCode= ${res1.statusCode}');
+    }
     //print(res1.body);
     final httpPackageJson = json.decode(res1.body) as Map<String, dynamic>;
     var entryList;
@@ -93,8 +97,7 @@ seadmeMaksumus(String value) async {
     var ajutine = entryList[1].value;
     var ajutine2 = ajutine.entries.toList();
     var hinnagraafik = ajutine2[0].value;
-    print('tunnid');
-    print(resJson);
+    paevaMaksumus[u] = [];
     for (var i = 0; i < 24; i++) {
       //print(resJson['data']['units']['consumption']);
       var ajutineTarb;
@@ -107,14 +110,18 @@ seadmeMaksumus(String value) async {
       // print(historyData);
       temp = temp + ajutineTarb * hinnagraafik[i]['price'];
       hind = hind + (ajutineTarb * hinnagraafik[i]['price']);
-      print('$hind $i');
+
+      paevaMaksumus[u]?.add(ajutineTarb * hinnagraafik[i]['price']);
     }
-
+    u++;
     maksumusSeade[DateTime.parse(abi)] = temp;
-    print('yesseseseese');
-    print(maksumusSeade);
   }
-  u++;
 
+  //print(paevaMaksumus);
+  if (setPaevamaksumus != null) {
+    setPaevamaksumus(paevaMaksumus);
+  }
+
+  print("seadmemaksusmus $value $maksumusSeade");
   return maksumusSeade;
 }

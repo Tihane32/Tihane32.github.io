@@ -3,15 +3,15 @@ import 'dart:convert';
 import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:testuus4/lehed/Login.dart';
-import 'package:testuus4/lehed/dynamicKoduLeht.dart';
-import 'package:testuus4/lehed/kaksTabelit.dart';
+import 'package:testuus4/lehed/P%C3%B5hi_Lehed/Login.dart';
+import 'package:testuus4/lehed/P%C3%B5hi_Lehed/dynamicKoduLeht.dart';
+import 'package:testuus4/Arhiiv/kaksTabelit.dart';
 //import '/SeadmeSeaded.dart';
-import 'package:testuus4/lehed/seadmeSeaded.dart';
+import 'package:testuus4/lehed/Seadme_Lehed/seadmeSeaded.dart';
 import 'package:testuus4/main.dart';
-import 'energiaGraafik.dart';
+import '../Arhiiv/energiaGraafik.dart';
 import 'package:testuus4/funktsioonid/seisukord.dart';
-import 'package:testuus4/lehed/koduleht.dart';
+import 'package:testuus4/lehed/P%C3%B5hi_Lehed/koduleht.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class LisaSeade extends StatefulWidget {
@@ -26,7 +26,6 @@ class _LisaSeadeState extends State<LisaSeade> {
   final GlobalKey<ScaffoldMessengerState> _scaffoldMessengerKey =
       GlobalKey<ScaffoldMessengerState>();
 
-  //TODO: Lisada seadme salvestamine mälusse
   Future<void> _submitForm() async {
     String ajutineParool = parool.text;
     String ajutineKastuajanimi = kasutajanimi.text;
@@ -44,10 +43,8 @@ class _LisaSeadeState extends State<LisaSeade> {
 
     var url3 = Uri.parse('https://shelly-64-eu.shelly.cloud/device/settings');
     var res = await http.post(url3, headers: headers, body: data3);
-    print(res.body);
     final httpPackageJson3 = json.decode(res.body) as Map<String, dynamic>;
     entryList = httpPackageJson3.entries.toList();
-    print(entryList);
     if (res.statusCode == 200) {
       _scaffoldMessengerKey.currentState?.showSnackBar(
         SnackBar(

@@ -1,29 +1,66 @@
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:testuus4/funktsioonid/graafikGen1.dart';
+import 'package:testuus4/lehed/GraafikusseSeadmeteValik.dart';
 import 'token.dart';
+import 'package:intl/intl.dart';
+import 'package:testuus4/main.dart';
 
-//TODO: peab tegema nii, et topelt graafikut ei laseks panna
-gen2GraafikuLoomine(var selected, var valitudPaev, String value) async {
-  var graafikud = Map<String, dynamic>();
-  List temp = List.empty(growable: true);
-  await graafikuteSaamine(graafikud, value, temp);
-  print(temp);
+/// The function `gen2GraafikuLoomine` creates and deletes schedules for a device based on selected
+/// values and user preferences.
+///
+/// Args:
+///   selected: A list of lists representing the selected hours for creating a schedule. Each inner list
+/// contains three elements: the hour (0-23), a boolean value indicating whether the hour is selected or
+/// not, and a boolean value indicating whether the hour is toggled on or off.
+///   valitudPaev: The parameter "valitudPaev" is a string that represents the selected day. It can have
+/// two possible values: "täna" (today) or "homme" (tomorrow).
+///   value (String): The value parameter is a string that represents a specific value or identifier. It
+/// is used in various parts of the code to retrieve or manipulate data related to that value.
+gen2GraafikuLoomine(
+    Map<int, dynamic> lulitus, String valitudPaev, String id) async {
+  List<int> paevad = [];
+  int paev;
+  if (valitudPaev == "täna") {
+    int i = getTommorowDayOfWeek();
+    paevad.add(i);
+    paev = getCurrentDayOfWeek();
+  } else {
+    int i = getCurrentDayOfWeek();
+    paevad.add(i);
+    paev = getTommorowDayOfWeek();
+  }
+  print("lulitusmap siin: $lulitus");
+  List<dynamic> graafik = await graafikGen2Lugemine(id);
+  List<dynamic> abi = graafik;
 
-  await graafikuloomine(graafikud, selected, valitudPaev, value);
+  await graafikGen2DeleteAll(id);
+  graafik = graafikGen2ToGraafikGen1(graafik);
+  graafik = graafikGen1Filtreerimine(graafik, paevad);
+  List<dynamic> graafikUus = graafikGen1Koostamine(lulitus, paev);
+  graafik.addAll(graafikUus);
 
-  await delete(value, temp);
+  graafik = graafikGen1ToGraafikGen2(graafik);
+
+  Set<String> abigraafik = Set<String>.from(graafik);
+  graafik = abigraafik.toList();
+
+  await graafikGen2DeleteSome(id, graafik);
+  await graafikGen2SaatmineGraafikuga(graafik, id);
+
+  //abi = true;
+  //await delete(value, temp);
 }
 
-graafikuteSaamine(
-    Map<String, dynamic> graafikud, String value, List temp) async {
+graafikuteSaamine(Map<String, dynamic> graafikud, String value, List temp,
+    valitudPaev) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   String? ajutineKasutajanimi = prefs.getString('Kasutajanimi');
   String? sha1Hash = prefs.getString('Kasutajaparool');
 
-  String token = await getToken();
   var headers = {
-    'Authorization': 'Bearer $token',
+    'Authorization': 'Bearer ${tokenMap[value]}',
   };
 
   var data = {
@@ -32,7 +69,7 @@ graafikuteSaamine(
   };
 
   var url = Uri.parse(
-      'https://shelly-64-eu.shelly.cloud/fast/device/gen2_generic_command');
+      '${seadmeteMap[value]['api_url']}/fast/device/gen2_generic_command');
   var res = await http.post(url, headers: headers, body: data);
   if (res.statusCode == 200) {
     var resJSON = jsonDecode(res.body) as Map<String, dynamic>;
@@ -47,23 +84,41 @@ graafikuteSaamine(
     jobs = resJSON['data']['jobs'] as List<dynamic>;
     int k = 0;
     for (var job in jobs) {
-      var id = job['id'] as int;
-      temp.add(id);
-      var timespec = job['timespec'] as String;
-      var calls = job['calls'] as List<dynamic>;
-      var graafik = Map<String, dynamic>();
-      for (var call in calls) {
-        var params = call['params']['on'];
+      DateTime now = DateTime.now();
+      if (valitudPaev == 'homme') {
+        now = now.add(Duration(days: 1));
+      }
 
-        graafik['Timespec'] = timespec;
-        graafik['On/Off'] = params;
-        graafikud['$id'] = graafik;
+      // Create a DateFormat instance to format the date
+      DateFormat dateFormat =
+          DateFormat('EEE'); // 'EEE' gives the abbreviated weekday name
+
+      // Format the current date to get the weekday abbreviation (e.g., "MON," "TUE," etc.)
+      String formattedWeekday = dateFormat.format(now);
+      formattedWeekday = formattedWeekday.toUpperCase();
+
+      String date = job['timespec'].split(" ")[5];
+      if (date == formattedWeekday) {
+        var id = job['id'] as int;
+        var timespec = job['timespec'] as String;
+        temp.add(id);
+
+        var calls = job['calls'] as List<dynamic>;
+        var graafik = Map<String, dynamic>();
+        for (var call in calls) {
+          var params = call['params']['on'];
+
+          graafik['Timespec'] = timespec;
+          graafik['On/Off'] = params;
+          graafikud['$id'] = graafik;
+        }
       }
       k++;
     }
   }
 }
 
+/*
 graafikuloomine(
     Map<String, dynamic> graafikud, selected, valitudPaev, String value) async {
   var j = 1;
@@ -149,7 +204,7 @@ graafikuSaatmine(bool lulitus, String tund, valitudPaev, String value) async {
         '{"enable":true,"timespec":"0 0 $tund * * $nadalapaev","calls":[{"method":"Switch.Set","params":{"id":0,"on":$lulitus}}]}',
   };
   var url = Uri.parse(
-      'https://shelly-64-eu.shelly.cloud/fast/device/gen2_generic_command');
+      '${seadmeteMap[value]['api_url']}/fast/device/gen2_generic_command');
   var res = await http.post(url, headers: headers, body: data);
   if (res.statusCode != 200)
     throw Exception('http.post error: statusCode= ${res.statusCode}');
@@ -227,7 +282,7 @@ graafikuKustutamine(Map<String, dynamic> graafikud, String value) async {
       };
 
       var url = Uri.parse(
-          'https://shelly-64-eu.shelly.cloud/fast/device/gen2_generic_command');
+          '${seadmeteMap[value]['api_url']}/fast/device/gen2_generic_command');
       var res = await http.post(url, headers: headers, body: data);
       if (res.statusCode != 200)
         throw Exception('http.post error: statusCode= ${res.statusCode}');
@@ -236,13 +291,12 @@ graafikuKustutamine(Map<String, dynamic> graafikud, String value) async {
     j++;
   }
 }
-
+*/
 Future<Map<int, dynamic>> gen2GraafikSaamine(
-    String value, Map<int, dynamic> onOff) async {
-  String token = await getToken();
+    String value, Map<int, dynamic> onOff, String paev) async {
   var graafikud = Map<int, dynamic>();
   var headers = {
-    'Authorization': 'Bearer $token',
+    'Authorization': 'Bearer ${tokenMap[value]}',
   };
 
   var data = {
@@ -251,14 +305,18 @@ Future<Map<int, dynamic>> gen2GraafikSaamine(
   };
 
   var url = Uri.parse(
-      'https://shelly-64-eu.shelly.cloud/fast/device/gen2_generic_command');
+      '${seadmeteMap[value]['api_url']}/fast/device/gen2_generic_command');
   var res = await http.post(url, headers: headers, body: data);
   if (res.statusCode == 200) {
     var resJSON = jsonDecode(res.body) as Map<String, dynamic>;
 
     var jobs = resJSON['data']['jobs'];
+    if (resJSON['data']['jobs'] == null) {
+      jobs = {};
+    } else {
+      jobs = resJSON['data']['jobs'] as List<dynamic>;
+    }
 
-    jobs = resJSON['data']['jobs'] as List<dynamic>;
     int k = 0;
     for (var job in jobs) {
       var id = job['id'] as int;
@@ -276,20 +334,32 @@ Future<Map<int, dynamic>> gen2GraafikSaamine(
       k++;
     }
     List abi = List.empty(growable: true);
+    DateTime now = DateTime.now();
+    if (paev == 'homme') {
+      now = now.add(Duration(days: 1));
+    }
+
+    // Create a DateFormat instance to format the date
+    DateFormat dateFormat =
+        DateFormat('EEE'); // 'EEE' gives the abbreviated weekday name
+
+    // Format the current date to get the weekday abbreviation (e.g., "MON," "TUE," etc.)
+    String formattedWeekday = dateFormat.format(now);
+    formattedWeekday = formattedWeekday.toUpperCase();
     for (var i = 0; i < graafikud.length; i++) {
       var temp = graafikud[i]['Timespec'];
       // print(temp);
       int hour = int.parse(temp.split(" ")[2]);
-
+      String date = temp.split(" ")[5];
       // Update boolean value in hourDataMap if the hour exists
       if (onOff.containsKey(hour)) {
-        abi.add(hour);
-        onOff[hour][2] = graafikud[i]["On/Off"];
+        if (formattedWeekday == date) {
+          abi.add(hour);
+          onOff[hour][2] = graafikud[i]["On/Off"];
+        }
       }
     }
     abi.sort();
-    print('object');
-    print(onOff);
     for (var i = 0; i < abi.length - 1; i++) {
       //print(onOff);
       int j = abi[i];
@@ -298,15 +368,11 @@ Future<Map<int, dynamic>> gen2GraafikSaamine(
       for (j; j < o; j++) {
         onOff[j][2] = onOff[abi[i]][2];
 
-        print('$i ${abi[i]} $j $o ${onOff[j][2]} ${onOff[i][2]}');
-        print(onOff[7][2]);
         //print('$onOff $i');
       }
       //print(onOff);
     }
 
-    print(abi);
-    print('lulitus $onOff');
     return onOff;
   } else {
     return onOff;
@@ -315,10 +381,8 @@ Future<Map<int, dynamic>> gen2GraafikSaamine(
 
 delete(value, List temp) async {
   for (var i = 0; i < temp.length; i++) {
-    String token = await getToken2();
-
     var headers = {
-      'Authorization': 'Bearer $token',
+      'Authorization': 'Bearer ${tokenMap[value]}',
       'Content-Type': 'application/x-www-form-urlencoded',
     };
 
@@ -329,10 +393,228 @@ delete(value, List temp) async {
     };
 
     var url = Uri.parse(
-        'https://shelly-64-eu.shelly.cloud/fast/device/gen2_generic_command');
+        '${seadmeteMap[value]['api_url']}/fast/device/gen2_generic_command');
     var res1 = await http.post(url, headers: headers, body: data);
-    
-    print(data);
-    print(res1.body);
+    //await Future.delayed(const Duration(seconds: 2));
+    print("delete this:  ${res1.body}");
   }
+}
+
+graafikGen2Lugemine(String id) async {
+  List<dynamic> tuhiGraafik = List.empty(growable: true);
+
+  var headers = {
+    'Authorization': 'Bearer ${tokenMap[id]}',
+  };
+
+  var data = {
+    'id': id,
+    'method': 'schedule.list',
+  };
+
+  var url = Uri.parse(
+      '${seadmeteMap[id]['api_url']}/fast/device/gen2_generic_command');
+  var res = await http.post(url, headers: headers, body: data);
+  if (res.statusCode == 200) {
+    var resJSON = jsonDecode(res.body) as Map<String, dynamic>;
+    if (resJSON['data']['jobs'] == null) {
+      return; // stop the function if resJSON is null
+    }
+    tuhiGraafik = resJSON['data']['jobs'];
+    if (tuhiGraafik == null) {
+      // handle the case where jobs is null
+      return 0;
+    }
+    tuhiGraafik = resJSON['data']['jobs'] as List<dynamic>;
+  }
+  return tuhiGraafik;
+}
+
+// 1.1.2.2 graafikGen2ToGraafikGen1
+graafikGen2ToGraafikGen1(List<dynamic> graafik) {
+  List<String> result = [];
+
+  // Define a map to convert day names to their corresponding numbers
+  final dayMap = {
+    'MON': 0,
+    'TUE': 1,
+    'WED': 2,
+    'THU': 3,
+    'FRI': 4,
+    'SAT': 5,
+    'SUN': 6,
+  };
+
+  // Iterate through the job entries
+  for (var job in graafik) {
+    if (job is Map && job.containsKey('timespec') && job.containsKey('calls')) {
+      String timespec = job['timespec'];
+      List<String> timespecParts = timespec.split(' ');
+
+      // Extract the relevant components
+      if (timespecParts.length == 6) {
+        String time = timespecParts[2];
+        String day = timespecParts[5];
+        String switchState = job['calls'][0]['params']['on'] ? 'on' : 'off';
+
+        // Convert the day name to a number using the dayMap
+        int? dayNumber = dayMap[day];
+        if (int.parse(time) < 10) {
+          time = "0${time}00";
+        } else {
+          time = "${time}00";
+        }
+        // Create the formatted string and add it to the result list
+        String formattedJob = '$time-$dayNumber-$switchState';
+        result.add(formattedJob);
+      }
+    }
+  }
+  // Join the result list into a single string using commas
+  return result;
+}
+
+graafikGen1ToGraafikGen2(List<dynamic> graafik) {
+  String graafikString = graafik.join(", ");
+
+  final dayMap = {
+    0: 'MON',
+    1: 'TUE',
+    2: 'WED',
+    3: 'THU',
+    4: 'FRI',
+    5: 'SAT',
+    6: 'SUN',
+  };
+
+  // Split the input string by commas to get individual job entries
+  List<String> entries = graafikString.split(', ');
+  List<String> jobs = List.empty(growable: true);
+  for (var entry in entries) {
+    // Split each entry by the dash '-' to get its components
+    List<String> parts = entry.split('-');
+
+    if (parts.length == 3) {
+      String time = parts[0];
+      int dayNumber = int.parse(parts[1]);
+      bool switchState = parts[2] == 'on' ? true : false;
+
+      // Convert the day number to the corresponding day name using the dayMap
+      String? day = dayMap[dayNumber];
+
+      // Create a map for the job and add it to the result list
+
+      if (time[0] == "0") {
+        time = time.substring(1, 2);
+      } else {
+        time = time.substring(0, 2);
+      }
+      jobs.add({
+        '"enable":true,"timespec":"0 0 $time * * $day","calls":[{"method":"Switch.Set","params":{"id":0,"on":$switchState}}]'
+      }.toString());
+    }
+  }
+  return jobs;
+}
+
+// 1.1.2.4 graafikGen2DeleteAll
+graafikGen2DeleteAll(String id) async {
+  /*List<dynamic> graafik = [];
+  List temp = [];
+  graafik = await graafikGen2Lugemine(id);
+  for (int i = 0; i < graafik.length; i++) {
+    temp.add(graafik[i]["id"]);
+  }
+  await delete(id, temp);*/
+  var headers = {
+    'Authorization': 'Bearer ${tokenMap[id]}',
+    'Content-Type': 'application/x-www-form-urlencoded',
+  };
+
+  var data = {
+    'id': id,
+    'method': 'Schedule.DeleteAll',
+  };
+
+  var url = Uri.parse(
+      '${seadmeteMap[id]['api_url']}/fast/device/gen2_generic_command');
+  var res1 = await http.post(url, headers: headers, body: data);
+  print("delete all");
+  print(res1.body);
+}
+
+graafikGen2DeleteSome(String id, List<dynamic> graafikUus) async {
+  List<dynamic> graafik = [];
+  List temp = [];
+  graafik = await graafikGen2Lugemine(id);
+  for (int i = 0; i < graafik.length; i++) {
+    int k = 0;
+    String abi = "";
+    abi = graafik[i].toString();
+    for (int j = 0; j < graafikUus.length; j++) {
+      var abi2 = jsonDecode(graafikUus[j]);
+      if (graafik[i]["timespec"] == abi2["timespec"] &&
+          abi2["calls"][0]["params"]["on"] ==
+              graafik[i]["calls"][0]["params"]["on"]) {
+        k = 1;
+        break;
+      }
+    }
+    if (k == 0) {
+      temp.add(graafik[i]["id"]);
+    }
+  }
+  await delete(id, temp);
+}
+
+graafikGen2Filtreerimine(String id, List<dynamic> graafikUus) async {
+  List<dynamic> graafik = [];
+  List<dynamic> temp = [];
+  int s = 0;
+  graafik = await graafikGen2Lugemine(id);
+  for (int i = 0; i < graafik.length; i++) {
+    int k = 0;
+    s = 0;
+    String abi = "";
+    abi = graafik[i].toString();
+    for (int j = 0; j < graafikUus.length; j++) {
+      var abi2 = jsonDecode(graafikUus[j]);
+      if (graafik[i]["timespec"] == abi2["timespec"] &&
+          abi2["calls"][0]["params"]["on"] ==
+              graafik[i]["calls"][0]["params"]["on"]) {
+        k = 1;
+        break;
+      }
+      s++;
+    }
+    if (k == 0) {
+      temp.add(graafikUus[s]);
+    }
+  }
+  return temp;
+}
+
+// 1.1.2.3 graafikGen2SaatmineGraafikuga
+graafikGen2SaatmineGraafikuga(List<dynamic> graafik, String id) async {
+  print(graafik);
+
+  for (int i = 0; i < graafik.length; i++) {
+    var headers = {
+      'Authorization': 'Bearer ${tokenMap[id]}',
+      'Content-Type': 'application/x-www-form-urlencoded',
+    };
+
+    var data = {
+      'id': id,
+      'method': 'schedule.create',
+      'params': '${graafik[i]}',
+    };
+    var url = Uri.parse(
+        '${seadmeteMap[id]['api_url']}/fast/device/gen2_generic_command');
+    var res = await http.post(url, headers: headers, body: data);
+    print(res.body);
+    print("sent this: $id ${graafik[i]}");
+  }
+  mitmeSeadmeKinnitus.add(true);
+  seadmeKinnitus = true;
 }
