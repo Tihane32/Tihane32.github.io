@@ -16,3 +16,4 @@ xx.xx.xxxx Eesmärgid
     valitud tunnid mällu
     kahetariifne
     tarbimisele graafik joonega
+    kui "homme" on võimalik, siis minna selle peale
