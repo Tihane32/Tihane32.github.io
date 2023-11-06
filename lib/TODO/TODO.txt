@@ -15,5 +15,4 @@ xx.xx.xxxx Eesmärgid
     Seadme mudel ja nimi erinevateks lahtriteks seadmete mapis
     valitud tunnid mällu
     kahetariifne
-    login korda
-    nii peale kinnitamist ei lähe ära
+    tarbimisele graafik joonega
