@@ -1,8 +1,12 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../funktsioonid/Elering.dart';
 import '../../funktsioonid/KeskmineHindArvutus.dart';
+import '../../funktsioonid/salvestaSeadistus.dart';
 import '../../main.dart';
 import 'DynaamilineTundideValimine.dart';
 import 'dart:math';
@@ -49,7 +53,7 @@ class _HinnaPiiriAluselTundideValimineState
   var valitudSeadmed;
   var lulitusMap;
   int selectedRowIndex = -1;
-  double hinnaPiir = 0.0;
+  double hinnaPiir = 100.0;
   String paevNupp = 'Täna';
   String selectedPage = 'Hinnapiir';
   double vahe = 10;
@@ -265,15 +269,23 @@ class _HinnaPiiriAluselTundideValimineState
       lulitusMap = lulitusMapParemHP;
     });
     updateLulitusMap(lulitusMap, "Hinnapiir");
-    print("hinnapiir: $lulitusMap");
   }
 
   @override
   void initState() {
-    hinnaPiir = seadmeteMap['80646f80f713']['Hinnapiir'];
-    print(
-        '------------------------------------------------------------------------------------------------------------------------------------------------------');
-    print(valitudSeadmed);
+    int trueCount = 0;
+    String valitudSeade = '';
+
+    for (var entry in valitudSeadmed.entries) {
+      if (entry.value) {
+        trueCount++;
+        valitudSeade = entry.key;
+      }
+    }
+
+    if (trueCount == 1) {
+      hinnaPiir = seadmeteMap[valitudSeade]['Hinnapiir'];
+    }
     norm();
     super.initState();
   }
@@ -463,6 +475,8 @@ class _HinnaPiiriAluselTundideValimineState
                                 onSubmitted: (value) {
                                   setState(() {
                                     hinnaPiir = double.tryParse(value) ?? 0;
+                                    salvestaSeadistus(
+                                        'Hinnapiir', hinnaPiir, valitudSeadmed);
                                     lulitusMapParemHP =
                                         LulitusMapParemVaartustamine(hinnaPiir,
                                             lulitus, lulitusMapParemHP);

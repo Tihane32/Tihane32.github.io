@@ -204,6 +204,20 @@ graafik = generatsioon 1 kujul graafik.
 
 # Lisa funktsioonid
 
+## Lisa 1, mällu salvestamine
+
+```dart
+salvestaSeadistus(
+    String parameetriNim, double parameeter, Map<String,bool> valitudSeadmed) async {
+}
+
+```
+Salvestab mällu seadme kohta parameetri
+
+---
+
+## Lisa 2
+
 ```dart
 int getCurrentDayOfWeek() {
 return int;
