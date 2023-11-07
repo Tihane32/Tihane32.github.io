@@ -25,6 +25,7 @@ import 'package:workmanager/workmanager.dart';
 
 //Maini käivitamine, home on koduleht.
 //bool graafikuNahtavus = true;
+List<dynamic> tariif = [];
 Map<String, String> tokenMap = {};
 Map<String, dynamic> graafikuSeaded = {
   'Seadistus_lubatud': false,
@@ -99,6 +100,11 @@ Future<void> main() async {
 
   gruppiMap['Kõik Seadmed']['Grupi_Seadmed'] = seadmeteMap.keys.toList();
 
+  var temp = prefs.getString('tariif');
+  if (temp != null) {
+    tariif = json.decode(temp);
+    print("siiiin tariif: $tariif");
+  }
   await getToken3();
   print("------------");
   print(tokenMap);
