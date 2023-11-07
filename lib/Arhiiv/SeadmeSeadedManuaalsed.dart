@@ -5,7 +5,7 @@ import 'package:testuus4/Arhiiv/kaksTabelit.dart';
 import 'package:http/http.dart' as http;
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:testuus4/funktsioonid/Elering.dart';
-import '../Arhiiv/seadmedKontoltNim.dart';
+import 'seadmedKontoltNim.dart';
 
 class SeadmeSeadedManuaalsed extends StatelessWidget {
   final String value;

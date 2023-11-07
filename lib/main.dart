@@ -5,7 +5,6 @@ TalTech
 //Kit test
 import 'dart:async';
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:testuus4/funktsioonid/graafikGen2.dart';
 import 'package:testuus4/funktsioonid/token.dart';
@@ -26,12 +25,16 @@ import 'package:workmanager/workmanager.dart';
 //Maini käivitamine, home on koduleht.
 //bool graafikuNahtavus = true;
 Map<String, String> tokenMap = {};
+
 Map<String, dynamic> graafikuSeaded = {
+  'Valitud_Tunnid': 12,
+  'Hinnapiir': 50.50,
   'Seadistus_lubatud': false,
   'Max_jarjest_valjas': 1.0,
   'Kelleatud_tunnid': [],
   'Lubatud_tunnid': [],
 };
+
 Map<String, dynamic> gruppiMap = {
   'Kõik Seadmed': {
     'Gruppi_pilt': 'assets/saun1.jpg',

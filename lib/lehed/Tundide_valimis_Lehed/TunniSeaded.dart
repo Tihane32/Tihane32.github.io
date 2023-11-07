@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import '../main.dart';
-import 'Tundide_valimis_Lehed/DynaamilineTundideValimine.dart';
+import '../../main.dart';
+import 'DynaamilineTundideValimine.dart';
 import 'package:intl/intl.dart';
 
 class TunniSeaded extends StatefulWidget {
@@ -26,8 +26,8 @@ class _TunniSeadedState extends State<TunniSeaded> {
   bool isLoading = true;
   String selectedPage = 'Kopeeri graafik';
   double vahe = 10;
-  int valitudTunnid = 10;
-  double hinnapiir = 50.50;
+  //int valitudTunnid = 10;
+  //double hinnapiir = 50.50;
   Color boxColor = sinineKast;
   bool _notificationsEnabled = false;
   String _selectedTheme = 'Odavaimad Tunnid';

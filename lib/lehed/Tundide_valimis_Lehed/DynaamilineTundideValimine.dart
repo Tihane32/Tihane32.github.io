@@ -4,16 +4,14 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:testuus4/funktsioonid/graafikGen1.dart';
 import 'package:testuus4/funktsioonid/graafikGen2.dart';
 import 'package:testuus4/lehed/GraafikusseSeadmeteValik.dart';
-import 'package:testuus4/lehed/P%C3%B5hi_Lehed/dynamicKoduLeht.dart';
+import 'package:testuus4/lehed/Tundide_valimis_Lehed/AutoTuniValik.dart';
+import 'package:testuus4/lehed/Tundide_valimis_Lehed/hinnaPiiriAluselTunideValimine.dart';
+import 'package:testuus4/lehed/Tundide_valimis_Lehed/kopeeeriGraafikTundideValimine.dart';
 import 'package:testuus4/widgets/kinnitus.dart';
 import '../../main.dart';
-import '../../widgets/AbiLeht.dart';
-import 'AutoTuniValik.dart';
-import '../TunniSeaded.dart';
-import '../keelatudTunnid.dart';
 import 'keskimiseHinnaAluselTundideValimine.dart';
-import 'hinnaPiiriAluselTunideValimine.dart';
-import 'kopeeeriGraafikTundideValimine.dart';
+import 'TunniSeaded.dart';
+import 'keelatudTunnid.dart';
 
 String selectedPageGlobal = "";
 
@@ -258,7 +256,6 @@ class _DynamilineTundideValimineState extends State<DynamilineTundideValimine> {
                         ),
                       ],
                       onTap: (int kodu) {
-                        print("graafikuseaded $graafikuSeaded");
                         //graafikuSeadedVaartustamine(graafikuSeaded);
                         Navigator.push(
                           context,

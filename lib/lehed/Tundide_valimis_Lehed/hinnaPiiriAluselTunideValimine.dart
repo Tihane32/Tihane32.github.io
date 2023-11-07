@@ -270,6 +270,10 @@ class _HinnaPiiriAluselTundideValimineState
 
   @override
   void initState() {
+    hinnaPiir = seadmeteMap['80646f80f713']['Hinnapiir'];
+    print(
+        '------------------------------------------------------------------------------------------------------------------------------------------------------');
+    print(valitudSeadmed);
     norm();
     super.initState();
   }

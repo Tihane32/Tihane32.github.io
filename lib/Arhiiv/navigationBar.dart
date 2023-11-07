@@ -6,7 +6,7 @@ import 'package:testuus4/lehed/P%C3%B5hi_Lehed/seadmeteListDynaamiline.dart';
 import 'package:testuus4/main.dart';
 import '../lehed/Põhi_Lehed/dynamicKoduLeht.dart';
 import 'kaksTabelit.dart';
-import '../lehed/hindJoonise.dart';
+import '../lehed/Põhi_Lehed/hindJoonise.dart';
 import 'package:get/get.dart';
 
 class AppNavigationBar extends StatelessWidget {

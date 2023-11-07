@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:testuus4/funktsioonid/lulitamine.dart';
-import 'package:testuus4/lehed/hindJoonise.dart';
+import 'package:testuus4/lehed/P%C3%B5hi_Lehed/hindJoonise.dart';
 import '../lehed/Põhi_Lehed/Login.dart';
 import '../lehed/Põhi_Lehed/koduleht.dart';
 import 'dart:convert';
@@ -10,8 +10,6 @@ import 'package:testuus4/funktsioonid/seisukord.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:testuus4/main.dart';
-import '../lehed/kasutajaSeaded.dart';
-import '../lehed/rakenduseSeaded.dart';
 import '../widgets/AbiLeht.dart';
 import 'drawer.dart';
 import 'navigationBar.dart';
