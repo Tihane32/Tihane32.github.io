@@ -3,7 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:testuus4/funktsioonid/graafikGen2.dart';
 import 'dart:convert';
 import '../../main.dart';
-import '../graafikuKoostamine.dart';
+import '../../Arhiiv/graafikuKoostamine.dart';
 import 'package:testuus4/Arhiiv/kaksTabelit.dart';
 import 'package:http/http.dart' as http;
 import 'package:syncfusion_flutter_charts/charts.dart';

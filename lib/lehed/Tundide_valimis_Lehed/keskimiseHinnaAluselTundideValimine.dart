@@ -6,6 +6,7 @@ import 'package:testuus4/lehed/GraafikusseSeadmeteValik.dart';
 import 'package:testuus4/lehed/P%C3%B5hi_Lehed/dynamicKoduLeht.dart';
 import '../../funktsioonid/Elering.dart';
 import '../../funktsioonid/KeskmineHindArvutus.dart';
+import '../../funktsioonid/salvestaSeadistus.dart';
 import '../../main.dart';
 import '../../widgets/AbiLeht.dart';
 import '../Põhi_Lehed/koduleht.dart';
@@ -62,7 +63,7 @@ class _KeskmiseHinnaAluselTundideValimineState
   String paevNupp = 'Täna';
   String selectedPage = 'Keskmine hind';
   double vahe = 10;
-  int valitudTunnid = 12;
+  int valitudTunnid = 10;
   Color boxColor = sinineKast;
   int tund = 0;
   late Map<int, dynamic> lulitus;
@@ -70,7 +71,6 @@ class _KeskmiseHinnaAluselTundideValimineState
   late Map<int, dynamic> lulitusHomme;
   late double hindAVG;
   late double temp = 0;
-  Map<String, dynamic> graafikuSeaded = {};
   Map<int, dynamic> keskHind = {
     0: ['00.00', 0, false],
     1: ['01.00', 0, false],
@@ -182,7 +182,6 @@ class _KeskmiseHinnaAluselTundideValimineState
 
   Future norm() async {
     DateTime now = new DateTime.now();
-
     var date = new DateTime(
         now.year, now.month, now.day, now.hour); // tänase päeva leidmine
 
@@ -281,6 +280,19 @@ class _KeskmiseHinnaAluselTundideValimineState
 
   @override
   void initState() {
+    int trueCount = 0;
+    String valitudSeade = '';
+
+    for (var entry in valitudSeadmed.entries) {
+      if (entry.value) {
+        trueCount++;
+        valitudSeade = entry.key;
+      }
+    }
+    if (trueCount == 1) {
+      valitudTunnid = seadmeteMap[valitudSeade]['Valitud_Tunnid'];
+    }
+
     for (int i = 0; i < 24; i++) {
       String key = i < 10 ? '0$i.00' : '$i.00';
       keskHind[i] = [key, 0, false];
@@ -490,6 +502,10 @@ class _KeskmiseHinnaAluselTundideValimineState
                                       parsedValue = 24;
                                     }
                                     valitudTunnid = parsedValue;
+                                    salvestaSeadistus(
+                                        'Valitud_Tunnid',
+                                        valitudTunnid.toDouble(),
+                                        valitudSeadmed);
                                     lulitus = OdavimadTunnidOn(
                                         lulitus, valitudTunnid);
                                     lulitusMapVasak =

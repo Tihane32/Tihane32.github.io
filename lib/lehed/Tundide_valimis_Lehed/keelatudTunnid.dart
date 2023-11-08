@@ -5,10 +5,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:testuus4/lehed/GraafikusseSeadmeteValik.dart';
 import 'package:testuus4/lehed/P%C3%B5hi_Lehed/dynamicKoduLeht.dart';
 import 'package:testuus4/lehed/Tundide_valimis_Lehed/keskimiseHinnaAluselTundideValimine.dart';
-import '../funktsioonid/seisukord.dart';
-import '../main.dart';
-import '../widgets/AbiLeht.dart';
-import 'Tundide_valimis_Lehed/hinnaPiiriAluselTunideValimine.dart';
+import '../../funktsioonid/seisukord.dart';
+import '../../main.dart';
+import '../../widgets/AbiLeht.dart';
+import 'hinnaPiiriAluselTunideValimine.dart';
 import 'package:http/http.dart' as http;
 
 class KeelatudTunnid extends StatefulWidget {

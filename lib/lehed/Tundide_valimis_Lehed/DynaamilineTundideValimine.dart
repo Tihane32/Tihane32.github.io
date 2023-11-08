@@ -4,16 +4,14 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:testuus4/funktsioonid/graafikGen1.dart';
 import 'package:testuus4/funktsioonid/graafikGen2.dart';
 import 'package:testuus4/lehed/GraafikusseSeadmeteValik.dart';
-import 'package:testuus4/lehed/P%C3%B5hi_Lehed/dynamicKoduLeht.dart';
+import 'package:testuus4/lehed/Tundide_valimis_Lehed/AutoTuniValik.dart';
+import 'package:testuus4/lehed/Tundide_valimis_Lehed/hinnaPiiriAluselTunideValimine.dart';
+import 'package:testuus4/lehed/Tundide_valimis_Lehed/kopeeeriGraafikTundideValimine.dart';
 import 'package:testuus4/widgets/kinnitus.dart';
 import '../../main.dart';
-import '../../widgets/AbiLeht.dart';
-import 'AutoTuniValik.dart';
-import '../TunniSeaded.dart';
-import '../keelatudTunnid.dart';
 import 'keskimiseHinnaAluselTundideValimine.dart';
-import 'hinnaPiiriAluselTunideValimine.dart';
-import 'kopeeeriGraafikTundideValimine.dart';
+import 'TunniSeaded.dart';
+import 'keelatudTunnid.dart';
 
 String selectedPageGlobal = "";
 
@@ -258,7 +256,6 @@ class _DynamilineTundideValimineState extends State<DynamilineTundideValimine> {
                         ),
                       ],
                       onTap: (int kodu) {
-                        print("graafikuseaded $graafikuSeaded");
                         //graafikuSeadedVaartustamine(graafikuSeaded);
                         Navigator.push(
                           context,
@@ -416,36 +413,4 @@ graafikuKopeerimine(
       }
     }
   });
-}
-
-graafikuSeadedVaartustamine(
-  Map<String, dynamic> graafikuSeaded,
-) async {
-  String seadista = graafikuSeaded['Seadistus_lubatud'];
-  String maxTunnid = graafikuSeaded['Max_jarjest_valjas'];
-  Set<int> keelatud = graafikuSeaded['Kelleatud_tunnid'];
-  Set<int> lubatud = graafikuSeaded['Lubatud_tunnid'];
-
-  final prefs = await SharedPreferences.getInstance();
-  await prefs.setString('Seadistus_lubatud', seadista);
-  await prefs.setString('Max_jarjest_valjas', maxTunnid);
-  await prefs.setStringList(
-      'Kelleatud_tunnid', keelatud.map((e) => e.toString()).toList());
-  await prefs.setStringList(
-      'Lubatud_tunnid', lubatud.map((e) => e.toString()).toList());
-}
-
-Future<Map<String, dynamic>> loadGraafikuSeaded() async {
-  final prefs = await SharedPreferences.getInstance();
-  bool? seadista = prefs.getBool('Seadistus_lubatud');
-  double? maxTunnid = prefs.getDouble('Max_jarjest_valjas');
-  List<String>? keelatudList = prefs.getStringList('Kelleatud_tunnid');
-  List<String>? lubatudList = prefs.getStringList('Lubatud_tunnid');
-
-  return {
-    'Seadistus_lubatud': seadista,
-    'Max_jarjest_valjas': maxTunnid,
-    'Kelleatud_tunnid': keelatudList?.map((e) => int.parse(e)).toSet(),
-    'Lubatud_tunnid': lubatudList?.map((e) => int.parse(e)).toSet(),
-  };
 }
