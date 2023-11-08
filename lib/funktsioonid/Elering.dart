@@ -6,14 +6,16 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 
+import '../main.dart';
+
 /// The function `getElering` retrieves the price graph data for electricity in Estonia from the Elering
 /// API for a specified date.
-/// 
+///
 /// Args:
 ///   paevtest (String): The parameter "paevtest" is a string that determines whether to get the data
 /// for today or tomorrow. If the value of "paevtest" is "tana", it means to get the data for today.
 /// Otherwise, it will get the data for tomorrow.
-/// 
+///
 /// Returns:
 ///   a Future<List> object.
 Future<List> getElering(String paevtest) async {
@@ -87,6 +89,41 @@ Future<List> getElering(String paevtest) async {
   var ajutine2 = ajutine.entries.toList();
   var hinnagraafik = ajutine2[0].value;
 
+  print("-----------------");
+  print(hinnagraafik.length);
+  print("-----------------");
+  print("nadalapaev ${now.weekday}");
+  if (tariif != null) {
+    for (int i = 0; i < hinnagraafik.length; i++) {
+      if (tariif.length == 1) {
+        double newPrice =
+            (hinnagraafik[i]["price"] * 1.2 + tariif[0] * 1.2 * 10);
+        hinnagraafik[i]["price"] = double.parse(newPrice.toStringAsFixed(2));
+      } else {
+        if (now.weekday < 6) {
+          if (i < 8) {
+
+            double newPrice =
+              (hinnagraafik[i]["price"] * 1.2 + tariif[1] * 1.2 * 10);
+          hinnagraafik[i]["price"] = double.parse(newPrice.toStringAsFixed(2));
+          } else {
+            
+            double newPrice =
+                (hinnagraafik[i]["price"] * 1.2 + tariif[0] * 1.2 * 10);
+            hinnagraafik[i]["price"] =
+                double.parse(newPrice.toStringAsFixed(2));
+          }
+        } else {
+          double newPrice =
+              (hinnagraafik[i]["price"] * 1.2 + tariif[1] * 1.2 * 10);
+          hinnagraafik[i]["price"] = double.parse(newPrice.toStringAsFixed(2));
+        }
+      }
+    }
+  }
+  print("-----------------");
+  print(hinnagraafik);
+  print("-----------------");
   return hinnagraafik;
 }
 
@@ -117,7 +154,7 @@ Future<List<double>> getEleringVahemik(String algusPaev, String vahemik) async {
   List<double> prices = [];
   for (int i = 0; i < hinnagraafik.length;) {
     prices.add(hinnagraafik[i]["price"]);
-    
+
     i++;
   }
 

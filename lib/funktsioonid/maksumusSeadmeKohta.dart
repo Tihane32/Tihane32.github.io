@@ -33,7 +33,6 @@ seadmeMaksumus(String value, [Function? setPaevamaksumus]) async {
 
   SharedPreferences prefs = await SharedPreferences.getInstance();
 
-  
   double katse = 0;
   double hind = 0;
   var k = 0;
@@ -66,7 +65,7 @@ seadmeMaksumus(String value, [Function? setPaevamaksumus]) async {
       'date_from': '$test 00:00:00',
       'date_to': '$test 23:59:59',
     };
-
+    print(value);
     var url = Uri.parse(
         '${seadmeteMap[value]["api_url"]}/statistics/relay/consumption');
     var res = await http.post(url, headers: headers, body: data);
@@ -76,7 +75,6 @@ seadmeMaksumus(String value, [Function? setPaevamaksumus]) async {
 
     if (res.statusCode != 200) {
       return;
-      
     }
     final jsonData = json.decode(res.body);
     var resJson = json.decode(res.body) as Map<String, dynamic>;

@@ -56,7 +56,7 @@ class _TarbimisLehtState extends State<TarbimisLeht> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Color.fromARGB(255, 255, 255, 255), //TaustavÃ¤rv
+        backgroundColor: const Color.fromARGB(255, 255, 255, 255), //TaustavÃ¤rv
         body: MGraafik(value: seadmeNimi));
   }
 }
@@ -104,7 +104,7 @@ class _MGraafikState extends State<MGraafik> {
     setState(() {
       for (DateTime date = firstDayOfMonth;
           date.isBefore(lastDayOfMonth);
-          date = date.add(Duration(days: 1))) {
+          date = date.add(const Duration(days: 1))) {
         temp[date] = 0.0;
       }
     });
@@ -122,7 +122,7 @@ class _MGraafikState extends State<MGraafik> {
     temp = await seadmeMaksumus(value, setPaevamaksumus);
     for (DateTime date = firstDayOfMonth;
         date.isBefore(lastDayOfMonth);
-        date = date.add(Duration(days: 1))) {
+        date = date.add(const Duration(days: 1))) {
       if (!temp.containsKey(date)) {
         temp[date] = 0.0;
       }
@@ -131,9 +131,9 @@ class _MGraafikState extends State<MGraafik> {
     setState(() {
       temp = temp.map((key, value) =>
           MapEntry(key, double.parse(value.toStringAsFixed(3))));
-      temp.values.forEach((value) {
+      for (var value in temp.values) {
         abi = abi + value;
-      });
+      }
       total = abi.toStringAsFixed(3);
       keskmine = double.parse(total) / double.parse(total2);
     });
@@ -143,11 +143,11 @@ class _MGraafikState extends State<MGraafik> {
           .negativeInfinity; // Initialize with negative infinity as the starting maximum value
 
       // Iterate through the values in the map
-      temp.values.forEach((value) {
+      for (var value in temp.values) {
         if (value > max) {
           max = value; // Update max if a larger value is found
         }
-      });
+      }
 
       return max;
     }
@@ -180,7 +180,7 @@ class _MGraafikState extends State<MGraafik> {
       total2 = '0';
       for (DateTime date = firstDayOfMonth;
           date.isBefore(lastDayOfMonth);
-          date = date.add(Duration(days: 1))) {
+          date = date.add(const Duration(days: 1))) {
         chartData.add(_ChartData(date, 0.0));
       }
     });
@@ -200,8 +200,9 @@ class _MGraafikState extends State<MGraafik> {
     var url = Uri.parse(
         '${seadmeteMap[value]["api_url"]}/statistics/relay/consumption');
     var res = await http.post(url, headers: headers, body: data);
-    if (res.statusCode != 200)
+    if (res.statusCode != 200) {
       throw Exception('http.post error: statusCode= ${res.statusCode}');
+    }
     final jsonData = json.decode(res.body);
     final historyData = jsonData['data']['history'] as List<dynamic>;
     setState(() {
@@ -293,7 +294,7 @@ class _MGraafikState extends State<MGraafik> {
                                 },
                                 child: Container(
                                   alignment: Alignment.centerRight,
-                                  child: Icon(
+                                  child: const Icon(
                                     Icons.bar_chart,
                                     size: 30,
                                     color: Colors.black,
@@ -312,7 +313,7 @@ class _MGraafikState extends State<MGraafik> {
                                 },
                                 child: Container(
                                   alignment: Alignment.centerRight,
-                                  child: Icon(
+                                  child: const Icon(
                                     Icons.table_rows_outlined,
                                     size: 30,
                                     color: Colors.black,
@@ -412,7 +413,7 @@ class _MGraafikState extends State<MGraafik> {
                                 width: 0.9,
                                 groupName: 'A',
                                 //splineType: SplineType.monotonic,
-                                borderRadius: BorderRadius.only(
+                                borderRadius: const BorderRadius.only(
                                     topLeft: Radius.circular(20),
                                     topRight: Radius.circular(20)),
                                 dataSource: temp.entries.toList(),
@@ -428,7 +429,7 @@ class _MGraafikState extends State<MGraafik> {
                                 },
                                 enableTooltip: false,
                                 dataLabelSettings: DataLabelSettings(
-                                  offset: Offset(0, -10),
+                                  offset: const Offset(0, -10),
                                   isVisible: true,
                                   labelAlignment: ChartDataLabelAlignment.outer,
                                   textStyle: fontVaike,
@@ -447,7 +448,7 @@ class _MGraafikState extends State<MGraafik> {
                               StackedColumnSeries<_ChartData, DateTime>(
                                 color: Colors.blue,
                                 width: 0.9,
-                                borderRadius: BorderRadius.only(
+                                borderRadius: const BorderRadius.only(
                                     topLeft: Radius.circular(20),
                                     topRight: Radius.circular(20)),
                                 dataSource: chartData,
@@ -463,7 +464,7 @@ class _MGraafikState extends State<MGraafik> {
                                 },
                                 enableTooltip: false,
                                 dataLabelSettings: DataLabelSettings(
-                                  offset: Offset(0, -20),
+                                  offset: const Offset(0, -20),
                                   isVisible: true,
                                   labelAlignment: ChartDataLabelAlignment.outer,
                                   textStyle: fontVaike,
@@ -486,48 +487,171 @@ class _MGraafikState extends State<MGraafik> {
                       ),
                     ),
                     Visibility(
-                        visible: graafik,
-                        child: Row(
-                          children: [
-                            Center(
-                              child: DataTable(
-                                dataRowHeight: 20,
-                                decoration: BoxDecoration(),
-                                columns: const [
-                                  DataColumn(label: Text('Kuupäev')),
-                                  DataColumn(label: Text('Eurot')),
-                                ],
-                                rows: temp.entries.map((entry) {
-                                  final formattedDate = DateFormat('yyyy.MM.dd')
-                                      .format(entry.key); // Format the date
-                                  return DataRow(
-                                    cells: [
-                                      DataCell(Text(formattedDate)),
-                                      DataCell(Text(entry.value.toString())),
-                                    ],
-                                  );
-                                }).toList(),
+                      visible: graafik,
+                      child: Container(
+                        height: MediaQuery.of(context).size.height * 2,
+                        child: RotatedBox(
+                          quarterTurns: 1,
+                          child: SfCartesianChart(
+                            axes: [
+                              NumericAxis(
+                                name: 'firstAxis',
+                                minorGridLines: MinorGridLines(width: 0.0),
+                                majorGridLines: MajorGridLines(width: 0.0),
+                                isVisible: false,
+                                title: AxisTitle(
+                                  
+                                  text: 'Eurot',
+                                  textStyle: fontVaike,
+                                ),
+                                labelStyle: fontVaike,
+                               labelAlignment: LabelAlignment.start,
+                        labelRotation: 0,
+                              ),
+                              NumericAxis(
+                                majorGridLines: MajorGridLines(width: 0.0),
+                                name: 'secondAxis',
+                                isVisible: false,
+                                title: AxisTitle(
+                                  text: 'test',
+                                  textStyle: fontVaike,
+                                ),
+                              ),
+                            ],
+                            primaryYAxis: NumericAxis(
+                              isVisible: false,
+                              title: AxisTitle(
+                                text: 'test',
+                                textStyle: fontVaike,
                               ),
                             ),
-                            Center(
-                              child: DataTable(
-                                dataRowHeight: 20,
-                                decoration: BoxDecoration(),
-                                columns: const [
-                                  DataColumn(label: Text('Wh')),
-                                ],
-                                rows: consumption.entries.map((entry) {
-                                  // Format the date
-                                  return DataRow(
-                                    cells: [
-                                      DataCell(Text(entry.value.toString())),
-                                    ],
-                                  );
-                                }).toList(),
-                              ),
+                            primaryXAxis: DateTimeAxis(
+                              //edgeLabelPlacement: EdgeLabelPlacement.hide,
+                              //visibleMinimum: DateTime(2023, 8,31),
+                              interval: 1,
+                              labelRotation: 270,
+                              labelStyle: fontVaike,
+                              dateFormat: DateFormat('dd.MM'),
+                              //minimum: temp.entries.first.key,
                             ),
-                          ],
-                        ))
+                            tooltipBehavior: _tooltipBehavior,
+                            series: <ChartSeries>[
+                              LineSeries<MapEntry<DateTime, double>, DateTime>(
+                                markerSettings:
+                                    const MarkerSettings(isVisible: true),
+                                onPointTap: (pointInteractionDetails) {
+                                  List<DateTime> dateTimes = temp.keys.toList();
+                                  int rowIndex =
+                                      pointInteractionDetails.pointIndex as int;
+                                  showDialog(
+                                    context: context,
+                                    builder: (context) {
+                                      return FractionallySizedBox(
+                                        heightFactor: 0.8,
+                                        widthFactor: 0.8,
+                                        child: Material(
+                                          color: Colors.white,
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          //height: MediaQuery.of(context).size.height*0.5,
+                                          //width: MediaQuery.of(context).size.width,
+
+                                          child: PaevaTarbimine(
+                                              date: dateTimes[rowIndex]
+                                                  .toString(),
+                                              value: widget.value,
+                                              rowIndex: rowIndex,
+                                              paevaMaksumus: paevaMaksumus),
+                                        ),
+                                      );
+                                    },
+                                  );
+                                },
+                                color: Colors.green,
+                                width: 5,
+
+                                //splineType: SplineType.monotonic,
+
+                                dataSource: temp.entries.toList(),
+                                yAxisName: 'firstAxis',
+                                xValueMapper: (entry, _) => entry.key,
+                                yValueMapper: (entry, _) {
+                                  final yValue = entry.value;
+                                  return yValue == 0
+                                      ? 0
+                                      : yValue < asi2 * 0.25
+                                          ? asi2 * 0.25
+                                          : yValue;
+                                },
+                                enableTooltip: false,
+                                dataLabelSettings: DataLabelSettings(
+                                  showZeroValue: false,
+                                  offset: const Offset(15, 0),
+                                  opacity: 0.8,
+                                  isVisible: true,
+                                  labelAlignment: ChartDataLabelAlignment.middle,
+                                  labelIntersectAction: LabelIntersectAction.none,
+                            
+    useSeriesColor: true,
+                                  textStyle: fontEritiVaike,
+                                  angle: 270,
+                                ),
+                                dataLabelMapper: (entry, _) {
+                                  // Display the data label only if the consumption is not 0
+                                  if (entry.value == 0) {
+                                    return ''; // Customize this as needed
+                                  } else {
+                                    String temp3 = entry.value.toString();
+                                    return '$temp3€';
+                                  }
+                                },
+                              ),
+                              LineSeries<_ChartData, DateTime>(
+                                markerSettings:
+                                    const MarkerSettings(isVisible: true),
+                                color: Colors.blue,
+                                width: 5,
+                                
+                                dataSource: chartData,
+                                yAxisName: 'secondAxis',
+                                xValueMapper: (_ChartData data, _) => data.date,
+                                yValueMapper: (_ChartData data, _) {
+                                  final yValue = data.consumption;
+                                  return yValue == 0
+                                      ? 0
+                                      : yValue < asi * 0.25
+                                          ? asi * 0.25
+                                          : yValue;
+                                },
+                                enableTooltip: false,
+                                dataLabelSettings: DataLabelSettings(
+                                  opacity: 0.8,
+                                  showZeroValue: false,
+                                  offset: const Offset(-15, 0),
+                                  isVisible: true,
+                                  labelAlignment: ChartDataLabelAlignment.middle,
+                                  labelIntersectAction: LabelIntersectAction.none,
+                            
+    useSeriesColor: true,
+                                  textStyle: fontEritiVaike,
+                                  angle: 270,
+                                ),
+                                dataLabelMapper: (_ChartData data, _) {
+                                  // Display the data label only if the consumption is not 0
+                                  if (data.consumption == 0) {
+                                    return ''; // Customize this as needed
+                                  } else {
+                                    String temp3 =
+                                        data.consumption.toStringAsFixed(2);
+                                    return '${temp3}Wh';
+                                  }
+                                },
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    )
                   ])
                 ],
               );

@@ -8,7 +8,7 @@ import 'package:flutter/services.dart';
 import 'GraafikusseSeadmeteValik.dart';
 
 import 'package:vibration/vibration.dart';
-import 'koduleht.dart';
+
 
 import 'dart:math';
 

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:testuus4/lehed/GraafikusseSeadmeteValik.dart';
 import 'package:testuus4/lehed/P%C3%B5hi_Lehed/koduleht.dart';
+import 'package:testuus4/lehed/P%C3%B5hi_Lehed/minuPakett.dart';
 import 'package:testuus4/lehed/P%C3%B5hi_Lehed/seadmeteListDynaamiline.dart';
 import 'package:testuus4/main.dart';
 import '../../widgets/AbiLeht.dart';
@@ -36,16 +37,65 @@ class _DynaamilenieKoduLehtState extends State<DynaamilenieKoduLeht> {
     KasutajaSeaded(),
     TulpDiagramm(),
     LisaSeade(),
+    MinuPakett()
   ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: backround,
-        appBar: AppBar(
+        appBar: 
+        
+        i == 6?
+        AppBar(
           automaticallyImplyLeading: false,
           backgroundColor: appbar,
           title: Text(
+            
+            "Minu pakett",
+            style: GoogleFonts.roboto(
+              textStyle: const TextStyle(fontSize: 25),
+            ),
+          ),
+           leading: Builder(
+    builder: (BuildContext context) {
+      return ElevatedButton(
+        style: ButtonStyle(backgroundColor: MaterialStatePropertyAll(appbar),elevation: MaterialStatePropertyAll(0.0)),
+        onPressed: () {
+          Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => DynaamilenieKoduLeht(i: 3)),
+                );
+        },
+        child: Icon(
+          Icons.arrow_back, // Replace with the icon you want to use
+          size: 30,
+        ),
+      );
+    },
+  ),
+          actions: [
+            Builder(
+              builder: (BuildContext context) {
+                return IconButton(
+                  padding: EdgeInsets.only(right: 20),
+                  icon: Icon(
+                    Icons.menu,
+                    size: 30,
+                  ),
+                  onPressed: () {
+                    Scaffold.of(context).openEndDrawer();
+                  },
+                );
+              },
+            ),
+          ],
+        ):
+        AppBar(
+          automaticallyImplyLeading: false,
+          backgroundColor: appbar,
+          title: Text(
+            
             appBarText,
             style: GoogleFonts.roboto(
               textStyle: const TextStyle(fontSize: 25),
@@ -68,6 +118,7 @@ class _DynaamilenieKoduLehtState extends State<DynaamilenieKoduLeht> {
             ),
           ],
         ),
+
         endDrawer: Drawer(
           width: MediaQuery.of(context).size.width * 0.60,
           child: Container(

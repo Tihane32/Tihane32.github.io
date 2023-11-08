@@ -11,9 +11,15 @@
     Päeva tarbimisgraafiku kuvamine                                     TEHTUD, vaja otsustada kas graafik püsti või külili
     Seadme graafiku kopeerimine tööle                                   TEHTUD
 
+17.11.2023 Eesmärgid
+    kahetariifne                                                        Tundide määramisel töötab, arvutamisel mitte
+    tarbimisele graafik joonega                                         
+    tarbimine ja maksumus kokku
+
 xx.xx.xxxx Eesmärgid
     Seadme mudel ja nimi erinevateks lahtriteks seadmete mapis
     valitud tunnid mällu
     kahetariifne
     tarbimisele graafik joonega
     kui "homme" on võimalik, siis minna selle peale
+    login korda, et uuesti samat seadet ei saaks lisada

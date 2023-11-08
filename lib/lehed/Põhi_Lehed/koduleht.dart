@@ -1,20 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:testuus4/funktsioonid/KeskmineHind.dart';
-import 'package:testuus4/Arhiiv/drawer.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:testuus4/funktsioonid/hetketarbimine.dart';
 import 'package:testuus4/funktsioonid/tarbimine.dart';
-import 'package:testuus4/funktsioonid/maksumus.dart';
 import 'package:testuus4/lehed/tarbimiseGraafik.dart';
 import 'package:testuus4/lehed/tarbimiseGraafikSpline.dart';
-import '../../funktsioonid/hetke_hind.dart';
 import 'package:testuus4/main.dart';
 import 'dynamicKoduLeht.dart';
-import 'minuPakett.dart';
 import '../maksumuseGraafik.dart';
 import 'package:table_calendar/table_calendar.dart';
 
-import '../../Arhiiv/navigationBar.dart';
 
 class KoduLeht extends StatefulWidget {
   const KoduLeht({Key? key}) : super(key: key);
@@ -89,18 +82,15 @@ class _KoduLehtState extends State<KoduLeht> {
 
   //Võtab Eleringi API-st hetke hinna
   updateTarbimine(tarbimiseMap1) {
-    print("update $tarbimiseMap1");
     setState(() {
       tarbimiseMap = tarbimiseMap1;
     });
-    print("Tarbimine siin: $tarbimiseMap");
   }
 
   Future<void> _getCurrentPrice() async {
     //getKeskmineHind(); //testimiseks
 
     var test = await tarbimine(tarbimiseMap, updateTarbimine);
-    print("test: $test");
 
     num k = num.parse(test.toStringAsFixed(4));
     //Võtab data Mapist 'price' väärtuse
@@ -112,270 +102,7 @@ class _KoduLehtState extends State<KoduLeht> {
     // final temp = await maksumus(selectedOption);
   }
 
-//Määrab kodulehe struktuuri
-/*
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-        backgroundColor: backround,
-        body: GestureDetector(
-          onHorizontalDragUpdate: (details) {
-            int tundlikus = 8;
-            if (details.delta.dx > -tundlikus) {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => DynaamilenieKoduLeht(i: 1)));
-              // Right Swipe
-            }
-          },
-          onVerticalDragUpdate: (details) {},
-          child: SingleChildScrollView(
-            child: Container(
-              decoration: const BoxDecoration(
-                  /*image: DecorationImage(
-                image: AssetImage('assets/tuulik7.jpg'),
-                alignment: Alignment.bottomCenter,
-              ),*/
-                  ),
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(0, 0, 0, 8),
-                child: Center(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      TableCalendar(
-                         //availableCalendarFormats: const {},
-                        startingDayOfWeek :StartingDayOfWeek.monday,
-                        rowHeight: 35,
-                        firstDay: firstDay,
-                        lastDay: lastDay,
-                        focusedDay: _focusedDay,
-                        selectedDayPredicate: (day) =>
-                            isSameDay(_selectedDay, day),
-                        rangeStartDay: _rangeStart,
-                        rangeEndDay: _rangeEnd,
-                        calendarFormat: _calendarFormat,
-                        rangeSelectionMode: _rangeSelectionMode,
-                        onDaySelected: (selectedDay, focusedDay) {
-                          if (!isSameDay(
-                              _selectedDay, selectedDay)) {
-                            setState(() {
-                              _selectedDay = selectedDay;
-                              _focusedDay = focusedDay;
-                              _rangeStart =
-                                  null; // Important to clean those
-                              _rangeEnd = null;
-                              _rangeSelectionMode =
-                                  RangeSelectionMode.toggledOff;
-                            });
-                          }
-                        },
-                        onRangeSelected: (start, end, focusedDay) {
-                          setState(() {
-                            _selectedDay = null;
-                            _focusedDay = focusedDay;
-                            _rangeStart = start;
-                            _rangeEnd = end;
-                            _rangeSelectionMode =
-                                RangeSelectionMode.toggledOn;
-                          });
-                        },
-                        onFormatChanged: (format) {
-                          if (_calendarFormat != format) {
-                            setState(() {
-                              _calendarFormat = format;
-                            });
-                          }
-                        },
-                        onPageChanged: (focusedDay) {
-                          _focusedDay = focusedDay;
-                        },
-                      ),
-                      //SizedBox(height: vahe / 4),
-                      Container(
-                        height: 1,
-                        width: double.infinity,
-                        color: Colors.black,
-                      ),
-                      SizedBox(height: vahe / 4),
-                      Center(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            Align(
-                              child: Container(
-                                alignment: Alignment.center,
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                ),
-                                //width: sinineKastLaius,
-                                //height: sinineKastKorgus,
-                                child: RichText(
-                                  textAlign: TextAlign.center,
-                                  text: TextSpan(
-                                    style: font,
-                                    children: [
-                                      TextSpan(
-                                          text: 'Kokku: $ajatarbimine kWh',
-                                          style: fontLaadimine()),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Align(
-                        child: Visibility(
-                          visible: tarbimineBool,
-                          child: GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                tarbimineBool = !tarbimineBool;
-                              });
-                            },
-                            child: Container(
-                              alignment: Alignment.centerRight,
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.only(right: 8.0),
-                                child: Icon(
-                                  Icons.show_chart_rounded,
-                                  size: 30,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                      Align(
-                        child: Visibility(
-                          visible: !tarbimineBool,
-                          child: GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                tarbimineBool = !tarbimineBool;
-                              });
-                            },
-                            child: Container(
-                              alignment: Alignment.centerRight,
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.only(right: 8.0),
-                                child: Icon(
-                                  Icons.bar_chart_rounded,
-                                  size: 30,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
 
-                      Visibility(
-                        visible: tarbimineBool,
-                        child: Center(
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              Align(
-                                child: Container(
-                                  alignment: Alignment.center,
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                  ),
-                                  //width: sinineKastLaius,
-                                  //height: sinineKastKorgus,
-                                  child: RichText(
-                                    textAlign: TextAlign.center,
-                                    text: TextSpan(
-                                      style: font,
-                                      children: [
-                                        TextSpan(text: 'kWh', style: fontVaike),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      // Add some spacing between the two widgets
-                      FutureBuilder<void>(
-                        future: Future.value(), // Use an empty future here
-                        builder: (context, snapshot) {
-                          if (!dataFetched) {
-                            return Center(child: CircularProgressIndicator());
-                          } else if (snapshot.hasError) {
-                            return Center(
-                                child: Text('Error: ${snapshot.error}'));
-                          } else {
-                            return Visibility(
-                              visible: tarbimineBool,
-                              child: TarbimiseGraafik(tarbimiseMap),
-                            );
-                          }
-                        },
-                      ),
-                      Visibility(
-                          visible: !tarbimineBool,
-                          child: TarbimiseGraafikSpline()),
-                      Container(
-                        height: 1,
-                        width: double.infinity,
-                        color: Colors.black,
-                      ),
-
-                      // Add some spacing between the two widgets
-
-                      SizedBox(height: vahe),
-                      Center(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            Align(
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  
-                                  //Text(" $kulu €", style: fontLaadimine()),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-
-                      //SizedBox(height: vahe / 8),
-                      Container(
-                        height: 1,
-                        width: double.infinity,
-                        color: Colors.black,
-                      ),
-                      SizedBox(height: vahe / 4),
-
-                      MaksumuseGraafik(),
-                      Container(
-                        height: 1,
-                        width: double.infinity,
-                        color: Colors.black,
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ));
-  }
-*/
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -454,27 +181,7 @@ class _KoduLehtState extends State<KoduLeht> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          Align(
-                            child: Container(
-                              alignment: Alignment.center,
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                              ),
-                              //width: sinineKastLaius,
-                              //height: sinineKastKorgus,
-                              child: RichText(
-                                textAlign: TextAlign.center,
-                                text: TextSpan(
-                                  style: font,
-                                  children: [
-                                    TextSpan(
-                                        text: 'Kokku: $ajatarbimine kWh',
-                                        style: fontLaadimine()),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
+                          
                         ],
                       ),
                     ),
@@ -489,11 +196,11 @@ class _KoduLehtState extends State<KoduLeht> {
                           },
                           child: Container(
                             alignment: Alignment.centerRight,
-                            decoration: BoxDecoration(
+                            decoration: const BoxDecoration(
                               color: Colors.white,
                             ),
-                            child: Padding(
-                              padding: const EdgeInsets.only(right: 8.0),
+                            child: const Padding(
+                              padding: EdgeInsets.only(right: 8.0),
                               child: Icon(
                                 Icons.show_chart_rounded,
                                 size: 30,
@@ -514,11 +221,11 @@ class _KoduLehtState extends State<KoduLeht> {
                           },
                           child: Container(
                             alignment: Alignment.centerRight,
-                            decoration: BoxDecoration(
+                            decoration: const BoxDecoration(
                               color: Colors.white,
                             ),
-                            child: Padding(
-                              padding: const EdgeInsets.only(right: 8.0),
+                            child: const Padding(
+                              padding: EdgeInsets.only(right: 8.0),
                               child: Icon(
                                 Icons.bar_chart_rounded,
                                 size: 30,
@@ -529,48 +236,20 @@ class _KoduLehtState extends State<KoduLeht> {
                       ),
                     ),
 
-                    Visibility(
-                      visible: tarbimineBool,
-                      child: Center(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            Align(
-                              child: Container(
-                                alignment: Alignment.center,
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                ),
-                                //width: sinineKastLaius,
-                                //height: sinineKastKorgus,
-                                child: RichText(
-                                  textAlign: TextAlign.center,
-                                  text: TextSpan(
-                                    style: font,
-                                    children: [
-                                      TextSpan(text: 'kWh', style: fontVaike),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
+                  
                     // Add some spacing between the two widgets
                     FutureBuilder<void>(
                       future: Future.value(), // Use an empty future here
                       builder: (context, snapshot) {
                         if (!dataFetched) {
-                          return Center(child: CircularProgressIndicator());
+                          return const Center(child: CircularProgressIndicator());
                         } else if (snapshot.hasError) {
                           return Center(
                               child: Text('Error: ${snapshot.error}'));
                         } else {
                           return Visibility(
                             visible: tarbimineBool,
-                            child: TarbimiseGraafik(tarbimiseMap),
+                            child: TarbimiseGraafik(tarbimiseMap, ajatarbimine),
                           );
                         }
                       },
@@ -578,46 +257,11 @@ class _KoduLehtState extends State<KoduLeht> {
                     Visibility(
                         visible: !tarbimineBool,
                         child: TarbimiseGraafikSpline()),
-                    Container(
-                      height: 1,
-                      width: double.infinity,
-                      color: Colors.black,
-                    ),
-
+                   
                     // Add some spacing between the two widgets
 
-                    SizedBox(height: vahe),
-                    Center(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          Align(
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                //Text(" $kulu €", style: fontLaadimine()),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-
                     //SizedBox(height: vahe / 8),
-                    Container(
-                      height: 1,
-                      width: double.infinity,
-                      color: Colors.black,
-                    ),
-                    SizedBox(height: vahe / 4),
-
-                    MaksumuseGraafik(),
-
-                    Container(
-                      height: 1,
-                      width: double.infinity,
-                      color: Colors.black,
-                    ),
+                  
                   ],
                 ),
               ),
