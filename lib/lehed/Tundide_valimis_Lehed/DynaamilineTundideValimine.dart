@@ -291,7 +291,7 @@ class _DynamilineTundideValimineState extends State<DynamilineTundideValimine> {
                           ),
                         ),
                       ],
-                      currentIndex: koduindex,
+                      currentIndex: 1,
                       onTap: (int kodu) async {
                         koduindex = kodu;
                         if (koduindex == 0) {
