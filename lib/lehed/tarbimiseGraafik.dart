@@ -20,13 +20,14 @@ class TarbimiseGraafik extends StatefulWidget {
       : super(key: key);
 
   @override
-  State<TarbimiseGraafik> createState() => _TarbimiseGraafikState(tarbimiseMap, ajatarbimine);
+  State<TarbimiseGraafik> createState() =>
+      _TarbimiseGraafikState(tarbimiseMap, ajatarbimine);
 }
 
 class _TarbimiseGraafikState extends State<TarbimiseGraafik> {
-  Map<String, dynamic> SeadmeteMap = {};
+ 
   final Map<String, dynamic> tarbimiseMap;
-  
+
   final ajatarbimine;
 
   _TarbimiseGraafikState(this.tarbimiseMap, this.ajatarbimine);
@@ -38,7 +39,7 @@ class _TarbimiseGraafikState extends State<TarbimiseGraafik> {
   double asi2 = 0;
 
   function() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
+    
     Map<String, dynamic> maksumuseMap = {};
     //Võtab mälust 'users'-i asukohast väärtused
 
@@ -130,26 +131,12 @@ class _TarbimiseGraafikState extends State<TarbimiseGraafik> {
     //return chartData;
   }
 
-  getSeadmeteMap(Map<String, dynamic> seadmeteMap) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    //await prefs.clear();
-
-    String? storedJsonMap = prefs.getString('seadmed');
-    if (storedJsonMap != null) {
-      storedJsonMap = prefs.getString('seadmed');
-      Map<String, dynamic> storedMap = json.decode(storedJsonMap!);
-
-      setState(() {
-        SeadmeteMap = storedMap;
-      });
-    }
-  }
+  
 
   @override
   void initState() {
     function();
     getChartData();
-    getSeadmeteMap(SeadmeteMap);
     super.initState();
   }
 
@@ -157,22 +144,33 @@ class _TarbimiseGraafikState extends State<TarbimiseGraafik> {
   Widget build(BuildContext context) {
     // Get the chart data
 
-    return Container(
+    return SizedBox(
       height: MediaQuery.of(context).size.height * chartData.length * 0.1,
       //width: double.infinity,
       child: Scaffold(
-        appBar: AppBar(centerTitle: true,automaticallyImplyLeading: false, title: Text("Kokku ${kokku.toStringAsFixed(4)} € ja $ajatarbimine kWh",textAlign: TextAlign.center, style: font,),backgroundColor: Colors.white, elevation: 0,),
+        appBar: AppBar(
+          centerTitle: true,
+          automaticallyImplyLeading: false,
+          title: Text(
+            "Kokku ${kokku.toStringAsFixed(4)} € ja $ajatarbimine kWh",
+            textAlign: TextAlign.center,
+            style: font,
+          ),
+          backgroundColor: Colors.white,
+          elevation: 0,
+        ),
         body: RotatedBox(
           quarterTurns: 1,
           child: Container(
+            color: Colors.white,
             child: SfCartesianChart(
               primaryXAxis: CategoryAxis(
                   labelRotation: 270, interval: 1, labelStyle: fontVaike),
               axes: [
                 NumericAxis(
                   name: 'firstAxis',
-                  minorGridLines: MinorGridLines(width: 0.0),
-                  majorGridLines: MajorGridLines(width: 0.0),
+                  minorGridLines: const MinorGridLines(width: 0.0),
+                  majorGridLines: const MajorGridLines(width: 0.0),
                   isVisible: false,
                   title: AxisTitle(
                     text: 'Eurot',
@@ -183,7 +181,7 @@ class _TarbimiseGraafikState extends State<TarbimiseGraafik> {
                   labelRotation: 0,
                 ),
                 NumericAxis(
-                  majorGridLines: MajorGridLines(width: 0.0),
+                  majorGridLines: const MajorGridLines(width: 0.0),
                   name: 'secondAxis',
                   isVisible: false,
                   title: AxisTitle(
@@ -205,13 +203,13 @@ class _TarbimiseGraafikState extends State<TarbimiseGraafik> {
                   yAxisName: "firstAxis",
                   onPointTap: (pointInteractionDetails) {
                     int? rowIndex = pointInteractionDetails.pointIndex;
-      
+
                     Navigator.push(
                       context,
                       MaterialPageRoute(
                         builder: (context) => DunaamilineSeadmeLeht(
-                          seadmeNimi: SeadmeteMap.keys.elementAt(rowIndex!),
-                          SeadmeteMap: SeadmeteMap,
+                          seadmeNimi: seadmeteMap.keys.elementAt(rowIndex!),
+                          SeadmeteMap: seadmeteMap,
                           valitud: 1,
                         ),
                       ),
@@ -219,7 +217,7 @@ class _TarbimiseGraafikState extends State<TarbimiseGraafik> {
                   },
                   width: 1,
                   spacing: 0.3,
-                  borderRadius: BorderRadius.only(
+                  borderRadius: const BorderRadius.only(
                       topLeft: Radius.circular(20),
                       topRight: Radius.circular(20)),
                   dataSource: chartData,
@@ -235,7 +233,7 @@ class _TarbimiseGraafikState extends State<TarbimiseGraafik> {
                   dataLabelSettings: DataLabelSettings(
                     isVisible: true,
                     labelAlignment: ChartDataLabelAlignment.bottom,
-                    textStyle: fontValgeVaike,
+                    textStyle: fontVaike,
                     angle: 270,
                   ),
                   color: Colors.blue,
@@ -245,7 +243,7 @@ class _TarbimiseGraafikState extends State<TarbimiseGraafik> {
                       return ''; // Customize this as needed
                     } else {
                       String temp3 = data.y!.toStringAsFixed(3);
-                      return ' $temp3';
+                      return ' $temp3 kWh';
                     }
                   },
                 ),
@@ -253,7 +251,7 @@ class _TarbimiseGraafikState extends State<TarbimiseGraafik> {
                   yAxisName: "secondAxis",
                   onPointTap: (pointInteractionDetails) {
                     int? rowIndex = pointInteractionDetails.pointIndex;
-      
+
                     Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -267,7 +265,7 @@ class _TarbimiseGraafikState extends State<TarbimiseGraafik> {
                   },
                   width: 1,
                   spacing: 0.3,
-                  borderRadius: BorderRadius.only(
+                  borderRadius: const BorderRadius.only(
                       topLeft: Radius.circular(20),
                       topRight: Radius.circular(20)),
                   dataSource: chartData2,
@@ -284,7 +282,7 @@ class _TarbimiseGraafikState extends State<TarbimiseGraafik> {
                   dataLabelSettings: DataLabelSettings(
                     isVisible: true,
                     labelAlignment: ChartDataLabelAlignment.bottom,
-                    textStyle: fontValgeVaike,
+                    textStyle: fontVaike,
                     angle: 270,
                   ),
                   dataLabelMapper: (ChartData data, _) {
@@ -293,7 +291,7 @@ class _TarbimiseGraafikState extends State<TarbimiseGraafik> {
                       return ''; // Customize this as needed
                     } else {
                       String temp3 = data.y!.toStringAsFixed(3);
-                      return ' $temp3';
+                      return ' $temp3 €';
                     }
                   },
                 ),
