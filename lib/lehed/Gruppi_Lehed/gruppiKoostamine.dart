@@ -44,18 +44,7 @@ class _GruppiKoostamineState extends State<GruppiKoostamine> {
           final staatus = seadmeteMap[seade]["Seadme_olek"];
           print('Staatus: $staatus');
           return GestureDetector(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => DunaamilineSeadmeLeht(
-                    seadmeNimi: seadmeteMap.keys.elementAt(index),
-                    SeadmeteMap: seadmeteMap,
-                    valitud: 0,
-                  ),
-                ),
-              );
-            },
+            onTap: () {},
             child: Padding(
               padding: const EdgeInsets.all(1),
               child: Container(
