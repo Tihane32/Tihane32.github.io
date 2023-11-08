@@ -414,35 +414,3 @@ graafikuKopeerimine(
     }
   });
 }
-
-graafikuSeadedVaartustamine(
-  Map<String, dynamic> graafikuSeaded,
-) async {
-  String seadista = graafikuSeaded['Seadistus_lubatud'];
-  String maxTunnid = graafikuSeaded['Max_jarjest_valjas'];
-  Set<int> keelatud = graafikuSeaded['Kelleatud_tunnid'];
-  Set<int> lubatud = graafikuSeaded['Lubatud_tunnid'];
-
-  final prefs = await SharedPreferences.getInstance();
-  await prefs.setString('Seadistus_lubatud', seadista);
-  await prefs.setString('Max_jarjest_valjas', maxTunnid);
-  await prefs.setStringList(
-      'Kelleatud_tunnid', keelatud.map((e) => e.toString()).toList());
-  await prefs.setStringList(
-      'Lubatud_tunnid', lubatud.map((e) => e.toString()).toList());
-}
-
-Future<Map<String, dynamic>> loadGraafikuSeaded() async {
-  final prefs = await SharedPreferences.getInstance();
-  bool? seadista = prefs.getBool('Seadistus_lubatud');
-  double? maxTunnid = prefs.getDouble('Max_jarjest_valjas');
-  List<String>? keelatudList = prefs.getStringList('Kelleatud_tunnid');
-  List<String>? lubatudList = prefs.getStringList('Lubatud_tunnid');
-
-  return {
-    'Seadistus_lubatud': seadista,
-    'Max_jarjest_valjas': maxTunnid,
-    'Kelleatud_tunnid': keelatudList?.map((e) => int.parse(e)).toSet(),
-    'Lubatud_tunnid': lubatudList?.map((e) => int.parse(e)).toSet(),
-  };
-}
