@@ -93,7 +93,7 @@ Future<List> getElering(String paevtest) async {
   print(hinnagraafik.length);
   print("-----------------");
   print("nadalapaev ${now.weekday}");
-  if (tariif != null) {
+  if (tariif.isNotEmpty) {
     for (int i = 0; i < hinnagraafik.length; i++) {
       if (tariif.length == 1) {
         double newPrice =
