@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../main.dart';
 
-salvestaSeadistus(String parameetriNim, double parameeter,
+salvestaSeadistus(String parameetriNim, var parameeter,
     Map<String, bool> valitudSeadmed) async {
   int trueCount = 0;
   String valitudSeade = '';

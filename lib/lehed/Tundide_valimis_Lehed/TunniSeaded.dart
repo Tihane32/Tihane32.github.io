@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import '../../funktsioonid/salvestaSeadistus.dart';
 import '../../main.dart';
 import 'DynaamilineTundideValimine.dart';
 import 'package:intl/intl.dart';
@@ -31,16 +32,27 @@ class _TunniSeadedState extends State<TunniSeaded> {
   Color boxColor = sinineKast;
   bool _notificationsEnabled = false;
   String _selectedTheme = 'Odavaimad Tunnid';
-  late bool seadista;
-  late double maxTunnid;
+  bool seadista = false;
+  double maxTunnid = 10;
 
   TextEditingController _textController = TextEditingController();
 
   @override
   void initState() {
+    int trueCount = 0;
+    String valitudSeade = '';
+
+    for (var entry in valitudSeadmed.entries) {
+      if (entry.value) {
+        trueCount++;
+        valitudSeade = entry.key;
+      }
+    }
+    if (trueCount == 1) {
+      seadista = seadmeteMap[valitudSeade]['Seadistus_lubatud'];
+      maxTunnid = seadmeteMap[valitudSeade]['Max_jarjest_valjas'];
+    }
     super.initState();
-    seadista = graafikuSeaded['Seadistus_lubatud'];
-    maxTunnid = graafikuSeaded['Max_jarjest_valjas'];
   }
 
   @override
@@ -60,7 +72,8 @@ class _TunniSeadedState extends State<TunniSeaded> {
                 onChanged: (bool value) {
                   setState(() {
                     seadista = value;
-                    graafikuSeaded['Seadistus_lubatud'] = seadista;
+                    salvestaSeadistus(
+                        'Seadistus_lubatud', seadista, valitudSeadmed);
                   });
                 },
               ),
@@ -121,7 +134,8 @@ class _TunniSeadedState extends State<TunniSeaded> {
                 onChanged: (newValue) {
                   setState(() {
                     maxTunnid = newValue;
-                    graafikuSeaded['Max_jarjest_valjas'] = maxTunnid;
+                    salvestaSeadistus(
+                        'Max_jarjest_valjas', maxTunnid, valitudSeadmed);
                   });
                 },
                 divisions: 11,
