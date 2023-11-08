@@ -75,6 +75,9 @@ TextStyle fontValgeVaike = GoogleFonts.roboto(
 TextStyle fontVaike = GoogleFonts.roboto(
     textStyle: const TextStyle(
         fontWeight: FontWeight.w500, fontSize: 14, color: Colors.black));
+        TextStyle fontEritiVaike = GoogleFonts.roboto(
+    textStyle: const TextStyle(
+        fontWeight: FontWeight.w500, fontSize: 12, color: Colors.black));
 TextStyle fontVaikePunane = GoogleFonts.roboto(
     textStyle: const TextStyle(
         fontWeight: FontWeight.w500, fontSize: 14, color: Colors.red));

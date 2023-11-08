@@ -123,7 +123,7 @@ class _MinuPakettState extends State<MinuPakett> {
                     
                         Kinnitus(context, "Salvestatud");
                       
-                        Hoiatus(context, "Sisestage tariif");
+                        //Hoiatus(context, "Sisestage tariif");
                       
                       // Reload the saved number
                     },

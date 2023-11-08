@@ -17,10 +17,7 @@ import 'package:testuus4/main.dart';
 gen1GraafikLoomine(
     Map<int, dynamic> lulitus, String valitudPaev, String value) async {
   DateTime now = DateTime.now();
-  int tundtana = now.hour;
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  String? storedKey = prefs.getString('key');
-  String storedKeyString = jsonDecode(storedKey!);
+
   Map<int, dynamic> selected = lulitus;
   Map<int, dynamic> ajutine = selected;
   for (int i = 0; i < 24; i++) {
@@ -94,17 +91,14 @@ gen1GraafikLoomine(
 
   if (res.body.toString() ==
       """{"isok":false,"errors":{"max_req":"Request limit reached!"}}""") {
-    print("ootab");
 
     await Future.delayed(Duration(seconds: 2));
 
     res = await http.post(url, headers: headers, body: data);
     //Kui post läheb läbi siis:
-    print("ootas ära");
   }
 
   final httpPackageJson = json.decode(res.body) as Map<String, dynamic>;
-  print(res.body);
   var scheduleRules1 =
       httpPackageJson['data']['device_settings']['relays'][0]['schedule_rules'];
   for (String item in scheduleRules1) {
@@ -143,7 +137,7 @@ gen1GraafikLoomine(
   }
   for (int i = 0; i < 24; i++) {
     String temp = selected[i][0];
-    temp = temp.substring(0, 2) + '.' + temp.substring(2);
+    temp = '${temp.substring(0, 2)}.${temp.substring(2)}';
     selected[i][0] = temp;
   }
 }
@@ -163,7 +157,7 @@ graafikGen1Lugemine(String id) async {
 
   var res = await http.post(url, headers: headers, body: data);
   //Kui post läheb läbi siis:
-  if (res.body.toString() ==
+  /*if (res.body.toString() ==
       """{"isok":false,"errors":{"max_req":"Request limit reached!"}}""") {
     print("ootab");
 
@@ -172,7 +166,7 @@ graafikGen1Lugemine(String id) async {
     res = await http.post(url, headers: headers, body: data);
     //Kui post läheb läbi siis:
     print("ootas ära");
-  }
+  }*/
 
   while (res.body.toString() ==
       """{"isok":false,"errors":{"max_req":"Request limit reached!"}}""") {
@@ -180,12 +174,9 @@ graafikGen1Lugemine(String id) async {
 
     res = await http.post(url, headers: headers, body: data);
     //Kui post läheb läbi siis:
-    print("ootas ära");
   }
 
   final httpPackageJson = json.decode(res.body) as Map<String, dynamic>;
-  print(id);
-  print(res.body);
   List<dynamic> scheduleRules1 =
       httpPackageJson['data']['device_settings']['relays'][0]['schedule_rules'];
 
@@ -193,7 +184,6 @@ graafikGen1Lugemine(String id) async {
 }
 
 graafikGen1Saatmine(List<dynamic> graafik, String id) async {
-  print("saadetud graafik $graafik");
   String graafikString = graafik.join(',');
   var headers1 = {
     'Content-Type': 'application/x-www-form-urlencoded',
@@ -211,8 +201,6 @@ graafikGen1Saatmine(List<dynamic> graafik, String id) async {
       '${seadmeteMap[id]['api_url']}/device/relay/settings/schedule_rules');
   var res1 = await http.post(url1, headers: headers1, body: data1);
   //abi = true;
-  print(res1.body);
-    print("sent this: $id $graafikString}");
   mitmeSeadmeKinnitus.add(true);
   seadmeKinnitus = true;
 }
@@ -283,9 +271,9 @@ graafikGen1ToLulitusMap(Map<int, dynamic> lulitus, List<dynamic> graafik) {
   for (int i = 0; i < 24; i++) {
     String asendus = '$i';
     if (i < 10) {
-      asendus = '0' + asendus + '00';
+      asendus = '0${asendus}00';
     } else {
-      asendus = asendus + '00';
+      asendus = '${asendus}00';
     }
     for (int j = 0; j < graafik.length; j++) {
       List<String> parts = graafik[j].split('-');

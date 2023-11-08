@@ -12,8 +12,8 @@
     Seadme graafiku kopeerimine tööle                                   TEHTUD
 
 17.11.2023 Eesmärgid
-    kahetariifne
-    tarbimisele graafik joonega
+    kahetariifne                                                        Tundide määramisel töötab, arvutamisel mitte
+    tarbimisele graafik joonega                                         
     tarbimine ja maksumus kokku
 
 xx.xx.xxxx Eesmärgid
@@ -22,4 +22,4 @@ xx.xx.xxxx Eesmärgid
     kahetariifne
     tarbimisele graafik joonega
     kui "homme" on võimalik, siis minna selle peale
-    login korda, et uesti samat seadet ei saaks lisada
+    login korda, et uuesti samat seadet ei saaks lisada
