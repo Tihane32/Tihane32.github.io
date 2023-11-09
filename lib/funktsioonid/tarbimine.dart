@@ -1,5 +1,6 @@
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import '../lehed/Põhi_Lehed/koduleht.dart';
 import '../main.dart';
 import 'token.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -17,12 +18,7 @@ Future<double> tarbimine(tarbimiseMap, Function updateTarbimine) async {
   DateTime currentDateTime = DateTime.now();
 
   // Calculate the first day of the current month
-  DateTime firstDayOfMonth =
-      DateTime(currentDateTime.year, currentDateTime.month);
 
-  // Calculate the last day of the current month
-  DateTime lastDayOfMonth =
-      DateTime(currentDateTime.year, currentDateTime.month + 1, 0);
   var j = 0;
   var tarbimine = 0.0;
 
@@ -43,11 +39,13 @@ Future<double> tarbimine(tarbimiseMap, Function updateTarbimine) async {
       'date_from': '$firstDayOfMonth',
       'date_to': '$lastDayOfMonth',
     };
-
+    print("data siin $data");
     var url = Uri.parse('${value["api_url"]}/statistics/relay/consumption');
     var res = await http.post(url, headers: headers, body: data);
     var resJson = json.decode(res.body) as Map<String, dynamic>;
-    if (resJson == null || resJson.toString()=="{isok: false, errors: {device_not_found: Your device has not been connected to the cloud!}}") {
+    if (resJson == null ||
+        resJson.toString() ==
+            "{isok: false, errors: {device_not_found: Your device has not been connected to the cloud!}}") {
       return 0;
     }
     print(resJson);

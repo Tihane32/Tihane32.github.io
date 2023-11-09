@@ -1,5 +1,8 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 import 'package:testuus4/funktsioonid/tarbimine.dart';
 import 'package:testuus4/lehed/tarbimiseGraafik.dart';
 import 'package:testuus4/lehed/tarbimiseGraafikSpline.dart';
@@ -8,6 +11,11 @@ import 'dynamicKoduLeht.dart';
 import '../maksumuseGraafik.dart';
 import 'package:table_calendar/table_calendar.dart';
 
+DateTime firstDayOfMonth = DateTime(DateTime.now().year, DateTime.now().month);
+
+// Calculate the last day of the current month
+DateTime lastDayOfMonth = DateTime.now();
+//DateTime(DateTime.now().year, DateTime.now().month + 1, 0);
 
 class KoduLeht extends StatefulWidget {
   const KoduLeht({Key? key}) : super(key: key);
@@ -28,6 +36,8 @@ class _KoduLehtState extends State<KoduLeht> {
   DateTime lastDay = DateTime(DateTime.now().year, DateTime.now().month, 30);
   String onoffNupp = 'Shelly ON';
   bool tarbimineBool = true;
+  bool showCalendar = false;
+  bool state = true;
   int koduindex = 1;
 
   int onTunnidSisestatud = 0;
@@ -41,13 +51,7 @@ class _KoduLehtState extends State<KoduLeht> {
   var kulu = '0';
   bool isLoading = false;
   String selectedOption = 'Kuu';
-  List<String> dropdownOptions = ['Nädala', 'Kuu', 'Aasta'];
-  String selectedOption2 = 'Kuu';
-  List<String> dropdownOptions2 = [
-    'Hetke',
-    'Nädala',
-    'Kuu',
-  ];
+
   Map<String, dynamic> tarbimiseMap = {};
   double vahe = 20;
 
@@ -102,10 +106,73 @@ class _KoduLehtState extends State<KoduLeht> {
     // final temp = await maksumus(selectedOption);
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.white,
+          elevation: 0,
+          automaticallyImplyLeading: false,
+          centerTitle: true,
+          title: Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  IconButton(
+                    onPressed: () {
+                      setState(() {
+                        showCalendar = !showCalendar;
+                      });
+                    },
+                    icon: const Icon(
+                      Icons.calendar_month,
+                      size: 30,
+                      color: Colors.black,
+                    ),
+                  ),
+                  IconButton(
+                    onPressed: () {
+                      setState(() {
+                        tarbimineBool = true;
+                      });
+                    },
+                    icon: Transform.rotate(
+                      angle: pi / 2,
+                      child: const Icon(
+                        Icons.bar_chart_rounded,
+                        size: 30,
+                        color: Colors.black,
+                      ),
+                    ),
+                  ),
+                  IconButton(
+                    onPressed: () {
+                      setState(() {
+                        tarbimineBool = false;
+                      });
+                    },
+                    icon: const Icon(
+                      Icons.show_chart_rounded,
+                      size: 30,
+                      color: Colors.black,
+                    ),
+                  ),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    "${DateFormat('dd.MM.yyyy').format(firstDayOfMonth)} - ${DateFormat('dd.MM.yyyy').format(lastDayOfMonth)}",
+                    style: fontVaike,
+                  ),
+                ],
+              )
+            ],
+          ),
+          toolbarHeight: 60
+        ),
         backgroundColor: backround,
         body: GestureDetector(
           onHorizontalDragUpdate: (details) {
@@ -126,128 +193,101 @@ class _KoduLehtState extends State<KoduLeht> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    TableCalendar(
-                      //availableCalendarFormats: const {},
-                      startingDayOfWeek: StartingDayOfWeek.monday,
-                      rowHeight: 35,
-                      firstDay: firstDay,
-                      lastDay: lastDay,
-                      focusedDay: _focusedDay,
-                      selectedDayPredicate: (day) =>
-                          isSameDay(_selectedDay, day),
-                      rangeStartDay: _rangeStart,
-                      rangeEndDay: _rangeEnd,
-                      calendarFormat: _calendarFormat,
-                      rangeSelectionMode: _rangeSelectionMode,
-                      onDaySelected: (selectedDay, focusedDay) {
-                        if (!isSameDay(_selectedDay, selectedDay)) {
-                          setState(() {
-                            _selectedDay = selectedDay;
-                            _focusedDay = focusedDay;
-                            _rangeStart = null; // Important to clean those
-                            _rangeEnd = null;
-                            _rangeSelectionMode = RangeSelectionMode.toggledOff;
-                          });
-                        }
-                      },
-                      onRangeSelected: (start, end, focusedDay) {
-                        setState(() {
-                          _selectedDay = null;
-                          _focusedDay = focusedDay;
-                          _rangeStart = start;
-                          _rangeEnd = end;
-                          _rangeSelectionMode = RangeSelectionMode.toggledOn;
-                        });
-                      },
-                      onFormatChanged: (format) {
-                        if (_calendarFormat != format) {
-                          setState(() {
-                            _calendarFormat = format;
-                          });
-                        }
-                      },
-                      onPageChanged: (focusedDay) {
-                        _focusedDay = focusedDay;
-                      },
-                    ),
-                    //SizedBox(height: vahe / 4),
-                    Container(
-                      height: 1,
-                      width: double.infinity,
-                      color: Colors.black,
-                    ),
-                    SizedBox(height: vahe / 4),
-                    Center(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    Visibility(
+                      visible: showCalendar,
+                      child: Column(
                         children: [
-                          
+                          TableCalendar(
+                            //availableCalendarFormats: const {},
+                            startingDayOfWeek: StartingDayOfWeek.monday,
+                            rowHeight: 35,
+                            firstDay: firstDay,
+                            lastDay: DateTime.now(),
+                            focusedDay: _focusedDay,
+                            selectedDayPredicate: (day) =>
+                                isSameDay(_selectedDay, day),
+                            rangeStartDay: _rangeStart,
+                            rangeEndDay: _rangeEnd,
+                            calendarFormat: _calendarFormat,
+                            rangeSelectionMode: _rangeSelectionMode,
+                            onDaySelected: (selectedDay, focusedDay) {
+                              if (!isSameDay(_selectedDay, selectedDay)) {
+                                setState(() {
+                                  _selectedDay = selectedDay;
+                                  _focusedDay = focusedDay;
+                                  _rangeStart =
+                                      null; // Important to clean those
+                                  _rangeEnd = null;
+                                  _rangeSelectionMode =
+                                      RangeSelectionMode.toggledOff;
+                                });
+                              }
+                            },
+                            onRangeSelected: (start, end, focusedDay) {
+                              setState(() {
+                                _selectedDay = null;
+                                _focusedDay = focusedDay;
+                                _rangeStart = start;
+                                _rangeEnd = end;
+                                _rangeSelectionMode =
+                                    RangeSelectionMode.toggledOn;
+                              });
+                            },
+                            onFormatChanged: (format) {
+                              if (_calendarFormat != format) {
+                                setState(() {
+                                  _calendarFormat = format;
+                                });
+                              }
+                            },
+                            onPageChanged: (focusedDay) {
+                              _focusedDay = focusedDay;
+                            },
+                          ),
+                          SizedBox(height: 8), // Adjust the height as needed
+                          ElevatedButton(
+                            style: ButtonStyle(backgroundColor: MaterialStatePropertyAll(boxColor)),
+                            onPressed: () {
+                              // Handle the confirmation logic here
+                              if (_rangeStart != null && _rangeEnd != null) {
+                                // Perform the desired action with the selected range
+                                setState(() {
+                                  firstDayOfMonth = _rangeStart!;
+                                  lastDayOfMonth = _rangeEnd!;
+                                });
+                                Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          DynaamilenieKoduLeht(i: 0)),
+                                );
+                              } else {
+                                // Inform the user that a valid range is required
+                              }
+                            },
+                            child: Text('Kinnita vahemik', style: fontVaike,),
+                          ),
                         ],
                       ),
                     ),
-                    Align(
-                      child: Visibility(
-                        visible: tarbimineBool,
-                        child: GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              tarbimineBool = !tarbimineBool;
-                            });
-                          },
-                          child: Container(
-                            alignment: Alignment.centerRight,
-                            decoration: const BoxDecoration(
-                              color: Colors.white,
-                            ),
-                            child: const Padding(
-                              padding: EdgeInsets.only(right: 8.0),
-                              child: Icon(
-                                Icons.show_chart_rounded,
-                                size: 30,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                    Align(
-                      child: Visibility(
-                        visible: !tarbimineBool,
-                        child: GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              tarbimineBool = !tarbimineBool;
-                            });
-                          },
-                          child: Container(
-                            alignment: Alignment.centerRight,
-                            decoration: const BoxDecoration(
-                              color: Colors.white,
-                            ),
-                            child: const Padding(
-                              padding: EdgeInsets.only(right: 8.0),
-                              child: Icon(
-                                Icons.bar_chart_rounded,
-                                size: 30,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
+                    //SizedBox(height: vahe / 4),
 
-                  
                     // Add some spacing between the two widgets
                     FutureBuilder<void>(
                       future: Future.value(), // Use an empty future here
                       builder: (context, snapshot) {
                         if (!dataFetched) {
-                          return const Center(child: CircularProgressIndicator());
+                          return const Center(
+                              child: Padding(
+                            padding: EdgeInsets.all(20.0),
+                            child: CircularProgressIndicator(),
+                          ));
                         } else if (snapshot.hasError) {
                           return Center(
                               child: Text('Error: ${snapshot.error}'));
                         } else {
                           return Visibility(
+                            maintainState: true,
                             visible: tarbimineBool,
                             child: TarbimiseGraafik(tarbimiseMap, ajatarbimine),
                           );
@@ -257,11 +297,10 @@ class _KoduLehtState extends State<KoduLeht> {
                     Visibility(
                         visible: !tarbimineBool,
                         child: TarbimiseGraafikSpline()),
-                   
+
                     // Add some spacing between the two widgets
 
                     //SizedBox(height: vahe / 8),
-                  
                   ],
                 ),
               ),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:testuus4/funktsioonid/graafikGen2.dart';
 import 'package:testuus4/Arhiiv/energiaGraafik.dart';
+import 'package:testuus4/lehed/P%C3%B5hi_Lehed/koduleht.dart';
 import 'dart:convert';
 import '../main.dart';
 import 'token.dart';
@@ -16,10 +17,10 @@ seadmeMaksumus(String value, [Function? setPaevamaksumus]) async {
   Map<DateTime, double> maksumusSeade = {};
   DateTime now = DateTime.now();
   DateTime startOfMonth = DateTime(now.year, now.month, 1);
-  DateTime endOfMonth = now;
+  DateTime endOfMonth = lastDayOfMonth;
 
   List<DateTime> monthDates = [];
-  DateTime date = startOfMonth;
+  DateTime date = firstDayOfMonth;
 
   while (date.isBefore(endOfMonth) || date.isAtSameMomentAs(endOfMonth)) {
     monthDates.add(date);
