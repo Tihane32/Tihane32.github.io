@@ -9,6 +9,7 @@ import '../../funktsioonid/KeskmineHindArvutus.dart';
 import '../../funktsioonid/salvestaSeadistus.dart';
 import '../../main.dart';
 import '../../widgets/AbiLeht.dart';
+import '../../widgets/hoitatus.dart';
 import '../Põhi_Lehed/koduleht.dart';
 import 'hinnaPiiriAluselTunideValimine.dart';
 import 'dart:math';
@@ -57,15 +58,12 @@ class _KeskmiseHinnaAluselTundideValimineState
   Color tana = green;
   TextStyle hommeFont = font;
   TextStyle tanaFont = fontValge;
-  int? tappedIndex;
   bool hommeNahtav = false;
   int selectedRowIndex = -1;
-  String paevNupp = 'Täna';
   String selectedPage = 'Keskmine hind';
   double vahe = 10;
   int valitudTunnid = 10;
   Color boxColor = sinineKast;
-  int tund = 0;
   late Map<int, dynamic> lulitus;
   late Map<int, dynamic> lulitusTana;
   late Map<int, dynamic> lulitusHomme;
@@ -253,11 +251,15 @@ class _KeskmiseHinnaAluselTundideValimineState
     }
 
     setState(() {
+      lulitus = lulitusTana;
       if (date.hour >= 15) {
         hommeNahtav = true;
+        lulitus = lulitusHomme;
+        homme = green;
+        tana = valge;
+        hommeFont = fontValge;
+        tanaFont = font;
       }
-      lulitus = lulitusTana;
-      tund = date.hour;
 
       hindAVG = keskmineHindArvutaus(lulitus);
       temp = hindAVG / 4;
@@ -275,7 +277,6 @@ class _KeskmiseHinnaAluselTundideValimineState
       lulitusMap = lulitusMapParem;
     });
     updateLulitusMap(lulitusMap, 'Odavaimad tunnid');
-    print("lulitusmap veider: $lulitusMap");
   }
 
   @override
@@ -441,12 +442,8 @@ class _KeskmiseHinnaAluselTundideValimineState
                             )
                           : GestureDetector(
                               onTap: () {
-                                showDialog(
-                                    context: context,
-                                    builder: (context) => AlertDialog(
-                                          title: Text(
-                                              'Homne graafik ei ole hetkel kättesaadav \n Proovige uuesti kell 15.00'),
-                                        ));
+                                Hoiatus(context,
+                                    'Homne graafik ei ole hetkel kättesaadav \n Proovige uuesti kell 15.00');
                               },
                               child: Container(
                                 width: 100,
@@ -502,10 +499,8 @@ class _KeskmiseHinnaAluselTundideValimineState
                                       parsedValue = 24;
                                     }
                                     valitudTunnid = parsedValue;
-                                    salvestaSeadistus(
-                                        'Valitud_Tunnid',
-                                        valitudTunnid.toDouble(),
-                                        valitudSeadmed);
+                                    salvestaSeadistus('Valitud_Tunnid',
+                                        valitudTunnid, valitudSeadmed);
                                     lulitus = OdavimadTunnidOn(
                                         lulitus, valitudTunnid);
                                     lulitusMapVasak =

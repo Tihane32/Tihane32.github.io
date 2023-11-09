@@ -1,4 +1,3 @@
-
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -197,4 +196,5 @@ Future<void> sort(List<bool> checkboxValues,
   print("---------------------");
   print(seadmeteMap);
   print("---------------------");
+  gruppiMap['Kõik Seadmed']['Grupi_Seadmed'] = seadmeteMap.keys.toList();
 }

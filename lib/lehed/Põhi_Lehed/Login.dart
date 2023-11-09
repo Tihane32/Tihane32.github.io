@@ -117,7 +117,7 @@ class _LoginPageState extends State<LoginPage> {
         seade['Valitud_Tunnid'] = 12;
         seade['Hinnapiir'] = 50.50;
         seade['Seadistus_lubatud'] = false;
-        seade['Max_jarjest_valjas'] = 1.0;
+        seade['Max_jarjest_valjas'] = 12.0;
         seade['Kelleatud_tunnid'] = [];
         seade['Lubatud_tunnid'] = [];
 

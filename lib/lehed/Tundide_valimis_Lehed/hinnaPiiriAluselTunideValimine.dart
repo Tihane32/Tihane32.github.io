@@ -8,6 +8,7 @@ import '../../funktsioonid/Elering.dart';
 import '../../funktsioonid/KeskmineHindArvutus.dart';
 import '../../funktsioonid/salvestaSeadistus.dart';
 import '../../main.dart';
+import '../../widgets/hoitatus.dart';
 import 'DynaamilineTundideValimine.dart';
 import 'dart:math';
 import 'package:syncfusion_flutter_charts/charts.dart';
@@ -250,11 +251,15 @@ class _HinnaPiiriAluselTundideValimineState
     }
 
     setState(() {
+      lulitus = lulitusTana;
       if (date.hour >= 15) {
         hommeNahtav = true;
+        lulitus = lulitusHomme;
+        homme = green;
+        tana = valge;
+        hommeFont = fontValge;
+        tanaFont = font;
       }
-      lulitus = lulitusTana;
-      tund = date.hour;
 
       hindAVG = keskmineHindArvutaus(lulitus);
 
@@ -422,12 +427,8 @@ class _HinnaPiiriAluselTundideValimineState
                               )
                             : GestureDetector(
                                 onTap: () {
-                                  showDialog(
-                                      context: context,
-                                      builder: (context) => AlertDialog(
-                                            title: Text(
-                                                'Homne graafik ei ole hetkel kättesaadav \n Proovige uuesti kell 15.00'),
-                                          ));
+                                  Hoiatus(context,
+                                      'Homne graafik ei ole hetkel kättesaadav \n Proovige uuesti kell 15.00');
                                 },
                                 child: Container(
                                   width: 100,

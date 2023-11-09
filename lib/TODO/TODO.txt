@@ -18,8 +18,8 @@
 
 xx.xx.xxxx Eesmärgid
     Seadme mudel ja nimi erinevateks lahtriteks seadmete mapis
-    valitud tunnid mällu
+    valitud tunnid mällu                                               TEHTUD 
     kahetariifne
     tarbimisele graafik joonega
-    kui "homme" on võimalik, siis minna selle peale
+    kui "homme" on võimalik, siis minna selle peale                    
     login korda, et uuesti samat seadet ei saaks lisada
