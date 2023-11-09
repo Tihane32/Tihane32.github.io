@@ -45,9 +45,9 @@ class _TarbimiseGraafikState extends State<TarbimiseGraafik> {
 
     double calculateSum(Map<DateTime, double> data) {
       double sum = 0.0;
-      data.values.forEach((value) {
+      for (var value in data.values) {
         sum += value;
-      });
+      }
       kokku = kokku + sum;
       return sum;
     }
@@ -137,6 +137,7 @@ class _TarbimiseGraafikState extends State<TarbimiseGraafik> {
   void initState() {
     function();
     getChartData();
+
     super.initState();
   }
 
@@ -152,7 +153,7 @@ class _TarbimiseGraafikState extends State<TarbimiseGraafik> {
           centerTitle: true,
           automaticallyImplyLeading: false,
           title: Text(
-            "Kokku ${kokku.toStringAsFixed(4)} € ja $ajatarbimine kWh",
+            "Kokku: ${kokku.toStringAsFixed(4)} € ja $ajatarbimine kWh \n  Keskmiselt: ${(kokku / num.parse(ajatarbimine)).toStringAsFixed(4)} €/kWh",
             textAlign: TextAlign.center,
             style: font,
           ),
