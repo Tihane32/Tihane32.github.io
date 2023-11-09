@@ -108,9 +108,14 @@ class _SeadmeteList_gruppidState extends State<SeadmeteList_gruppid> {
                     return GestureDetector(
                       onTap: () {
                         Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => GruppiKoostamine()));
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => DunaamilineGrupiLeht(
+                              gruppNimi: 'Uus grupp',
+                              valitud: 4,
+                            ),
+                          ),
+                        );
                       },
                       child: Padding(
                         padding: const EdgeInsets.all(1),

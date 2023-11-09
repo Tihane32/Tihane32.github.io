@@ -12,6 +12,7 @@ import 'package:testuus4/main.dart';
 import 'GrupiSeadmed.dart';
 import '../Seadme_Lehed/SeadmePildiMuutmine.dart';
 import '../Seadme_Lehed/SeadmeYldInfo.dart';
+import 'gruppiKoostamine.dart';
 
 class DunaamilineGrupiLeht extends StatefulWidget {
   DunaamilineGrupiLeht(
@@ -54,6 +55,7 @@ class _DunaamilineGrupiLehtState extends State<DunaamilineGrupiLeht> {
       AbiLeht(),
       GruppiSeadmed(),
       AbiLeht(),
+      GruppiKoostamine(),
     ];
   }
 
@@ -89,53 +91,55 @@ class _DunaamilineGrupiLehtState extends State<DunaamilineGrupiLeht> {
             const Spacer(),
           ],
         ),
-        actions: [
-          Center(
-            child: Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                color: boxColor,
-              ),
-              padding: const EdgeInsets.symmetric(horizontal: 10),
-              child: DropdownButton<String>(
-                icon: const Icon(Icons.menu),
-                value: selectedPage,
-                style: font,
-                onChanged: (String? newValue) {
-                  setState(() {
-                    selectedPage = newValue!;
-                  });
-                  if (selectedPage == 'Lülitusgraafik') {
-                    valitud = 0;
-                  } else if (selectedPage == 'Tarbimisgraafik') {
-                    valitud = 1;
-                  } else if (selectedPage == 'Seadmed') {
-                    valitud = 2;
-                    print(gruppiMap);
-                    print(seadmeteMap);
-                  } else if (selectedPage == 'Sätted') {
-                    valitud = 3;
-                  }
-                },
-                underline: Container(),
-                items: <String>[
-                  'Lülitusgraafik',
-                  'Tarbimisgraafik',
-                  'Seadmed',
-                  'Sätted'
-                ].map((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(
-                      value,
-                      style: const TextStyle(color: Colors.black),
+        actions: valitud == 4
+            ? []
+            : [
+                Center(
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: boxColor,
                     ),
-                  );
-                }).toList(),
-              ),
-            ),
-          ),
-        ],
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    child: DropdownButton<String>(
+                      icon: const Icon(Icons.menu),
+                      value: selectedPage,
+                      style: font,
+                      onChanged: (String? newValue) {
+                        setState(() {
+                          selectedPage = newValue!;
+                        });
+                        if (selectedPage == 'Lülitusgraafik') {
+                          valitud = 0;
+                        } else if (selectedPage == 'Tarbimisgraafik') {
+                          valitud = 1;
+                        } else if (selectedPage == 'Seadmed') {
+                          valitud = 2;
+                          print(gruppiMap);
+                          print(seadmeteMap);
+                        } else if (selectedPage == 'Sätted') {
+                          valitud = 3;
+                        }
+                      },
+                      underline: Container(),
+                      items: <String>[
+                        'Lülitusgraafik',
+                        'Tarbimisgraafik',
+                        'Seadmed',
+                        'Sätted'
+                      ].map((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(
+                            value,
+                            style: const TextStyle(color: Colors.black),
+                          ),
+                        );
+                      }).toList(),
+                    ),
+                  ),
+                ),
+              ],
       ),
       body: IndexedStack(
         index: valitud,

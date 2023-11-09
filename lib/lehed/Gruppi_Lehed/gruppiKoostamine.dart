@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:testuus4/funktsioonid/lulitamine.dart';
 import 'dart:async';
 import '../GraafikusseSeadmeteValik.dart';
@@ -19,19 +20,141 @@ class _GruppiKoostamineState extends State<GruppiKoostamine> {
   @override
   void initState() {
     super.initState();
+    ValitudSeadmed = valitudSeadmeteNullimine();
   }
 
+  Map<String, bool> ValitudSeadmed = {};
   int koduindex = 1;
-  Set<String> selectedPictures = Set<String>();
   double xAlign = -1;
   double signInAlign = 1;
   double loginAlign = -1;
   double width = 200;
   double height = 40;
+  String tempAndur = 'Lisa temperatuuri Andur';
+  String niiskusAndur = 'Lisa niiskus Andur';
+  String gruppiNimi = '';
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: backround,
+      appBar: AppBar(
+        toolbarHeight: 160,
+        automaticallyImplyLeading: false,
+        elevation: 0.0,
+        shadowColor: Colors.transparent,
+        backgroundColor: Colors.transparent,
+        title: Container(
+          height: 150,
+          child: ListView(
+            children: <Widget>[
+              ListTile(
+                title: Text(
+                  'Gruppi nimi',
+                  style: font,
+                ),
+                trailing: Container(
+                  width: 250,
+                  height: 40,
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.grey),
+                    borderRadius: BorderRadius.circular(4.0),
+                  ),
+                  child: Center(
+                      child: TextField(
+                    onSubmitted: (value) {
+                      setState(() {
+                        gruppiNimi = value;
+                      });
+                    },
+                    decoration: InputDecoration(
+                      border: InputBorder.none,
+                      isDense: true,
+                      hintText: '',
+                      contentPadding:
+                          EdgeInsets.symmetric(vertical: 3.0, horizontal: 8.0),
+                    ),
+                    style: font,
+                  )),
+                ),
+              ),
+              ListTile(
+                title: Text(
+                  'Gruppi temperatuuriandur',
+                  style: font,
+                ),
+                trailing: Container(
+                  width: 250,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: Color.fromARGB(255, 255, 116, 106),
+                  ),
+                  padding: EdgeInsets.symmetric(horizontal: 10),
+                  child: DropdownButtonHideUnderline(
+                    child: DropdownButton<String>(
+                      style: font,
+                      dropdownColor: Color.fromARGB(255, 250, 169, 164),
+                      borderRadius: borderRadius,
+                      value: tempAndur,
+                      onChanged: (andur) {
+                        setState(() {
+                          tempAndur = andur!;
+                        });
+                      },
+                      items: <String>[
+                        'Lisa temperatuuri Andur',
+                        'Temperatuuri Andur 1',
+                        'Temperatuuri Andur 2',
+                      ].map<DropdownMenuItem<String>>((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(value),
+                        );
+                      }).toList(),
+                    ),
+                  ),
+                ),
+              ),
+              ListTile(
+                title: Text(
+                  'Gruppi niiskusandur',
+                  style: font,
+                ),
+                trailing: Container(
+                  width: 250,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: Color.fromARGB(255, 76, 153, 167),
+                  ),
+                  padding: EdgeInsets.symmetric(horizontal: 10),
+                  child: DropdownButtonHideUnderline(
+                    child: DropdownButton<String>(
+                      style: font,
+                      dropdownColor: Color.fromARGB(255, 231, 246, 248),
+                      borderRadius: borderRadius,
+                      value: niiskusAndur,
+                      onChanged: (andur) {
+                        setState(() {
+                          niiskusAndur = andur!;
+                        });
+                      },
+                      items: <String>[
+                        'Lisa niiskus Andur',
+                        'Niiskus Andur 1',
+                        'Niiskus Andur 2',
+                      ].map<DropdownMenuItem<String>>((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(value),
+                        );
+                      }).toList(),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
       body: GridView.builder(
         physics: BouncingScrollPhysics(),
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -44,7 +167,15 @@ class _GruppiKoostamineState extends State<GruppiKoostamine> {
           final staatus = seadmeteMap[seade]["Seadme_olek"];
           print('Staatus: $staatus');
           return GestureDetector(
-            onTap: () {},
+            onTap: () {
+              setState(() {
+                if (ValitudSeadmed[seade] == false) {
+                  ValitudSeadmed[seade] = true;
+                } else {
+                  ValitudSeadmed[seade] = false;
+                }
+              });
+            },
             child: Padding(
               padding: const EdgeInsets.all(1),
               child: Container(
@@ -56,7 +187,9 @@ class _GruppiKoostamineState extends State<GruppiKoostamine> {
                   height: double.infinity,
                   decoration: BoxDecoration(
                     border: Border.all(
-                      color: staatus == 'on' ? Colors.green : Colors.grey,
+                      color: ValitudSeadmed[seade] == true
+                          ? Colors.green
+                          : Colors.grey,
                       width: 8,
                     ),
                   ),
@@ -100,4 +233,12 @@ class _GruppiKoostamineState extends State<GruppiKoostamine> {
       ),
     );
   }
+}
+
+Map<String, bool> valitudSeadmeteNullimine() {
+  Map<String, bool> ValitudSeadmed = {};
+  seadmeteMap.forEach((key, value) async {
+    ValitudSeadmed[key] = false;
+  });
+  return ValitudSeadmed;
 }
