@@ -32,6 +32,7 @@ class _GruppiKoostamineState extends State<GruppiKoostamine> {
   double height = 40;
   String tempAndur = 'Lisa temperatuuri Andur';
   String niiskusAndur = 'Lisa niiskus Andur';
+  String valgusAndur = 'Lisa valgus Andur';
   String gruppiNimi = '';
   @override
   Widget build(BuildContext context) {
@@ -141,6 +142,43 @@ class _GruppiKoostamineState extends State<GruppiKoostamine> {
                         'Lisa niiskus Andur',
                         'Niiskus Andur 1',
                         'Niiskus Andur 2',
+                      ].map<DropdownMenuItem<String>>((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(value),
+                        );
+                      }).toList(),
+                    ),
+                  ),
+                ),
+              ),
+              ListTile(
+                title: Text(
+                  'Gruppi valgusandur',
+                  style: font,
+                ),
+                trailing: Container(
+                  width: 250,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: Color.fromARGB(255, 76, 153, 167),
+                  ),
+                  padding: EdgeInsets.symmetric(horizontal: 10),
+                  child: DropdownButtonHideUnderline(
+                    child: DropdownButton<String>(
+                      style: font,
+                      dropdownColor: Color.fromARGB(255, 231, 246, 248),
+                      borderRadius: borderRadius,
+                      value: valgusAndur,
+                      onChanged: (andur) {
+                        setState(() {
+                          valgusAndur = andur!;
+                        });
+                      },
+                      items: <String>[
+                        'Lisa valgus Andur',
+                        'Valgus Andur 1',
+                        'Valgus Andur 2',
                       ].map<DropdownMenuItem<String>>((String value) {
                         return DropdownMenuItem<String>(
                           value: value,
