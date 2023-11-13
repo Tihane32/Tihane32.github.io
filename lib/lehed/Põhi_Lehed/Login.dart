@@ -7,7 +7,6 @@ import 'package:testuus4/lehed/P%C3%B5hi_Lehed/dynamicKoduLeht.dart';
 //import '/SeadmeSeaded.dart';
 import 'package:testuus4/lehed/uuedSeadmed.dart';
 import 'package:testuus4/main.dart';
-import '../uuedSeadmed.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -21,8 +20,8 @@ class _LoginPageState extends State<LoginPage> {
   final GlobalKey<ScaffoldMessengerState> _scaffoldMessengerKey =
       GlobalKey<ScaffoldMessengerState>();
   Future<void> _submitForm() async {
-    String ajutineParool = parool.text as String;
-    String ajutineKastuajanimi = kasutajanimi.text as String;
+    String ajutineParool = parool.text;
+    String ajutineKastuajanimi = kasutajanimi.text;
     Map<String, dynamic> seadmed;
     String sha1Hash = sha1.convert(ajutineParool.codeUnits).toString();
     List<String> uuedSeadmedString = [];
@@ -91,13 +90,9 @@ class _LoginPageState extends State<LoginPage> {
       String keyMap = keyVastusJSON['data']['key'];
       seadmed = new Map<String, dynamic>();
       i = 0;
-      print("----------------");
-      print(seadedKasutajalt);
-      print("----------------");
-      print(seadedKasutajalt);
-      print("----------------");
       for (var device in seadedKasutajalt.values) {
-        var seade = new Map<String, dynamic>();
+        if (!seadmeteMap.containsKey(device['id'])) {
+    var seade = new Map<String, dynamic>();
         //seade['Seadme_ID'] = device['id'];
         seade['Seadme_nimi'] = device['name'];
         seade['Seadme_pistik'] = device['name'];
@@ -118,9 +113,11 @@ class _LoginPageState extends State<LoginPage> {
         i++;
 
         uuedSeadmedString.add(device['name']);
+  }
+       
       }
 
-      String seadmedMap = json.encode(seadmed);
+      
       // await prefs.setString('seadmed', seadmedMap);
 
       await prefs.setString('key', json.encode(keyVastusJSON['data']['key']));
@@ -158,7 +155,7 @@ class _LoginPageState extends State<LoginPage> {
         uuedSeadmedString.add(device['name']);
       }
 
-      String seadmedMap = json.encode(seadmed);
+      
       // await prefs.setString('seadmed', seadmedMap);
 
       await prefs.setString('key', json.encode(keyVastusJSON['data']['key']));
