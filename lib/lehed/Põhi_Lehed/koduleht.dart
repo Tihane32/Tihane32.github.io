@@ -10,7 +10,7 @@ import 'package:testuus4/main.dart';
 import 'dynamicKoduLeht.dart';
 import '../maksumuseGraafik.dart';
 import 'package:table_calendar/table_calendar.dart';
-
+ bool state = true;
 DateTime firstDayOfMonth = DateTime(DateTime.now().year, DateTime.now().month);
 
 // Calculate the last day of the current month
@@ -37,7 +37,7 @@ class _KoduLehtState extends State<KoduLeht> {
   String onoffNupp = 'Shelly ON';
   bool tarbimineBool = true;
   bool showCalendar = false;
-  bool state = true;
+ 
   int koduindex = 1;
 
   int onTunnidSisestatud = 0;
