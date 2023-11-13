@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -313,22 +314,37 @@ class _TarbimiseGraafikState extends State<TarbimiseGraafik> {
                 visible: tarbimineBoolStacked,
                 child: Column(
                   children: [
-                   
                     SfCartesianChart(
                       legend: Legend(
-                        
                           width: '100%',
-                       
                           textStyle: fontVaikeLight,
                           isVisible: true,
-                         
                           position: LegendPosition.bottom,
-                                   
-                          overflowMode: LegendItemOverflowMode.wrap
-                          
-                        ),
+                          overflowMode: LegendItemOverflowMode.wrap),
                       series: <ChartSeries>[
                         StackedColumnSeries<ExpenseData, String>(
+                          onPointTap: (pointInteractionDetails) {
+                            showDialog(
+                              context: context,
+                              builder: (context) {
+                                return BackdropFilter(
+                                  filter:
+                                      ImageFilter.blur(sigmaX: 1, sigmaY: 1),
+                                  child: FractionallySizedBox(
+                                    heightFactor: 0.5,
+                                    widthFactor: 1,
+                                    child: Material(
+                                        color: Colors.white,
+                                        borderRadius: BorderRadius.circular(10),
+                                        //height: MediaQuery.of(context).size.height*0.5,
+                                        //width: MediaQuery.of(context).size.width,
+
+                                        child: PieChartSample()),
+                                  ),
+                                );
+                              },
+                            );
+                          },
                           dataSource: [
                             ExpenseData('Mon', 500, 300, 200),
                             ExpenseData('Tue', 600, 400, 300),
@@ -363,8 +379,8 @@ class _TarbimiseGraafikState extends State<TarbimiseGraafik> {
                             name: 'Pesumasin\n400€',
                             color: Colors.blue),
                         StackedColumnSeries<ExpenseData, String>(
-                            borderRadius:
-                                const BorderRadius.vertical(top: Radius.circular(10)),
+                            borderRadius: const BorderRadius.vertical(
+                                top: Radius.circular(10)),
                             dataSource: [
                               ExpenseData('Mon', 100, 200, 50),
                               ExpenseData('Tue', 150, 250, 100),
@@ -379,13 +395,13 @@ class _TarbimiseGraafikState extends State<TarbimiseGraafik> {
                             yValueMapper: (ExpenseData expense, _) =>
                                 expense.utilities,
                             name: 'Suvila\n200€',
-                            
                             color: Colors.orange),
                       ],
                       primaryXAxis: CategoryAxis(),
                       primaryYAxis: NumericAxis(
-                          title: AxisTitle(text: 'Kulu (€)',textStyle: fontVaikeLight),
-                          ),
+                        title: AxisTitle(
+                            text: 'Kulu (€)', textStyle: fontVaikeLight),
+                      ),
                     ),
                   ],
                 ),
@@ -400,8 +416,6 @@ class _TarbimiseGraafikState extends State<TarbimiseGraafik> {
   }
 }
 
-
-
 class ChartData {
   ChartData(this.x, this.y);
   final String x;
@@ -415,4 +429,71 @@ class ExpenseData {
   final double utilities;
 
   ExpenseData(this.month, this.food, this.clothing, this.utilities);
+}
+
+class PieChartSample extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.white,
+      appBar: AppBar(backgroundColor: Colors.white, automaticallyImplyLeading: false, elevation: 0, centerTitle: true, title: Column(
+        children: [Text('Esmaspäev', style: fontVaike,),
+          Text('Kokku 80€', style: font,),
+           
+        ],
+
+      ),
+      toolbarHeight: 50,
+      ),
+      body: SfCircularChart(
+        legend: Legend(
+            isVisible: true,
+            position: LegendPosition.bottom,
+            textStyle: fontVaikeLight,
+            overflowMode: LegendItemOverflowMode.wrap),
+        series: <CircularSeries>[
+          PieSeries<PieData, String>(
+            strokeColor: Color.fromARGB(255, 255, 255, 255),
+            strokeWidth: 2,
+            dataSource: getData(),
+            xValueMapper: (PieData data, _) => data.category,
+            yValueMapper: (PieData data, _) => data.value,
+            pointColorMapper: (PieData data, _) => data.color,
+            radius: '70%',
+            dataLabelSettings: DataLabelSettings(
+              useSeriesColor: true,
+                isVisible: true,
+                textStyle: fontVaikeLight,
+                labelPosition: ChartDataLabelPosition.outside),
+            dataLabelMapper: (data, _) {
+              // Display the data label only if the consumption is not 0
+              if (data.value == 0) {
+                return ''; // Customize this as needed
+              } else {
+                String temp3 = data.value.toString();
+                return '$temp3€';
+              }
+            },
+          )
+        ],
+      ),
+    );
+  }
+
+  List<PieData> getData() {
+    final List<PieData> chartData = [
+      PieData('Suvila', 10, Colors.orange),
+      PieData('Pesumasin', 30, Colors.green),
+      PieData('Elektriauto', 40, Colors.blue),
+    ];
+    return chartData;
+  }
+}
+
+class PieData {
+  PieData(this.category, this.value, this.color);
+
+  final String category;
+  final double value;
+  final Color color;
 }
