@@ -9,6 +9,7 @@ import 'package:testuus4/Arhiiv/SeadmeTarbimisLeht.dart';
 import 'package:testuus4/lehed/TarbimisLeht.dart';
 import 'package:testuus4/lehed/Seadme_Lehed/dynamicSeadmeInfo.dart';
 import 'package:testuus4/lehed/P%C3%B5hi_Lehed/koduleht.dart';
+import 'package:testuus4/lehed/tarbimiseGraafikSpline.dart';
 import 'package:testuus4/main.dart';
 
 import '../funktsioonid/maksumusSeadmeKohta.dart';
@@ -159,158 +160,173 @@ class _TarbimiseGraafikState extends State<TarbimiseGraafik> {
         ),
         body: SingleChildScrollView(
           child: Column(
+            mainAxisSize: MainAxisSize.min,
             children: [
-              RotatedBox(
-                quarterTurns: 1,
-                child: Container(
-                  color: Colors.white,
-                  child: SfCartesianChart(
-                    primaryXAxis: CategoryAxis(
-                        labelRotation: 270, interval: 1, labelStyle: fontVaike),
-                    axes: [
-                      NumericAxis(
-                        name: 'firstAxis',
-                        minorGridLines: const MinorGridLines(width: 0.0),
-                        majorGridLines: const MajorGridLines(width: 0.0),
-                        isVisible: false,
-                        title: AxisTitle(
-                          text: 'Eurot',
-                          textStyle: fontVaike,
+              Visibility(
+                visible: tarbimineBoolChart,
+                child: RotatedBox(
+                  quarterTurns: 1,
+                  child: Container(
+                    color: Colors.white,
+                    child: SfCartesianChart(
+                      primaryXAxis: CategoryAxis(
+                          labelRotation: 270,
+                          interval: 1,
+                          labelStyle: fontVaike),
+                      axes: [
+                        NumericAxis(
+                          name: 'firstAxis',
+                          minorGridLines: const MinorGridLines(width: 0.0),
+                          majorGridLines: const MajorGridLines(width: 0.0),
+                          isVisible: false,
+                          title: AxisTitle(
+                            text: 'Eurot',
+                            textStyle: fontVaike,
+                          ),
+                          labelStyle: fontVaike,
+                          labelAlignment: LabelAlignment.start,
+                          labelRotation: 0,
                         ),
-                        labelStyle: fontVaike,
-                        labelAlignment: LabelAlignment.start,
-                        labelRotation: 0,
-                      ),
-                      NumericAxis(
-                        majorGridLines: const MajorGridLines(width: 0.0),
-                        name: 'secondAxis',
+                        NumericAxis(
+                          majorGridLines: const MajorGridLines(width: 0.0),
+                          name: 'secondAxis',
+                          isVisible: false,
+                          title: AxisTitle(
+                            text: 'test',
+                            textStyle: fontVaike,
+                          ),
+                        ),
+                      ],
+                      primaryYAxis: NumericAxis(
                         isVisible: false,
                         title: AxisTitle(
                           text: 'test',
                           textStyle: fontVaike,
                         ),
                       ),
-                    ],
-                    primaryYAxis: NumericAxis(
-                      isVisible: false,
-                      title: AxisTitle(
-                        text: 'test',
-                        textStyle: fontVaike,
-                      ),
+                      series: <ChartSeries>[
+                        // Renders spline chart
+                        ColumnSeries<ChartData, String>(
+                          yAxisName: "firstAxis",
+                          onPointTap: (pointInteractionDetails) {
+                            int? rowIndex = pointInteractionDetails.pointIndex;
+
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => DunaamilineSeadmeLeht(
+                                  seadmeNimi:
+                                      seadmeteMap.keys.elementAt(rowIndex!),
+                                  SeadmeteMap: seadmeteMap,
+                                  valitud: 1,
+                                ),
+                              ),
+                            );
+                          },
+                          width: 1,
+                          spacing: 0.3,
+                          borderRadius: const BorderRadius.only(
+                              topLeft: Radius.circular(20),
+                              topRight: Radius.circular(20)),
+                          dataSource: chartData,
+                          xValueMapper: (ChartData data, _) => data.x,
+                          yValueMapper: (ChartData data, _) {
+                            final yValue = data.y;
+                            return yValue == 0
+                                ? 0
+                                : yValue! < asi * 0.20
+                                    ? asi * 0.20
+                                    : yValue;
+                          },
+                          dataLabelSettings: DataLabelSettings(
+                            isVisible: true,
+                            labelAlignment: ChartDataLabelAlignment.bottom,
+                            textStyle: fontVaike,
+                            angle: 270,
+                          ),
+                          color: Colors.blue,
+                          dataLabelMapper: (ChartData data, _) {
+                            // Display the data label only if the consumption is not 0
+                            if (data.y == 0) {
+                              return ''; // Customize this as needed
+                            } else {
+                              String temp3 = data.y!.toStringAsFixed(3);
+                              return ' $temp3 kWh';
+                            }
+                          },
+                        ),
+                        ColumnSeries<ChartData, String>(
+                          yAxisName: "secondAxis",
+                          onPointTap: (pointInteractionDetails) {
+                            int? rowIndex = pointInteractionDetails.pointIndex;
+
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => DunaamilineSeadmeLeht(
+                                  seadmeNimi:
+                                      seadmeteMap.keys.elementAt(rowIndex!),
+                                  SeadmeteMap: seadmeteMap,
+                                  valitud: 1,
+                                ),
+                              ),
+                            );
+                          },
+                          width: 1,
+                          spacing: 0.3,
+                          borderRadius: const BorderRadius.only(
+                              topLeft: Radius.circular(20),
+                              topRight: Radius.circular(20)),
+                          dataSource: chartData2,
+                          xValueMapper: (ChartData data, _) => data.x,
+                          yValueMapper: (ChartData data, _) {
+                            final yValue = data.y;
+                            return yValue == 0
+                                ? 0
+                                : yValue! < asi * 0.20
+                                    ? asi * 0.20
+                                    : yValue;
+                          },
+                          color: Colors.green,
+                          dataLabelSettings: DataLabelSettings(
+                            isVisible: true,
+                            labelAlignment: ChartDataLabelAlignment.bottom,
+                            textStyle: fontVaike,
+                            angle: 270,
+                          ),
+                          dataLabelMapper: (ChartData data, _) {
+                            // Display the data label only if the consumption is not 0
+                            if (data.y == 0) {
+                              return ''; // Customize this as needed
+                            } else {
+                              String temp3 = data.y!.toStringAsFixed(3);
+                              return ' $temp3 €';
+                            }
+                          },
+                        ),
+                      ],
                     ),
-                    series: <ChartSeries>[
-                      // Renders spline chart
-                      ColumnSeries<ChartData, String>(
-                        yAxisName: "firstAxis",
-                        onPointTap: (pointInteractionDetails) {
-                          int? rowIndex = pointInteractionDetails.pointIndex;
-
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => DunaamilineSeadmeLeht(
-                                seadmeNimi:
-                                    seadmeteMap.keys.elementAt(rowIndex!),
-                                SeadmeteMap: seadmeteMap,
-                                valitud: 1,
-                              ),
-                            ),
-                          );
-                        },
-                        width: 1,
-                        spacing: 0.3,
-                        borderRadius: const BorderRadius.only(
-                            topLeft: Radius.circular(20),
-                            topRight: Radius.circular(20)),
-                        dataSource: chartData,
-                        xValueMapper: (ChartData data, _) => data.x,
-                        yValueMapper: (ChartData data, _) {
-                          final yValue = data.y;
-                          return yValue == 0
-                              ? 0
-                              : yValue! < asi * 0.20
-                                  ? asi * 0.20
-                                  : yValue;
-                        },
-                        dataLabelSettings: DataLabelSettings(
-                          isVisible: true,
-                          labelAlignment: ChartDataLabelAlignment.bottom,
-                          textStyle: fontVaike,
-                          angle: 270,
-                        ),
-                        color: Colors.blue,
-                        dataLabelMapper: (ChartData data, _) {
-                          // Display the data label only if the consumption is not 0
-                          if (data.y == 0) {
-                            return ''; // Customize this as needed
-                          } else {
-                            String temp3 = data.y!.toStringAsFixed(3);
-                            return ' $temp3 kWh';
-                          }
-                        },
-                      ),
-                      ColumnSeries<ChartData, String>(
-                        yAxisName: "secondAxis",
-                        onPointTap: (pointInteractionDetails) {
-                          int? rowIndex = pointInteractionDetails.pointIndex;
-
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => DunaamilineSeadmeLeht(
-                                seadmeNimi:
-                                    seadmeteMap.keys.elementAt(rowIndex!),
-                                SeadmeteMap: seadmeteMap,
-                                valitud: 1,
-                              ),
-                            ),
-                          );
-                        },
-                        width: 1,
-                        spacing: 0.3,
-                        borderRadius: const BorderRadius.only(
-                            topLeft: Radius.circular(20),
-                            topRight: Radius.circular(20)),
-                        dataSource: chartData2,
-                        xValueMapper: (ChartData data, _) => data.x,
-                        yValueMapper: (ChartData data, _) {
-                          final yValue = data.y;
-                          return yValue == 0
-                              ? 0
-                              : yValue! < asi * 0.20
-                                  ? asi * 0.20
-                                  : yValue;
-                        },
-                        color: Colors.green,
-                        dataLabelSettings: DataLabelSettings(
-                          isVisible: true,
-                          labelAlignment: ChartDataLabelAlignment.bottom,
-                          textStyle: fontVaike,
-                          angle: 270,
-                        ),
-                        dataLabelMapper: (ChartData data, _) {
-                          // Display the data label only if the consumption is not 0
-                          if (data.y == 0) {
-                            return ''; // Customize this as needed
-                          } else {
-                            String temp3 = data.y!.toStringAsFixed(3);
-                            return ' $temp3 €';
-                          }
-                        },
-                      ),
-                    ],
                   ),
                 ),
               ),
-              SizedBox(height: 50,),
               Visibility(
-                visible: state,
-                child: Container(
-                    height: 250,
-                    color: Colors.white,
-                    child: SfCartesianChart(
-                      legend: Legend(textStyle: fontVaikeLight,
-                          isVisible: true, position: LegendPosition.bottom, overflowMode: LegendItemOverflowMode.wrap),
+                visible: tarbimineBoolStacked,
+                child: Column(
+                  children: [
+                   
+                    SfCartesianChart(
+                      legend: Legend(
+                        
+                          width: '100%',
+                       
+                          textStyle: fontVaikeLight,
+                          isVisible: true,
+                         
+                          position: LegendPosition.bottom,
+                                   
+                          overflowMode: LegendItemOverflowMode.wrap
+                          
+                        ),
                       series: <ChartSeries>[
                         StackedColumnSeries<ExpenseData, String>(
                           dataSource: [
@@ -322,12 +338,12 @@ class _TarbimiseGraafikState extends State<TarbimiseGraafik> {
                             ExpenseData('Sat', 200, 300, 100),
                             ExpenseData('Sun', 200, 300, 100),
                           ],
-                          
                           xValueMapper: (ExpenseData expense, _) =>
                               expense.month,
                           yValueMapper: (ExpenseData expense, _) =>
                               expense.food,
-                          name: 'Elektriauto \n 500 €',
+                          name: 'Elektriauto\n500€',
+                          //legendIconType: LegendIconType.verticalLin,
                           color: Colors.green,
                         ),
                         StackedColumnSeries<ExpenseData, String>(
@@ -338,17 +354,17 @@ class _TarbimiseGraafikState extends State<TarbimiseGraafik> {
                               ExpenseData('Thu', 500, 700, 400),
                               ExpenseData('Fri', 200, 300, 100),
                               ExpenseData('Sat', 200, 100, 100),
-                            ExpenseData('Sun', 200, 300, 100),
+                              ExpenseData('Sun', 200, 300, 100),
                             ],
                             xValueMapper: (ExpenseData expense, _) =>
                                 expense.month,
                             yValueMapper: (ExpenseData expense, _) =>
                                 expense.clothing,
-                            name: 'Külmkapp \n 200 €',
+                            name: 'Pesumasin\n400€',
                             color: Colors.blue),
                         StackedColumnSeries<ExpenseData, String>(
                             borderRadius:
-                                BorderRadius.vertical(top: Radius.circular(10)),
+                                const BorderRadius.vertical(top: Radius.circular(10)),
                             dataSource: [
                               ExpenseData('Mon', 100, 200, 50),
                               ExpenseData('Tue', 150, 250, 100),
@@ -356,22 +372,26 @@ class _TarbimiseGraafikState extends State<TarbimiseGraafik> {
                               ExpenseData('Thu', 250, 350, 200),
                               ExpenseData('Fri', 200, 300, 100),
                               ExpenseData('Sat', 200, 300, 100),
-                            ExpenseData('Sun', 200, 300, 300),
+                              ExpenseData('Sun', 200, 300, 300),
                             ],
                             xValueMapper: (ExpenseData expense, _) =>
                                 expense.month,
                             yValueMapper: (ExpenseData expense, _) =>
                                 expense.utilities,
-                            name: 'LED lamp \n 100 €',
+                            name: 'Suvila\n200€',
+                            
                             color: Colors.orange),
                       ],
                       primaryXAxis: CategoryAxis(),
                       primaryYAxis: NumericAxis(
-                        title: AxisTitle(text: 'Kulu (€)'),
-                      ),
-                    )),
+                          title: AxisTitle(text: 'Kulu (€)',textStyle: fontVaikeLight),
+                          ),
+                    ),
+                  ],
+                ),
               ),
-              
+              Visibility(
+                  visible: tarbimineBoolSpline, child: TarbimiseGraafikSpline())
             ],
           ),
         ),
@@ -379,6 +399,8 @@ class _TarbimiseGraafikState extends State<TarbimiseGraafik> {
     );
   }
 }
+
+
 
 class ChartData {
   ChartData(this.x, this.y);

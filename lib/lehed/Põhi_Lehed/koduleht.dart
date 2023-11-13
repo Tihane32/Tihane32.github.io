@@ -10,7 +10,9 @@ import 'package:testuus4/main.dart';
 import 'dynamicKoduLeht.dart';
 import '../maksumuseGraafik.dart';
 import 'package:table_calendar/table_calendar.dart';
- bool state = true;
+ bool tarbimineBoolChart = true;
+bool tarbimineBoolStacked = false;
+bool tarbimineBoolSpline = false;
 DateTime firstDayOfMonth = DateTime(DateTime.now().year, DateTime.now().month);
 
 // Calculate the last day of the current month
@@ -35,9 +37,10 @@ class _KoduLehtState extends State<KoduLeht> {
   DateTime firstDay = DateTime(DateTime.now().year, DateTime.now().month, 1);
   DateTime lastDay = DateTime(DateTime.now().year, DateTime.now().month, 30);
   String onoffNupp = 'Shelly ON';
-  bool tarbimineBool = true;
-  bool showCalendar = false;
  
+  
+  bool showCalendar = false;
+
   int koduindex = 1;
 
   int onTunnidSisestatud = 0;
@@ -110,69 +113,86 @@ class _KoduLehtState extends State<KoduLeht> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          backgroundColor: Colors.white,
-          elevation: 0,
-          automaticallyImplyLeading: false,
-          centerTitle: true,
-          title: Column(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  IconButton(
-                    onPressed: () {
-                      setState(() {
-                        showCalendar = !showCalendar;
-                      });
-                    },
-                    icon: const Icon(
-                      Icons.calendar_month,
-                      size: 30,
-                      color: Colors.black,
-                    ),
-                  ),
-                  IconButton(
-                    onPressed: () {
-                      setState(() {
-                        tarbimineBool = true;
-                      });
-                    },
-                    icon: Transform.rotate(
-                      angle: pi / 2,
-                      child: const Icon(
-                        Icons.bar_chart_rounded,
+            backgroundColor: Colors.white,
+            elevation: 0,
+            automaticallyImplyLeading: false,
+            centerTitle: true,
+            title: Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    IconButton(
+                      onPressed: () {
+                        setState(() {
+                          showCalendar = !showCalendar;
+                        });
+                      },
+                      icon: const Icon(
+                        Icons.calendar_month,
                         size: 30,
                         color: Colors.black,
                       ),
                     ),
-                  ),
-                  IconButton(
-                    onPressed: () {
-                      setState(() {
-                        tarbimineBool = false;
-                      });
-                    },
-                    icon: const Icon(
-                      Icons.show_chart_rounded,
-                      size: 30,
-                      color: Colors.black,
+                    IconButton(
+                      onPressed: () {
+                        setState(() {
+                          tarbimineBoolChart = true;
+                          tarbimineBoolSpline = false;
+                          tarbimineBoolStacked = false;
+                        });
+                      },
+                      icon: Transform.rotate(
+                        angle: pi / 2,
+                        child: const Icon(
+                          Icons.bar_chart_rounded,
+                          size: 30,
+                          color: Colors.black,
+                        ),
+                      ),
                     ),
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    "${DateFormat('dd.MM.yyyy').format(firstDayOfMonth)} - ${DateFormat('dd.MM.yyyy').format(lastDayOfMonth)}",
-                    style: fontVaike,
-                  ),
-                ],
-              )
-            ],
-          ),
-          toolbarHeight: 60
-        ),
+                    IconButton(
+                      onPressed: () {
+                        setState(() {
+                          tarbimineBoolChart = false;
+                          tarbimineBoolSpline = true;
+                          tarbimineBoolStacked = false;
+                        });
+                      },
+                      icon: const Icon(
+                        Icons.show_chart_rounded,
+                        size: 30,
+                        color: Colors.black,
+                      ),
+                    ),
+                    IconButton(
+                      onPressed: () {
+                        setState(() {
+                          tarbimineBoolChart = false;
+                          tarbimineBoolSpline = false;
+                          tarbimineBoolStacked = true;
+                        });
+                      },
+                      icon: const Icon(
+                        Icons.stacked_bar_chart_rounded,
+                        size: 30,
+                        color: Colors.black,
+                      ),
+                    ),
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      "${DateFormat('dd.MM.yyyy').format(firstDayOfMonth)} - ${DateFormat('dd.MM.yyyy').format(lastDayOfMonth)}",
+                      style: fontVaike,
+                    ),
+                  ],
+                )
+              ],
+            ),
+            toolbarHeight: 60),
         backgroundColor: backround,
         body: GestureDetector(
           onHorizontalDragUpdate: (details) {
@@ -246,7 +266,9 @@ class _KoduLehtState extends State<KoduLeht> {
                           ),
                           SizedBox(height: 8), // Adjust the height as needed
                           ElevatedButton(
-                            style: ButtonStyle(backgroundColor: MaterialStatePropertyAll(boxColor)),
+                            style: ButtonStyle(
+                                backgroundColor:
+                                    MaterialStatePropertyAll(boxColor)),
                             onPressed: () {
                               // Handle the confirmation logic here
                               if (_rangeStart != null && _rangeEnd != null) {
@@ -265,7 +287,10 @@ class _KoduLehtState extends State<KoduLeht> {
                                 // Inform the user that a valid range is required
                               }
                             },
-                            child: Text('Kinnita vahemik', style: fontVaike,),
+                            child: Text(
+                              'Kinnita vahemik',
+                              style: fontVaike,
+                            ),
                           ),
                         ],
                       ),
@@ -286,17 +311,11 @@ class _KoduLehtState extends State<KoduLeht> {
                           return Center(
                               child: Text('Error: ${snapshot.error}'));
                         } else {
-                          return Visibility(
-                            maintainState: true,
-                            visible: tarbimineBool,
-                            child: TarbimiseGraafik(tarbimiseMap, ajatarbimine),
-                          );
+                          return TarbimiseGraafik(tarbimiseMap, ajatarbimine);
                         }
                       },
                     ),
-                    Visibility(
-                        visible: !tarbimineBool,
-                        child: TarbimiseGraafikSpline()),
+                   
 
                     // Add some spacing between the two widgets
 
