@@ -9,13 +9,17 @@ import 'package:testuus4/main.dart';
 import '../Seadme_Lehed/dynamicSeadmeInfo.dart';
 
 class GruppiSeadmed extends StatefulWidget {
-  const GruppiSeadmed({Key? key}) : super(key: key);
+  const GruppiSeadmed({Key? key, required this.gruppNimi}) : super(key: key);
+  final String gruppNimi;
 
   @override
-  State<GruppiSeadmed> createState() => _GruppiSeadmedState();
+  State<GruppiSeadmed> createState() =>
+      _GruppiSeadmedState(gruppNimi: gruppNimi);
 }
 
 class _GruppiSeadmedState extends State<GruppiSeadmed> {
+  _GruppiSeadmedState({Key? key, required this.gruppNimi});
+  String gruppNimi;
   bool isLoading = true;
   //String onoffNupp = 'Shelly ON';
   Map<String, dynamic> filteredDevices = {};
@@ -27,7 +31,7 @@ class _GruppiSeadmedState extends State<GruppiSeadmed> {
 
   Future<void> fetchData() async {
     await seisukord();
-    filteredDevices = filterDevices(gruppiMap);
+    filteredDevices = gruppiSeadmedtoMap(gruppNimi);
     // Add any other data fetching or initialization code here if needed.
     // When done, set isLoading to false to display the content.
     setState(() {
@@ -257,12 +261,12 @@ muudaSeadmeOlek(Map<String, dynamic> filteredDevices, SeadmeNimi) {
   return seadmeteMap; // Device key not found in the map
 }
 
-Map<String, dynamic> filterDevices(Map<String, dynamic> gruppiMap) {
+Map<String, dynamic> gruppiSeadmedtoMap(String gruppNimi) {
   print('siin');
   Map<String, dynamic> filteredDevices = {};
 
   seadmeteMap.forEach((device, deviceData) {
-    if (gruppiMap['Kõik Seadmed']['Grupi_Seadmed'].contains(device)) {
+    if (gruppiMap[gruppNimi]['Grupi_Seadmed'].contains(device)) {
       filteredDevices[device] = deviceData;
     }
   });
