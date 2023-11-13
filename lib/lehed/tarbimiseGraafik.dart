@@ -303,8 +303,8 @@ class _TarbimiseGraafikState extends State<TarbimiseGraafik> {
                 ),
               ),
               SizedBox(height: 50,),
-              RotatedBox(
-                quarterTurns: 0,
+              Visibility(
+                visible: state,
                 child: Container(
                     height: 250,
                     color: Colors.white,
