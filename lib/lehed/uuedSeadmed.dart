@@ -8,6 +8,8 @@ import 'package:testuus4/funktsioonid/token.dart';
 import 'package:testuus4/lehed/P%C3%B5hi_Lehed/dynamicKoduLeht.dart';
 import 'package:testuus4/main.dart';
 
+import '../funktsioonid/salvestaGrupp.dart';
+
 class uuedSeadmed extends StatefulWidget {
   uuedSeadmed({required this.uuedSeadmedString});
   final Map<String, dynamic> uuedSeadmedString;
@@ -196,5 +198,7 @@ Future<void> sort(List<bool> checkboxValues,
   print("---------------------");
   print(seadmeteMap);
   print("---------------------");
-  gruppiMap['Kõik Seadmed']['Grupi_Seadmed'] = seadmeteMap.keys.toList();
+  //kirjutamegruppimappi koik seadmed
+  Map<String, bool> tyhiMap = {};
+  SalvestaUusGrupp('Kõik Seadmed', tyhiMap);
 }

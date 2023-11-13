@@ -53,7 +53,7 @@ class _DunaamilineGrupiLehtState extends State<DunaamilineGrupiLeht> {
     lehedSeadme = [
       AbiLeht(),
       AbiLeht(),
-      GruppiSeadmed(),
+      GruppiSeadmed(gruppNimi: gruppNimi),
       AbiLeht(),
       GruppiKoostamine(),
     ];

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:testuus4/funktsioonid/lulitamine.dart';
 import 'dart:async';
+import '../../funktsioonid/salvestaGrupp.dart';
 import '../GraafikusseSeadmeteValik.dart';
 import '../Põhi_Lehed/dynamicKoduLeht.dart';
 import 'package:testuus4/funktsioonid/seisukord.dart';
@@ -323,7 +324,7 @@ class _GruppiKoostamineState extends State<GruppiKoostamine> {
                         ),
                       ],
                       onTap: (int kodu) {
-                        gruppiLoomine(gruppiNimi, ValitudSeadmed);
+                        SalvestaUusGrupp(gruppiNimi, ValitudSeadmed);
                       })),
             ],
           ),
@@ -339,21 +340,4 @@ Map<String, bool> valitudSeadmeteNullimine() {
     ValitudSeadmed[key] = false;
   });
   return ValitudSeadmed;
-}
-
-gruppiLoomine(String gruppiNimi, Map<String, bool> valitudSeadmed) {
-  Map<String, dynamic> uusGrupp = {
-    'Gruppi_pilt': 'assets/saun1.jpg',
-    'Grupi_Seadmed': [],
-    'Grupi_andurid': [],
-    'Grupi_temp': 27.3,
-    'Gruppi_olek': 'on',
-  };
-  valitudSeadmed.forEach((key, value) async {
-    if (value == true) {
-      uusGrupp['Grupi_Seadmed'].add(key);
-    }
-  });
-  gruppiMap['$gruppiNimi'] = uusGrupp;
-  print(gruppiMap);
 }

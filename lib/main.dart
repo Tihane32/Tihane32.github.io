@@ -78,10 +78,12 @@ TextStyle fontValgeVaike = GoogleFonts.roboto(
 TextStyle fontVaike = GoogleFonts.roboto(
     textStyle: const TextStyle(
         fontWeight: FontWeight.w500, fontSize: 14, color: Colors.black));
-        TextStyle fontVaikeLight = GoogleFonts.roboto(
+TextStyle fontVaikeLight = GoogleFonts.roboto(
     textStyle: const TextStyle(
-      letterSpacing: 1,
-        fontWeight: FontWeight.w500, fontSize: 14, color: Color.fromARGB(255, 48, 44, 44)));
+        letterSpacing: 1,
+        fontWeight: FontWeight.w500,
+        fontSize: 14,
+        color: Color.fromARGB(255, 48, 44, 44)));
 TextStyle fontEritiVaike = GoogleFonts.roboto(
     textStyle: const TextStyle(
         fontWeight: FontWeight.w500, fontSize: 12, color: Colors.black));
@@ -108,7 +110,12 @@ Future<void> main() async {
     seadmeteMap = json.decode(seadmedJSONmap);
   }
 
-  gruppiMap['Kõik Seadmed']['Grupi_Seadmed'] = seadmeteMap.keys.toList();
+  var gruppidJSONmap = prefs.getString('gruppid');
+  if (gruppidJSONmap != null) {
+    gruppiMap = json.decode(gruppidJSONmap);
+  } else {
+    gruppiMap['Kõik Seadmed']['Grupi_Seadmed'] = seadmeteMap.keys.toList();
+  }
 
   var temp = prefs.getString('tariif');
   if (temp != null) {
