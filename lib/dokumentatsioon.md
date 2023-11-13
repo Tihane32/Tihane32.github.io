@@ -212,7 +212,7 @@ salvestaSeadistus(
 }
 
 ```
-Salvestab mällu seadme kohta parameetri
+Salvestab mällu iga valitud seadme kohta parameetri
 
 ---
 
