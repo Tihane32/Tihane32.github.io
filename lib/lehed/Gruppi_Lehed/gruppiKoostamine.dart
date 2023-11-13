@@ -39,13 +39,13 @@ class _GruppiKoostamineState extends State<GruppiKoostamine> {
     return Scaffold(
       backgroundColor: backround,
       appBar: AppBar(
-        toolbarHeight: 160,
+        toolbarHeight: 250,
         automaticallyImplyLeading: false,
         elevation: 0.0,
         shadowColor: Colors.transparent,
         backgroundColor: Colors.transparent,
         title: Container(
-          height: 150,
+          height: 240,
           child: ListView(
             children: <Widget>[
               ListTile(
@@ -77,6 +77,9 @@ class _GruppiKoostamineState extends State<GruppiKoostamine> {
                     style: font,
                   )),
                 ),
+              ),
+              SizedBox(
+                height: 10,
               ),
               ListTile(
                 title: Text(
@@ -115,6 +118,9 @@ class _GruppiKoostamineState extends State<GruppiKoostamine> {
                   ),
                 ),
               ),
+              SizedBox(
+                height: 10,
+              ),
               ListTile(
                 title: Text(
                   'Gruppi niiskusandur',
@@ -152,6 +158,9 @@ class _GruppiKoostamineState extends State<GruppiKoostamine> {
                   ),
                 ),
               ),
+              SizedBox(
+                height: 10,
+              ),
               ListTile(
                 title: Text(
                   'Gruppi valgusandur',
@@ -161,13 +170,13 @@ class _GruppiKoostamineState extends State<GruppiKoostamine> {
                   width: 250,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
-                    color: Color.fromARGB(255, 76, 153, 167),
+                    color: Color.fromARGB(255, 66, 66, 66),
                   ),
                   padding: EdgeInsets.symmetric(horizontal: 10),
                   child: DropdownButtonHideUnderline(
                     child: DropdownButton<String>(
                       style: font,
-                      dropdownColor: Color.fromARGB(255, 231, 246, 248),
+                      dropdownColor: Color.fromARGB(255, 172, 172, 172),
                       borderRadius: borderRadius,
                       value: valgusAndur,
                       onChanged: (andur) {
@@ -269,6 +278,57 @@ class _GruppiKoostamineState extends State<GruppiKoostamine> {
           );
         },
       ),
+      bottomNavigationBar: Visibility(
+        visible: ValitudSeadmed.values.any((value) => value == true) &&
+            gruppiNimi != '',
+        child: SizedBox(
+          height: navBarHeight,
+          child: Stack(
+            children: [
+              Positioned(
+                  top: -5,
+                  left: 0,
+                  right: 0,
+                  child: BottomNavigationBar(
+                      backgroundColor: Color.fromARGB(255, 115, 162, 195),
+                      fixedColor: Color.fromARGB(255, 157, 214, 171),
+                      unselectedLabelStyle: TextStyle(
+                        color: Color.fromARGB(255, 157, 214, 171),
+                      ),
+                      selectedLabelStyle: TextStyle(
+                        color: Color.fromARGB(255, 157, 214, 171),
+                      ),
+                      items: const <BottomNavigationBarItem>[
+                        BottomNavigationBarItem(
+                          label: '',
+                          icon: Icon(
+                            Icons.check_circle_outlined,
+                            size: 0,
+                          ),
+                        ),
+                        BottomNavigationBarItem(
+                          label: 'Kinnita',
+                          icon: Icon(
+                            Icons.check_circle_outlined,
+                            size: 30,
+                            color: Color.fromARGB(255, 157, 214, 171),
+                          ),
+                        ),
+                        BottomNavigationBarItem(
+                          label: '',
+                          icon: Icon(
+                            Icons.check_circle_outlined,
+                            size: 0,
+                          ),
+                        ),
+                      ],
+                      onTap: (int kodu) {
+                        gruppiLoomine(gruppiNimi, ValitudSeadmed);
+                      })),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }
@@ -279,4 +339,21 @@ Map<String, bool> valitudSeadmeteNullimine() {
     ValitudSeadmed[key] = false;
   });
   return ValitudSeadmed;
+}
+
+gruppiLoomine(String gruppiNimi, Map<String, bool> valitudSeadmed) {
+  Map<String, dynamic> uusGrupp = {
+    'Gruppi_pilt': 'assets/saun1.jpg',
+    'Grupi_Seadmed': [],
+    'Grupi_andurid': [],
+    'Grupi_temp': 27.3,
+    'Gruppi_olek': 'on',
+  };
+  valitudSeadmed.forEach((key, value) async {
+    if (value == true) {
+      uusGrupp['Grupi_Seadmed'].add(key);
+    }
+  });
+  gruppiMap['$gruppiNimi'] = uusGrupp;
+  print(gruppiMap);
 }
