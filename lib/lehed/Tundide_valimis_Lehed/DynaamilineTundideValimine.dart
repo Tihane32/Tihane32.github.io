@@ -3,12 +3,13 @@ import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:testuus4/funktsioonid/graafikGen1.dart';
 import 'package:testuus4/funktsioonid/graafikGen2.dart';
-import 'package:testuus4/lehed/GraafikusseSeadmeteValik.dart';
+import 'package:testuus4/lehed/Tundide_valimis_Lehed/Graafik_Seadmete_valik/DynaamilineGraafikusseSeadmeteValik.dart';
 import 'package:testuus4/lehed/Tundide_valimis_Lehed/AutoTuniValik.dart';
 import 'package:testuus4/lehed/Tundide_valimis_Lehed/hinnaPiiriAluselTunideValimine.dart';
 import 'package:testuus4/lehed/Tundide_valimis_Lehed/kopeeeriGraafikTundideValimine.dart';
 import 'package:testuus4/widgets/kinnitus.dart';
 import '../../main.dart';
+import 'Graafik_Seadmete_valik/graafikuseSeadmeteValik_yksikud.dart';
 import 'keskimiseHinnaAluselTundideValimine.dart';
 import 'TunniSeaded.dart';
 import 'keelatudTunnid.dart';
@@ -298,7 +299,8 @@ class _DynamilineTundideValimineState extends State<DynamilineTundideValimine> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => SeadmeteListValimine(),
+                              builder: (context) =>
+                                  SeadmeteListValimine_dynaamiline(),
                             ),
                           );
                         } else if (koduindex == 1) {

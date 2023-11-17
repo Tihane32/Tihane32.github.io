@@ -5,7 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:testuus4/funktsioonid/Elering.dart';
 import 'package:flutter/services.dart';
 
-import '../GraafikusseSeadmeteValik.dart';
+import '../Tundide_valimis_Lehed/Graafik_Seadmete_valik/DynaamilineGraafikusseSeadmeteValik.dart';
 
 import 'package:vibration/vibration.dart';
 
