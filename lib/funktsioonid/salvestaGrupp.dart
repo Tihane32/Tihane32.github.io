@@ -8,7 +8,9 @@ SalvestaUusGrupp(String gruppiNimi, Map<String, bool> valitudSeadmed) async {
     Map<String, dynamic> uusGrupp = {
       'Gruppi_pilt': 'assets/saun1.jpg',
       'Grupi_Seadmed': [],
-      'Grupi_andurid': [],
+      'Grupi_temp_andur': [],
+      'Grupi_niiskus_andur': [],
+      'Grupi_valgus_andur': [],
       'Grupi_temp': 27.3,
       'Gruppi_olek': 'on',
     };
