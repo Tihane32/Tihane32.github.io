@@ -312,6 +312,7 @@ class _DynamilineTundideValimineState extends State<DynamilineTundideValimine> {
 
                           // Show CircularProgressIndicator
                           showDialog(
+                            barrierDismissible: false,
                             context: context,
                             builder: (BuildContext context) {
                               return Center(
@@ -330,20 +331,11 @@ class _DynamilineTundideValimineState extends State<DynamilineTundideValimine> {
                           // Close the CircularProgressIndicator dialog
                           Navigator.pop(context);
 
+
                           Kinnitus(context, "Graafik seadmetele saadetud");
                           HapticFeedback.vibrate();
 
-                          Future.delayed(Duration(seconds: 5), () {
-                            Navigator.of(context)
-                                .pop(); // Close the AlertDialog
-                            /* Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) =>
-                                    DynaamilenieKoduLeht(i: 1),
-                              ),
-                            );*/
-                          });
+                          
                         }
                       }),
             ),
