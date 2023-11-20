@@ -3,6 +3,7 @@ Trevor Uuna, Jaakob Lambot 27.03.2023
 TalTech
 */
 //Kit test
+import 'dart:developer';
 import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
@@ -21,9 +22,14 @@ import 'lehed/Põhi_Lehed/seadmeteListDynaamiline.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:workmanager/workmanager.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+import 'package:logging/logging.dart';
 
 //Maini käivitamine, home on koduleht.
 //bool graafikuNahtavus = true;
+const String serverUrl = 'http://172.22.22.217:5000/log';
+
 List<dynamic> tariif = [];
 Map<String, String> tokenMap = {};
 
@@ -97,10 +103,23 @@ Border border = Border.all(
   color: const Color.fromARGB(255, 0, 0, 0),
   width: 2,
 );
+Future<void> sendLogToServer(String log) async {
+  try {
+    await http.post(
+      Uri.parse("http://172.22.22.217:5000/log"),
+      body: log,
+      headers: {'Content-Type': 'text/plain'},
+    );
+  } catch (e) {
+    print('Error sending log to server: $e');
+  }
+}
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 //backround start
+  
+
   SharedPreferences prefs = await SharedPreferences.getInstance();
 
   []; //Võtab mälust 'users'-i asukohast väärtused
@@ -128,20 +147,10 @@ Future<void> main() async {
   print(seadmeteMap);
   print("------------");
 //backround end
-
+  await sendLogToServer("$seadmeteMap");
   runApp(MaterialApp(
     theme: ThemeData(brightness: Brightness.light),
     home: DynaamilenieKoduLeht(i: 1), //Alustab appi kodulehest
   ));
-  //energia();
-  //energia2();
-  /*Workmanager().initialize(callbackDispatcher);
-  Workmanager().registerPeriodicTask(
-    "1",
-    "simplePeriodicTask",
-    frequency: Duration(seconds: 5),
-  );*/
-  //graafikGen2DeleteAll("30c6f7828098");
 
-  //graafikGen1Lugemine("80646f81ad9a");
 }
