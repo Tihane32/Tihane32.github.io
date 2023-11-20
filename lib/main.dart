@@ -118,7 +118,6 @@ Future<void> sendLogToServer(String log) async {
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 //backround start
-  
 
   SharedPreferences prefs = await SharedPreferences.getInstance();
 
@@ -147,10 +146,11 @@ Future<void> main() async {
   print(seadmeteMap);
   print("------------");
 //backround end
-  await sendLogToServer("$seadmeteMap");
+  await sendLogToServer(
+      "ID::${seadmeteMap[seadmeteMap.keys.first]["Username"]};ACTION::START");
+ 
   runApp(MaterialApp(
     theme: ThemeData(brightness: Brightness.light),
     home: DynaamilenieKoduLeht(i: 1), //Alustab appi kodulehest
   ));
-
 }

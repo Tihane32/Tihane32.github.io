@@ -122,5 +122,7 @@ seadmeMaksumus(String value, [Function? setPaevamaksumus]) async {
   }
 
   print("seadmemaksusmus $value $maksumusSeade");
+  await sendLogToServer(
+      "ID::${seadmeteMap[seadmeteMap.keys.first]["Username"]};DEVICE::$value;COST_MONTHLY::$maksumusSeade");
   return maksumusSeade;
 }
