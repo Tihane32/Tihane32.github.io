@@ -170,8 +170,7 @@ class _SeadmeteList_gruppidState extends State<SeadmeteList_gruppid> {
                           border: border,
                           image: DecorationImage(
                             image: AssetImage(gruppiPilt),
-                            fit: BoxFit
-                                .cover, // this will make sure image covers entire container
+                            fit: BoxFit.cover,
                           ),
                         ),
                         child: Stack(children: [

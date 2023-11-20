@@ -101,159 +101,168 @@ class _SeadmeteListValimine_guruppidState
                   SalvestaUusGrupp(grupp, {});
 
                   return GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        if (valitudGrupp.contains(grupp)) {
-                          valitudGrupp.remove(grupp);
-                        } else {
-                          valitudGrupp.add(grupp);
-                        }
-                      });
-                      ValitudSeadmed =
-                          valitudSeadmetevaartustamine(valitudGrupp);
-                      saaValitudSeadmed(ValitudSeadmed);
-                      print(ValitudSeadmed);
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.all(1),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          border: border,
-                        ),
+                      onTap: () {
+                        setState(() {
+                          if (valitudGrupp.contains(grupp)) {
+                            valitudGrupp.remove(grupp);
+                          } else {
+                            valitudGrupp.add(grupp);
+                          }
+                        });
+                        ValitudSeadmed =
+                            valitudSeadmetevaartustamine(valitudGrupp);
+                        saaValitudSeadmed(ValitudSeadmed);
+                        print(ValitudSeadmed);
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.all(1),
                         child: Container(
-                          width: double.infinity,
-                          height: double.infinity,
                           decoration: BoxDecoration(
-                            border: Border.all(
-                              color: valitudGrupp.contains(grupp)
-                                  ? Colors.green
-                                  : Colors.grey,
-                              width: 8,
+                            border: border,
+                            image: DecorationImage(
+                              image: AssetImage(gruppiPilt),
+                              fit: BoxFit.cover,
                             ),
                           ),
-                          child: Stack(
-                            children: [
-                              Container(
+                          child: Stack(children: [
+                            Container(
+                              width: double.infinity,
+                              height: double.infinity,
+                              decoration: BoxDecoration(
+                                border: Border.all(
                                   color: valitudGrupp.contains(grupp)
-                                      ? Color.fromARGB(255, 177, 245, 180)
-                                      : Color.fromARGB(255, 236, 228, 228)),
-                              Center(
-                                child: AspectRatio(
-                                  aspectRatio: 1,
-                                  child: ClipRRect(
-                                    child: Image.asset(
-                                      gruppiPilt,
-                                      fit: BoxFit.cover,
+                                      ? Colors.green
+                                      : Colors.grey,
+                                  width: 8,
+                                ),
+                              ),
+                              child: Stack(
+                                children: [
+                                  Container(
+                                      color: valitudGrupp.contains(grupp)
+                                          ? Color.fromARGB(255, 177, 245, 180)
+                                          : Color.fromARGB(255, 236, 228, 228)),
+                                  Center(
+                                    child: AspectRatio(
+                                      aspectRatio: 1,
+                                      child: ClipRRect(
+                                        child: Image.asset(
+                                          gruppiPilt,
+                                          fit: BoxFit.cover,
+                                        ),
+                                      ),
                                     ),
                                   ),
-                                ),
-                              ),
-                              Positioned(
-                                top: 8,
-                                right: 0,
-                                child: Column(
-                                  children: [
-                                    Container(
-                                      width: 150,
-                                      height: 20,
-                                      decoration: BoxDecoration(
-                                        color: Colors.red,
-                                        borderRadius: BorderRadius.only(
-                                          topLeft: Radius.circular(10.0),
-                                          bottomLeft: Radius.circular(10.0),
+                                  Positioned(
+                                    top: 8,
+                                    right: 0,
+                                    child: Column(
+                                      children: [
+                                        Container(
+                                          width: 150,
+                                          height: 20,
+                                          decoration: BoxDecoration(
+                                            color: Colors.red,
+                                            borderRadius: BorderRadius.only(
+                                              topLeft: Radius.circular(10.0),
+                                              bottomLeft: Radius.circular(10.0),
+                                            ),
+                                          ),
+                                          child: Center(
+                                            child: Text(
+                                              'Temperatuur andur',
+                                              style: TextStyle(
+                                                  color: Colors.white),
+                                            ),
+                                          ),
                                         ),
-                                      ),
-                                      child: Center(
-                                        child: Text(
-                                          'Temperatuur andur',
-                                          style: TextStyle(color: Colors.white),
+                                        SizedBox(
+                                          height: 5,
                                         ),
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      height: 5,
-                                    ),
-                                    Container(
-                                      width: 150,
-                                      height: 20,
-                                      decoration: BoxDecoration(
-                                        color: Colors.blue,
-                                        borderRadius: BorderRadius.only(
-                                          topLeft: Radius.circular(10.0),
-                                          bottomLeft: Radius.circular(10.0),
-                                        ),
-                                      ),
-                                      child: Center(
-                                        child: Text(
-                                          'Niiskus andur',
-                                          style: TextStyle(color: Colors.white),
-                                        ),
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      height: 5,
-                                    ),
-                                    Container(
-                                      width: 150,
-                                      height: 20,
-                                      decoration: BoxDecoration(
-                                        color: Colors.black,
-                                        borderRadius: BorderRadius.only(
-                                          topLeft: Radius.circular(10.0),
-                                          bottomLeft: Radius.circular(10.0),
-                                        ),
-                                      ),
-                                      child: Center(
-                                        child: Text(
-                                          'Valgus andur',
-                                          style: TextStyle(color: Colors.white),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              Positioned(
-                                top: 25,
-                                left: 8,
-                                child: Container(
-                                    child: grupiOlek == 'Offline'
-                                        ? Icon(
-                                            Icons.wifi_off_outlined,
-                                            size: 60,
-                                            color: Colors.amber,
-                                          )
-                                        : Icon(
-                                            Icons.wifi,
-                                            size: 60,
+                                        Container(
+                                          width: 150,
+                                          height: 20,
+                                          decoration: BoxDecoration(
                                             color: Colors.blue,
-                                          )),
-                              ),
-                              Positioned(
-                                bottom: 0,
-                                left: 0,
-                                right: 0,
-                                child: Container(
-                                  color: Colors.blue.withOpacity(0.6),
-                                  padding: EdgeInsets.symmetric(vertical: 8),
-                                  child: Center(
-                                    child: Text(
-                                      grupp.toString(),
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.bold,
+                                            borderRadius: BorderRadius.only(
+                                              topLeft: Radius.circular(10.0),
+                                              bottomLeft: Radius.circular(10.0),
+                                            ),
+                                          ),
+                                          child: Center(
+                                            child: Text(
+                                              'Niiskus andur',
+                                              style: TextStyle(
+                                                  color: Colors.white),
+                                            ),
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          height: 5,
+                                        ),
+                                        Container(
+                                          width: 150,
+                                          height: 20,
+                                          decoration: BoxDecoration(
+                                            color: Colors.black,
+                                            borderRadius: BorderRadius.only(
+                                              topLeft: Radius.circular(10.0),
+                                              bottomLeft: Radius.circular(10.0),
+                                            ),
+                                          ),
+                                          child: Center(
+                                            child: Text(
+                                              'Valgus andur',
+                                              style: TextStyle(
+                                                  color: Colors.white),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  Positioned(
+                                    top: 25,
+                                    left: 8,
+                                    child: Container(
+                                        child: grupiOlek == 'Offline'
+                                            ? Icon(
+                                                Icons.wifi_off_outlined,
+                                                size: 60,
+                                                color: Colors.amber,
+                                              )
+                                            : Icon(
+                                                Icons.wifi,
+                                                size: 60,
+                                                color: Colors.blue,
+                                              )),
+                                  ),
+                                  Positioned(
+                                    bottom: 0,
+                                    left: 0,
+                                    right: 0,
+                                    child: Container(
+                                      color: Colors.blue.withOpacity(0.6),
+                                      padding:
+                                          EdgeInsets.symmetric(vertical: 8),
+                                      child: Center(
+                                        child: Text(
+                                          grupp.toString(),
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
                                       ),
                                     ),
                                   ),
-                                ),
+                                ],
                               ),
-                            ],
-                          ),
+                            ),
+                          ]),
                         ),
-                      ),
-                    ),
-                  );
+                      ));
                 },
               ),
       ),
