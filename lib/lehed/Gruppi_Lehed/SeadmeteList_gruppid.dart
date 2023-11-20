@@ -9,6 +9,8 @@ import 'package:testuus4/lehed/Gruppi_Lehed/gruppiKoostamine.dart';
 import 'package:testuus4/lehed/P%C3%B5hi_Lehed/dynamicKoduLeht.dart';
 import 'package:testuus4/main.dart';
 
+import '../../funktsioonid/saaGruppiOlek.dart';
+import '../../funktsioonid/salvestaGrupp.dart';
 import '../Tundide_valimis_Lehed/Graafik_Seadmete_valik/graafikuseSeadmeteValik_yksikud.dart';
 
 class SeadmeteList_gruppid extends StatefulWidget {
@@ -145,8 +147,9 @@ class _SeadmeteList_gruppidState extends State<SeadmeteList_gruppid> {
 
                   final grupp = gruppiMap.keys.elementAt(index);
                   final gruppiPilt = gruppiMap[grupp]["Gruppi_pilt"];
-                  final grupiOlek = gruppiMap[grupp]["Gruppi_olek"];
+                  final grupiOlek = saaGrupiOlek(grupp);
                   final grupiTemp = gruppiMap[grupp]['Grupi_temp'];
+                  SalvestaUusGrupp(grupp, {});
 
                   return GestureDetector(
                     onTap: () {

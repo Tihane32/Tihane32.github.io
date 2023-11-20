@@ -599,22 +599,24 @@ graafikGen2Filtreerimine(String id, List<dynamic> graafikUus) async {
 graafikGen2SaatmineGraafikuga(List<dynamic> graafik, String id) async {
   print(graafik);
 
-  for (int i = 0; i < graafik.length; i++) {
-    var headers = {
-      'Authorization': 'Bearer ${tokenMap[id]}',
-      'Content-Type': 'application/x-www-form-urlencoded',
-    };
+  if (seadmeteMap[id]['Seadme_olek'] != 'Offline') {
+    for (int i = 0; i < graafik.length; i++) {
+      var headers = {
+        'Authorization': 'Bearer ${tokenMap[id]}',
+        'Content-Type': 'application/x-www-form-urlencoded',
+      };
 
-    var data = {
-      'id': id,
-      'method': 'schedule.create',
-      'params': '${graafik[i]}',
-    };
-    var url = Uri.parse(
-        '${seadmeteMap[id]['api_url']}/fast/device/gen2_generic_command');
-    var res = await http.post(url, headers: headers, body: data);
-    print(res.body);
-    print("sent this: $id ${graafik[i]}");
+      var data = {
+        'id': id,
+        'method': 'schedule.create',
+        'params': '${graafik[i]}',
+      };
+      var url = Uri.parse(
+          '${seadmeteMap[id]['api_url']}/fast/device/gen2_generic_command');
+      var res = await http.post(url, headers: headers, body: data);
+      print(res.body);
+      print("sent this: $id ${graafik[i]}");
+    }
   }
   mitmeSeadmeKinnitus.add(true);
   seadmeKinnitus = true;

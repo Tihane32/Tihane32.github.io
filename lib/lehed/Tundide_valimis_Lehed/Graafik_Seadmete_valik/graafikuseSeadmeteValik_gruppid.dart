@@ -8,6 +8,8 @@ import 'package:testuus4/funktsioonid/graafikGen1.dart';
 import 'package:testuus4/funktsioonid/graafikGen2.dart';
 import 'package:testuus4/lehed/Seadme_Lehed/SeadmeGraafikLeht.dart';
 import 'package:testuus4/widgets/hoitatus.dart';
+import '../../../funktsioonid/saaGruppiOlek.dart';
+import '../../../funktsioonid/salvestaGrupp.dart';
 import '../../../funktsioonid/seisukord.dart';
 import '../../../funktsioonid/token.dart';
 import '../../../widgets/PopUpGraafik.dart';
@@ -95,7 +97,8 @@ class _SeadmeteListValimine_guruppidState
                 itemBuilder: (context, index) {
                   final grupp = gruppiMap.keys.elementAt(index);
                   final gruppiPilt = gruppiMap[grupp]["Gruppi_pilt"];
-                  final grupiOlek = gruppiMap[grupp]["Gruppi_olek"];
+                  final grupiOlek = saaGrupiOlek(grupp);
+                  SalvestaUusGrupp(grupp, {});
 
                   return GestureDetector(
                     onTap: () {
@@ -147,35 +150,68 @@ class _SeadmeteListValimine_guruppidState
                               ),
                               Positioned(
                                 top: 8,
-                                right: 8,
-                                child:
-                                    true //seadmeteMap[grupp]["Graafik"] == 'ei'
-                                        ? IconButton(
-                                            iconSize: 60,
-                                            icon: Icon(
-                                              Icons.warning_amber_rounded,
-                                              size: 80,
-                                              color: Colors.amber,
-                                            ),
-                                            onPressed: () {
-                                              showDialog(
-                                                  context: context,
-                                                  builder: (context) =>
-                                                      AlertDialog(
-                                                        title: Text(
-                                                            "  $grupp graafik puudub"),
-                                                      ));
-                                            },
-                                          )
-                                        : IconButton(
-                                            iconSize: 60,
-                                            icon: Icon(
-                                              Icons.fact_check_outlined,
-                                              size: 80,
-                                              color: Colors.blue,
-                                            ),
-                                            onPressed: () async {},
-                                          ),
+                                right: 0,
+                                child: Column(
+                                  children: [
+                                    Container(
+                                      width: 150,
+                                      height: 20,
+                                      decoration: BoxDecoration(
+                                        color: Colors.red,
+                                        borderRadius: BorderRadius.only(
+                                          topLeft: Radius.circular(10.0),
+                                          bottomLeft: Radius.circular(10.0),
+                                        ),
+                                      ),
+                                      child: Center(
+                                        child: Text(
+                                          'Temperatuur andur',
+                                          style: TextStyle(color: Colors.white),
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: 5,
+                                    ),
+                                    Container(
+                                      width: 150,
+                                      height: 20,
+                                      decoration: BoxDecoration(
+                                        color: Colors.blue,
+                                        borderRadius: BorderRadius.only(
+                                          topLeft: Radius.circular(10.0),
+                                          bottomLeft: Radius.circular(10.0),
+                                        ),
+                                      ),
+                                      child: Center(
+                                        child: Text(
+                                          'Niiskus andur',
+                                          style: TextStyle(color: Colors.white),
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: 5,
+                                    ),
+                                    Container(
+                                      width: 150,
+                                      height: 20,
+                                      decoration: BoxDecoration(
+                                        color: Colors.black,
+                                        borderRadius: BorderRadius.only(
+                                          topLeft: Radius.circular(10.0),
+                                          bottomLeft: Radius.circular(10.0),
+                                        ),
+                                      ),
+                                      child: Center(
+                                        child: Text(
+                                          'Valgus andur',
+                                          style: TextStyle(color: Colors.white),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
                               Positioned(
                                 top: 25,
@@ -244,10 +280,11 @@ Map<String, bool> valitudSeadmetevaartustamine(List valitudGrupp) {
     List seadmed = gruppiMap[grupp]['Grupi_Seadmed'];
     for (var item in seadmed) {
       if (item is String) {
-        valitudSeadmed[item] = true;
+        if (seadmeteMap[item]['Seadme_olek'] != 'Offline') {
+          valitudSeadmed[item] = true;
+        }
       }
     }
   }
-
   return valitudSeadmed;
 }

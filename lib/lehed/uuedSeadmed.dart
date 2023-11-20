@@ -199,6 +199,5 @@ Future<void> sort(List<bool> checkboxValues,
   print(seadmeteMap);
   print("---------------------");
   //kirjutamegruppimappi koik seadmed
-  Map<String, bool> tyhiMap = {};
-  SalvestaUusGrupp('Kõik Seadmed', tyhiMap);
+  SalvestaUusGrupp('Kõik Seadmed', {});
 }
