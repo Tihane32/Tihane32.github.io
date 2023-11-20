@@ -5,6 +5,7 @@ import 'package:testuus4/widgets/hoitatus.dart';
 import '../DynaamilineTundideValimine.dart';
 import '../../Põhi_Lehed/dynamicKoduLeht.dart';
 import 'package:testuus4/main.dart';
+import 'graafikuseSeadmeteValik_gruppid.dart';
 import 'graafikuseSeadmeteValik_yksikud.dart';
 
 class SeadmeteListValimine_dynaamiline extends StatefulWidget {
@@ -17,8 +18,6 @@ class SeadmeteListValimine_dynaamiline extends StatefulWidget {
 
 class _SeadmeteListValimine_dynaamilineState
     extends State<SeadmeteListValimine_dynaamiline> {
-  late List<Widget> menu;
-
   int item = 0;
   double xAlign = -1;
   double signInAlign = 1;
@@ -27,8 +26,8 @@ class _SeadmeteListValimine_dynaamilineState
   double height = 40;
   Map<String, bool> ValitudSeadmed = {};
   bool isLoading = false;
-
   int koduindex = 1;
+  late List<Widget> menu;
 
   saaValitudSeadmed(Map<String, bool> seadmed) {
     setState(() {
@@ -38,9 +37,9 @@ class _SeadmeteListValimine_dynaamilineState
 
   @override
   void initState() {
-    List<Widget> lehedMenu = [
+    menu = [
       SeadmeteListValimine_yksikud(saaValitudSeadmed: saaValitudSeadmed),
-      AbiLeht(),
+      SeadmeteListValimine_guruppid(saaValitudSeadmed: saaValitudSeadmed),
     ];
   }
 
