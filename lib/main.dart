@@ -105,17 +105,6 @@ Border border = Border.all(
   color: const Color.fromARGB(255, 0, 0, 0),
   width: 2,
 );
-Future<void> sendLogToServer(String log) async {
-  try {
-    await http.post(
-      Uri.parse("http://172.22.22.217:5000/log"),
-      body: log,
-      headers: {'Content-Type': 'text/plain'},
-    );
-  } catch (e) {
-    print('Error sending log to server: $e');
-  }
-}
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -148,9 +137,7 @@ Future<void> main() async {
   print(seadmeteMap);
   print("------------");
 //backround end
-  await sendLogToServer(
-      "ID::${seadmeteMap[seadmeteMap.keys.first]["Username"]};ACTION::START");
- 
+
   runApp(MaterialApp(
     theme: ThemeData(brightness: Brightness.light),
     home: DynaamilenieKoduLeht(i: 1), //Alustab appi kodulehest

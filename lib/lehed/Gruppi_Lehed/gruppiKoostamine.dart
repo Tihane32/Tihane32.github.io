@@ -50,11 +50,7 @@ class _GruppiKoostamineState extends State<GruppiKoostamine> {
           child: ListView(
             children: <Widget>[
               ListTile(
-                title: Text(
-                  'Gruppi nimi',
-                  style: font,
-                ),
-                trailing: Container(
+                title: Container(
                   width: 250,
                   height: 40,
                   decoration: BoxDecoration(
@@ -71,7 +67,8 @@ class _GruppiKoostamineState extends State<GruppiKoostamine> {
                     decoration: InputDecoration(
                       border: InputBorder.none,
                       isDense: true,
-                      hintText: '',
+                      hintText: 'Gruppi nimi',
+                      alignLabelWithHint: true,
                       contentPadding:
                           EdgeInsets.symmetric(vertical: 3.0, horizontal: 8.0),
                     ),
@@ -80,15 +77,10 @@ class _GruppiKoostamineState extends State<GruppiKoostamine> {
                 ),
               ),
               SizedBox(
-                height: 10,
+                height: 5,
               ),
               ListTile(
-                title: Text(
-                  'Gruppi temperatuuriandur',
-                  style: font,
-                ),
-                trailing: Container(
-                  width: 250,
+                title: Container(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
                     color: Color.fromARGB(255, 255, 116, 106),
@@ -120,15 +112,10 @@ class _GruppiKoostamineState extends State<GruppiKoostamine> {
                 ),
               ),
               SizedBox(
-                height: 10,
+                height: 5,
               ),
               ListTile(
-                title: Text(
-                  'Gruppi niiskusandur',
-                  style: font,
-                ),
-                trailing: Container(
-                  width: 250,
+                title: Container(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
                     color: Color.fromARGB(255, 76, 153, 167),
@@ -160,15 +147,10 @@ class _GruppiKoostamineState extends State<GruppiKoostamine> {
                 ),
               ),
               SizedBox(
-                height: 10,
+                height: 5,
               ),
               ListTile(
-                title: Text(
-                  'Gruppi valgusandur',
-                  style: font,
-                ),
-                trailing: Container(
-                  width: 250,
+                title: Container(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
                     color: Color.fromARGB(255, 66, 66, 66),
