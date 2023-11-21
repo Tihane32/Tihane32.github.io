@@ -3,11 +3,15 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:testuus4/funktsioonid/seisukord.dart';
-import 'package:testuus4/lehed/GraafikusseSeadmeteValik.dart';
+import 'package:testuus4/lehed/Tundide_valimis_Lehed/Graafik_Seadmete_valik/DynaamilineGraafikusseSeadmeteValik.dart';
 import 'package:testuus4/lehed/Gruppi_Lehed/dynaamilineGrupiLeht.dart';
 import 'package:testuus4/lehed/Gruppi_Lehed/gruppiKoostamine.dart';
 import 'package:testuus4/lehed/P%C3%B5hi_Lehed/dynamicKoduLeht.dart';
 import 'package:testuus4/main.dart';
+
+import '../../funktsioonid/saaGruppiOlek.dart';
+import '../../funktsioonid/salvestaGrupp.dart';
+import '../Tundide_valimis_Lehed/Graafik_Seadmete_valik/graafikuseSeadmeteValik_yksikud.dart';
 
 class SeadmeteList_gruppid extends StatefulWidget {
   const SeadmeteList_gruppid({Key? key}) : super(key: key);
@@ -78,7 +82,8 @@ class _SeadmeteList_gruppidState extends State<SeadmeteList_gruppid> {
           } else if (details.delta.dx < -tundlikus) {
             Navigator.push(
               context,
-              CupertinoPageRoute(builder: (context) => SeadmeteListValimine()),
+              CupertinoPageRoute(
+                  builder: (context) => SeadmeteListValimine_dynaamiline()),
             );
             //Left Swipe
           }
@@ -142,8 +147,9 @@ class _SeadmeteList_gruppidState extends State<SeadmeteList_gruppid> {
 
                   final grupp = gruppiMap.keys.elementAt(index);
                   final gruppiPilt = gruppiMap[grupp]["Gruppi_pilt"];
-                  final grupiOlek = gruppiMap[grupp]["Gruppi_olek"];
+                  final grupiOlek = saaGrupiOlek(grupp);
                   final grupiTemp = gruppiMap[grupp]['Grupi_temp'];
+                  SalvestaUusGrupp(grupp, {});
 
                   return GestureDetector(
                     onTap: () {
@@ -164,8 +170,7 @@ class _SeadmeteList_gruppidState extends State<SeadmeteList_gruppid> {
                           border: border,
                           image: DecorationImage(
                             image: AssetImage(gruppiPilt),
-                            fit: BoxFit
-                                .cover, // this will make sure image covers entire container
+                            fit: BoxFit.cover,
                           ),
                         ),
                         child: Stack(children: [

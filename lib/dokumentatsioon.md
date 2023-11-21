@@ -231,29 +231,24 @@ Annab tänase nädalapäeva numbri.
 
 ```dart
 SalvestaUusGrupp(String gruppiNimi, Map<String, bool> valitudSeadmed) async {
-  gruppiMap['Kõik Seadmed']['Grupi_Seadmed'] = seadmeteMap.keys.toList();
-  if (gruppiNimi != 'Kõik Seadmed') {
-    Map<String, dynamic> uusGrupp = {
-      'Gruppi_pilt': 'assets/saun1.jpg',
-      'Grupi_Seadmed': [],
-      'Grupi_andurid': [],
-      'Grupi_temp': 27.3,
-      'Gruppi_olek': 'on',
-    };
-    valitudSeadmed.forEach((key, value) async {
-      if (value == true) {
-        uusGrupp['Grupi_Seadmed'].add(key);
-      }
-    });
-    gruppiMap['$gruppiNimi'] = uusGrupp;
-  }
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  String gMap = json.encode(gruppiMap);
-  prefs.setString('gruppid', gMap);
 }
 ```
 
 Salvestab uue gruppi seadme mällu, et gruppimappi alglaadimisel väärtustada, samas kirjutab üle ka kõiki seadmeid hõlmava gruppi seadmetemapi kõigi keydega
+
+## Lisa 4
+
+```dart
+saaGrupiOlek(String gruppiNimi) {
+  return olek;
+}
+
+```
+
+Määrab gruppile oleku, loogikaga:
+ kui vähemalt 1 seade "Offline" siis on grupp "Offline"
+ kui kõik seadmed on "on" siis on grupp "on"
+ kui kumbki tingimus ei ole täidetud on grupp "off"
 
 
 

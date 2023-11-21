@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:testuus4/funktsioonid/lulitamine.dart';
 import 'dart:async';
-import '../GraafikusseSeadmeteValik.dart';
+import '../Tundide_valimis_Lehed/Graafik_Seadmete_valik/DynaamilineGraafikusseSeadmeteValik.dart';
 import '../Põhi_Lehed/dynamicKoduLeht.dart';
 import 'package:testuus4/funktsioonid/seisukord.dart';
 import 'package:testuus4/main.dart';
@@ -90,7 +90,8 @@ class _GruppiSeadmedState extends State<GruppiSeadmed> {
           } else if (details.delta.dx < -tundlikus) {
             Navigator.push(
               context,
-              CupertinoPageRoute(builder: (context) => SeadmeteListValimine()),
+              CupertinoPageRoute(
+                  builder: (context) => SeadmeteListValimine_dynaamiline()),
             );
             //Left Swipe
           }

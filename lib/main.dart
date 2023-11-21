@@ -9,7 +9,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:testuus4/funktsioonid/graafikGen2.dart';
 import 'package:testuus4/funktsioonid/token.dart';
-import 'package:testuus4/lehed/GraafikusseSeadmeteValik.dart';
+import 'package:testuus4/lehed/Tundide_valimis_Lehed/Graafik_Seadmete_valik/DynaamilineGraafikusseSeadmeteValik.dart';
 import 'funktsioonid/backroundTask.dart';
 import 'funktsioonid/graafikGen1.dart';
 import 'funktsioonid/voimsus.dart';
@@ -46,7 +46,9 @@ Map<String, dynamic> gruppiMap = {
   'Kõik Seadmed': {
     'Gruppi_pilt': 'assets/saun1.jpg',
     'Grupi_Seadmed': [],
-    'Grupi_andurid': [],
+    'Grupi_temp_andur': [],
+    'Grupi_niiskus_andur': [],
+    'Grupi_valgus_andur': [],
     'Grupi_temp': 27.3,
     'Gruppi_olek': 'on',
   },

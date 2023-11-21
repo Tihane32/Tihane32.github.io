@@ -5,7 +5,7 @@ import 'dart:async';
 
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:testuus4/lehed/P%C3%B5hi_Lehed/dynamicKoduLeht.dart';
-import '../GraafikusseSeadmeteValik.dart';
+import '../Tundide_valimis_Lehed/Graafik_Seadmete_valik/DynaamilineGraafikusseSeadmeteValik.dart';
 
 import 'dart:convert';
 import 'package:testuus4/funktsioonid/seisukord.dart';
@@ -13,6 +13,7 @@ import 'package:testuus4/main.dart';
 
 import 'package:get/get.dart';
 
+import '../Tundide_valimis_Lehed/Graafik_Seadmete_valik/graafikuseSeadmeteValik_yksikud.dart';
 import 'dynamicSeadmeInfo.dart';
 
 class SeadmeteList_yksikud extends StatefulWidget {
@@ -95,7 +96,8 @@ class _SeadmeteList_yksikudState extends State<SeadmeteList_yksikud> {
           } else if (details.delta.dx < -tundlikus) {
             Navigator.push(
               context,
-              CupertinoPageRoute(builder: (context) => SeadmeteListValimine()),
+              CupertinoPageRoute(
+                  builder: (context) => SeadmeteListValimine_dynaamiline()),
             );
             //Left Swipe
           }
