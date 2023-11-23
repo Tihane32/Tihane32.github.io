@@ -18,12 +18,6 @@ class GruppiKoostamine extends StatefulWidget {
 }
 
 class _GruppiKoostamineState extends State<GruppiKoostamine> {
-  @override
-  void initState() {
-    super.initState();
-    ValitudSeadmed = valitudSeadmeteNullimine();
-  }
-
   Map<String, bool> ValitudSeadmed = {};
   int koduindex = 1;
   double xAlign = -1;
@@ -35,6 +29,19 @@ class _GruppiKoostamineState extends State<GruppiKoostamine> {
   String niiskusAndur = 'Lisa niiskus Andur';
   String valgusAndur = 'Lisa valgus Andur';
   String gruppiNimi = '';
+  List<String> listTemp = <String>['Lisa temperatuuri Andur'];
+  List<String> listNiis = <String>['Lisa niiskus Andur'];
+  List<String> listValg = <String>['Lisa valgus Andur'];
+
+  @override
+  void initState() {
+    super.initState();
+    ValitudSeadmed = valitudSeadmeteNullimine();
+    listTemp = andurListiKoostamine(listTemp, 'Temp_andurid');
+    listNiis = andurListiKoostamine(listNiis, 'Niiskus_andurid');
+    //listValg = andurListiKoostamine(listValg, 'valgus_andurid');
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -89,7 +96,7 @@ class _GruppiKoostamineState extends State<GruppiKoostamine> {
                   child: DropdownButtonHideUnderline(
                     child: DropdownButton<String>(
                       style: font,
-                      dropdownColor: Color.fromARGB(255, 250, 169, 164),
+                      dropdownColor: Color.fromARGB(255, 243, 145, 132),
                       borderRadius: borderRadius,
                       value: tempAndur,
                       onChanged: (andur) {
@@ -97,11 +104,8 @@ class _GruppiKoostamineState extends State<GruppiKoostamine> {
                           tempAndur = andur!;
                         });
                       },
-                      items: <String>[
-                        'Lisa temperatuuri Andur',
-                        'Temperatuuri Andur 1',
-                        'Temperatuuri Andur 2',
-                      ].map<DropdownMenuItem<String>>((String value) {
+                      items: listTemp
+                          .map<DropdownMenuItem<String>>((String value) {
                         return DropdownMenuItem<String>(
                           value: value,
                           child: Text(value),
@@ -132,11 +136,8 @@ class _GruppiKoostamineState extends State<GruppiKoostamine> {
                           niiskusAndur = andur!;
                         });
                       },
-                      items: <String>[
-                        'Lisa niiskus Andur',
-                        'Niiskus Andur 1',
-                        'Niiskus Andur 2',
-                      ].map<DropdownMenuItem<String>>((String value) {
+                      items: listNiis
+                          .map<DropdownMenuItem<String>>((String value) {
                         return DropdownMenuItem<String>(
                           value: value,
                           child: Text(value),
@@ -167,11 +168,8 @@ class _GruppiKoostamineState extends State<GruppiKoostamine> {
                           valgusAndur = andur!;
                         });
                       },
-                      items: <String>[
-                        'Lisa valgus Andur',
-                        'Valgus Andur 1',
-                        'Valgus Andur 2',
-                      ].map<DropdownMenuItem<String>>((String value) {
+                      items: listValg
+                          .map<DropdownMenuItem<String>>((String value) {
                         return DropdownMenuItem<String>(
                           value: value,
                           child: Text(value),
@@ -322,4 +320,14 @@ Map<String, bool> valitudSeadmeteNullimine() {
     ValitudSeadmed[key] = false;
   });
   return ValitudSeadmed;
+}
+
+andurListiKoostamine(List<String> list, String tuup) {
+  anduriteMap[tuup].forEach((id, value) {
+    var anduriNimi = value['Anduri_nimi'];
+    if (anduriNimi != null && anduriNimi.isNotEmpty) {
+      list.add(anduriNimi);
+    }
+  });
+  return list;
 }
