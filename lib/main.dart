@@ -80,7 +80,7 @@ Map<String, dynamic> anduriteMap = {
       'Anduri_olek': 'off',
     },
   },
-  'valgus_andurid': [],
+  'Valgus_andurid': [],
 };
 
 String paevAbi = "";

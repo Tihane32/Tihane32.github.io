@@ -25,13 +25,13 @@ class _GruppiKoostamineState extends State<GruppiKoostamine> {
   double loginAlign = -1;
   double width = 200;
   double height = 40;
-  String tempAndur = 'Lisa temperatuuri Andur';
-  String niiskusAndur = 'Lisa niiskus Andur';
-  String valgusAndur = 'Lisa valgus Andur';
+  String tempAndur = 'Lisa temperatuuri andur';
+  String niiskusAndur = 'Lisa niiskus andur';
+  String valgusAndur = 'Lisa valgus andur';
   String gruppiNimi = '';
-  List<String> listTemp = <String>['Lisa temperatuuri Andur'];
-  List<String> listNiis = <String>['Lisa niiskus Andur'];
-  List<String> listValg = <String>['Lisa valgus Andur'];
+  List<String> listTemp = <String>['Lisa temperatuuri andur'];
+  List<String> listNiis = <String>['Lisa niiskus andur'];
+  List<String> listValg = <String>['Lisa valgus andur'];
 
   @override
   void initState() {
@@ -39,7 +39,7 @@ class _GruppiKoostamineState extends State<GruppiKoostamine> {
     ValitudSeadmed = valitudSeadmeteNullimine();
     listTemp = andurListiKoostamine(listTemp, 'Temp_andurid');
     listNiis = andurListiKoostamine(listNiis, 'Niiskus_andurid');
-    //listValg = andurListiKoostamine(listValg, 'valgus_andurid');
+    listValg = andurListiKoostamine(listValg, 'Valgus_andurid');
   }
 
   @override
@@ -304,7 +304,14 @@ class _GruppiKoostamineState extends State<GruppiKoostamine> {
                         ),
                       ],
                       onTap: (int kodu) {
-                        SalvestaUusGrupp(gruppiNimi, ValitudSeadmed);
+                        String? tempAid =
+                            andurIDsaaamine('Temp_andurid', tempAndur);
+                        String? niiskusAid =
+                            andurIDsaaamine('Niiskus_andurid', niiskusAndur);
+                        String? ValgusAid =
+                            andurIDsaaamine('Valgus_andurid', valgusAndur);
+                        SalvestaUusGrupp(gruppiNimi, ValitudSeadmed, tempAid,
+                            niiskusAid, ValgusAid);
                       })),
             ],
           ),
@@ -323,11 +330,28 @@ Map<String, bool> valitudSeadmeteNullimine() {
 }
 
 andurListiKoostamine(List<String> list, String tuup) {
-  anduriteMap[tuup].forEach((id, value) {
-    var anduriNimi = value['Anduri_nimi'];
-    if (anduriNimi != null && anduriNimi.isNotEmpty) {
-      list.add(anduriNimi);
+  List<String> listUus = list;
+  if (anduriteMap[tuup].isNotEmpty) {
+    anduriteMap[tuup].forEach((id, value) {
+      var anduriNimi = value['Anduri_nimi'];
+      listUus.add(anduriNimi);
+    });
+  }
+  return listUus;
+}
+
+String? andurIDsaaamine(String tuup, String andurNimi) {
+  var anduriteMapTuup = anduriteMap[tuup];
+  if (anduriteMapTuup.isNotEmpty) {
+    for (var id in anduriteMapTuup.keys) {
+      var anduriMap = anduriteMapTuup[id];
+      var nimi = anduriMap?['Anduri_nimi'];
+      if (nimi == andurNimi) {
+        print('$andurNimi: $id');
+        return id;
+      }
     }
-  });
-  return list;
+  }
+  print('$andurNimi: xxxxxxx');
+  return '';
 }
