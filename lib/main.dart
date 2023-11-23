@@ -33,6 +33,7 @@ const String serverUrl = 'http://172.22.22.217:5000/log';
 List<dynamic> tariif = [];
 Map<String, String> tokenMap = {};
 
+//KEELATUD TUNNID MALLU
 Map<String, dynamic> graafikuSeaded = {
   'Valitud_Tunnid': 12,
   'Hinnapiir': 50.50,
@@ -52,6 +53,34 @@ Map<String, dynamic> gruppiMap = {
     'Grupi_temp': 27.3,
     'Gruppi_olek': 'on',
   },
+};
+
+Map<String, dynamic> anduriteMap = {
+  'Temp_andurid': {
+    '6l6l7k7k': {
+      'Anduri_pilt': 'assets/saun1.jpg',
+      'Anduri_nimi': 'Tandur',
+      'Anduri_olek': 'on',
+    },
+    'x9x9x9x9': {
+      'Anduri_pilt': 'assets/saun1.jpg',
+      'Anduri_nimi': 'Temperatuuri andur',
+      'Anduri_olek': 'off',
+    },
+  },
+  'Niiskus_andurid': {
+    's4s4i0i0': {
+      'Anduri_pilt': 'assets/saun1.jpg',
+      'Anduri_nimi': 'Niiskus andur',
+      'Anduri_olek': 'on',
+    },
+    '6h6h8k8k': {
+      'Anduri_pilt': 'assets/saun1.jpg',
+      'Anduri_nimi': 'Nandur',
+      'Anduri_olek': 'off',
+    },
+  },
+  'Valgus_andurid': [],
 };
 
 String paevAbi = "";
@@ -105,17 +134,6 @@ Border border = Border.all(
   color: const Color.fromARGB(255, 0, 0, 0),
   width: 2,
 );
-Future<void> sendLogToServer(String log) async {
-  try {
-    await http.post(
-      Uri.parse("http://172.22.22.217:5000/log"),
-      body: log,
-      headers: {'Content-Type': 'text/plain'},
-    );
-  } catch (e) {
-    print('Error sending log to server: $e');
-  }
-}
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -148,9 +166,7 @@ Future<void> main() async {
   print(seadmeteMap);
   print("------------");
 //backround end
-  await sendLogToServer(
-      "ID::${seadmeteMap[seadmeteMap.keys.first]["Username"]};ACTION::START");
- 
+
   runApp(MaterialApp(
     theme: ThemeData(brightness: Brightness.light),
     home: DynaamilenieKoduLeht(i: 1), //Alustab appi kodulehest
