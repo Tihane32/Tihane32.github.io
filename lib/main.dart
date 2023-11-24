@@ -33,6 +33,8 @@ const String serverUrl = 'http://172.22.22.217:5000/log';
 List<dynamic> tariif = [];
 Map<String, String> tokenMap = {};
 
+int seadmeteListIndex = 0;
+
 //KEELATUD TUNNID MALLU
 Map<String, dynamic> graafikuSeaded = {
   'Valitud_Tunnid': 12,

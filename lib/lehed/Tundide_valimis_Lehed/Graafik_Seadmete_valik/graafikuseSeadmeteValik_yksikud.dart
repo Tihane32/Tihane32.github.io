@@ -153,7 +153,8 @@ class _SeadmeteListValimine_yksikudState
                               Positioned(
                                 top: 8,
                                 right: 8,
-                                child: seadmeteMap[seade]["Graafik"] == 'ei'
+                                child: seadmeteMap[seade]["Graafik"] == 'ei' ||
+                                        staatus == 'Offline'
                                     ? IconButton(
                                         iconSize: 60,
                                         icon: Icon(
