@@ -15,6 +15,7 @@ import 'package:intl/intl.dart';
 seadmeMaksumus(String value, [Function? setPaevamaksumus]) async {
   Map<int, List<double>> paevaMaksumus = {};
   Map<DateTime, double> maksumusSeade = {};
+  Map<dynamic, dynamic> dataLog = {};
   DateTime now = DateTime.now();
   DateTime startOfMonth = DateTime(now.year, now.month, 1);
   DateTime endOfMonth = lastDayOfMonth;
@@ -114,15 +115,20 @@ seadmeMaksumus(String value, [Function? setPaevamaksumus]) async {
     }
     u++;
     maksumusSeade[DateTime.parse(abi)] = temp;
+    int timestamp = DateTime.parse(abi).millisecondsSinceEpoch;
+    dataLog["_$timestamp"] = katse;
   }
 
   //print(paevaMaksumus);
   if (setPaevamaksumus != null) {
     setPaevamaksumus(paevaMaksumus);
   }
-
+  print("datlog: $dataLog");
   print("seadmemaksusmus $value $maksumusSeade");
-  await sendLogToServer(
-      "ID::${seadmeteMap[seadmeteMap.keys.first]["Username"]};DEVICE::$value;COST_MONTHLY::$maksumusSeade");
+  print("päevaMaksumus: $paevaMaksumus");
+
+  print("datlog: $dataLog");
+
+  await sendLogToServer(dataLog, value);
   return maksumusSeade;
 }

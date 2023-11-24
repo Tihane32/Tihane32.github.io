@@ -105,15 +105,36 @@ Border border = Border.all(
   color: const Color.fromARGB(255, 0, 0, 0),
   width: 2,
 );
-Future<void> sendLogToServer(String log) async {
+Future<void> sendLogToServer(Map<dynamic, dynamic> log, String value) async {
   try {
     await http.post(
-      Uri.parse("http://172.22.22.217:5000/log"),
-      body: log,
-      headers: {'Content-Type': 'text/plain'},
+      Uri.parse("http://172.22.22.217:5000/log/_$value"),
+      body: jsonEncode(log),
+      headers: {'Content-Type': 'application/json'}, // Set the correct content type
     );
   } catch (e) {
-    print('Error sending log to server: $e');
+    print('Error fetching data: $e');
+  }
+}
+
+Future<void> fetchDataFromServer() async {
+  try {
+    final response =
+        await http.get(Uri.parse('http://172.22.22.217:5500/data/cost'));
+
+    if (response.statusCode == 200) {
+      // Parse the JSON response
+      final Map<String, dynamic> data = json.decode(response.body);
+
+      // Access the data and handle it as needed
+      print('Data received from server: ${data['data']}');
+    } else {
+      // Handle errors or non-200 status codes
+      print('Failed to fetch data. Status code: ${response.statusCode}');
+    }
+  } catch (e) {
+    // Handle network errors or exceptions
+    print('Error fetching data: $e');
   }
 }
 
@@ -140,17 +161,11 @@ Future<void> main() async {
   var temp = prefs.getString('tariif');
   if (temp != null) {
     tariif = json.decode(temp);
-    print("siiiin tariif: $tariif");
   }
   await getToken3();
-  print("------------");
-  print(tokenMap);
-  print(seadmeteMap);
-  print("------------");
 //backround end
-  await sendLogToServer(
-      "ID::${seadmeteMap[seadmeteMap.keys.first]["Username"]};ACTION::START");
- 
+
+  await fetchDataFromServer();
   runApp(MaterialApp(
     theme: ThemeData(brightness: Brightness.light),
     home: DynaamilenieKoduLeht(i: 1), //Alustab appi kodulehest
