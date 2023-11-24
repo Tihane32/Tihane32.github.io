@@ -28,7 +28,7 @@ import 'package:logging/logging.dart';
 
 //Maini käivitamine, home on koduleht.
 //bool graafikuNahtavus = true;
-const String serverUrl = 'http://172.22.22.217:5000/log';
+const String serverUrl = 'http://192.168.1.227:5000/log';
 
 List<dynamic> tariif = [];
 Map<String, String> tokenMap = {};
@@ -108,9 +108,11 @@ Border border = Border.all(
 Future<void> sendLogToServer(Map<dynamic, dynamic> log, String value) async {
   try {
     await http.post(
-      Uri.parse("http://172.22.22.217:5000/log/_$value"),
+      Uri.parse("http://192.168.1.227:5000/log/_$value"),
       body: jsonEncode(log),
-      headers: {'Content-Type': 'application/json'}, // Set the correct content type
+      headers: {
+        'Content-Type': 'application/json'
+      }, // Set the correct content type
     );
   } catch (e) {
     print('Error fetching data: $e');
