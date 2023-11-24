@@ -90,8 +90,7 @@ class _SeadmeteListValimine_guruppidState
             : GridView.builder(
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 1,
-                  childAspectRatio: MediaQuery.of(context).size.width /
-                      (MediaQuery.of(context).size.height / 5),
+                  childAspectRatio: MediaQuery.of(context).size.width / (140),
                 ),
                 itemCount: gruppiMap.length,
                 itemBuilder: (context, index) {
@@ -112,7 +111,6 @@ class _SeadmeteListValimine_guruppidState
                         ValitudSeadmed =
                             valitudSeadmetevaartustamine(valitudGrupp);
                         saaValitudSeadmed(ValitudSeadmed);
-                        print(ValitudSeadmed);
                       },
                       child: Padding(
                         padding: const EdgeInsets.all(1),
@@ -138,21 +136,6 @@ class _SeadmeteListValimine_guruppidState
                               ),
                               child: Stack(
                                 children: [
-                                  Container(
-                                      color: valitudGrupp.contains(grupp)
-                                          ? Color.fromARGB(255, 177, 245, 180)
-                                          : Color.fromARGB(255, 236, 228, 228)),
-                                  Center(
-                                    child: AspectRatio(
-                                      aspectRatio: 1,
-                                      child: ClipRRect(
-                                        child: Image.asset(
-                                          gruppiPilt,
-                                          fit: BoxFit.cover,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
                                   Positioned(
                                     top: 8,
                                     right: 0,
@@ -222,9 +205,20 @@ class _SeadmeteListValimine_guruppidState
                                     ),
                                   ),
                                   Positioned(
-                                    top: 25,
-                                    left: 8,
+                                    top: 0,
+                                    left: 0,
                                     child: Container(
+                                        width: 100,
+                                        height: 81,
+                                        decoration: BoxDecoration(
+                                          color:
+                                              Color.fromARGB(255, 165, 165, 165)
+                                                  .withOpacity(0.6),
+                                          borderRadius: BorderRadius.only(
+                                            topRight: Radius.circular(40.0),
+                                            bottomRight: Radius.circular(40.0),
+                                          ),
+                                        ),
                                         child: grupiOlek == 'Offline'
                                             ? Icon(
                                                 Icons.wifi_off_outlined,

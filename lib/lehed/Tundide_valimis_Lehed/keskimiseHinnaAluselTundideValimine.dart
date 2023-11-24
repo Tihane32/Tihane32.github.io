@@ -530,7 +530,6 @@ class _KeskmiseHinnaAluselTundideValimineState
           actions: [
             IconButton(
                 onPressed: () {
-                  print(graafikuSeaded);
                   Navigator.push(
                     context,
                     MaterialPageRoute(

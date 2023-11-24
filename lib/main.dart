@@ -33,16 +33,6 @@ const String serverUrl = 'http://172.22.22.217:5000/log';
 List<dynamic> tariif = [];
 Map<String, String> tokenMap = {};
 
-//KEELATUD TUNNID MALLU
-Map<String, dynamic> graafikuSeaded = {
-  'Valitud_Tunnid': 12,
-  'Hinnapiir': 50.50,
-  'Seadistus_lubatud': false,
-  'Max_jarjest_valjas': 1.0,
-  'Kelleatud_tunnid': [],
-  'Lubatud_tunnid': [],
-};
-
 Map<String, dynamic> gruppiMap = {
   'Kõik Seadmed': {
     'Gruppi_pilt': 'assets/saun1.jpg',
