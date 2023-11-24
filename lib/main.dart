@@ -108,7 +108,7 @@ Border border = Border.all(
 Future<void> sendLogToServer(Map<dynamic, dynamic> log, String value) async {
   try {
     await http.post(
-      Uri.parse("http://192.168.1.227:5000/log/_$value"),
+      Uri.parse("http://172.20.10.10:5000/log/cost_daily/_$value"),
       body: jsonEncode(log),
       headers: {
         'Content-Type': 'application/json'
@@ -119,10 +119,11 @@ Future<void> sendLogToServer(Map<dynamic, dynamic> log, String value) async {
   }
 }
 
-Future<void> fetchDataFromServer() async {
+Future<void> fetchDataFromServer(value) async {
   try {
+    
     final response =
-        await http.get(Uri.parse('http://172.22.22.217:5500/data/cost'));
+        await http.get(Uri.parse("http://172.22.22.217:5500/data/_$value"));
 
     if (response.statusCode == 200) {
       // Parse the JSON response
@@ -167,7 +168,7 @@ Future<void> main() async {
   await getToken3();
 //backround end
 
-  await fetchDataFromServer();
+  //await fetchDataFromServer();
   runApp(MaterialApp(
     theme: ThemeData(brightness: Brightness.light),
     home: DynaamilenieKoduLeht(i: 1), //Alustab appi kodulehest

@@ -8,7 +8,7 @@ app = Flask(__name__)
 @app.route('/data/<table_name>', methods=['GET'])
 def get_data(table_name):
     try:
-        conn = sqlite3.connect('logs.db')
+        conn = sqlite3.connect('data.db')
         cursor = conn.cursor()
 
         # Execute your SQL query to fetch data from the specified table
