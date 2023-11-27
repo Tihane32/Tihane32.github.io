@@ -2,9 +2,10 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:testuus4/lehed/GraafikusseSeadmeteValik.dart';
+import 'package:testuus4/lehed/Tundide_valimis_Lehed/Graafik_Seadmete_valik/DynaamilineGraafikusseSeadmeteValik.dart';
 import 'package:testuus4/lehed/P%C3%B5hi_Lehed/dynamicKoduLeht.dart';
 import 'package:testuus4/lehed/Tundide_valimis_Lehed/keskimiseHinnaAluselTundideValimine.dart';
+import '../../funktsioonid/salvestaSeadistus.dart';
 import '../../funktsioonid/seisukord.dart';
 import '../../main.dart';
 import '../../widgets/AbiLeht.dart';
@@ -38,24 +39,30 @@ class _KeelatudTunnidState extends State<KeelatudTunnid> {
   List aktiivTunnid = [];
   Color valitudvarv = Colors.red;
   String valitudSuund = 'Lubatud';
-  List valjasTunnid = [];
-  List seesTunnid = [];
 
   @override
   void initState() {
-    super.initState();
-    seesTunnid = graafikuSeaded['Kelleatud_tunnid'];
-    valjasTunnid = graafikuSeaded['Lubatud_tunnid'];
+    int trueCount = 0;
+    String valitudSeade = '';
 
-    if (luba == 'ei') {
-      valitudvarv = Colors.red;
-      valitudSuund = 'Keelatud';
-      aktiivTunnid = valjasTunnid;
-    } else {
-      valitudvarv = Colors.green;
-      valitudSuund = 'Lubatud';
-      aktiivTunnid = seesTunnid;
+    for (var entry in valitudSeadmed.entries) {
+      if (entry.value) {
+        trueCount++;
+        valitudSeade = entry.key;
+      }
     }
+    if (trueCount == 1) {
+      if (luba == 'ei') {
+        valitudvarv = Colors.red;
+        valitudSuund = 'Keelatud';
+        aktiivTunnid = seadmeteMap[valitudSeade]['Kelleatud_tunnid'];
+      } else {
+        valitudvarv = Colors.green;
+        valitudSuund = 'Lubatud';
+        aktiivTunnid = seadmeteMap[valitudSeade]['Lubatud_tunnid'];
+      }
+    }
+    super.initState();
   }
 
   @override
@@ -95,11 +102,7 @@ class _KeelatudTunnidState extends State<KeelatudTunnid> {
                 } else {
                   aktiivTunnid.add(index);
                 }
-                if (luba == 'ei') {
-                  graafikuSeaded['Kelleatud_tunnid'] = aktiivTunnid;
-                } else {
-                  graafikuSeaded['Lubatud_tunnid'] = aktiivTunnid;
-                }
+                saklvestaTunnid(luba, valitudSeadmed, aktiivTunnid);
               });
             },
           );
@@ -107,4 +110,16 @@ class _KeelatudTunnidState extends State<KeelatudTunnid> {
       ),
     );
   }
+}
+
+saklvestaTunnid(
+    String luba, Map<String, bool> valitudSeadmed, List aktiivTunnid) {
+  String tunnid = '';
+  if (luba == 'ei') {
+    tunnid = 'Kelleatud_tunnid';
+  } else {
+    tunnid = 'Lubatud_tunnid';
+  }
+  aktiivTunnid.sort();
+  salvestaSeadistus(tunnid, aktiivTunnid, valitudSeadmed);
 }

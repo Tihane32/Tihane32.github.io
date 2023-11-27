@@ -8,22 +8,34 @@ import 'package:testuus4/funktsioonid/graafikGen1.dart';
 import 'package:testuus4/funktsioonid/graafikGen2.dart';
 import 'package:testuus4/lehed/Seadme_Lehed/SeadmeGraafikLeht.dart';
 import 'package:testuus4/widgets/hoitatus.dart';
-import '../funktsioonid/seisukord.dart';
-import '../funktsioonid/token.dart';
-import '../widgets/PopUpGraafik.dart';
-import 'Tundide_valimis_Lehed/DynaamilineTundideValimine.dart';
-import 'Põhi_Lehed/dynamicKoduLeht.dart';
+import '../../../funktsioonid/seisukord.dart';
+import '../../../funktsioonid/token.dart';
+import '../../../widgets/PopUpGraafik.dart';
+import '../DynaamilineTundideValimine.dart';
+import '../../Põhi_Lehed/dynamicKoduLeht.dart';
 import 'package:testuus4/main.dart';
 import 'package:http/http.dart' as http;
 
-class SeadmeteListValimine extends StatefulWidget {
-  const SeadmeteListValimine({Key? key}) : super(key: key);
+class SeadmeteListValimine_yksikud extends StatefulWidget {
+  final Function saaValitudSeadmed;
+  const SeadmeteListValimine_yksikud(
+      {Key? key, required this.saaValitudSeadmed})
+      : super(key: key);
 
   @override
-  State<SeadmeteListValimine> createState() => _SeadmeteListValimineState();
+  State<SeadmeteListValimine_yksikud> createState() =>
+      _SeadmeteListValimine_yksikudState(
+        saaValitudSeadmed: saaValitudSeadmed,
+      );
 }
 
-class _SeadmeteListValimineState extends State<SeadmeteListValimine> {
+class _SeadmeteListValimine_yksikudState
+    extends State<SeadmeteListValimine_yksikud> {
+  _SeadmeteListValimine_yksikudState({
+    Key? key,
+    required this.saaValitudSeadmed,
+  });
+  Function saaValitudSeadmed;
   Map<String, bool> ValitudSeadmed = {};
   bool isLoading = false;
 
@@ -69,16 +81,6 @@ class _SeadmeteListValimineState extends State<SeadmeteListValimine> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: backround,
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        backgroundColor: appbar,
-        title: Text(
-          'Seadmete valimine',
-          style: GoogleFonts.roboto(
-            textStyle: const TextStyle(fontSize: 25),
-          ),
-        ),
-      ),
       body: GestureDetector(
         child: isLoading
             ? Center(child: CircularProgressIndicator())
@@ -104,6 +106,7 @@ class _SeadmeteListValimineState extends State<SeadmeteListValimine> {
                             ValitudSeadmed[seade] = false;
                           }
                         });
+                        saaValitudSeadmed(ValitudSeadmed);
                       } else {
                         showDialog(
                             context: context,
@@ -150,7 +153,8 @@ class _SeadmeteListValimineState extends State<SeadmeteListValimine> {
                               Positioned(
                                 top: 8,
                                 right: 8,
-                                child: seadmeteMap[seade]["Graafik"] == 'ei'
+                                child: seadmeteMap[seade]["Graafik"] == 'ei' ||
+                                        staatus == 'Offline'
                                     ? IconButton(
                                         iconSize: 60,
                                         icon: Icon(
@@ -255,52 +259,6 @@ class _SeadmeteListValimineState extends State<SeadmeteListValimine> {
                 },
               ),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-          backgroundColor: Color.fromARGB(255, 115, 162, 195),
-          fixedColor: Color.fromARGB(255, 157, 214, 171),
-          unselectedItemColor: Colors.white,
-          selectedIconTheme: IconThemeData(size: 40),
-          unselectedIconTheme: IconThemeData(size: 30),
-          items: const <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
-              label: 'Tühista',
-              icon: Icon(Icons.cancel),
-            ),
-            BottomNavigationBarItem(
-              label: 'Tundide Valimine',
-              icon: Icon(Icons.arrow_forward),
-            ),
-          ],
-          currentIndex: koduindex,
-          onTap: (int kodu) {
-            setState(() {
-              koduindex = kodu;
-              if (koduindex == 0) {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => DynaamilenieKoduLeht(i: 1)));
-              } else if (koduindex == 1) {
-                if (ValitudSeadmed.values.any((value) => value == true)) {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => DynamilineTundideValimine(
-                              valitudSeadmed: ValitudSeadmed,
-                              i: 0,
-                              luba: '',
-                              eelmineleht: 0,
-                            )),
-                  );
-                } else {
-                  Hoiatus(
-                    context,
-                    'Enne graafiku koostamist valige kaasatavad seadmed!',
-                  );
-                }
-              }
-            });
-          }),
     );
   }
 }
@@ -311,15 +269,6 @@ Map<String, bool> valitudSeadmeteNullimine() {
     ValitudSeadmed[key] = false;
   });
   return ValitudSeadmed;
-}
-
-SaaSeadmegraafik(SeadmeNimi) {
-  String deviceInfo = seadmeteMap[SeadmeNimi];
-  if (deviceInfo != null) {
-    String graafik = deviceInfo[5];
-    return graafik;
-  }
-  return null; // Device key not found in the map
 }
 
 SeadmeGraafikKoostamineGen1(String value) async {
@@ -438,63 +387,98 @@ SeadmeGraafikKoostamineGen1(String value) async {
 SeadmeGraafikKoostamineGen2(
   String value,
 ) async {
+  bool grafikOlems = false;
+  DateTime now = DateTime.now();
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  var graafikud = Map<String, dynamic>();
-  List temp = List.empty(growable: true);
+  String? storedKey = prefs.getString('key');
+  String storedKeyString = jsonDecode(storedKey!);
 
-  var headers = {
-    'Authorization': 'Bearer ${tokenMap[value]}',
-  };
+  List<dynamic> seadmeGraafik1 = await graafikGen2Lugemine(value);
+  seadmeGraafik1 = graafikGen2ToGraafikGen1(seadmeGraafik1);
+  print(seadmeGraafik1);
 
-  var data = {
-    'id': value,
-    'method': 'schedule.list',
-  };
+  int paev = 0;
 
-  var url = Uri.parse(
-      '${seadmeteMap[value]["api_url"]}/fast/device/gen2_generic_command');
-  var res = await http.post(url, headers: headers, body: data);
-  if (res.statusCode == 200) {
-    var resJSON = jsonDecode(res.body) as Map<String, dynamic>;
-    if (resJSON == null) {
-      return; // stop the function if resJSON is null
+  if (now.weekday == 7) {
+    paev = 0;
+  } else {
+    paev = now.weekday - 1;
+  }
+
+  for (var i = 0; i < seadmeGraafik1.length; i++) {
+    String mainString = seadmeGraafik1[i];
+    if (mainString.contains("-$paev-")) {
+      grafikOlems = true;
     }
-    var jobs = resJSON['data']['jobs'];
-    if (jobs == null) {
-      // handle the case where jobs is null
-      return;
+  }
+
+  if (grafikOlems) {
+    List<String> filledTimes = [];
+    List<String> graafikParis = [];
+    String? lastState;
+
+    for (var i = 0; i < seadmeGraafik1.length; i++) {
+      var parts = seadmeGraafik1[i].split('-');
+      var currentTime = int.parse(parts[0]);
+      var state = parts[2];
+
+      if (i == 0) {
+        filledTimes.add(seadmeGraafik1[i]);
+      } else {
+        var prevParts = seadmeGraafik1[i - 1].split('-');
+        var prevTime = int.parse(prevParts[0]);
+        var timeDiff = currentTime - prevTime;
+
+        if (timeDiff > 100) {
+          for (var j = 1; j < timeDiff / 100; j++) {
+            filledTimes.add(
+                "${(prevTime + 100 * j).toString().padLeft(4, '0')}-0-$lastState");
+          }
+        }
+        filledTimes.add(seadmeGraafik1[i]);
+      }
+      lastState = state;
     }
-    jobs = resJSON['data']['jobs'] as List<dynamic>;
-    int k = 0;
-    for (var job in jobs) {
-      DateTime now = DateTime.now();
 
-      // Create a DateFormat instance to format the date
-      DateFormat dateFormat =
-          DateFormat('EEE'); // 'EEE' gives the abbreviated weekday name
+    var lastParts = filledTimes.last.split('-');
+    var lastTime = int.parse(lastParts[0]);
 
-      // Format the current date to get the weekday abbreviation (e.g., "MON," "TUE," etc.)
-      String formattedWeekday = dateFormat.format(now);
-      formattedWeekday = formattedWeekday.toUpperCase();
-
-      String date = job['timespec'].split(" ")[5];
-      if (date == formattedWeekday) {
-        var id = job['id'] as int;
-        var timespec = job['timespec'] as String;
-        temp.add(id);
-
-        var calls = job['calls'] as List<dynamic>;
-        var graafik = Map<String, dynamic>();
-        for (var call in calls) {
-          var params = call['params']['on'];
-
-          graafik['Timespec'] = timespec;
-          graafik['On/Off'] = params;
-          graafikud['$id'] = graafik;
+    while (lastTime < 2400) {
+      lastTime += 100;
+      filledTimes.add("${lastTime.toString().padLeft(4, '0')}-0-$lastState");
+    }
+    if (filledTimes[0] != '0000-$paev-on' ||
+        filledTimes[0] != '0000-$paev-off') {
+      int maramataPaevad = 24 - filledTimes.length;
+      for (int i = 0; i < 24; i++) {
+        String tunnike = '';
+        if (i < maramataPaevad + 1) {
+          if (i < 10) {
+            tunnike = '0$i';
+          } else {
+            tunnike = '$i';
+          }
+          graafikParis.add("${tunnike}00-0-off");
+        } else {
+          graafikParis.add(filledTimes[i - maramataPaevad - 1]);
         }
       }
-      k++;
     }
+
+    List<String> onOffStatus = [];
+
+    for (var timeEntry in graafikParis) {
+      var parts = timeEntry.split('-');
+      var status = parts[2];
+
+      if (status == "on" || status == "off") {
+        onOffStatus.add(status);
+      }
+    }
+    return onOffStatus;
+  } else {
+    List<String> tuhi = ['pole graafikut'];
+    return tuhi;
   }
 }
 

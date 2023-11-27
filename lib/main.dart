@@ -3,12 +3,13 @@ Trevor Uuna, Jaakob Lambot 27.03.2023
 TalTech
 */
 //Kit test
+import 'dart:developer';
 import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:testuus4/funktsioonid/graafikGen2.dart';
 import 'package:testuus4/funktsioonid/token.dart';
-import 'package:testuus4/lehed/GraafikusseSeadmeteValik.dart';
+import 'package:testuus4/lehed/Tundide_valimis_Lehed/Graafik_Seadmete_valik/DynaamilineGraafikusseSeadmeteValik.dart';
 import 'funktsioonid/backroundTask.dart';
 import 'funktsioonid/graafikGen1.dart';
 import 'funktsioonid/voimsus.dart';
@@ -21,12 +22,20 @@ import 'lehed/Põhi_Lehed/seadmeteListDynaamiline.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:workmanager/workmanager.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+import 'package:logging/logging.dart';
 
 //Maini käivitamine, home on koduleht.
 //bool graafikuNahtavus = true;
+const String serverUrl = 'http://192.168.1.227:5000/log';
+
 List<dynamic> tariif = [];
 Map<String, String> tokenMap = {};
 
+int seadmeteListIndex = 0;
+
+//KEELATUD TUNNID MALLU
 Map<String, dynamic> graafikuSeaded = {
   'Valitud_Tunnid': 12,
   'Hinnapiir': 50.50,
@@ -40,10 +49,40 @@ Map<String, dynamic> gruppiMap = {
   'Kõik Seadmed': {
     'Gruppi_pilt': 'assets/saun1.jpg',
     'Grupi_Seadmed': [],
-    'Grupi_andurid': [],
+    'Grupi_temp_andur': [],
+    'Grupi_niiskus_andur': [],
+    'Grupi_valgus_andur': [],
     'Grupi_temp': 27.3,
     'Gruppi_olek': 'on',
   },
+};
+
+Map<String, dynamic> anduriteMap = {
+  'Temp_andurid': {
+    '6l6l7k7k': {
+      'Anduri_pilt': 'assets/saun1.jpg',
+      'Anduri_nimi': 'Tandur',
+      'Anduri_olek': 'on',
+    },
+    'x9x9x9x9': {
+      'Anduri_pilt': 'assets/saun1.jpg',
+      'Anduri_nimi': 'Temperatuuri andur',
+      'Anduri_olek': 'off',
+    },
+  },
+  'Niiskus_andurid': {
+    's4s4i0i0': {
+      'Anduri_pilt': 'assets/saun1.jpg',
+      'Anduri_nimi': 'Niiskus andur',
+      'Anduri_olek': 'on',
+    },
+    '6h6h8k8k': {
+      'Anduri_pilt': 'assets/saun1.jpg',
+      'Anduri_nimi': 'Nandur',
+      'Anduri_olek': 'off',
+    },
+  },
+  'Valgus_andurid': [],
 };
 
 String paevAbi = "";
@@ -97,10 +136,46 @@ Border border = Border.all(
   color: const Color.fromARGB(255, 0, 0, 0),
   width: 2,
 );
+Future<void> sendLogToServer(Map<dynamic, dynamic> log, String value) async {
+  try {
+    await http.post(
+      Uri.parse("http://172.20.10.10:5000/log/cost_daily/_$value"),
+      body: jsonEncode(log),
+      headers: {
+        'Content-Type': 'application/json'
+      }, // Set the correct content type
+    );
+  } catch (e) {
+    print('Error fetching data: $e');
+  }
+}
+
+Future<void> fetchDataFromServer(value) async {
+  try {
+    
+    final response =
+        await http.get(Uri.parse("http://172.22.22.217:5500/data/_$value"));
+
+    if (response.statusCode == 200) {
+      // Parse the JSON response
+      final Map<String, dynamic> data = json.decode(response.body);
+
+      // Access the data and handle it as needed
+      print('Data received from server: ${data['data']}');
+    } else {
+      // Handle errors or non-200 status codes
+      print('Failed to fetch data. Status code: ${response.statusCode}');
+    }
+  } catch (e) {
+    // Handle network errors or exceptions
+    print('Error fetching data: $e');
+  }
+}
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 //backround start
+
   SharedPreferences prefs = await SharedPreferences.getInstance();
 
   []; //Võtab mälust 'users'-i asukohast väärtused
@@ -120,28 +195,13 @@ Future<void> main() async {
   var temp = prefs.getString('tariif');
   if (temp != null) {
     tariif = json.decode(temp);
-    print("siiiin tariif: $tariif");
   }
   await getToken3();
-  print("------------");
-  print(tokenMap);
-  print(seadmeteMap);
-  print("------------");
 //backround end
 
+  //await fetchDataFromServer();
   runApp(MaterialApp(
     theme: ThemeData(brightness: Brightness.light),
     home: DynaamilenieKoduLeht(i: 1), //Alustab appi kodulehest
   ));
-  //energia();
-  //energia2();
-  /*Workmanager().initialize(callbackDispatcher);
-  Workmanager().registerPeriodicTask(
-    "1",
-    "simplePeriodicTask",
-    frequency: Duration(seconds: 5),
-  );*/
-  //graafikGen2DeleteAll("30c6f7828098");
-
-  //graafikGen1Lugemine("80646f81ad9a");
 }

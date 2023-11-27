@@ -15,6 +15,7 @@ import 'package:intl/intl.dart';
 seadmeMaksumus(String value, [Function? setPaevamaksumus]) async {
   Map<int, List<double>> paevaMaksumus = {};
   Map<DateTime, double> maksumusSeade = {};
+  Map<dynamic, dynamic> dataLog = {};
   DateTime now = DateTime.now();
   DateTime startOfMonth = DateTime(now.year, now.month, 1);
   DateTime endOfMonth = lastDayOfMonth;
@@ -97,6 +98,7 @@ seadmeMaksumus(String value, [Function? setPaevamaksumus]) async {
     var ajutine2 = ajutine.entries.toList();
     var hinnagraafik = ajutine2[0].value;
     paevaMaksumus[u] = [];
+    double tarbimine = 0.0;
     for (var i = 0; i < 24; i++) {
       //print(resJson['data']['units']['consumption']);
       var ajutineTarb;
@@ -105,6 +107,7 @@ seadmeMaksumus(String value, [Function? setPaevamaksumus]) async {
       } else {
         ajutineTarb = historyData[i]['consumption'] / 1000000;
       }
+      tarbimine = tarbimine + ajutineTarb;
       katse = katse + ajutineTarb;
       // print(historyData);
       temp = temp + ajutineTarb * hinnagraafik[i]['price'];
@@ -114,13 +117,23 @@ seadmeMaksumus(String value, [Function? setPaevamaksumus]) async {
     }
     u++;
     maksumusSeade[DateTime.parse(abi)] = temp;
+    int timestamp = DateTime.parse(abi).millisecondsSinceEpoch;
+    if (!dataLog.containsKey(timestamp)) {
+      // If not, create a new map for the timestamp
+      dataLog["$timestamp"] = {};
+    }
+
+    // Set the "consumption" key for the timestamp
+    dataLog["$timestamp"]["cost"] = temp;
+    dataLog["$timestamp"]["consumption"] = tarbimine;
   }
 
   //print(paevaMaksumus);
   if (setPaevamaksumus != null) {
     setPaevamaksumus(paevaMaksumus);
   }
-
+  print("datlog: $dataLog");
   print("seadmemaksusmus $value $maksumusSeade");
+
   return maksumusSeade;
 }

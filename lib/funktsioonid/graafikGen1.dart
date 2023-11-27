@@ -91,7 +91,6 @@ gen1GraafikLoomine(
 
   if (res.body.toString() ==
       """{"isok":false,"errors":{"max_req":"Request limit reached!"}}""") {
-
     await Future.delayed(Duration(seconds: 2));
 
     res = await http.post(url, headers: headers, body: data);
@@ -184,22 +183,24 @@ graafikGen1Lugemine(String id) async {
 }
 
 graafikGen1Saatmine(List<dynamic> graafik, String id) async {
-  String graafikString = graafik.join(',');
-  var headers1 = {
-    'Content-Type': 'application/x-www-form-urlencoded',
-  };
+  if (seadmeteMap[id]['Seadme_olek'] != 'Offline') {
+    String graafikString = graafik.join(',');
+    var headers1 = {
+      'Content-Type': 'application/x-www-form-urlencoded',
+    };
 
-  var data1 = {
-    'channel': '0',
-    'enabled': "1",
-    'schedule_rules': graafikString,
-    'id': id,
-    'auth_key': seadmeteMap[id]['Cloud_key'],
-  };
+    var data1 = {
+      'channel': '0',
+      'enabled': "1",
+      'schedule_rules': graafikString,
+      'id': id,
+      'auth_key': seadmeteMap[id]['Cloud_key'],
+    };
 
-  var url1 = Uri.parse(
-      '${seadmeteMap[id]['api_url']}/device/relay/settings/schedule_rules');
-  var res1 = await http.post(url1, headers: headers1, body: data1);
+    var url1 = Uri.parse(
+        '${seadmeteMap[id]['api_url']}/device/relay/settings/schedule_rules');
+    var res1 = await http.post(url1, headers: headers1, body: data1);
+  }
   //abi = true;
   mitmeSeadmeKinnitus.add(true);
   seadmeKinnitus = true;

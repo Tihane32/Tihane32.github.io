@@ -12,6 +12,7 @@ salvestaSeadistus(String parameetriNim, var parameeter,
       seadmeteMap[valitudSeade][parameetriNim] = parameeter;
       String keyMap = json.encode(seadmeteMap);
       prefs.setString('seadmed', keyMap);
+      print(seadmeteMap[valitudSeade]);
     }
   }
 }
