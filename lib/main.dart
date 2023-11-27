@@ -28,7 +28,7 @@ import 'package:logging/logging.dart';
 
 //Maini käivitamine, home on koduleht.
 //bool graafikuNahtavus = true;
-const String serverUrl = 'http://172.22.22.217:5000/log';
+const String serverUrl = 'http://192.168.1.227:5000/log';
 
 List<dynamic> tariif = [];
 Map<String, String> tokenMap = {};
@@ -136,6 +136,41 @@ Border border = Border.all(
   color: const Color.fromARGB(255, 0, 0, 0),
   width: 2,
 );
+Future<void> sendLogToServer(Map<dynamic, dynamic> log, String value) async {
+  try {
+    await http.post(
+      Uri.parse("http://172.20.10.10:5000/log/cost_daily/_$value"),
+      body: jsonEncode(log),
+      headers: {
+        'Content-Type': 'application/json'
+      }, // Set the correct content type
+    );
+  } catch (e) {
+    print('Error fetching data: $e');
+  }
+}
+
+Future<void> fetchDataFromServer(value) async {
+  try {
+    
+    final response =
+        await http.get(Uri.parse("http://172.22.22.217:5500/data/_$value"));
+
+    if (response.statusCode == 200) {
+      // Parse the JSON response
+      final Map<String, dynamic> data = json.decode(response.body);
+
+      // Access the data and handle it as needed
+      print('Data received from server: ${data['data']}');
+    } else {
+      // Handle errors or non-200 status codes
+      print('Failed to fetch data. Status code: ${response.statusCode}');
+    }
+  } catch (e) {
+    // Handle network errors or exceptions
+    print('Error fetching data: $e');
+  }
+}
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -160,15 +195,11 @@ Future<void> main() async {
   var temp = prefs.getString('tariif');
   if (temp != null) {
     tariif = json.decode(temp);
-    print("siiiin tariif: $tariif");
   }
   await getToken3();
-  print("------------");
-  print(tokenMap);
-  print(seadmeteMap);
-  print("------------");
 //backround end
 
+  //await fetchDataFromServer();
   runApp(MaterialApp(
     theme: ThemeData(brightness: Brightness.light),
     home: DynaamilenieKoduLeht(i: 1), //Alustab appi kodulehest

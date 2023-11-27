@@ -1,75 +1,59 @@
+import json
 from flask import Flask, request
+from flask_cors import CORS  # Import the CORS extension
 import sqlite3
-from datetime import datetime
-
 app = Flask(__name__)
+CORS(app)
+def create_table(table_name, cursor, log_pairs):
+    # Create table if it doesn't exist
+    cursor.execute(f''' 
+        CREATE TABLE IF NOT EXISTS "{table_name}" (
+            timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
+            date INT UNIQUE,
+            cost DOUBLE,
+            consumption DOUBLE
+        )
+    ''')
 
-# Create SQLite database and table if they don't exist
-conn = sqlite3.connect('logs.db')
-cursor = conn.cursor()
-cursor.execute('''
-    CREATE TABLE IF NOT EXISTS log_entries (
-        timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
-        COST_MONTHLY TEXT,
-        DEVICE TEXT,
-        UNIQUE (COST_MONTHLY, DEVICE)
-    )
-''')
-conn.commit()
-conn.close()
+def process_log_data(log_message):
+    # Convert the log_message dictionary into a list of tuples (date, cost, consumption)
+    log_data = [
+        (
+            int(timestamp),
+            entry.get('cost', 0.0),           # Get 'cost' value or default to 0.0
+            entry.get('consumption', 0.0)     # Get 'consumption' value or default to 0.0
+        )
+        for timestamp, entry in log_message.items()
+    ]
+    return log_data
 
-@app.route('/log', methods=['POST'])
-def receive_log():
-    log_message = request.get_data(as_text=True)
+@app.route('/log/cost_daily/<table_name>', methods=['POST'])
+def receive_log(table_name):
+    log_message = request.get_json()
     print(log_message)
+    
+    # Process log data
+    log_data = process_log_data(log_message)
 
-    # Parse the log message and extract key-value pairs
-    log_pairs = {}
-    for pair in log_message.split(';'):
-        key, value = pair.split('::')
-        log_pairs[key.strip()] = value.strip()
+    with sqlite3.connect('cost.db') as conn:
+        cursor = conn.cursor()
 
-    # Extract values or set defaults if keys are missing
+        # Check if the table exists, create it if not
+        create_table(table_name, cursor, log_data)
 
-    # Add any missing columns dynamically to the table
-    conn = sqlite3.connect('logs.db')
-    cursor = conn.cursor()
+        # Iterate through log_data and insert only if date does not exist
+        for entry in log_data:
+            date_value = entry[0]
+            
+            # Check if the date already exists in the table
+            cursor.execute(f"SELECT COUNT(*) FROM {table_name} WHERE date = ?", (date_value,))
+            count = cursor.fetchone()[0]
 
-    # Get the current columns in the table
-    cursor.execute("PRAGMA table_info(log_entries)")
-    existing_columns = [column[1] for column in cursor.fetchall()]
-    print(existing_columns)
+            # If the date does not exist, insert the record
+            if count == 0:
+                cursor.execute(f"INSERT INTO {table_name} (date, cost, consumption) VALUES (?, ?, ?)", entry)
 
-    # Add missing columns to the table
-    for key in log_pairs.keys():
-        if key not in existing_columns:  # Exclude timestamp
-            cursor.execute(f"ALTER TABLE log_entries ADD COLUMN {key} TEXT")
-
-    # Check if 'COST_MONTHLY' is in the log message before performing the check
-    if 'COST_MONTHLY' in log_pairs:
-        # Check if a row with the same 'COST_MONTHLY' value already exists for the given 'DEVICE'
-        query_check = """
-            SELECT 1 
-            FROM log_entries 
-            WHERE COST_MONTHLY LIKE ? AND DEVICE = ?
-        """
-        check_values = (f"%{log_pairs['COST_MONTHLY']}%", log_pairs['DEVICE'])
-        existing_row = cursor.execute(query_check, check_values).fetchone()
-
-        # If the row already exists, return without inserting a new row
-        if existing_row:
-            conn.close()
-            return 'Row already exists, not inserting a new row\n'
-
-    # Create the SQL query dynamically based on the keys in log_pairs
-    columns = ', '.join(log_pairs.keys())
-    placeholders = ', '.join(['?'] * len(log_pairs))
-    query = f"INSERT INTO log_entries ({columns}) VALUES ({placeholders})"
-
-    # Execute the query with values from log_pairs
-    cursor.execute(query, tuple(log_pairs.values()))
-    conn.commit()
-    conn.close()
+        conn.commit()
 
     return 'Log received and saved successfully\n'
 
