@@ -149,7 +149,7 @@ class _SeadmeteList_gruppidState extends State<SeadmeteList_gruppid> {
                   final gruppiPilt = gruppiMap[grupp]["Gruppi_pilt"];
                   final grupiOlek = saaGrupiOlek(grupp);
                   final grupiTemp = gruppiMap[grupp]['Grupi_temp'];
-                  SalvestaUusGrupp(grupp, {});
+                  SalvestaUusGrupp(grupp, {}, '', '', '');
 
                   return GestureDetector(
                     onTap: () {

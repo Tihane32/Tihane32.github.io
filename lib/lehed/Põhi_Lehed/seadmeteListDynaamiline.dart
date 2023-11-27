@@ -17,15 +17,6 @@ import 'package:get/get.dart';
 
 import '../Seadme_Lehed/dynamicSeadmeInfo.dart';
 
-class SeadmeteListPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return GetMaterialApp(
-      home: SeadmeteList(),
-    );
-  }
-}
-
 class SeadmeteList extends StatefulWidget {
   const SeadmeteList({Key? key}) : super(key: key);
 
@@ -38,12 +29,19 @@ class _SeadmeteListState extends State<SeadmeteList> {
     SeadmeteList_yksikud(),
     SeadmeteList_gruppid(),
   ];
-  int leht = 0;
   double xAlign = -1;
   double signInAlign = 1;
   double loginAlign = -1;
   double width = 200;
   double height = 40;
+  void initState() {
+    super.initState();
+    if (seadmeteListIndex == 0) {
+      xAlign = -1;
+    } else {
+      xAlign = 1;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -84,7 +82,7 @@ class _SeadmeteListState extends State<SeadmeteList> {
                   onTap: () {
                     setState(() {
                       xAlign = loginAlign;
-                      leht = 0;
+                      seadmeteListIndex = 0;
                     });
                   },
                   child: Align(
@@ -100,7 +98,7 @@ class _SeadmeteListState extends State<SeadmeteList> {
                   onTap: () {
                     setState(() {
                       xAlign = signInAlign;
-                      leht = 1;
+                      seadmeteListIndex = 1;
                     });
                   },
                   child: Align(
@@ -118,7 +116,7 @@ class _SeadmeteListState extends State<SeadmeteList> {
         ),
       ),
       body: IndexedStack(
-        index: leht,
+        index: seadmeteListIndex,
         children: lehedMenu,
       ),
     );

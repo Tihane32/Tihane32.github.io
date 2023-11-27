@@ -18,12 +18,6 @@ class GruppiKoostamine extends StatefulWidget {
 }
 
 class _GruppiKoostamineState extends State<GruppiKoostamine> {
-  @override
-  void initState() {
-    super.initState();
-    ValitudSeadmed = valitudSeadmeteNullimine();
-  }
-
   Map<String, bool> ValitudSeadmed = {};
   int koduindex = 1;
   double xAlign = -1;
@@ -31,10 +25,23 @@ class _GruppiKoostamineState extends State<GruppiKoostamine> {
   double loginAlign = -1;
   double width = 200;
   double height = 40;
-  String tempAndur = 'Lisa temperatuuri Andur';
-  String niiskusAndur = 'Lisa niiskus Andur';
-  String valgusAndur = 'Lisa valgus Andur';
+  String tempAndur = 'Lisa temperatuuri andur';
+  String niiskusAndur = 'Lisa niiskus andur';
+  String valgusAndur = 'Lisa valgus andur';
   String gruppiNimi = '';
+  List<String> listTemp = <String>['Lisa temperatuuri andur'];
+  List<String> listNiis = <String>['Lisa niiskus andur'];
+  List<String> listValg = <String>['Lisa valgus andur'];
+
+  @override
+  void initState() {
+    super.initState();
+    ValitudSeadmed = valitudSeadmeteNullimine();
+    listTemp = andurListiKoostamine(listTemp, 'Temp_andurid');
+    listNiis = andurListiKoostamine(listNiis, 'Niiskus_andurid');
+    listValg = andurListiKoostamine(listValg, 'Valgus_andurid');
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -50,11 +57,7 @@ class _GruppiKoostamineState extends State<GruppiKoostamine> {
           child: ListView(
             children: <Widget>[
               ListTile(
-                title: Text(
-                  'Gruppi nimi',
-                  style: font,
-                ),
-                trailing: Container(
+                title: Container(
                   width: 250,
                   height: 40,
                   decoration: BoxDecoration(
@@ -71,7 +74,8 @@ class _GruppiKoostamineState extends State<GruppiKoostamine> {
                     decoration: InputDecoration(
                       border: InputBorder.none,
                       isDense: true,
-                      hintText: '',
+                      hintText: 'Gruppi nimi',
+                      alignLabelWithHint: true,
                       contentPadding:
                           EdgeInsets.symmetric(vertical: 3.0, horizontal: 8.0),
                     ),
@@ -80,15 +84,10 @@ class _GruppiKoostamineState extends State<GruppiKoostamine> {
                 ),
               ),
               SizedBox(
-                height: 10,
+                height: 5,
               ),
               ListTile(
-                title: Text(
-                  'Gruppi temperatuuriandur',
-                  style: font,
-                ),
-                trailing: Container(
-                  width: 250,
+                title: Container(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
                     color: Color.fromARGB(255, 255, 116, 106),
@@ -97,7 +96,7 @@ class _GruppiKoostamineState extends State<GruppiKoostamine> {
                   child: DropdownButtonHideUnderline(
                     child: DropdownButton<String>(
                       style: font,
-                      dropdownColor: Color.fromARGB(255, 250, 169, 164),
+                      dropdownColor: Color.fromARGB(255, 243, 145, 132),
                       borderRadius: borderRadius,
                       value: tempAndur,
                       onChanged: (andur) {
@@ -105,11 +104,8 @@ class _GruppiKoostamineState extends State<GruppiKoostamine> {
                           tempAndur = andur!;
                         });
                       },
-                      items: <String>[
-                        'Lisa temperatuuri Andur',
-                        'Temperatuuri Andur 1',
-                        'Temperatuuri Andur 2',
-                      ].map<DropdownMenuItem<String>>((String value) {
+                      items: listTemp
+                          .map<DropdownMenuItem<String>>((String value) {
                         return DropdownMenuItem<String>(
                           value: value,
                           child: Text(value),
@@ -120,15 +116,10 @@ class _GruppiKoostamineState extends State<GruppiKoostamine> {
                 ),
               ),
               SizedBox(
-                height: 10,
+                height: 5,
               ),
               ListTile(
-                title: Text(
-                  'Gruppi niiskusandur',
-                  style: font,
-                ),
-                trailing: Container(
-                  width: 250,
+                title: Container(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
                     color: Color.fromARGB(255, 76, 153, 167),
@@ -145,11 +136,8 @@ class _GruppiKoostamineState extends State<GruppiKoostamine> {
                           niiskusAndur = andur!;
                         });
                       },
-                      items: <String>[
-                        'Lisa niiskus Andur',
-                        'Niiskus Andur 1',
-                        'Niiskus Andur 2',
-                      ].map<DropdownMenuItem<String>>((String value) {
+                      items: listNiis
+                          .map<DropdownMenuItem<String>>((String value) {
                         return DropdownMenuItem<String>(
                           value: value,
                           child: Text(value),
@@ -160,15 +148,10 @@ class _GruppiKoostamineState extends State<GruppiKoostamine> {
                 ),
               ),
               SizedBox(
-                height: 10,
+                height: 5,
               ),
               ListTile(
-                title: Text(
-                  'Gruppi valgusandur',
-                  style: font,
-                ),
-                trailing: Container(
-                  width: 250,
+                title: Container(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
                     color: Color.fromARGB(255, 66, 66, 66),
@@ -185,11 +168,8 @@ class _GruppiKoostamineState extends State<GruppiKoostamine> {
                           valgusAndur = andur!;
                         });
                       },
-                      items: <String>[
-                        'Lisa valgus Andur',
-                        'Valgus Andur 1',
-                        'Valgus Andur 2',
-                      ].map<DropdownMenuItem<String>>((String value) {
+                      items: listValg
+                          .map<DropdownMenuItem<String>>((String value) {
                         return DropdownMenuItem<String>(
                           value: value,
                           child: Text(value),
@@ -324,7 +304,14 @@ class _GruppiKoostamineState extends State<GruppiKoostamine> {
                         ),
                       ],
                       onTap: (int kodu) {
-                        SalvestaUusGrupp(gruppiNimi, ValitudSeadmed);
+                        String? tempAid =
+                            andurIDsaaamine('Temp_andurid', tempAndur);
+                        String? niiskusAid =
+                            andurIDsaaamine('Niiskus_andurid', niiskusAndur);
+                        String? ValgusAid =
+                            andurIDsaaamine('Valgus_andurid', valgusAndur);
+                        SalvestaUusGrupp(gruppiNimi, ValitudSeadmed, tempAid,
+                            niiskusAid, ValgusAid);
                       })),
             ],
           ),
@@ -340,4 +327,31 @@ Map<String, bool> valitudSeadmeteNullimine() {
     ValitudSeadmed[key] = false;
   });
   return ValitudSeadmed;
+}
+
+andurListiKoostamine(List<String> list, String tuup) {
+  List<String> listUus = list;
+  if (anduriteMap[tuup].isNotEmpty) {
+    anduriteMap[tuup].forEach((id, value) {
+      var anduriNimi = value['Anduri_nimi'];
+      listUus.add(anduriNimi);
+    });
+  }
+  return listUus;
+}
+
+String? andurIDsaaamine(String tuup, String andurNimi) {
+  var anduriteMapTuup = anduriteMap[tuup];
+  if (anduriteMapTuup.isNotEmpty) {
+    for (var id in anduriteMapTuup.keys) {
+      var anduriMap = anduriteMapTuup[id];
+      var nimi = anduriMap?['Anduri_nimi'];
+      if (nimi == andurNimi) {
+        print('$andurNimi: $id');
+        return id;
+      }
+    }
+  }
+  print('$andurNimi: xxxxxxx');
+  return '';
 }

@@ -110,39 +110,42 @@ class _DunaamilineSeadmeLehtState extends State<DunaamilineSeadmeLeht> {
           ],
         ),
         actions: [
-          Center(
-            child: Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                color: boxColor,
-              ),
-              padding: const EdgeInsets.symmetric(horizontal: 10),
-              child: DropdownButton<String>(
-                icon: const Icon(Icons.menu),
-                value: selectedPage, style: font,
-                onChanged: (String? newValue) {
-                  setState(() {
-                    selectedPage = newValue!;
-                  });
-                  if (selectedPage == 'Lülitusgraafik') {
-                    valitud = 0;
-                  } else if (selectedPage == 'Tarbimisgraafik') {
-                    valitud = 1;
-                  } else if (selectedPage == 'Seaded') {
-                    valitud = 2;
-                  }
-                },
-                underline: Container(), // or SizedBox.shrink()
-                items: <String>['Lülitusgraafik', 'Tarbimisgraafik', 'Seaded']
-                    .map((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(
-                      value,
-                      style: const TextStyle(color: Colors.black),
-                    ),
-                  );
-                }).toList(),
+          Visibility(
+            visible: valitud != 3,
+            child: Center(
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: boxColor,
+                ),
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                child: DropdownButton<String>(
+                  icon: const Icon(Icons.menu),
+                  value: selectedPage, style: font,
+                  onChanged: (String? newValue) {
+                    setState(() {
+                      selectedPage = newValue!;
+                    });
+                    if (selectedPage == 'Lülitusgraafik') {
+                      valitud = 0;
+                    } else if (selectedPage == 'Tarbimisgraafik') {
+                      valitud = 1;
+                    } else if (selectedPage == 'Seaded') {
+                      valitud = 2;
+                    }
+                  },
+                  underline: Container(), // or SizedBox.shrink()
+                  items: <String>['Lülitusgraafik', 'Tarbimisgraafik', 'Seaded']
+                      .map((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(
+                        value,
+                        style: const TextStyle(color: Colors.black),
+                      ),
+                    );
+                  }).toList(),
+                ),
               ),
             ),
           ),

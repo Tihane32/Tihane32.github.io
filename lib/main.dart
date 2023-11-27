@@ -33,6 +33,9 @@ const String serverUrl = 'http://192.168.1.227:5000/log';
 List<dynamic> tariif = [];
 Map<String, String> tokenMap = {};
 
+int seadmeteListIndex = 0;
+
+//KEELATUD TUNNID MALLU
 Map<String, dynamic> graafikuSeaded = {
   'Valitud_Tunnid': 12,
   'Hinnapiir': 50.50,
@@ -52,6 +55,34 @@ Map<String, dynamic> gruppiMap = {
     'Grupi_temp': 27.3,
     'Gruppi_olek': 'on',
   },
+};
+
+Map<String, dynamic> anduriteMap = {
+  'Temp_andurid': {
+    '6l6l7k7k': {
+      'Anduri_pilt': 'assets/saun1.jpg',
+      'Anduri_nimi': 'Tandur',
+      'Anduri_olek': 'on',
+    },
+    'x9x9x9x9': {
+      'Anduri_pilt': 'assets/saun1.jpg',
+      'Anduri_nimi': 'Temperatuuri andur',
+      'Anduri_olek': 'off',
+    },
+  },
+  'Niiskus_andurid': {
+    's4s4i0i0': {
+      'Anduri_pilt': 'assets/saun1.jpg',
+      'Anduri_nimi': 'Niiskus andur',
+      'Anduri_olek': 'on',
+    },
+    '6h6h8k8k': {
+      'Anduri_pilt': 'assets/saun1.jpg',
+      'Anduri_nimi': 'Nandur',
+      'Anduri_olek': 'off',
+    },
+  },
+  'Valgus_andurid': [],
 };
 
 String paevAbi = "";
