@@ -242,7 +242,7 @@ class _KeskmiseHinnaAluselTundideValimineState
     }
 
     if (date.hour >=
-        15) //Kui kell on vähem, kui 15 või on saadetud String 'täna'
+        5) //Kui kell on vähem, kui 15 või on saadetud String 'täna'
     {
       var data = await getElering('homme');
       for (var i = 0; i < 24; i++) {
@@ -252,11 +252,12 @@ class _KeskmiseHinnaAluselTundideValimineState
 
     setState(() {
       lulitus = lulitusTana;
-      if (date.hour >= 15) {
+      if (date.hour >= 5) {
         hommeNahtav = true;
         lulitus = lulitusHomme;
         homme = green;
         tana = valge;
+        paevAbi = "homme";
         hommeFont = fontValge;
         tanaFont = font;
       }
@@ -281,6 +282,7 @@ class _KeskmiseHinnaAluselTundideValimineState
 
   @override
   void initState() {
+    norm();
     int trueCount = 0;
     String valitudSeade = '';
 
@@ -298,14 +300,8 @@ class _KeskmiseHinnaAluselTundideValimineState
       String key = i < 10 ? '0$i.00' : '$i.00';
       keskHind[i] = [key, 0, false];
     }
-    norm();
-    super.initState();
-    _loadGraafikuSeaded;
-  }
 
-  _loadGraafikuSeaded() async {
-    //graafikuSeaded = await loadGraafikuSeaded();
-    setState(() {}); // To rebuild the widget once data is loaded
+    super.initState();
   }
 
   @override
