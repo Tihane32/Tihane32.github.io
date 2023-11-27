@@ -242,7 +242,7 @@ class _KeskmiseHinnaAluselTundideValimineState
     }
 
     if (date.hour >=
-        5) //Kui kell on vähem, kui 15 või on saadetud String 'täna'
+        15) //Kui kell on vähem, kui 15 või on saadetud String 'täna'
     {
       var data = await getElering('homme');
       for (var i = 0; i < 24; i++) {
@@ -252,7 +252,7 @@ class _KeskmiseHinnaAluselTundideValimineState
 
     setState(() {
       lulitus = lulitusTana;
-      if (date.hour >= 5) {
+      if (date.hour >= 15) {
         hommeNahtav = true;
         lulitus = lulitusHomme;
         homme = green;
