@@ -7,6 +7,7 @@ import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 
 import '../main.dart';
+import 'tariifArvutus.dart';
 
 /// The function `getElering` retrieves the price graph data for electricity in Estonia from the Elering
 /// API for a specified date.
@@ -18,6 +19,8 @@ import '../main.dart';
 ///
 /// Returns:
 ///   a Future<List> object.
+
+/*
 Future<List> getElering(String paevtest) async {
   var entryList;
 
@@ -102,12 +105,11 @@ Future<List> getElering(String paevtest) async {
       } else {
         if (now.weekday < 6) {
           if (i < 8) {
-
             double newPrice =
-              (hinnagraafik[i]["price"] * 1.2 + tariif[1] * 1.2 * 10);
-          hinnagraafik[i]["price"] = double.parse(newPrice.toStringAsFixed(2));
+                (hinnagraafik[i]["price"] * 1.2 + tariif[1] * 1.2 * 10);
+            hinnagraafik[i]["price"] =
+                double.parse(newPrice.toStringAsFixed(2));
           } else {
-            
             double newPrice =
                 (hinnagraafik[i]["price"] * 1.2 + tariif[0] * 1.2 * 10);
             hinnagraafik[i]["price"] =
@@ -126,10 +128,10 @@ Future<List> getElering(String paevtest) async {
   print("-----------------");
   return hinnagraafik;
 }
-
+*/
+/*
 Future<List<double>> getEleringVahemik(String algusPaev, String vahemik) async {
   var entryList;
-
   DateFormat format = DateFormat("yyyy-MM-dd");
   DateTime dateTime = format.parse(algusPaev);
   dateTime = DateTime(dateTime.year, dateTime.month, dateTime.day - 1);
@@ -158,5 +160,32 @@ Future<List<double>> getEleringVahemik(String algusPaev, String vahemik) async {
     i++;
   }
 
+  return prices;
+}
+*/
+Future<List<double>> getElering(DateTime startDate, DateTime endDate) async {
+  var entryList;
+  startDate = startDate.add(const Duration(days: -1));
+  endDate = endDate.add(const Duration(days: -1));
+
+  String url =
+      'https://dashboard.elering.ee/api/nps/price?start=${DateFormat('yyyy-MM-dd').format(startDate)}T${24 - startDate.timeZoneOffset.inHours}%3A00%3A00Z&end=${DateFormat('yyyy-MM-dd').format(endDate)}T${23 - endDate.timeZoneOffset.inHours}%3A00%3A00Z';
+  final httpPackageUrl = Uri.parse(url);
+  final httpPackageInfo = await http.read(httpPackageUrl);
+  final httpPackageJson = json.decode(httpPackageInfo) as Map<String, dynamic>;
+
+  entryList = httpPackageJson.entries.toList();
+
+  //Võtab Listist Eesti hinnagraafiku
+  var ajutine = entryList[1].value;
+  var ajutine2 = ajutine.entries.toList();
+  var hinnagraafik = ajutine2[0].value;
+  List<double> prices = [];
+  for (int i = 0; i < hinnagraafik.length;) {
+    prices.add(hinnagraafik[i]["price"]);
+    i++;
+  }
+
+  prices = tariifArvutus(prices);
   return prices;
 }

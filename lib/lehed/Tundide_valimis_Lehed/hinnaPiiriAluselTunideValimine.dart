@@ -236,17 +236,18 @@ class _HinnaPiiriAluselTundideValimineState
       22: ['22.00', 24.4, false],
       23: ['23.00', 44.1, false],
     };
-    var data = await getElering('tana');
+    var data = await getElering(DateTime.now(),DateTime.now().add(Duration(days: 1)));
+    
     for (var i = 0; i < 24; i++) {
-      lulitusTana[i][1] = data[i]['price'];
+      lulitusTana[i][1] = data[i];
     }
 
     if (date.hour >=
         15) //Kui kell on vähem, kui 15 või on saadetud String 'täna'
     {
-      var data = await getElering('homme');
+      var data = await getElering(DateTime.now().add(Duration(days: 1)),DateTime.now().add(Duration(days: 2)));
       for (var i = 0; i < 24; i++) {
-        lulitusHomme[i][1] = data[i]['price'];
+        lulitusHomme[i][1] = data[i];
       }
     }
 

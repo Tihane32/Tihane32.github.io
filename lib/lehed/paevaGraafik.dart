@@ -46,7 +46,9 @@ class _PaevaTarbimineState extends State<PaevaTarbimine> {
 // Format the DateTime object to get yyyy-MM-dd
     formattedDate = DateFormat('yyyy.MM.dd').format(dateTime);
     var temp = await getTarbimine(widget.value, widget.date, "day");
-    List<double> temp2 = await getEleringVahemik(widget.date, "day");
+
+    List<double> temp2 =
+        await getElering(dateTime, dateTime.add(Duration(days: 1)));
     setState(() {
       paevaTarbimine = temp;
       paevaHind = temp2;
@@ -54,7 +56,7 @@ class _PaevaTarbimineState extends State<PaevaTarbimine> {
     });
   }
 
-  getElering() {}
+  
 
   @override
   void initState() {

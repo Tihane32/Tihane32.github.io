@@ -1,3 +1,4 @@
+/*
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'graafikuKoostamine.dart';
@@ -301,3 +302,4 @@ class _LulitusGraafikState extends State<_LulitusGraafik> {
     );
   }
 }
+*/
