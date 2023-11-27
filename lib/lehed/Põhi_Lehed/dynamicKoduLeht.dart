@@ -14,7 +14,7 @@ import '../../Arhiiv/drawer.dart';
 import '../../Arhiiv/kaksTabelit.dart';
 import 'hindJoonise.dart';
 import 'package:get/get.dart';
-import '../lisaSeade.dart';
+import '../../Arhiiv/lisaSeade.dart';
 import '../../Arhiiv/navigationBar.dart';
 
 class DynaamilenieKoduLeht extends StatefulWidget {
@@ -37,7 +37,6 @@ class _DynaamilenieKoduLehtState extends State<DynaamilenieKoduLeht> {
     LoginPage(),
     KasutajaSeaded(),
     TulpDiagramm(),
-    LisaSeade(),
     MinuPakett()
   ];
 

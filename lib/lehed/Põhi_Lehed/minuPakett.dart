@@ -76,7 +76,7 @@ class _MinuPakettState extends State<MinuPakett> {
                   keyboardType:
                       TextInputType.number, // Allow only numeric input
                   decoration: InputDecoration(
-                    labelText: 'Sisestage tariif:',
+                    labelText: 'Sisestage tariif: senti / kWh',
                     labelStyle: font
                   ),
                 ),
@@ -88,7 +88,7 @@ class _MinuPakettState extends State<MinuPakett> {
                   keyboardType:
                       TextInputType.number, // Allow only numeric input
                   decoration: InputDecoration(
-                    labelText: 'Sisestage päevatariif:',
+                    labelText: 'Sisestage päevatariif: senti / kWh',
                     labelStyle: font
                   ),
                 ),
@@ -103,7 +103,7 @@ class _MinuPakettState extends State<MinuPakett> {
                   keyboardType:
                       TextInputType.number, // Allow only numeric input
                   decoration: InputDecoration(
-                    labelText: 'Sisestage öötariif:',
+                    labelText: 'Sisestage öötariif: senti / kWh',
                     labelStyle: font
                   ),
                 ),

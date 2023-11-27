@@ -47,13 +47,13 @@ class _GruppiKoostamineState extends State<GruppiKoostamine> {
     return Scaffold(
       backgroundColor: backround,
       appBar: AppBar(
-        toolbarHeight: 250,
+        toolbarHeight: 310,
         automaticallyImplyLeading: false,
         elevation: 0.0,
         shadowColor: Colors.transparent,
         backgroundColor: Colors.transparent,
         title: Container(
-          height: 240,
+          height: 300,
           child: ListView(
             children: <Widget>[
               ListTile(

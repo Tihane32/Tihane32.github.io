@@ -1,14 +1,15 @@
+/*
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:testuus4/funktsioonid/graafikGen2.dart';
 import 'dart:convert';
-import '../../main.dart';
-import '../../Arhiiv/graafikuKoostamine.dart';
+import '../main.dart';
+import 'graafikuKoostamine.dart';
 import 'package:testuus4/Arhiiv/kaksTabelit.dart';
 import 'package:http/http.dart' as http;
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:testuus4/funktsioonid/Elering.dart';
-import '../../Arhiiv/seadmedKontoltNim.dart';
+import 'seadmedKontoltNim.dart';
 
 class SeadmeSeaded extends StatelessWidget {
   final String value;
@@ -189,7 +190,7 @@ class _LulitusGraafikState extends State<_LulitusGraafik> {
           var graafikud = Map<String, dynamic>();
 
           //await graafikuteSaamine(graafikud, value);
-          var elering = await getElering('täna');
+          var elering = await getElering(DateTime.now(),DateTime.now().add(Duration(days: 1)));
           setState(() {
             j = 0;
             for (var i = 0; i < 24; i++) {
@@ -204,7 +205,7 @@ class _LulitusGraafikState extends State<_LulitusGraafik> {
               }
               print(asendus);
 
-              lulitus[asendus][1] = elering[i]['price'];
+              lulitus[asendus][1] = elering[i];
 
               //print(lulitus[asendus][1]);
 
@@ -296,7 +297,7 @@ class _LulitusGraafikState extends State<_LulitusGraafik> {
               filteredRules.add(rule);
             }
           }
-          var elering = await getElering('täna');
+          var elering = await getElering(DateTime.now(),DateTime.now().add(Duration(days: 1)));
           var i = 0;
 
           setState(() {
@@ -343,7 +344,7 @@ class _LulitusGraafikState extends State<_LulitusGraafik> {
                 //print(lulitus['$j']);
               }
               lulitus[asendus][2] = k;
-              lulitus[asendus][1] = elering[j]['price'];
+              lulitus[asendus][1] = elering[j];
             }
           });
         }
@@ -494,3 +495,4 @@ class _ChartData {
   final DateTime date;
   final double consumption;
 }
+*/

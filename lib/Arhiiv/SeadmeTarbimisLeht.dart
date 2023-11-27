@@ -1,3 +1,4 @@
+/*
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:testuus4/widgets/AbiLeht.dart';
@@ -844,3 +845,4 @@ class _ChartData {
   final DateTime date;
   final double consumption;
 }
+*/
