@@ -258,6 +258,7 @@ class _HinnaPiiriAluselTundideValimineState
         lulitus = lulitusHomme;
         homme = green;
         tana = valge;
+        paevAbi = "homme";
         hommeFont = fontValge;
         tanaFont = font;
       }
@@ -279,6 +280,7 @@ class _HinnaPiiriAluselTundideValimineState
 
   @override
   void initState() {
+    norm();
     int trueCount = 0;
     String valitudSeade = '';
 
@@ -292,7 +294,7 @@ class _HinnaPiiriAluselTundideValimineState
     if (trueCount == 1) {
       hinnaPiir = seadmeteMap[valitudSeade]['Hinnapiir'];
     }
-    norm();
+
     super.initState();
   }
 

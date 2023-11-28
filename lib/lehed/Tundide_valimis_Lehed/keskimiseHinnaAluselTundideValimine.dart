@@ -257,6 +257,7 @@ var data = await getElering(DateTime.now(),DateTime.now().add(Duration(days: 1))
         lulitus = lulitusHomme;
         homme = green;
         tana = valge;
+        paevAbi = "homme";
         hommeFont = fontValge;
         tanaFont = font;
       }
@@ -281,6 +282,7 @@ var data = await getElering(DateTime.now(),DateTime.now().add(Duration(days: 1))
 
   @override
   void initState() {
+    norm();
     int trueCount = 0;
     String valitudSeade = '';
 
@@ -298,14 +300,8 @@ var data = await getElering(DateTime.now(),DateTime.now().add(Duration(days: 1))
       String key = i < 10 ? '0$i.00' : '$i.00';
       keskHind[i] = [key, 0, false];
     }
-    norm();
-    super.initState();
-    _loadGraafikuSeaded;
-  }
 
-  _loadGraafikuSeaded() async {
-    //graafikuSeaded = await loadGraafikuSeaded();
-    setState(() {}); // To rebuild the widget once data is loaded
+    super.initState();
   }
 
   @override
