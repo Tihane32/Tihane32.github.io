@@ -28,6 +28,7 @@ class _SeadmeteListState extends State<SeadmeteList> {
   List<Widget> lehedMenu = [
     SeadmeteList_yksikud(),
     SeadmeteList_gruppid(),
+    SeadmeteList_gruppid(),
   ];
   double xAlign = -1;
   double signInAlign = 1;
@@ -38,8 +39,10 @@ class _SeadmeteListState extends State<SeadmeteList> {
     super.initState();
     if (seadmeteListIndex == 0) {
       xAlign = -1;
-    } else {
+    } else if (seadmeteListIndex == 1) {
       xAlign = 1;
+    } else {
+      xAlign = 0;
     }
   }
 
@@ -54,7 +57,7 @@ class _SeadmeteListState extends State<SeadmeteList> {
         backgroundColor: Colors.transparent,
         title: Center(
           child: Container(
-            width: width,
+            width: width * 1.3333,
             height: height,
             decoration: BoxDecoration(
               color: Colors.grey,
@@ -88,10 +91,28 @@ class _SeadmeteListState extends State<SeadmeteList> {
                   child: Align(
                     alignment: Alignment(-1, 0),
                     child: Container(
-                        width: width * 0.5,
-                        color: Colors.transparent,
-                        alignment: Alignment.center,
-                        child: Icon(Icons.grid_view)),
+                      width: width * 0.5,
+                      color: Colors.transparent,
+                      alignment: Alignment.center,
+                      child: Icon(Icons.grid_view),
+                    ),
+                  ),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      xAlign = 0;
+                      seadmeteListIndex = 2;
+                    });
+                  },
+                  child: Align(
+                    alignment: Alignment(0, 0),
+                    child: Container(
+                      width: width * 0.5,
+                      color: Colors.transparent,
+                      alignment: Alignment.center,
+                      child: Icon(Icons.view_agenda_outlined),
+                    ),
                   ),
                 ),
                 GestureDetector(
@@ -104,10 +125,11 @@ class _SeadmeteListState extends State<SeadmeteList> {
                   child: Align(
                     alignment: Alignment(1, 0),
                     child: Container(
-                        width: width * 0.5,
-                        color: Colors.transparent,
-                        alignment: Alignment.center,
-                        child: Icon(Icons.view_agenda_outlined)),
+                      width: width * 0.5,
+                      color: Colors.transparent,
+                      alignment: Alignment.center,
+                      child: Icon(Icons.sensors),
+                    ),
                   ),
                 ),
               ],
