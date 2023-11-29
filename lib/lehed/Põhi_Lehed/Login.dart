@@ -75,6 +75,7 @@ class _LoginPageState extends State<LoginPage> {
         await http.post(seadmeteSaamiseUrl, headers: headers1);
     var seadmeteSaamiseVastusJSON =
         json.decode(seadmeteSaamiseVastus.body) as Map<String, dynamic>;
+    print(' vastus ============================ \n $seadmeteSaamiseVastusJSON');
     var seadedKasutajalt = seadmeteSaamiseVastusJSON['data']['devices'];
     var i = 0;
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -92,32 +93,32 @@ class _LoginPageState extends State<LoginPage> {
       i = 0;
       for (var device in seadedKasutajalt.values) {
         if (!seadmeteMap.containsKey(device['id'])) {
-    var seade = new Map<String, dynamic>();
-        //seade['Seadme_ID'] = device['id'];
-        seade['Seadme_nimi'] = device['name'];
-        seade['Seadme_pistik'] = device['name'];
-        seade['Seadme_generatsioon'] = device['gen'];
-        seade['api_url'] = apiUrl;
-        seade['Seadme_pilt'] = "assets/boiler1.jpg";
-        seade['Cloud_key'] = keyMap;
-        seade['Username'] = ajutineKastuajanimi;
-        seade['Password'] = sha1Hash;
-        seade['Valitud_Tunnid'] = 12;
-        seade['Hinnapiir'] = 50.50;
-        seade['Seadistus_lubatud'] = false;
-        seade['Max_jarjest_valjas'] = 12.0;
-        seade['Kelleatud_tunnid'] = [];
-        seade['Lubatud_tunnid'] = [];
+          var seade = new Map<String, dynamic>();
+          //seade['Seadme_ID'] = device['id'];
+          seade['Seadme_nimi'] = device['name'];
+          seade['Seadme_pistik'] = device['name'];
+          seade['Seadme_generatsioon'] = device['gen'];
+          seade['Seadme_cat'] = device['category'];
+          seade['Seadme_tuup'] = device['type'];
+          seade['api_url'] = apiUrl;
+          seade['Seadme_pilt'] = "assets/boiler1.jpg";
+          seade['Cloud_key'] = keyMap;
+          seade['Username'] = ajutineKastuajanimi;
+          seade['Password'] = sha1Hash;
+          seade['Valitud_Tunnid'] = 12;
+          seade['Hinnapiir'] = 50.50;
+          seade['Seadistus_lubatud'] = false;
+          seade['Max_jarjest_valjas'] = 12.0;
+          seade['Kelleatud_tunnid'] = [];
+          seade['Lubatud_tunnid'] = [];
 
-        seadmed['${device['id']}'] = seade;
-        i++;
+          seadmed['${device['id']}'] = seade;
+          i++;
 
-        uuedSeadmedString.add(device['name']);
-  }
-       
+          uuedSeadmedString.add(device['name']);
+        }
       }
 
-      
       // await prefs.setString('seadmed', seadmedMap);
 
       await prefs.setString('key', json.encode(keyVastusJSON['data']['key']));
@@ -138,6 +139,8 @@ class _LoginPageState extends State<LoginPage> {
         seade['Seadme_nimi'] = device['name'];
         seade['Seadme_pistik'] = device['name'];
         seade['Seadme_generatsioon'] = device['gen'];
+        seade['Seadme_cat'] = device['category'];
+        seade['Seadme_tuup'] = device['type'];
         seade['api_url'] = apiUrl;
         seade['Seadme_pilt'] = "assets/boiler1.jpg";
         seade['Cloud_key'] = keyMap;
@@ -155,7 +158,6 @@ class _LoginPageState extends State<LoginPage> {
         uuedSeadmedString.add(device['name']);
       }
 
-      
       // await prefs.setString('seadmed', seadmedMap);
 
       await prefs.setString('key', json.encode(keyVastusJSON['data']['key']));

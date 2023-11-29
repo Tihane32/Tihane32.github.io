@@ -201,3 +201,61 @@ Future<void> sort(List<bool> checkboxValues,
   //kirjutamegruppimappi koik seadmed
   SalvestaUusGrupp('Kõik Seadmed', {}, '', '', '');
 }
+
+/*{
+  "isok": true,
+  "data": {
+    "devices": {
+      "80646f80f713": {
+        "id": "80646f80f713",
+        "type": "SHPLG-S",
+        "category": "relay",======================================================================================
+        "position": 0,
+        "gen": 1,
+        "channel": 0,
+        "channels_count": 1,
+        "mode": "relay",
+        "name": "Trevori plug",
+        "room_id": 1,
+        "image": "images/device_images/SHPLG-S.png",
+        "exclude_event_log": false,
+        "modified": 1697798471,
+        "ip": "172.22.22.229",
+        "ssid": "MisVahid?",
+        "no_room_cons": false,
+        "no_account_cons": false
+      },
+      "7086c9": {
+        "id": "7086c9",
+        "type": "SHHT-1",============================================================================================
+        "category": "sensor",
+        "position": 1,
+        "gen": 1,
+        "channel": 0,
+        "channels_count": 1,
+        "mode": "",
+        "name": "Temperatuur",
+        "room_id": 1,
+        "image": "images/device_images/SHHT-1.png",
+        "exclude_event_log": false,
+        "modified": 1698244105,
+        "ip": "172.22.22.203",
+        "ssid": "iPhone (5)"
+      }
+    },
+    "rooms": {
+      "1": {
+        "name": "Selleri",
+        "image": "images/room_def/bedroom_img_def_m.jpg",
+        "position": 1,
+        "overview_style": false,
+        "floor": 1,
+        "id": 1,
+        "modified": 1695376539
+      }
+    },
+    "groups": {},
+    "dashboards": {}
+  }
+}
+*/
