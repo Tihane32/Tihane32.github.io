@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:testuus4/lehed/Tundide_valimis_Lehed/Graafik_Seadmete_valik/DynaamilineGraafikusseSeadmeteValik.dart';
-import 'package:testuus4/lehed/P%C3%B5hi_Lehed/kasutajaseaded.dart';
+import 'kasutajaSeaded.dart';
 import 'package:testuus4/lehed/P%C3%B5hi_Lehed/koduleht.dart';
 import 'package:testuus4/lehed/P%C3%B5hi_Lehed/minuPakett.dart';
 import 'package:testuus4/lehed/P%C3%B5hi_Lehed/seadmeteListDynaamiline.dart';
