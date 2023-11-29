@@ -402,7 +402,7 @@ delete(value, List temp) async {
 }
 
 graafikGen2Lugemine(String id) async {
-  List<dynamic> tuhiGraafik = List.empty(growable: true);
+  List<Map<String, dynamic>> tuhiGraafik = List.empty(growable: true);
 
   var headers = {
     'Authorization': 'Bearer ${tokenMap[id]}',
@@ -419,14 +419,9 @@ graafikGen2Lugemine(String id) async {
   if (res.statusCode == 200) {
     var resJSON = jsonDecode(res.body) as Map<String, dynamic>;
     if (resJSON['data']['jobs'] == null) {
-      return; // stop the function if resJSON is null
+      return tuhiGraafik; // return an empty list if jobs is null
     }
-    tuhiGraafik = resJSON['data']['jobs'];
-    if (tuhiGraafik == null) {
-      // handle the case where jobs is null
-      return 0;
-    }
-    tuhiGraafik = resJSON['data']['jobs'] as List<dynamic>;
+    tuhiGraafik = List<Map<String, dynamic>>.from(resJSON['data']['jobs']);
   }
   return tuhiGraafik;
 }
