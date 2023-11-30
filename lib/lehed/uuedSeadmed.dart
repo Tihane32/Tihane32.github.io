@@ -175,19 +175,21 @@ Future<void> sort(List<bool> checkboxValues,
   var seadmedJSON = prefs.getString('seadmed');
   Map<String, Map<String, dynamic>> confShelly = {};
   confShelly = await saaShellyConf();
-  print('confShelly =$confShelly');
-  print('uuedSeadmedString =$uuedSeadmedString');
-  print('seadmedJSON =$seadmedJSON');
+  print('T: confShelly =$confShelly');
+  print('T:uuedSeadmedString =$uuedSeadmedString');
+  print('T:seadmedJSON =$seadmedJSON');
   if (seadmedJSON != null) {
-    for (var entry in uuedSeadmedString.entries) {
-      var index = entry.key;
-      var innerMap = entry.value;
-
-      if (innerMap['Seadme_cat'] == 'relay') {
-        print(innerMap['Seadme_cat']);
+    for (var innerMap in uuedSeadmedString.values) {
+      print('T: inermap = $innerMap');
+      var keys = innerMap.keys.toList();
+      var firstKey = keys[0];
+      String cat = innerMap[firstKey]['Seadme_cat'];
+      print('T: seadme cat = $cat');
+      if (cat == 'relay') {
         seadmeteMap.addAll(innerMap);
       } else {
-        var tuupKey = innerMap['Seadme_tuup'];
+        var tuupKey = innerMap[firstKey]['Seadme_tuup'];
+        print('T: tuupKey>: $tuupKey');
         if (confShelly[tuupKey]!['temperature'] == true) {
           anduriteMap['Temp_andurid'].addAll(innerMap);
         }
@@ -207,15 +209,16 @@ Future<void> sort(List<bool> checkboxValues,
   } else {
     Map<String, dynamic> convertedMap = {};
 
-    for (var entry in uuedSeadmedString.entries) {
-      var index = entry.key;
-      var innerMap = entry.value;
-
-      if (innerMap['Seadme_cat'] == 'relay') {
-        print(innerMap['Seadme_cat']);
+    for (var innerMap in uuedSeadmedString.values) {
+      print('T: inermap = $innerMap');
+      var keys = innerMap.keys.toList();
+      var firstKey = keys[0];
+      String cat = innerMap[firstKey]['Seadme_cat'];
+      print('T: seadme cat = $cat');
+      if (cat == 'relay') {
         convertedMap.addAll(innerMap);
       } else {
-        var tuupKey = innerMap['Seadme_tuup'];
+        var tuupKey = innerMap[firstKey]['Seadme_tuup'];
         if (confShelly[tuupKey]!['temperature'] == true) {
           anduriteMap['Temp_andurid'].addAll(innerMap);
         }
@@ -234,7 +237,9 @@ Future<void> sort(List<bool> checkboxValues,
     await seisukord();
   }
   print("---------------------");
-  print(seadmeteMap);
+  print('T: $seadmeteMap');
+  print("---------------------");
+  print('T: $anduriteMap');
   print("---------------------");
   //kirjutamegruppimappi koik seadmed
   SalvestaUusGrupp('Kõik Seadmed', {}, '', '', '');
