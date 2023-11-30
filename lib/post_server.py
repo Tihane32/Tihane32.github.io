@@ -1,7 +1,10 @@
-from flask import Flask, jsonify
 import sqlite3
+from flask import Flask, jsonify
+from flask_cors import CORS  # Import CORS from flask_cors
+from flask_cors import cross_origin
 
 app = Flask(__name__)
+CORS(app) 
 
 def get_data_by_month(table_name, month):
     with sqlite3.connect('cost.db') as conn:
@@ -17,6 +20,7 @@ def get_data_by_month(table_name, month):
 
 
 @app.route('/data/<table_name>/<month>', methods=['GET'])
+@cross_origin(origin='http://172.22.22.222:8000', headers=['Content-Type', 'Authorization'])
 def get_data(table_name, month):
     try:
         # Validate input parameters
