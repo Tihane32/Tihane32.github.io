@@ -6,6 +6,7 @@ TalTech
 import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:testuus4/funktsioonid/token.dart';
 import 'lehed/Põhi_Lehed/dynamicKoduLeht.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -136,10 +137,14 @@ Future<void> sendLogToServer(Map<dynamic, dynamic> log, String value) async {
   }
 }
 
-Future<void> fetchDataFromServer(value) async {
+Future<void> fetchDataFromServer(
+    value, DateTime firstDayOfMonth, DateTime lastDayOfMonth) async {
+  String start = DateFormat('yyyy-MM-dd').format(firstDayOfMonth);
+  String end = DateFormat('yyyy-MM-dd').format(lastDayOfMonth);
+  String month = DateFormat('MM').format(firstDayOfMonth);
   try {
     final response =
-        await http.get(Uri.parse("http://$serverUrl:5500/data/_$value"));
+        await http.get(Uri.parse("http://$serverUrl:5500/data/_$value/$month"));
 
     if (response.statusCode == 200) {
       // Parse the JSON response
@@ -147,6 +152,7 @@ Future<void> fetchDataFromServer(value) async {
 
       // Access the data and handle it as needed
       print('Data received from server: ${data['data']}');
+      print(data);
     } else {
       // Handle errors or non-200 status codes
       print('Failed to fetch data. Status code: ${response.statusCode}');

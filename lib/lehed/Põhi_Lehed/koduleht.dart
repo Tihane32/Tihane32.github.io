@@ -10,7 +10,8 @@ import 'package:testuus4/main.dart';
 import 'dynamicKoduLeht.dart';
 import '../maksumuseGraafik.dart';
 import 'package:table_calendar/table_calendar.dart';
- bool tarbimineBoolChart = true;
+
+bool tarbimineBoolChart = true;
 bool tarbimineBoolStacked = false;
 bool tarbimineBoolSpline = false;
 DateTime firstDayOfMonth = DateTime(DateTime.now().year, DateTime.now().month);
@@ -34,11 +35,10 @@ class _KoduLehtState extends State<KoduLeht> {
   DateTime? _selectedDay;
   DateTime? _rangeStart;
   DateTime? _rangeEnd;
-  DateTime firstDay = DateTime(DateTime.now().year, DateTime.now().month, 1);
+  DateTime firstDay = DateTime.utc(2021, 1, 1);
   DateTime lastDay = DateTime(DateTime.now().year, DateTime.now().month, 30);
   String onoffNupp = 'Shelly ON';
- 
-  
+
   bool showCalendar = false;
 
   int koduindex = 1;
@@ -315,7 +315,6 @@ class _KoduLehtState extends State<KoduLeht> {
                         }
                       },
                     ),
-                   
 
                     // Add some spacing between the two widgets
 

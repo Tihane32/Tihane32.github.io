@@ -22,7 +22,8 @@ seadmeMaksumus(String value, [Function? setPaevamaksumus]) async {
 
   List<DateTime> monthDates = [];
   DateTime date = firstDayOfMonth;
-
+  print("days $lastDayOfMonth $firstDayOfMonth");
+  await fetchDataFromServer(value, firstDayOfMonth, lastDayOfMonth);
   while (date.isBefore(endOfMonth) || date.isAtSameMomentAs(endOfMonth)) {
     monthDates.add(date);
     date = date.add(Duration(days: 1));
