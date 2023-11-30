@@ -7,7 +7,7 @@ import 'package:testuus4/funktsioonid/seisukord.dart';
 import 'package:testuus4/funktsioonid/token.dart';
 import 'package:testuus4/lehed/P%C3%B5hi_Lehed/dynamicKoduLeht.dart';
 import 'package:testuus4/main.dart';
-
+import '../funktsioonid/saaShellyConf.dart';
 import '../funktsioonid/salvestaGrupp.dart';
 
 class uuedSeadmed extends StatefulWidget {
@@ -174,9 +174,25 @@ Future<void> sort(List<bool> checkboxValues,
   print("optsi $uuedSeadmedString");
   SharedPreferences prefs = await SharedPreferences.getInstance();
   var seadmedJSON = prefs.getString('seadmed');
+  Map<String, Map<String, dynamic>> confShelly = {};
+  confShelly = await saaShellyConf();
+  print(
+      'siin...............................................................................');
   if (seadmedJSON != null) {
     for (var innerMap in uuedSeadmedString.values) {
-      seadmeteMap.addAll(innerMap);
+      if (innerMap['Seadme_cat'] == 'relay') {
+        seadmeteMap.addAll(innerMap);
+      } else {
+        if (confShelly[innerMap['Seadme_tuup']]!['temperature'] == true) {
+          anduriteMap['Temp_andurid'].addAll(innerMap);
+        }
+        if (confShelly[innerMap['Seadme_tuup']]!['moisture'] == true) {
+          anduriteMap['Niiskus_andurid'].addAll(innerMap);
+        }
+        if (confShelly[innerMap['Seadme_tuup']]!['ligth'] == true) {
+          anduriteMap['Valgus_andurid'].addAll(innerMap);
+        }
+      }
     }
 
     String seadmedMap = json.encode(seadmeteMap);
@@ -187,7 +203,9 @@ Future<void> sort(List<bool> checkboxValues,
     Map<String, dynamic> convertedMap = {};
 
     for (var innerMap in uuedSeadmedString.values) {
-      convertedMap.addAll(innerMap);
+      if (innerMap['Seadme_cat'] == 'relay') {
+        convertedMap.addAll(innerMap);
+      }
     }
     seadmeteMap = convertedMap;
     String seadmedMap = json.encode(convertedMap);
