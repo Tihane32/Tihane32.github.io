@@ -137,22 +137,25 @@ Future<void> sendLogToServer(Map<dynamic, dynamic> log, String value) async {
   }
 }
 
-Future<void> fetchDataFromServer(
+Future<List> fetchDataFromServer(
     value, DateTime firstDayOfMonth, DateTime lastDayOfMonth) async {
   String start = DateFormat('yyyy-MM-dd').format(firstDayOfMonth);
   String end = DateFormat('yyyy-MM-dd').format(lastDayOfMonth);
   String month = DateFormat('MM').format(firstDayOfMonth);
+  List<dynamic> ListData = [];
+  Map<String, dynamic> data = {};
   try {
     final response =
         await http.get(Uri.parse("http://$serverUrl:5500/data/_$value/$month"));
 
     if (response.statusCode == 200) {
       // Parse the JSON response
-      final Map<String, dynamic> data = json.decode(response.body);
+      data = json.decode(response.body);
 
       // Access the data and handle it as needed
       print('Data received from server: ${data['data']}');
       print(data);
+      ListData = data['data'];
     } else {
       // Handle errors or non-200 status codes
       print('Failed to fetch data. Status code: ${response.statusCode}');
@@ -161,6 +164,7 @@ Future<void> fetchDataFromServer(
     // Handle network errors or exceptions
     print('Error fetching data: $e');
   }
+  return ListData;
 }
 
 Future<void> main() async {

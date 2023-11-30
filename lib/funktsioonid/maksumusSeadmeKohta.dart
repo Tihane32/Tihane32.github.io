@@ -23,7 +23,27 @@ seadmeMaksumus(String value, [Function? setPaevamaksumus]) async {
   List<DateTime> monthDates = [];
   DateTime date = firstDayOfMonth;
   print("days $lastDayOfMonth $firstDayOfMonth");
-  await fetchDataFromServer(value, firstDayOfMonth, lastDayOfMonth);
+  List<dynamic> dataList =
+      await fetchDataFromServer(value, firstDayOfMonth, lastDayOfMonth);
+  if (dataList.length != 0) {
+    int u = 0;
+    for (List<dynamic> data in dataList) {
+      DateTime dateTime = DateTime.fromMillisecondsSinceEpoch(data[1]);
+      double value = data[2];
+      maksumusSeade[dateTime] = value;
+      paevaMaksumus[u] = [];
+      paevaMaksumus[u]?.add(value);
+      u++;
+    }
+    if (setPaevamaksumus != null) {
+      setPaevamaksumus(paevaMaksumus);
+    }
+    print('////////////////////');
+    print('$paevaMaksumus');
+    print("seadmemaksusmus $value $maksumusSeade");
+    print('////////////////////');
+    return maksumusSeade;
+  }
   while (date.isBefore(endOfMonth) || date.isAtSameMomentAs(endOfMonth)) {
     monthDates.add(date);
     date = date.add(Duration(days: 1));

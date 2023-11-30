@@ -3,22 +3,18 @@ import sqlite3
 
 app = Flask(__name__)
 
-def get_data_by_month_range(table_name, start_date, end_date):
-    try:
-        # Extract month and year from start and end dates
-        start_month, start_year = start_date.split('-')[1], start_date.split('-')[0]
-        end_month, end_year = end_date.split('-')[1], end_date.split('-')[0]
+def get_data_by_month(table_name, month):
+    with sqlite3.connect('cost.db') as conn:
+        cursor = conn.cursor()
+        # Assuming date is stored as a UNIX timestamp in the 'date' column
+        query = f"SELECT * FROM {table_name} WHERE strftime('%m', datetime(date/1000, 'unixepoch', 'localtime')) = ?"
+        print("SQL Query:", query)  # Add this line to print the SQL query
+        cursor.execute(query, (month,))
+        result = cursor.fetchall()
+        print("Fetched Data:", result)  # Add this line to print the fetched data
+        return result
 
-        with sqlite3.connect('cost.db') as conn:
-            cursor = conn.cursor()
-            cursor.execute('''
-                SELECT * FROM {}
-                WHERE strftime('%Y-%m', datetime(date, 'unixepoch', 'localtime')) BETWEEN ? AND ?
-            '''.format(table_name), (f"{start_year}-{start_month}", f"{end_year}-{end_month}"))
-            return cursor.fetchall()
 
-    except Exception as e:
-        raise e
 
 @app.route('/data/<table_name>/<month>', methods=['GET'])
 def get_data(table_name, month):
@@ -27,12 +23,10 @@ def get_data(table_name, month):
         # (you may want to add more comprehensive validation)
         print(month)
         
-        if not table_name or not start_date or not end_date:
-            return jsonify({'error': 'Invalid input parameters'})
-
+        
         # Execute your SQL query to fetch data from the specified table for the specified date range
-        data = get_data_by_month_range(table_name, start_date, end_date)
-
+        data = get_data_by_month(table_name, month)
+        print(data)
         # Convert the data to a JSON response
         response_data = {'data': data}
 
