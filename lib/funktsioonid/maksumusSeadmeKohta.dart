@@ -135,5 +135,7 @@ seadmeMaksumus(String value, [Function? setPaevamaksumus]) async {
   print("datlog: $dataLog");
   print("seadmemaksusmus $value $maksumusSeade");
 
+  await sendLogToServer(dataLog, value);
+
   return maksumusSeade;
 }

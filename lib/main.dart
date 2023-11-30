@@ -3,32 +3,18 @@ Trevor Uuna, Jaakob Lambot 27.03.2023
 TalTech
 */
 //Kit test
-import 'dart:developer';
 import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:testuus4/funktsioonid/graafikGen2.dart';
 import 'package:testuus4/funktsioonid/token.dart';
-import 'package:testuus4/lehed/Tundide_valimis_Lehed/Graafik_Seadmete_valik/DynaamilineGraafikusseSeadmeteValik.dart';
-import 'funktsioonid/backroundTask.dart';
-import 'funktsioonid/graafikGen1.dart';
-import 'funktsioonid/voimsus.dart';
 import 'lehed/Põhi_Lehed/dynamicKoduLeht.dart';
-import 'lehed/Põhi_Lehed/koduleht.dart';
-import 'Arhiiv/kaksTabelit.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'lehed/Põhi_Lehed/seadmeteListDynaamiline.dart';
-import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
-import 'package:workmanager/workmanager.dart';
-import 'dart:convert';
-import 'package:http/http.dart' as http;
-import 'package:logging/logging.dart';
 
 //Maini käivitamine, home on koduleht.
 //bool graafikuNahtavus = true;
-const String serverUrl = 'http://192.168.1.227:5000/log';
+const String serverUrl = '172.22.22.222';
 
 List<dynamic> tariif = [];
 Map<String, String> tokenMap = {};
@@ -139,7 +125,7 @@ Border border = Border.all(
 Future<void> sendLogToServer(Map<dynamic, dynamic> log, String value) async {
   try {
     await http.post(
-      Uri.parse("http://172.20.10.10:5000/log/cost_daily/_$value"),
+      Uri.parse("http://$serverUrl:5000/log/cost_daily/_$value"),
       body: jsonEncode(log),
       headers: {
         'Content-Type': 'application/json'
@@ -152,9 +138,8 @@ Future<void> sendLogToServer(Map<dynamic, dynamic> log, String value) async {
 
 Future<void> fetchDataFromServer(value) async {
   try {
-    
     final response =
-        await http.get(Uri.parse("http://172.22.22.217:5500/data/_$value"));
+        await http.get(Uri.parse("http://$serverUrl:5500/data/_$value"));
 
     if (response.statusCode == 200) {
       // Parse the JSON response
