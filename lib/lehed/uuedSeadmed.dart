@@ -179,9 +179,9 @@ Future<void> sort(List<bool> checkboxValues,
   print('T:uuedSeadmedString =$uuedSeadmedString');
   print('T:seadmedJSON =$seadmedJSON');
   if (seadmedJSON != null) {
-    Map temperaMap = anduriteMap['Temp_andurid'];
-    Map niiskusMap = anduriteMap['Niiskus_andurid'];
-    Map valgusMap = anduriteMap['Valgus_andurid'];
+    Map<String, dynamic> temperaMap = anduriteMap['Temp_andurid'];
+    Map<String, dynamic> niiskusMap = anduriteMap['Niiskus_andurid'];
+    Map<String, dynamic> valgusMap = anduriteMap['Valgus_andurid'];
     for (var innerMap in uuedSeadmedString.values) {
       print('T: inermap = $innerMap');
       var keys = innerMap.keys.toList();
@@ -214,9 +214,9 @@ Future<void> sort(List<bool> checkboxValues,
     await seisukord();
   } else {
     Map<String, dynamic> convertedMap = {};
-    Map temperaMap = anduriteMap['Temp_andurid'];
-    Map niiskusMap = anduriteMap['Niiskus_andurid'];
-    Map valgusMap = anduriteMap['Valgus_andurid'];
+    //Map<String, dynamic> temperaMap = anduriteMap['Temp_andurid'];
+    //Map<String, dynamic> niiskusMap = anduriteMap['Niiskus_andurid'];
+    //Map<String, dynamic> valgusMap = anduriteMap['Valgus_andurid'];
 
     for (var innerMap in uuedSeadmedString.values) {
       print('T: inermap = $innerMap');
@@ -224,25 +224,27 @@ Future<void> sort(List<bool> checkboxValues,
       var firstKey = keys[0];
       String cat = innerMap[firstKey]['Seadme_cat'];
       print('T: seadme cat = $cat');
+      var tuupKey = innerMap[firstKey]['Seadme_tuup'];
+      print('T: tuupKey>: $tuupKey');
+      var values = innerMap.values;
+      print('T: values: $values');
       if (cat == 'relay') {
         convertedMap.addAll(innerMap);
       } else {
-        var tuupKey = innerMap[firstKey]['Seadme_tuup'];
-        print('T: tuupKey>: $tuupKey');
         if (confShelly[tuupKey]!['temperature'] == true) {
-          temperaMap.addAll(innerMap);
+          //temperaMap.addAll(innerMap);
         }
         if (confShelly[tuupKey]!['moisture'] == true) {
-          niiskusMap.addAll(innerMap);
+          //niiskusMap.addAll(innerMap);
         }
         if (confShelly[tuupKey]!['ligth'] == true) {
-          valgusMap.addAll(innerMap);
+          //valgusMap.addAll(innerMap);
         }
       }
     }
-    anduriteMap['Temp_andurid'] = temperaMap;
-    anduriteMap['Niiskus_andurid'] = niiskusMap;
-    anduriteMap['Valgus_andurid'] = valgusMap;
+    //anduriteMap['Temp_andurid'] = temperaMap;
+    //anduriteMap['Niiskus_andurid'] = niiskusMap;
+    //anduriteMap['Valgus_andurid'] = valgusMap;
     seadmeteMap = convertedMap;
     String seadmedMap = json.encode(convertedMap);
     await prefs.setString('seadmed', seadmedMap);
@@ -250,9 +252,9 @@ Future<void> sort(List<bool> checkboxValues,
     await seisukord();
   }
   print("---------------------");
-  print('T: $seadmeteMap');
+  print('Tprint: $seadmeteMap');
   print("---------------------");
-  print('T: $anduriteMap');
+  print('Tprint: $anduriteMap');
   print("---------------------");
   //kirjutamegruppimappi koik seadmed
   SalvestaUusGrupp('Kõik Seadmed', {}, '', '', '');
