@@ -9,9 +9,6 @@ Future<Map<String, Map<String, dynamic>>> saaShellyConf() async {
     fieldDelimiter: ';', // Set the field delimiter to semicolon
   ).convert(csvString, shouldParseNumbers: false);
 
-  print(csvTable);
-  print(csvTable[1]);
-
   Map<String, Map<String, dynamic>> confShelly = {};
 
   for (int i = 1; i < csvTable.length; i++) {
@@ -28,6 +25,5 @@ Future<Map<String, Map<String, dynamic>>> saaShellyConf() async {
 
     confShelly[rowData[0]] = values;
   }
-  print(confShelly);
   return confShelly;
 }

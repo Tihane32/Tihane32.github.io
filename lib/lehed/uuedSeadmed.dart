@@ -171,25 +171,30 @@ Future<void> sort(List<bool> checkboxValues,
     }
   }
   uuedSeadmedString;
-  print("optsi $uuedSeadmedString");
   SharedPreferences prefs = await SharedPreferences.getInstance();
   var seadmedJSON = prefs.getString('seadmed');
   Map<String, Map<String, dynamic>> confShelly = {};
   confShelly = await saaShellyConf();
-  print(
-      'siin...............................................................................');
+  print('confShelly =$confShelly');
+  print('uuedSeadmedString =$uuedSeadmedString');
+  print('seadmedJSON =$seadmedJSON');
   if (seadmedJSON != null) {
-    for (var innerMap in uuedSeadmedString.values) {
+    for (var entry in uuedSeadmedString.entries) {
+      var index = entry.key;
+      var innerMap = entry.value;
+
       if (innerMap['Seadme_cat'] == 'relay') {
+        print(innerMap['Seadme_cat']);
         seadmeteMap.addAll(innerMap);
       } else {
-        if (confShelly[innerMap['Seadme_tuup']]!['temperature'] == true) {
+        var tuupKey = innerMap['Seadme_tuup'];
+        if (confShelly[tuupKey]!['temperature'] == true) {
           anduriteMap['Temp_andurid'].addAll(innerMap);
         }
-        if (confShelly[innerMap['Seadme_tuup']]!['moisture'] == true) {
+        if (confShelly[tuupKey]!['moisture'] == true) {
           anduriteMap['Niiskus_andurid'].addAll(innerMap);
         }
-        if (confShelly[innerMap['Seadme_tuup']]!['ligth'] == true) {
+        if (confShelly[tuupKey]!['ligth'] == true) {
           anduriteMap['Valgus_andurid'].addAll(innerMap);
         }
       }
@@ -202,9 +207,24 @@ Future<void> sort(List<bool> checkboxValues,
   } else {
     Map<String, dynamic> convertedMap = {};
 
-    for (var innerMap in uuedSeadmedString.values) {
+    for (var entry in uuedSeadmedString.entries) {
+      var index = entry.key;
+      var innerMap = entry.value;
+
       if (innerMap['Seadme_cat'] == 'relay') {
+        print(innerMap['Seadme_cat']);
         convertedMap.addAll(innerMap);
+      } else {
+        var tuupKey = innerMap['Seadme_tuup'];
+        if (confShelly[tuupKey]!['temperature'] == true) {
+          anduriteMap['Temp_andurid'].addAll(innerMap);
+        }
+        if (confShelly[tuupKey]!['moisture'] == true) {
+          anduriteMap['Niiskus_andurid'].addAll(innerMap);
+        }
+        if (confShelly[tuupKey]!['ligth'] == true) {
+          anduriteMap['Valgus_andurid'].addAll(innerMap);
+        }
       }
     }
     seadmeteMap = convertedMap;
@@ -219,61 +239,3 @@ Future<void> sort(List<bool> checkboxValues,
   //kirjutamegruppimappi koik seadmed
   SalvestaUusGrupp('Kõik Seadmed', {}, '', '', '');
 }
-
-/*{
-  "isok": true,
-  "data": {
-    "devices": {
-      "80646f80f713": {
-        "id": "80646f80f713",
-        "type": "SHPLG-S",
-        "category": "relay",======================================================================================
-        "position": 0,
-        "gen": 1,
-        "channel": 0,
-        "channels_count": 1,
-        "mode": "relay",
-        "name": "Trevori plug",
-        "room_id": 1,
-        "image": "images/device_images/SHPLG-S.png",
-        "exclude_event_log": false,
-        "modified": 1697798471,
-        "ip": "172.22.22.229",
-        "ssid": "MisVahid?",
-        "no_room_cons": false,
-        "no_account_cons": false
-      },
-      "7086c9": {
-        "id": "7086c9",
-        "type": "SHHT-1",============================================================================================
-        "category": "sensor",
-        "position": 1,
-        "gen": 1,
-        "channel": 0,
-        "channels_count": 1,
-        "mode": "",
-        "name": "Temperatuur",
-        "room_id": 1,
-        "image": "images/device_images/SHHT-1.png",
-        "exclude_event_log": false,
-        "modified": 1698244105,
-        "ip": "172.22.22.203",
-        "ssid": "iPhone (5)"
-      }
-    },
-    "rooms": {
-      "1": {
-        "name": "Selleri",
-        "image": "images/room_def/bedroom_img_def_m.jpg",
-        "position": 1,
-        "overview_style": false,
-        "floor": 1,
-        "id": 1,
-        "modified": 1695376539
-      }
-    },
-    "groups": {},
-    "dashboards": {}
-  }
-}
-*/
