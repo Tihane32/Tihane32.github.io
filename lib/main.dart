@@ -57,8 +57,8 @@ Map<String, dynamic> gruppiMap = {
   },
 };
 
-Map<String, dynamic> anduriteMap = {
-  'Temp_andurid': {
+Map<String, dynamic> anduriteMap = {};
+/*'Temp_andurid': {
     '6l6l7k7k': {
       'Anduri_pilt': 'assets/saun1.jpg',
       'Anduri_nimi': 'Tandur',
@@ -82,8 +82,7 @@ Map<String, dynamic> anduriteMap = {
       'Anduri_olek': 'off',
     },
   },
-  'Valgus_andurid': [],
-};
+  'Valgus_andurid': {},*/
 
 String paevAbi = "";
 bool seadmeKinnitus = false;
@@ -152,7 +151,6 @@ Future<void> sendLogToServer(Map<dynamic, dynamic> log, String value) async {
 
 Future<void> fetchDataFromServer(value) async {
   try {
-    
     final response =
         await http.get(Uri.parse("http://172.22.22.217:5500/data/_$value"));
 

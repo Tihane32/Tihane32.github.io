@@ -179,31 +179,44 @@ Future<void> sort(List<bool> checkboxValues,
   print('T:uuedSeadmedString =$uuedSeadmedString');
   print('T:seadmedJSON =$seadmedJSON');
   if (seadmedJSON != null) {
-    Map<String, dynamic> temperaMap = anduriteMap['Temp_andurid'];
-    Map<String, dynamic> niiskusMap = anduriteMap['Niiskus_andurid'];
-    Map<String, dynamic> valgusMap = anduriteMap['Valgus_andurid'];
+    Map<String, dynamic> temperaMap = {};
+    Map<String, dynamic> niiskusMap = {};
+    Map<String, dynamic> valgusMap = {};
+    //anduriteMap['Niiskus_andurid'] as Map<String, dynamic>;
+    //anduriteMap['Valgus_andurid'] as Map<String, dynamic>;
+    //temperaMap = anduriteMap['Temp_andurid'] as Map<String, dynamic>;
+
     for (var innerMap in uuedSeadmedString.values) {
       print('T: inermap = $innerMap');
       var keys = innerMap.keys.toList();
       var firstKey = keys[0];
       String cat = innerMap[firstKey]['Seadme_cat'];
       print('T: seadme cat = $cat');
+      var tuupKey = innerMap[firstKey]['Seadme_tuup'];
+      print('T: tuupKey>: $tuupKey');
+      var values = innerMap.values;
+      print('T: values: $values');
       if (cat == 'relay') {
         seadmeteMap.addAll(innerMap);
-      } else {
-        var tuupKey = innerMap[firstKey]['Seadme_tuup'];
-        print('T: tuupKey>: $tuupKey');
-        if (confShelly[tuupKey]!['temperature'] == true) {
-          temperaMap.addAll(innerMap);
-        }
-        if (confShelly[tuupKey]!['moisture'] == true) {
-          niiskusMap.addAll(innerMap);
-        }
-        if (confShelly[tuupKey]!['ligth'] == true) {
-          valgusMap.addAll(innerMap);
-        }
+      }
+      print(confShelly[tuupKey]!['temperature']);
+      if (confShelly[tuupKey]!['temperature'] == 'true') {
+        innerMap.forEach((key, value) {
+          temperaMap[firstKey] = value;
+        });
+      }
+      if (confShelly[tuupKey]!['moisture'] == 'true') {
+        innerMap.forEach((key, value) {
+          niiskusMap[firstKey] = value;
+        });
+      }
+      if (confShelly[tuupKey]!['ligth'] == 'true') {
+        innerMap.forEach((key, value) {
+          valgusMap[firstKey] = value;
+        });
       }
     }
+
     anduriteMap['Temp_andurid'] = temperaMap;
     anduriteMap['Niiskus_andurid'] = niiskusMap;
     anduriteMap['Valgus_andurid'] = valgusMap;
@@ -214,9 +227,12 @@ Future<void> sort(List<bool> checkboxValues,
     await seisukord();
   } else {
     Map<String, dynamic> convertedMap = {};
-    //Map<String, dynamic> temperaMap = anduriteMap['Temp_andurid'];
-    //Map<String, dynamic> niiskusMap = anduriteMap['Niiskus_andurid'];
-    //Map<String, dynamic> valgusMap = anduriteMap['Valgus_andurid'];
+    Map<String, dynamic> temperaMap = {};
+    Map<String, dynamic> niiskusMap = {};
+    Map<String, dynamic> valgusMap = {};
+    //anduriteMap['Niiskus_andurid'] as Map<String, dynamic>;
+    //anduriteMap['Valgus_andurid'] as Map<String, dynamic>;
+    //temperaMap = anduriteMap['Temp_andurid'] as Map<String, dynamic>;
 
     for (var innerMap in uuedSeadmedString.values) {
       print('T: inermap = $innerMap');
@@ -230,21 +246,27 @@ Future<void> sort(List<bool> checkboxValues,
       print('T: values: $values');
       if (cat == 'relay') {
         convertedMap.addAll(innerMap);
-      } else {
-        if (confShelly[tuupKey]!['temperature'] == true) {
-          //temperaMap.addAll(innerMap);
-        }
-        if (confShelly[tuupKey]!['moisture'] == true) {
-          //niiskusMap.addAll(innerMap);
-        }
-        if (confShelly[tuupKey]!['ligth'] == true) {
-          //valgusMap.addAll(innerMap);
-        }
+      }
+      print(confShelly[tuupKey]!['temperature']);
+      if (confShelly[tuupKey]!['temperature'] == 'true') {
+        innerMap.forEach((key, value) {
+          temperaMap[firstKey] = value;
+        });
+      }
+      if (confShelly[tuupKey]!['moisture'] == 'true') {
+        innerMap.forEach((key, value) {
+          niiskusMap[firstKey] = value;
+        });
+      }
+      if (confShelly[tuupKey]!['ligth'] == 'true') {
+        innerMap.forEach((key, value) {
+          valgusMap[firstKey] = value;
+        });
       }
     }
-    //anduriteMap['Temp_andurid'] = temperaMap;
-    //anduriteMap['Niiskus_andurid'] = niiskusMap;
-    //anduriteMap['Valgus_andurid'] = valgusMap;
+    anduriteMap['Temp_andurid'] = temperaMap;
+    anduriteMap['Niiskus_andurid'] = niiskusMap;
+    anduriteMap['Valgus_andurid'] = valgusMap;
     seadmeteMap = convertedMap;
     String seadmedMap = json.encode(convertedMap);
     await prefs.setString('seadmed', seadmedMap);
