@@ -182,9 +182,9 @@ Future<void> sort(List<bool> checkboxValues,
     Map<String, dynamic> temperaMap = {};
     Map<String, dynamic> niiskusMap = {};
     Map<String, dynamic> valgusMap = {};
-    //anduriteMap['Niiskus_andurid'] as Map<String, dynamic>;
-    //anduriteMap['Valgus_andurid'] as Map<String, dynamic>;
-    //temperaMap = anduriteMap['Temp_andurid'] as Map<String, dynamic>;
+    temperaMap = anduriteMap['Niiskus_andurid'] as Map<String, dynamic>;
+    niiskusMap = anduriteMap['Valgus_andurid'] as Map<String, dynamic>;
+    valgusMap = anduriteMap['Temp_andurid'] as Map<String, dynamic>;
 
     for (var innerMap in uuedSeadmedString.values) {
       print('T: inermap = $innerMap');
