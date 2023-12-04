@@ -173,6 +173,7 @@ Future<void> sort(List<bool> checkboxValues,
   uuedSeadmedString;
   SharedPreferences prefs = await SharedPreferences.getInstance();
   var seadmedJSON = prefs.getString('seadmed');
+  var anduridJSON = prefs.getString('andurid');
   Map<String, Map<String, dynamic>> confShelly = {};
   confShelly = await saaShellyConf();
   print('T: confShelly =$confShelly');
@@ -182,9 +183,9 @@ Future<void> sort(List<bool> checkboxValues,
     Map<String, dynamic> temperaMap = {};
     Map<String, dynamic> niiskusMap = {};
     Map<String, dynamic> valgusMap = {};
-    temperaMap = anduriteMap['Niiskus_andurid'] as Map<String, dynamic>;
-    niiskusMap = anduriteMap['Valgus_andurid'] as Map<String, dynamic>;
-    valgusMap = anduriteMap['Temp_andurid'] as Map<String, dynamic>;
+    temperaMap = anduriteMap['Temp_andurid'] as Map<String, dynamic>;
+    niiskusMap = anduriteMap['Niiskus_andurid'] as Map<String, dynamic>;
+    valgusMap = anduriteMap['Valgus_andurid'] as Map<String, dynamic>;
 
     for (var innerMap in uuedSeadmedString.values) {
       print('T: inermap = $innerMap');
@@ -221,6 +222,8 @@ Future<void> sort(List<bool> checkboxValues,
     anduriteMap['Niiskus_andurid'] = niiskusMap;
     anduriteMap['Valgus_andurid'] = valgusMap;
 
+    String aMap = json.encode(anduriteMap);
+    await prefs.setString('andurid', aMap);
     String seadmedMap = json.encode(seadmeteMap);
     await prefs.setString('seadmed', seadmedMap);
     await getToken3();
@@ -230,9 +233,9 @@ Future<void> sort(List<bool> checkboxValues,
     Map<String, dynamic> temperaMap = {};
     Map<String, dynamic> niiskusMap = {};
     Map<String, dynamic> valgusMap = {};
-    //anduriteMap['Niiskus_andurid'] as Map<String, dynamic>;
-    //anduriteMap['Valgus_andurid'] as Map<String, dynamic>;
     //temperaMap = anduriteMap['Temp_andurid'] as Map<String, dynamic>;
+    //niiskusMap = anduriteMap['Niiskus_andurid'] as Map<String, dynamic>;
+    //valgusMap = anduriteMap['Valgus_andurid'] as Map<String, dynamic>;
 
     for (var innerMap in uuedSeadmedString.values) {
       print('T: inermap = $innerMap');
@@ -267,6 +270,8 @@ Future<void> sort(List<bool> checkboxValues,
     anduriteMap['Temp_andurid'] = temperaMap;
     anduriteMap['Niiskus_andurid'] = niiskusMap;
     anduriteMap['Valgus_andurid'] = valgusMap;
+    String aMap = json.encode(anduriteMap);
+    await prefs.setString('andurid', aMap);
     seadmeteMap = convertedMap;
     String seadmedMap = json.encode(convertedMap);
     await prefs.setString('seadmed', seadmedMap);

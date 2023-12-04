@@ -183,6 +183,11 @@ Future<void> main() async {
     seadmeteMap = json.decode(seadmedJSONmap);
   }
 
+  var anduridJSONmap = prefs.getString('andurid');
+  if (anduridJSONmap != null) {
+    anduriteMap = json.decode(anduridJSONmap);
+  }
+
   var gruppidJSONmap = prefs.getString('gruppid');
   if (gruppidJSONmap != null) {
     gruppiMap = json.decode(gruppidJSONmap);
