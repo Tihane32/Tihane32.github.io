@@ -49,6 +49,7 @@ dependencies:
   dcdg: ^4.1.0
   table_calendar: ^3.0.9
   logging: ^1.2.0
+  csv: ^5.1.1
 
 
 dev_dependencies:
@@ -93,6 +94,7 @@ flutter:
     - assets/TeslaModel31.jpg
     - assets/vesinik1.jpg
     - assets/valge.png
+    - assets/ShellyConf.csv
 
     
     
