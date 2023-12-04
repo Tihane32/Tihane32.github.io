@@ -7,7 +7,7 @@ import 'package:testuus4/funktsioonid/seisukord.dart';
 import 'package:testuus4/funktsioonid/token.dart';
 import 'package:testuus4/lehed/P%C3%B5hi_Lehed/dynamicKoduLeht.dart';
 import 'package:testuus4/main.dart';
-
+import '../funktsioonid/saaShellyConf.dart';
 import '../funktsioonid/salvestaGrupp.dart';
 
 class uuedSeadmed extends StatefulWidget {
@@ -171,24 +171,107 @@ Future<void> sort(List<bool> checkboxValues,
     }
   }
   uuedSeadmedString;
-  print("optsi $uuedSeadmedString");
   SharedPreferences prefs = await SharedPreferences.getInstance();
   var seadmedJSON = prefs.getString('seadmed');
+  var anduridJSON = prefs.getString('andurid');
+  Map<String, Map<String, dynamic>> confShelly = {};
+  confShelly = await saaShellyConf();
+  print('T: confShelly =$confShelly');
+  print('T:uuedSeadmedString =$uuedSeadmedString');
+  print('T:seadmedJSON =$seadmedJSON');
   if (seadmedJSON != null) {
+    Map<String, dynamic> temperaMap = {};
+    Map<String, dynamic> niiskusMap = {};
+    Map<String, dynamic> valgusMap = {};
+    temperaMap = anduriteMap['Temp_andurid'] as Map<String, dynamic>;
+    niiskusMap = anduriteMap['Niiskus_andurid'] as Map<String, dynamic>;
+    valgusMap = anduriteMap['Valgus_andurid'] as Map<String, dynamic>;
+
     for (var innerMap in uuedSeadmedString.values) {
-      seadmeteMap.addAll(innerMap);
+      print('T: inermap = $innerMap');
+      var keys = innerMap.keys.toList();
+      var firstKey = keys[0];
+      String cat = innerMap[firstKey]['Seadme_cat'];
+      print('T: seadme cat = $cat');
+      var tuupKey = innerMap[firstKey]['Seadme_tuup'];
+      print('T: tuupKey>: $tuupKey');
+      var values = innerMap.values;
+      print('T: values: $values');
+      if (cat == 'relay') {
+        seadmeteMap.addAll(innerMap);
+      }
+      print(confShelly[tuupKey]!['temperature']);
+      if (confShelly[tuupKey]!['temperature'] == 'true') {
+        innerMap.forEach((key, value) {
+          temperaMap[firstKey] = value;
+        });
+      }
+      if (confShelly[tuupKey]!['moisture'] == 'true') {
+        innerMap.forEach((key, value) {
+          niiskusMap[firstKey] = value;
+        });
+      }
+      if (confShelly[tuupKey]!['ligth'] == 'true') {
+        innerMap.forEach((key, value) {
+          valgusMap[firstKey] = value;
+        });
+      }
     }
 
+    anduriteMap['Temp_andurid'] = temperaMap;
+    anduriteMap['Niiskus_andurid'] = niiskusMap;
+    anduriteMap['Valgus_andurid'] = valgusMap;
+
+    String aMap = json.encode(anduriteMap);
+    await prefs.setString('andurid', aMap);
     String seadmedMap = json.encode(seadmeteMap);
     await prefs.setString('seadmed', seadmedMap);
     await getToken3();
     await seisukord();
   } else {
     Map<String, dynamic> convertedMap = {};
+    Map<String, dynamic> temperaMap = {};
+    Map<String, dynamic> niiskusMap = {};
+    Map<String, dynamic> valgusMap = {};
+    //temperaMap = anduriteMap['Temp_andurid'] as Map<String, dynamic>;
+    //niiskusMap = anduriteMap['Niiskus_andurid'] as Map<String, dynamic>;
+    //valgusMap = anduriteMap['Valgus_andurid'] as Map<String, dynamic>;
 
     for (var innerMap in uuedSeadmedString.values) {
-      convertedMap.addAll(innerMap);
+      print('T: inermap = $innerMap');
+      var keys = innerMap.keys.toList();
+      var firstKey = keys[0];
+      String cat = innerMap[firstKey]['Seadme_cat'];
+      print('T: seadme cat = $cat');
+      var tuupKey = innerMap[firstKey]['Seadme_tuup'];
+      print('T: tuupKey>: $tuupKey');
+      var values = innerMap.values;
+      print('T: values: $values');
+      if (cat == 'relay') {
+        convertedMap.addAll(innerMap);
+      }
+      print(confShelly[tuupKey]!['temperature']);
+      if (confShelly[tuupKey]!['temperature'] == 'true') {
+        innerMap.forEach((key, value) {
+          temperaMap[firstKey] = value;
+        });
+      }
+      if (confShelly[tuupKey]!['moisture'] == 'true') {
+        innerMap.forEach((key, value) {
+          niiskusMap[firstKey] = value;
+        });
+      }
+      if (confShelly[tuupKey]!['ligth'] == 'true') {
+        innerMap.forEach((key, value) {
+          valgusMap[firstKey] = value;
+        });
+      }
     }
+    anduriteMap['Temp_andurid'] = temperaMap;
+    anduriteMap['Niiskus_andurid'] = niiskusMap;
+    anduriteMap['Valgus_andurid'] = valgusMap;
+    String aMap = json.encode(anduriteMap);
+    await prefs.setString('andurid', aMap);
     seadmeteMap = convertedMap;
     String seadmedMap = json.encode(convertedMap);
     await prefs.setString('seadmed', seadmedMap);
@@ -196,7 +279,9 @@ Future<void> sort(List<bool> checkboxValues,
     await seisukord();
   }
   print("---------------------");
-  print(seadmeteMap);
+  print('Tprint: $seadmeteMap');
+  print("---------------------");
+  print('Tprint: $anduriteMap');
   print("---------------------");
   //kirjutamegruppimappi koik seadmed
   SalvestaUusGrupp('Kõik Seadmed', {}, '', '', '');

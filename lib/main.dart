@@ -44,8 +44,8 @@ Map<String, dynamic> gruppiMap = {
   },
 };
 
-Map<String, dynamic> anduriteMap = {
-  'Temp_andurid': {
+Map<String, dynamic> anduriteMap = {};
+/*'Temp_andurid': {
     '6l6l7k7k': {
       'Anduri_pilt': 'assets/saun1.jpg',
       'Anduri_nimi': 'Tandur',
@@ -69,8 +69,7 @@ Map<String, dynamic> anduriteMap = {
       'Anduri_olek': 'off',
     },
   },
-  'Valgus_andurid': [],
-};
+  'Valgus_andurid': {},*/
 
 String paevAbi = "";
 bool seadmeKinnitus = false;
@@ -211,6 +210,11 @@ Future<void> main() async {
   //print(seadmedJSONmap);
   if (seadmedJSONmap != null) {
     seadmeteMap = json.decode(seadmedJSONmap);
+  }
+
+  var anduridJSONmap = prefs.getString('andurid');
+  if (anduridJSONmap != null) {
+    anduriteMap = json.decode(anduridJSONmap);
   }
 
   var gruppidJSONmap = prefs.getString('gruppid');
