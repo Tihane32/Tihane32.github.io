@@ -330,12 +330,17 @@ Map<String, bool> valitudSeadmeteNullimine() {
 }
 
 andurListiKoostamine(List<String> list, String tuup) {
+  print(list);
+  print(tuup);
+  print(anduriteMap);
   List<String> listUus = list;
-  if (anduriteMap[tuup].isNotEmpty) {
-    anduriteMap[tuup].forEach((id, value) {
-      var anduriNimi = value['Anduri_nimi'];
-      listUus.add(anduriNimi);
-    });
+  if (anduriteMap.isNotEmpty) {
+    if (anduriteMap[tuup].isNotEmpty) {
+      anduriteMap[tuup].forEach((id, value) {
+        var anduriNimi = value['Seadme_nimi'];
+        listUus.add(anduriNimi);
+      });
+    }
   }
   return listUus;
 }

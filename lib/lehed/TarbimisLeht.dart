@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:testuus4/funktsioonid/maksumusSeadmeKohta.dart';
+import 'package:testuus4/lehed/P%C3%B5hi_Lehed/koduleht.dart';
 import 'package:testuus4/lehed/Seadme_Lehed/SeadmeGraafikLeht.dart';
 import 'package:testuus4/Arhiiv/SeadmeTarbimisLeht.dart';
 import 'Seadme_Lehed/SeadmeYldInfo.dart';
@@ -47,7 +48,7 @@ class _TarbimisLehtState extends State<TarbimisLeht> {
 
   @override
   void initState() {
-    seadmeMaksumus(seadmeNimi);
+    //seadmeMaksumus2(seadmeNimi);
     super.initState();
   }
 
@@ -93,12 +94,13 @@ class _MGraafikState extends State<MGraafik> {
     DateTime currentDateTime = DateTime.now();
 
     // Calculate the first day of the current month
-    DateTime firstDayOfMonth =
-        DateTime(currentDateTime.year, currentDateTime.month);
+  DateTime firstDayOfMonth =
+        DateTime(tarbimisFirstDay.year, tarbimisFirstDay.month);
 
     // Calculate the last day of the current month
     DateTime lastDayOfMonth =
-        DateTime(currentDateTime.year, currentDateTime.month + 1, 1);
+        DateTime(firstDayOfMonth.year, firstDayOfMonth.month + 1, 1);
+  
     // Create the map with dates and initial values of 0
     //Map<DateTime, double> temp = {};
     setState(() {
@@ -119,7 +121,7 @@ class _MGraafikState extends State<MGraafik> {
       consumption[j] = k;
     }
     double abi = 0;
-    temp = await seadmeMaksumus(value, setPaevamaksumus);
+    temp = await seadmeMaksumus2(value, setPaevamaksumus);
     for (DateTime date = firstDayOfMonth;
         date.isBefore(lastDayOfMonth);
         date = date.add(const Duration(days: 1))) {
@@ -170,11 +172,11 @@ class _MGraafikState extends State<MGraafik> {
 
     // Calculate the first day of the current month
     DateTime firstDayOfMonth =
-        DateTime(currentDateTime.year, currentDateTime.month);
+        DateTime(tarbimisFirstDay.year, tarbimisFirstDay.month);
 
     // Calculate the last day of the current month
     DateTime lastDayOfMonth =
-        DateTime(currentDateTime.year, currentDateTime.month + 1, 0);
+        DateTime(firstDayOfMonth.year, firstDayOfMonth.month + 1, 0);
     // Create the list of _ChartData objects with dates and initial consumption values of 0
     setState(() {
       total2 = '0';
@@ -500,13 +502,12 @@ class _MGraafikState extends State<MGraafik> {
                                 majorGridLines: MajorGridLines(width: 0.0),
                                 isVisible: false,
                                 title: AxisTitle(
-                                  
                                   text: 'Eurot',
                                   textStyle: fontVaike,
                                 ),
                                 labelStyle: fontVaike,
-                               labelAlignment: LabelAlignment.start,
-                        labelRotation: 0,
+                                labelAlignment: LabelAlignment.start,
+                                labelRotation: 0,
                               ),
                               NumericAxis(
                                 majorGridLines: MajorGridLines(width: 0.0),
@@ -589,10 +590,11 @@ class _MGraafikState extends State<MGraafik> {
                                   offset: const Offset(15, 0),
                                   opacity: 0.8,
                                   isVisible: true,
-                                  labelAlignment: ChartDataLabelAlignment.middle,
-                                  labelIntersectAction: LabelIntersectAction.none,
-                            
-    useSeriesColor: true,
+                                  labelAlignment:
+                                      ChartDataLabelAlignment.middle,
+                                  labelIntersectAction:
+                                      LabelIntersectAction.none,
+                                  useSeriesColor: true,
                                   textStyle: fontEritiVaike,
                                   angle: 270,
                                 ),
@@ -611,7 +613,6 @@ class _MGraafikState extends State<MGraafik> {
                                     const MarkerSettings(isVisible: true),
                                 color: Colors.blue,
                                 width: 5,
-                                
                                 dataSource: chartData,
                                 yAxisName: 'secondAxis',
                                 xValueMapper: (_ChartData data, _) => data.date,
@@ -629,10 +630,11 @@ class _MGraafikState extends State<MGraafik> {
                                   showZeroValue: false,
                                   offset: const Offset(-15, 0),
                                   isVisible: true,
-                                  labelAlignment: ChartDataLabelAlignment.middle,
-                                  labelIntersectAction: LabelIntersectAction.none,
-                            
-    useSeriesColor: true,
+                                  labelAlignment:
+                                      ChartDataLabelAlignment.middle,
+                                  labelIntersectAction:
+                                      LabelIntersectAction.none,
+                                  useSeriesColor: true,
                                   textStyle: fontEritiVaike,
                                   angle: 270,
                                 ),

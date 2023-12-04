@@ -8,6 +8,7 @@ import 'package:testuus4/main.dart';
 double findMaximumYValue(dataPoints) {
   double max = double.negativeInfinity;
   for (int i = 0; i < dataPoints.length; i++) {
+    print('Data Point $i: x=${dataPoints[i].x}, y=${dataPoints[i].y}');
     if (dataPoints[i].y > max) {
       max = dataPoints[i].y;
     }
@@ -52,11 +53,9 @@ class _PaevaTarbimineState extends State<PaevaTarbimine> {
     setState(() {
       paevaTarbimine = temp;
       paevaHind = temp2;
-      print(paevaTarbimine);
+      print('paevagraafik $paevaTarbimine << ${widget.paevaMaksumus}');
     });
   }
-
-  
 
   @override
   void initState() {
@@ -218,6 +217,7 @@ class _PaevaTarbimineState extends State<PaevaTarbimine> {
                     },
 
                     dataLabelMapper: (data, _) {
+                      print(temp);
                       // Display the data label only if the consumption is not 0
                       if (data.y == 0) {
                         return ''; // Customize this as needed

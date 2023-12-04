@@ -3,32 +3,19 @@ Trevor Uuna, Jaakob Lambot 27.03.2023
 TalTech
 */
 //Kit test
-import 'dart:developer';
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:testuus4/funktsioonid/graafikGen2.dart';
+import 'package:intl/intl.dart';
 import 'package:testuus4/funktsioonid/token.dart';
-import 'package:testuus4/lehed/Tundide_valimis_Lehed/Graafik_Seadmete_valik/DynaamilineGraafikusseSeadmeteValik.dart';
-import 'funktsioonid/backroundTask.dart';
-import 'funktsioonid/graafikGen1.dart';
-import 'funktsioonid/voimsus.dart';
 import 'lehed/Põhi_Lehed/dynamicKoduLeht.dart';
-import 'lehed/Põhi_Lehed/koduleht.dart';
-import 'Arhiiv/kaksTabelit.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'lehed/Põhi_Lehed/seadmeteListDynaamiline.dart';
-import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
-import 'package:workmanager/workmanager.dart';
-import 'dart:convert';
-import 'package:http/http.dart' as http;
-import 'package:logging/logging.dart';
 
 //Maini käivitamine, home on koduleht.
 //bool graafikuNahtavus = true;
-const String serverUrl = 'http://192.168.1.227:5000/log';
 
 List<dynamic> tariif = [];
 Map<String, String> tokenMap = {};
@@ -57,8 +44,8 @@ Map<String, dynamic> gruppiMap = {
   },
 };
 
-Map<String, dynamic> anduriteMap = {
-  'Temp_andurid': {
+Map<String, dynamic> anduriteMap = {};
+/*'Temp_andurid': {
     '6l6l7k7k': {
       'Anduri_pilt': 'assets/saun1.jpg',
       'Anduri_nimi': 'Tandur',
@@ -82,8 +69,7 @@ Map<String, dynamic> anduriteMap = {
       'Anduri_olek': 'off',
     },
   },
-  'Valgus_andurid': [],
-};
+  'Valgus_andurid': {},*/
 
 String paevAbi = "";
 bool seadmeKinnitus = false;
@@ -136,46 +122,87 @@ Border border = Border.all(
   color: const Color.fromARGB(255, 0, 0, 0),
   width: 2,
 );
-Future<void> sendLogToServer(Map<dynamic, dynamic> log, String value) async {
+
+const String serverUrl = '172.22.22.222';
+bool useServer = false;
+ping() async {
+  final int port = 5500; // You can adjust the port number
+
   try {
-    await http.post(
-      Uri.parse("http://172.20.10.10:5000/log/cost_daily/_$value"),
-      body: jsonEncode(log),
-      headers: {
-        'Content-Type': 'application/json'
-      }, // Set the correct content type
-    );
+    final socket =
+        await Socket.connect(serverUrl, port, timeout: Duration(seconds: 2));
+    print('Connected to $serverUrl:$port');
+    socket.close();
+    useServer = true;
   } catch (e) {
-    print('Error fetching data: $e');
+    print('Error: $e');
   }
 }
 
-Future<void> fetchDataFromServer(value) async {
-  try {
-    
-    final response =
-        await http.get(Uri.parse("http://172.22.22.217:5500/data/_$value"));
-
-    if (response.statusCode == 200) {
-      // Parse the JSON response
-      final Map<String, dynamic> data = json.decode(response.body);
-
-      // Access the data and handle it as needed
-      print('Data received from server: ${data['data']}');
-    } else {
-      // Handle errors or non-200 status codes
-      print('Failed to fetch data. Status code: ${response.statusCode}');
+Future<void> sendLogToServer(Map<dynamic, dynamic> log, String value) async {
+  if (useServer == true) {
+    DateTime now = DateTime.now();
+    int todayTimestamp =
+        DateTime(now.year, now.month, now.day).millisecondsSinceEpoch;
+    if (log.containsKey(todayTimestamp)) {
+      // Remove the key corresponding to today's date
+      log.remove(todayTimestamp);
+      print('Key for today removed successfully.');
     }
-  } catch (e) {
-    // Handle network errors or exceptions
-    print('Error fetching data: $e');
+
+    print("sending log: $log");
+    try {
+      await http.post(
+        Uri.parse("http://$serverUrl:5000/log/cost_daily/_$value"),
+        body: jsonEncode(log),
+        headers: {
+          'Content-Type': 'application/json'
+        }, // Set the correct content type
+      );
+    } catch (e) {
+      print('Error logdata: $e');
+    }
   }
+}
+
+Future<List> fetchDataFromServer(
+    value, DateTime firstDayOfMonth, DateTime lastDayOfMonth) async {
+  print("fecthib");
+  String start = DateFormat('yyyy-MM-dd').format(firstDayOfMonth);
+  String end = DateFormat('yyyy-MM-dd').format(lastDayOfMonth);
+  String month = DateFormat('MM').format(firstDayOfMonth);
+  List<dynamic> ListData = [];
+  Map<String, dynamic> data = {};
+  if (useServer == true) {
+    try {
+      final response = await http
+          .get(Uri.parse("http://$serverUrl:5500/data/_$value/$month"));
+
+      if (response.statusCode == 200) {
+        // Parse the JSON response
+        data = json.decode(response.body);
+
+        // Access the data and handle it as needed
+        print('Data received from server: ${data['data']}');
+        print(data);
+        ListData = data['data'];
+      } else {
+        // Handle errors or non-200 status codes
+        print('Failed to fetch data. Status code: ${response.statusCode}');
+      }
+    } catch (e) {
+      // Handle network errors or exceptions
+      print('Error fetchdata: $e');
+    }
+  }
+  print("list $ListData");
+  return ListData;
 }
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 //backround start
-
+  await ping();
   SharedPreferences prefs = await SharedPreferences.getInstance();
 
   []; //Võtab mälust 'users'-i asukohast väärtused
@@ -183,6 +210,11 @@ Future<void> main() async {
   //print(seadmedJSONmap);
   if (seadmedJSONmap != null) {
     seadmeteMap = json.decode(seadmedJSONmap);
+  }
+
+  var anduridJSONmap = prefs.getString('andurid');
+  if (anduridJSONmap != null) {
+    anduriteMap = json.decode(anduridJSONmap);
   }
 
   var gruppidJSONmap = prefs.getString('gruppid');
