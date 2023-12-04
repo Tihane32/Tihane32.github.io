@@ -4,6 +4,7 @@ import 'package:testuus4/funktsioonid/lulitamine.dart';
 import 'dart:async';
 import 'package:testuus4/lehed/Seadme_Lehed/SeadmeGraafikLeht.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../SeadmeteList_andurid.dart';
 import '../Tundide_valimis_Lehed/Graafik_Seadmete_valik/DynaamilineGraafikusseSeadmeteValik.dart';
 import '../Seadme_Lehed/SeadmeYldInfo.dart';
 import '../Gruppi_Lehed/SeadmeteList_gruppid.dart';
@@ -28,7 +29,7 @@ class _SeadmeteListState extends State<SeadmeteList> {
   List<Widget> lehedMenu = [
     SeadmeteList_yksikud(),
     SeadmeteList_gruppid(),
-    SeadmeteList_gruppid(),
+    SeadmeteList_andurid(),
   ];
   double xAlign = -1;
   double signInAlign = 1;
