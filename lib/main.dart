@@ -125,7 +125,7 @@ Border border = Border.all(
 );
 
 const String serverUrl = '172.22.22.222';
-bool useServer = false;
+bool useServer = true;
 ping() async {
   final int port = 5500; // You can adjust the port number
 
@@ -168,6 +168,7 @@ Future<void> sendLogToServer(Map<dynamic, dynamic> log, String value) async {
 
 Future<List> fetchDataFromServer(
     value, DateTime firstDayOfMonth, DateTime lastDayOfMonth) async {
+  print("fecthib");
   String start = DateFormat('yyyy-MM-dd').format(firstDayOfMonth);
   String end = DateFormat('yyyy-MM-dd').format(lastDayOfMonth);
   String month = DateFormat('MM').format(firstDayOfMonth);
@@ -195,6 +196,7 @@ Future<List> fetchDataFromServer(
       print('Error fetchdata: $e');
     }
   }
+  print("list $ListData");
   return ListData;
 }
 
