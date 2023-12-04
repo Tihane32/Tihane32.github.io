@@ -17,15 +17,27 @@ seadmeMaksumus(String value, [Function? setPaevamaksumus]) async {
 
   List<DateTime> monthDates = [];
   DateTime date = firstDayOfMonth;
-
-  List<dynamic> dataList =
-      await fetchDataFromServer(value, firstDayOfMonth, lastDayOfMonth);
+  List<dynamic> dataList = [];
+  if (useServer == true) {
+    dataList =
+        await fetchDataFromServer(value, firstDayOfMonth, lastDayOfMonth);
+  }
   if (dataList.isNotEmpty) {
     int u = 0;
     for (List<dynamic> data in dataList) {
       DateTime dateTime = DateTime.fromMillisecondsSinceEpoch(data[1]);
-      double value = data[2];
-      maksumusSeade[dateTime] = value;
+
+      if (dateTime.isAfter(firstDayOfMonth) ||
+          dateTime.isAtSameMomentAs(firstDayOfMonth)) {
+        if (dateTime.isBefore(lastDayOfMonth) ||
+            dateTime.isAtSameMomentAs(lastDayOfMonth)) {
+          print("datetime $dateTime");
+          print("firstday $firstDayOfMonth");
+          print(lastDayOfMonth);
+          double value = data[2];
+          maksumusSeade[dateTime] = value;
+        }
+      }
     }
 
     // Get the last DateTime from the dataList
@@ -35,17 +47,18 @@ seadmeMaksumus(String value, [Function? setPaevamaksumus]) async {
     while (lastDateTime.isBefore(lastDayOfMonth)) {
       lastDateTime = lastDateTime.add(Duration(days: 1));
       newDates.add(lastDateTime);
-      print("lastDateTime $lastDateTime");
     }
 
-    Map<DateTime, double> newMaksumuseade = await getSeadmeMaksumus(value, newDates.first, newDates.last);
-    print(maksumusSeade);
-     newMaksumuseade.forEach((dateTime, value) {
-      maksumusSeade[dateTime] = value;
-    });
+    if (newDates.isNotEmpty) {
+      Map<DateTime, double> newMaksumuseade =
+          await getSeadmeMaksumus(value, newDates.first, newDates.last);
+
+      newMaksumuseade.forEach((dateTime, value) {
+        maksumusSeade[dateTime] = value;
+      });
+    }
     return maksumusSeade;
   }
-
   while (date.isBefore(endOfMonth) || date.isAtSameMomentAs(endOfMonth)) {
     monthDates.add(date);
     date = date.add(const Duration(days: 1));
@@ -134,7 +147,7 @@ seadmeMaksumus(String value, [Function? setPaevamaksumus]) async {
 
       paevaMaksumus[u]?.add(ajutineTarb * hinnagraafik[i]['price']);
     }
-    u++;
+
     maksumusSeade[DateTime.parse(abi)] = temp;
     int timestamp = DateTime.parse(abi).millisecondsSinceEpoch;
     if (!dataLog.containsKey(timestamp)) {
@@ -145,6 +158,9 @@ seadmeMaksumus(String value, [Function? setPaevamaksumus]) async {
     // Set the "consumption" key for the timestamp
     dataLog["$timestamp"]["cost"] = temp;
     dataLog["$timestamp"]["consumption"] = tarbimine;
+    print("testing cost $u $temp");
+    print("testing consumption $u $tarbimine");
+    u++;
   }
 
   //print(paevaMaksumus);
@@ -152,8 +168,9 @@ seadmeMaksumus(String value, [Function? setPaevamaksumus]) async {
     setPaevamaksumus(paevaMaksumus);
   }
 
-  await sendLogToServer(dataLog, value);
-
+  if (useServer) {
+    await sendLogToServer(dataLog, value);
+  }
   return maksumusSeade;
 }
 
@@ -162,12 +179,6 @@ Future<Map<DateTime, double>> getSeadmeMaksumus(
   Map<dynamic, dynamic> dataLog = {};
   List<double> eleringHinnad = await getElering(startDate, endDate);
   List<double> tarbimine = await getTarbimineList(value, startDate, endDate);
-  print("''''''''''''''''''''''''''''''''''''''''''");
-  print(eleringHinnad);
-  print(tarbimine);
-  print(tarbimine.length);
-  print(eleringHinnad.length);
-  print("''''''''''''''''''''''''''''''''''''''''''");
   Map<DateTime, double> maksumusSeade = {};
   int i = 0;
   int j = 0;
@@ -176,7 +187,7 @@ Future<Map<DateTime, double>> getSeadmeMaksumus(
     double maksumus = 0.0;
     double seadmeTarbimine = 0.0;
     for (j = 0; j < 24; j++) {
-      maksumus = maksumus + (eleringHinnad[k] * tarbimine[k]/ 1000000);
+      maksumus = maksumus + (eleringHinnad[k] * tarbimine[k] / 1000000);
       seadmeTarbimine = seadmeTarbimine + tarbimine[k];
       k++;
     }
@@ -197,11 +208,6 @@ Future<Map<DateTime, double>> getSeadmeMaksumus(
     startDate = startDate.add(Duration(days: 1));
   }
 
-  print("üüüüüüü");
-  print(maksumusSeade);
-  print(k);
-  print("üüüüüüü");
-
   //print(paevaMaksumus);
 
   await sendLogToServer(dataLog, value);
@@ -210,6 +216,7 @@ Future<Map<DateTime, double>> getSeadmeMaksumus(
 }
 
 seadmeMaksumus2(String value, [Function? setPaevamaksumus]) async {
+  print("teeb siin");
   Map<int, List<double>> paevaMaksumus = {};
   Map<DateTime, double> maksumusSeade = {};
   Map<dynamic, dynamic> dataLog = {};
@@ -254,6 +261,7 @@ seadmeMaksumus2(String value, [Function? setPaevamaksumus]) async {
     var headers = {
       'Authorization': 'Bearer ${tokenMap[value]}',
     };
+    print(test);
     var data = {
       'id': value,
       'channel': '0',
@@ -326,7 +334,9 @@ seadmeMaksumus2(String value, [Function? setPaevamaksumus]) async {
     setPaevamaksumus(paevaMaksumus);
   }
 
+  if (useServer) {
   await sendLogToServer(dataLog, value);
+}
 
   return maksumusSeade;
 }

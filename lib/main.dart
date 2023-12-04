@@ -5,6 +5,7 @@ TalTech
 //Kit test
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:testuus4/funktsioonid/token.dart';
@@ -15,7 +16,6 @@ import 'package:http/http.dart' as http;
 
 //Maini käivitamine, home on koduleht.
 //bool graafikuNahtavus = true;
-const String serverUrl = '172.22.22.222';
 
 List<dynamic> tariif = [];
 Map<String, String> tokenMap = {};
@@ -123,17 +123,46 @@ Border border = Border.all(
   color: const Color.fromARGB(255, 0, 0, 0),
   width: 2,
 );
-Future<void> sendLogToServer(Map<dynamic, dynamic> log, String value) async {
+
+const String serverUrl = '172.22.22.222';
+bool useServer = false;
+ping() async {
+  final int port = 5500; // You can adjust the port number
+
   try {
-    await http.post(
-      Uri.parse("http://$serverUrl:5000/log/cost_daily/_$value"),
-      body: jsonEncode(log),
-      headers: {
-        'Content-Type': 'application/json'
-      }, // Set the correct content type
-    );
+    final socket =
+        await Socket.connect(serverUrl, port, timeout: Duration(seconds: 2));
+    print('Connected to $serverUrl:$port');
+    socket.close();
+    useServer = true;
   } catch (e) {
-    print('Error fetching data: $e');
+    print('Error: $e');
+  }
+}
+
+Future<void> sendLogToServer(Map<dynamic, dynamic> log, String value) async {
+  if (useServer == true) {
+    DateTime now = DateTime.now();
+    int todayTimestamp =
+        DateTime(now.year, now.month, now.day).millisecondsSinceEpoch;
+    if (log.containsKey(todayTimestamp)) {
+      // Remove the key corresponding to today's date
+      log.remove(todayTimestamp);
+      print('Key for today removed successfully.');
+    }
+
+    print("sending log: $log");
+    try {
+      await http.post(
+        Uri.parse("http://$serverUrl:5000/log/cost_daily/_$value"),
+        body: jsonEncode(log),
+        headers: {
+          'Content-Type': 'application/json'
+        }, // Set the correct content type
+      );
+    } catch (e) {
+      print('Error logdata: $e');
+    }
   }
 }
 
@@ -144,25 +173,27 @@ Future<List> fetchDataFromServer(
   String month = DateFormat('MM').format(firstDayOfMonth);
   List<dynamic> ListData = [];
   Map<String, dynamic> data = {};
-  try {
-    final response =
-        await http.get(Uri.parse("http://$serverUrl:5500/data/_$value/$month"));
+  if (useServer == true) {
+    try {
+      final response = await http
+          .get(Uri.parse("http://$serverUrl:5500/data/_$value/$month"));
 
-    if (response.statusCode == 200) {
-      // Parse the JSON response
-      data = json.decode(response.body);
+      if (response.statusCode == 200) {
+        // Parse the JSON response
+        data = json.decode(response.body);
 
-      // Access the data and handle it as needed
-      print('Data received from server: ${data['data']}');
-      print(data);
-      ListData = data['data'];
-    } else {
-      // Handle errors or non-200 status codes
-      print('Failed to fetch data. Status code: ${response.statusCode}');
+        // Access the data and handle it as needed
+        print('Data received from server: ${data['data']}');
+        print(data);
+        ListData = data['data'];
+      } else {
+        // Handle errors or non-200 status codes
+        print('Failed to fetch data. Status code: ${response.statusCode}');
+      }
+    } catch (e) {
+      // Handle network errors or exceptions
+      print('Error fetchdata: $e');
     }
-  } catch (e) {
-    // Handle network errors or exceptions
-    print('Error fetching data: $e');
   }
   return ListData;
 }
@@ -170,7 +201,7 @@ Future<List> fetchDataFromServer(
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 //backround start
-
+  await ping();
   SharedPreferences prefs = await SharedPreferences.getInstance();
 
   []; //Võtab mälust 'users'-i asukohast väärtused
