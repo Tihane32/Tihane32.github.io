@@ -49,6 +49,7 @@ Future<double> tarbimine(tarbimiseMap, Function updateTarbimine) async {
       return 0;
     }
     print(resJson);
+    print(asendus);
     if (resJson['data']['units']['consumption'] == 'Wh') {
       double ajutine = resJson['data']['total'] / 1000.0;
       tarbimine += ajutine;

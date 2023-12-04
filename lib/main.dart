@@ -124,7 +124,7 @@ Border border = Border.all(
 );
 
 const String serverUrl = '172.22.22.222';
-bool useServer = true;
+bool useServer = false;
 ping() async {
   final int port = 5500; // You can adjust the port number
 
