@@ -15,9 +15,10 @@ bool tarbimineBoolChart = true;
 bool tarbimineBoolStacked = false;
 bool tarbimineBoolSpline = false;
 DateTime firstDayOfMonth = DateTime(DateTime.now().year, DateTime.now().month);
-
+DateTime tarbimisFirstDay = firstDayOfMonth;
 // Calculate the last day of the current month
 DateTime lastDayOfMonth = DateTime.now();
+DateTime tarbimisLastDay = lastDayOfMonth;
 //DateTime(DateTime.now().year, DateTime.now().month + 1, 0);
 
 class KoduLeht extends StatefulWidget {
@@ -274,6 +275,9 @@ class _KoduLehtState extends State<KoduLeht> {
                               if (_rangeStart != null && _rangeEnd != null) {
                                 // Perform the desired action with the selected range
                                 setState(() {
+                                  print("määratud ${_rangeStart?.month}");
+                                  tarbimisLastDay = DateTime(_rangeEnd!.year, _rangeEnd!.month);
+                                  tarbimisFirstDay = DateTime(_rangeStart!.year, _rangeStart!.month);
                                   firstDayOfMonth = _rangeStart!;
                                   lastDayOfMonth = _rangeEnd!;
                                 });

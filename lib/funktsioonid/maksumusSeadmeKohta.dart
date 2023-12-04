@@ -220,16 +220,22 @@ seadmeMaksumus2(String value, [Function? setPaevamaksumus]) async {
   Map<int, List<double>> paevaMaksumus = {};
   Map<DateTime, double> maksumusSeade = {};
   Map<dynamic, dynamic> dataLog = {};
-  DateTime endOfMonth = lastDayOfMonth;
-
   List<DateTime> monthDates = [];
-  DateTime date = firstDayOfMonth;
+
+  DateTime endOfMonth = lastDayOfMonth;
+  DateTime date = tarbimisFirstDay;
+  if (endOfMonth.month == DateTime.now().month) {
+    endOfMonth = DateTime.now();
+  } else {
+    int k = DateTime(date.year, date.month + 1, 0).day;
+    endOfMonth = DateTime(date.year, date.month, k);
+  }
 
   while (date.isBefore(endOfMonth) || date.isAtSameMomentAs(endOfMonth)) {
     monthDates.add(date);
     date = date.add(const Duration(days: 1));
   }
-
+  print("päevad: $monthDates");
   // Formatting the dates
   DateFormat formatter = DateFormat('yyyy-MM-dd');
   List<String> formattedDates =
@@ -335,8 +341,8 @@ seadmeMaksumus2(String value, [Function? setPaevamaksumus]) async {
   }
 
   if (useServer) {
-  await sendLogToServer(dataLog, value);
-}
+    await sendLogToServer(dataLog, value);
+  }
 
   return maksumusSeade;
 }

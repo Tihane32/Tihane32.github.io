@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:testuus4/funktsioonid/maksumusSeadmeKohta.dart';
+import 'package:testuus4/lehed/P%C3%B5hi_Lehed/koduleht.dart';
 import 'package:testuus4/lehed/Seadme_Lehed/SeadmeGraafikLeht.dart';
 import 'package:testuus4/Arhiiv/SeadmeTarbimisLeht.dart';
 import 'Seadme_Lehed/SeadmeYldInfo.dart';
@@ -93,12 +94,13 @@ class _MGraafikState extends State<MGraafik> {
     DateTime currentDateTime = DateTime.now();
 
     // Calculate the first day of the current month
-    DateTime firstDayOfMonth =
-        DateTime(currentDateTime.year, currentDateTime.month);
+  DateTime firstDayOfMonth =
+        DateTime(tarbimisFirstDay.year, tarbimisFirstDay.month);
 
     // Calculate the last day of the current month
     DateTime lastDayOfMonth =
-        DateTime(currentDateTime.year, currentDateTime.month + 1, 1);
+        DateTime(firstDayOfMonth.year, firstDayOfMonth.month + 1, 1);
+  
     // Create the map with dates and initial values of 0
     //Map<DateTime, double> temp = {};
     setState(() {
@@ -170,11 +172,11 @@ class _MGraafikState extends State<MGraafik> {
 
     // Calculate the first day of the current month
     DateTime firstDayOfMonth =
-        DateTime(currentDateTime.year, currentDateTime.month);
+        DateTime(tarbimisFirstDay.year, tarbimisFirstDay.month);
 
     // Calculate the last day of the current month
     DateTime lastDayOfMonth =
-        DateTime(currentDateTime.year, currentDateTime.month + 1, 0);
+        DateTime(firstDayOfMonth.year, firstDayOfMonth.month + 1, 0);
     // Create the list of _ChartData objects with dates and initial consumption values of 0
     setState(() {
       total2 = '0';
