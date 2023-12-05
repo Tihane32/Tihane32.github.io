@@ -4,3 +4,4 @@ SHHT-1;sensor;1;false;true;true;false
 SHTRV-01;thermostat;1;false;true;false;false
 SPSW-202PE16EU;relay;2;true;false;false;false
 SNSN-0013A;sensor;1;false;true;true;false
+SNSW-001P8EU;relay;1;true;true;true;true

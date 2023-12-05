@@ -159,6 +159,105 @@ Future<void> sort(List<bool> checkboxValues,
     Map<int, Map<String, dynamic>> uuedSeadmedString) async {
   int i = uuedSeadmedString.length;
   int j = 0;
+  for (j = 0; j < i; j++) {
+    print("$j $checkboxValues");
+    if (checkboxValues[j] == false) {
+      print("this is false $j");
+      print("uuedSeadmed $uuedSeadmedString");
+      uuedSeadmedString.remove(j);
+    }
+  }
+  uuedSeadmedString;
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  var seadmedJSON = prefs.getString('seadmed');
+  var anduridJSON = prefs.getString('andurid');
+  Map<String, Map<String, dynamic>> confShelly = {};
+  confShelly = await saaShellyConf();
+
+  print('T: confShelly =$confShelly');
+  print('T:uuedSeadmedString =$uuedSeadmedString');
+  print('T:seadmedJSON =$seadmedJSON');
+
+  Map<String, dynamic> ajutine_seadmeteMap = {};
+  Map<String, dynamic> ajutine_anduriteMap = {};
+
+  for (var innerMap in uuedSeadmedString.values) {
+    print('T: inermap = $innerMap');
+    var keys = innerMap.keys.toList();
+    var firstKey = keys[0];
+    String cat = innerMap[firstKey]['Seadme_cat'];
+    print('T: seadme cat = $cat');
+    var tuupKey = innerMap[firstKey]['Seadme_tuup'];
+    print('T: tuupKey>: $tuupKey');
+
+    if (confShelly.containsKey(tuupKey)) {
+      if (confShelly[tuupKey]!['temperature'] == 'true') {
+        innerMap[firstKey]['temperatuur_tajuv'] = true;
+      }
+      if (confShelly[tuupKey]!['moisture'] == 'true') {
+        innerMap[firstKey]['Niiskus_tajuv'] = true;
+      }
+      if (confShelly[tuupKey]!['ligth'] == 'true') {
+        innerMap[firstKey]['Valgus_tajuv'] = true;
+      }
+
+      if (seadmedJSON != null) {
+        if (cat == 'relay') {
+          seadmeteMap.addAll(innerMap);
+        }
+      } else {
+        if (cat == 'relay') {
+          ajutine_seadmeteMap.addAll(innerMap);
+        }
+      }
+
+      if (anduridJSON != null) {
+        if (cat != 'relay') {
+          anduriteMap.addAll(innerMap);
+        }
+      } else {
+        if (cat != 'relay') {
+          ajutine_anduriteMap.addAll(innerMap);
+        }
+      }
+    }
+  }
+  if (seadmedJSON != null) {
+    String seadmed = json.encode(seadmeteMap);
+    await prefs.setString('seadmed', seadmed);
+  } else {
+    seadmeteMap = ajutine_seadmeteMap;
+    String seadmed = json.encode(ajutine_seadmeteMap);
+    await prefs.setString('seadmed', seadmed);
+  }
+
+  if (anduridJSON != null) {
+    String andurid = json.encode(anduriteMap);
+    await prefs.setString('andurid', andurid);
+  } else {
+    anduriteMap = ajutine_anduriteMap;
+    String andurid = json.encode(ajutine_anduriteMap);
+    await prefs.setString('andurid', andurid);
+  }
+
+  await getToken3();
+  await seisukord();
+
+  print("---------------------");
+  print('Tprint: $seadmeteMap');
+  print("---------------------");
+  print('Tprint: $anduriteMap');
+  print("---------------------");
+  //kirjutamegruppimappi koik seadmed
+  SalvestaUusGrupp('Kõik Seadmed', {}, '', '', '');
+}
+
+
+/*
+Future<void> sort(List<bool> checkboxValues,
+    Map<int, Map<String, dynamic>> uuedSeadmedString) async {
+  int i = uuedSeadmedString.length;
+  int j = 0;
   Map<int, Map<String, dynamic>> reindexedMap = {};
   for (j = 0; j < i; j++) {
     print("$j $checkboxValues");
@@ -286,3 +385,4 @@ Future<void> sort(List<bool> checkboxValues,
   //kirjutamegruppimappi koik seadmed
   SalvestaUusGrupp('Kõik Seadmed', {}, '', '', '');
 }
+*/

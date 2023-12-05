@@ -384,7 +384,9 @@ class _SeadmeteList_anduridState extends State<SeadmeteList_andurid> {
                                     gradient: LinearGradient(
                                       colors: [
                                         Color(0xff114cff),
+                                        Color(0xff4f49ff),
                                         Color(0xffe008ff),
+                                        Color(0xffff004f),
                                         Color(0xffff0000)
                                       ],
                                       begin: Alignment.bottomLeft,
@@ -408,7 +410,6 @@ class _SeadmeteList_anduridState extends State<SeadmeteList_andurid> {
 
 SaaSeadmePilt(Map<String, dynamic> SeadmeteMap, SeadmeNimi) {
   String deviceInfo = seadmeteMap[SeadmeNimi]["Seadme_pilt"];
-  print("------");
   print(SeadmeteMap[SeadmeNimi]);
   if (deviceInfo != null) {
     String pilt = deviceInfo;
