@@ -1,22 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:testuus4/funktsioonid/lulitamine.dart';
-import 'dart:async';
-import 'package:testuus4/lehed/Seadme_Lehed/SeadmeGraafikLeht.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import '../SeadmeteList_andurid.dart';
-import '../Tundide_valimis_Lehed/Graafik_Seadmete_valik/DynaamilineGraafikusseSeadmeteValik.dart';
-import '../Seadme_Lehed/SeadmeYldInfo.dart';
 import '../Gruppi_Lehed/SeadmeteList_gruppid.dart';
 import '../Seadme_Lehed/SeadmeteList_yksikud.dart';
-import 'dynamicKoduLeht.dart';
-import 'dart:convert';
-import 'package:testuus4/funktsioonid/seisukord.dart';
 import 'package:testuus4/main.dart';
-
-import 'package:get/get.dart';
-
-import '../Seadme_Lehed/dynamicSeadmeInfo.dart';
 
 class SeadmeteList extends StatefulWidget {
   const SeadmeteList({Key? key}) : super(key: key);
@@ -103,7 +90,7 @@ class _SeadmeteListState extends State<SeadmeteList> {
                   onTap: () {
                     setState(() {
                       xAlign = 0;
-                      seadmeteListIndex = 2;
+                      seadmeteListIndex = 1;
                     });
                   },
                   child: Align(
@@ -120,7 +107,7 @@ class _SeadmeteListState extends State<SeadmeteList> {
                   onTap: () {
                     setState(() {
                       xAlign = signInAlign;
-                      seadmeteListIndex = 1;
+                      seadmeteListIndex = 2;
                     });
                   },
                   child: Align(
