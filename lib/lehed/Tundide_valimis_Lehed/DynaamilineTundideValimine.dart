@@ -9,6 +9,7 @@ import 'package:testuus4/lehed/Tundide_valimis_Lehed/hinnaPiiriAluselTunideValim
 import 'package:testuus4/lehed/Tundide_valimis_Lehed/kopeeeriGraafikTundideValimine.dart';
 import 'package:testuus4/widgets/kinnitus.dart';
 import '../../main.dart';
+import '../../parameters.dart';
 import 'Graafik_Seadmete_valik/graafikuseSeadmeteValik_yksikud.dart';
 import 'keskimiseHinnaAluselTundideValimine.dart';
 import 'TunniSeaded.dart';

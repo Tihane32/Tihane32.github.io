@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../main.dart';
-
+import 'package:testuus4/parameters.dart';
 saaGrupiOlek(String gruppiNimi) {
   String olek = 'off';
   List seadmed = [];

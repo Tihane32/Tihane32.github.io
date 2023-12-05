@@ -3,7 +3,7 @@ import 'token.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:testuus4/main.dart';
-
+import 'package:testuus4/parameters.dart';
 /// The function `voimus` retrieves data from stored preferences, makes HTTP requests to retrieve device
 /// status, calculates power consumption, and returns the total power consumption.
 /// 

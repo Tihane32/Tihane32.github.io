@@ -5,6 +5,8 @@ import 'package:testuus4/funktsioonid/Elering.dart';
 import 'package:testuus4/funktsioonid/tarbmineSeadmeKohta.dart';
 import 'package:testuus4/main.dart';
 
+import '../parameters.dart';
+
 double findMaximumYValue(dataPoints) {
   double max = double.negativeInfinity;
   for (int i = 0; i < dataPoints.length; i++) {

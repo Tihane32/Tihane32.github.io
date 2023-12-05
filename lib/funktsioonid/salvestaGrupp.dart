@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../main.dart';
+import '../main.dart';import 'package:testuus4/parameters.dart';
 
 SalvestaUusGrupp(String gruppiNimi, Map<String, bool> valitudSeadmed,
     String? tempAid, String? niiskusAid, String? valgusAid) async {

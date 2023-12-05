@@ -17,6 +17,7 @@ import '../DynaamilineTundideValimine.dart';
 import '../../Põhi_Lehed/dynamicKoduLeht.dart';
 import 'package:testuus4/main.dart';
 import 'package:http/http.dart' as http;
+import 'package:testuus4/parameters.dart';
 
 class SeadmeteListValimine_guruppid extends StatefulWidget {
   final Function saaValitudSeadmed;

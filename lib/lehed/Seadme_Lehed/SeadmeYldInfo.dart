@@ -11,7 +11,7 @@ import 'package:testuus4/Arhiiv/seadmedKontoltNim.dart';
 import 'package:testuus4/main.dart';
 import '../../Arhiiv/SeadmeTarbimisLeht.dart';
 import 'dynamicSeadmeInfo.dart';
-
+import 'package:testuus4/parameters.dart';
 class SeadmeYldinfoLeht extends StatefulWidget {
   const SeadmeYldinfoLeht(
       {Key? key, required this.seadmeNimi, required this.SeadmeteMap})

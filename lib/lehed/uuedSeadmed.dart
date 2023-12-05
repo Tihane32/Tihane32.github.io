@@ -9,6 +9,7 @@ import 'package:testuus4/lehed/P%C3%B5hi_Lehed/dynamicKoduLeht.dart';
 import 'package:testuus4/main.dart';
 import '../funktsioonid/saaShellyConf.dart';
 import '../funktsioonid/salvestaGrupp.dart';
+import '../parameters.dart';
 
 class uuedSeadmed extends StatefulWidget {
   uuedSeadmed({required this.uuedSeadmedString});
@@ -250,7 +251,9 @@ Future<void> sort(List<bool> checkboxValues,
       if (cat == 'relay') {
         convertedMap.addAll(innerMap);
       }
-      print(confShelly[tuupKey]!['temperature']);
+      if(confShelly[tuupKey]?['temperature']!=null) {
+        
+     
       if (confShelly[tuupKey]!['temperature'] == 'true') {
         innerMap.forEach((key, value) {
           temperaMap[firstKey] = value;
@@ -265,6 +268,7 @@ Future<void> sort(List<bool> checkboxValues,
         innerMap.forEach((key, value) {
           valgusMap[firstKey] = value;
         });
+      } 
       }
     }
     anduriteMap['Temp_andurid'] = temperaMap;

@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:testuus4/funktsioonid/parameters.dart';
-
+import 'package:testuus4/parameters.dart';
 import '../main.dart';
 
 List<double> tariifArvutus(List<double> perioodiHinnad) {

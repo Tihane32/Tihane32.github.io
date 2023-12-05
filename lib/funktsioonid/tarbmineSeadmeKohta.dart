@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:testuus4/funktsioonid/token.dart';
-import 'package:testuus4/main.dart';
+import 'package:testuus4/main.dart';import 'package:testuus4/parameters.dart';
 import 'package:http/http.dart' as http;
 
 getTarbimine(String seadmeID, String algusPaev, String vahemik) async {

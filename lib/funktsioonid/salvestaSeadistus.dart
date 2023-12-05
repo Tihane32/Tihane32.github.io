@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../main.dart';
-
+import 'package:testuus4/parameters.dart';
 salvestaSeadistus(String parameetriNim, var parameeter,
     Map<String, bool> valitudSeadmed) async {
   String valitudSeade = '';

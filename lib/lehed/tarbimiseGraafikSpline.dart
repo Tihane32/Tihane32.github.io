@@ -3,6 +3,8 @@ import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:testuus4/main.dart';
 
+import '../parameters.dart';
+
 class TarbimiseGraafikSpline extends StatelessWidget {
 /*DateTime now = DateTime.now();
     late DateTime startOfWeek = now.subtract(Duration(days: now.weekday - 1));

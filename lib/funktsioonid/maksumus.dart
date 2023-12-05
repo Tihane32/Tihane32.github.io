@@ -9,7 +9,7 @@ import 'package:testuus4/Arhiiv/kaksTabelit.dart';
 import 'package:http/http.dart' as http;
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:testuus4/funktsioonid/Elering.dart';
-import 'package:intl/intl.dart';
+import 'package:intl/intl.dart';import 'package:testuus4/parameters.dart';
 
 Future maksumus(String vahemik) async {
   if (vahemik == 'Kuu') {

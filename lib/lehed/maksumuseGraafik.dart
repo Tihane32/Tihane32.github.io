@@ -7,6 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:testuus4/funktsioonid/maksumusSeadmeKohta.dart';
 import 'package:testuus4/main.dart';
+import 'package:testuus4/parameters.dart';
 import 'Seadme_Lehed/dynamicSeadmeInfo.dart';
 import 'Põhi_Lehed/koduleht.dart';
 

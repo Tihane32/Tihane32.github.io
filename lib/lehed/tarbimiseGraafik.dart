@@ -14,6 +14,7 @@ import 'package:testuus4/lehed/tarbimiseGraafikSpline.dart';
 import 'package:testuus4/main.dart';
 
 import '../funktsioonid/maksumusSeadmeKohta.dart';
+import '../parameters.dart';
 
 class TarbimiseGraafik extends StatefulWidget {
   final Map<String, dynamic> tarbimiseMap;

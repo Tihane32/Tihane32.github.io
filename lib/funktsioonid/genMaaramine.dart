@@ -5,7 +5,7 @@ import 'package:testuus4/funktsioonid/graafikGen2.dart';
 import 'token.dart';
 import 'graafikGen1.dart';
 import 'package:testuus4/main.dart';
-
+import 'package:testuus4/parameters.dart';
 /// The function `genMaaramine` determines which generation of a device is being used and calls the
 /// appropriate function.
 /// 

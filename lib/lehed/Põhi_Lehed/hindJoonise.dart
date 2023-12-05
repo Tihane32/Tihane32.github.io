@@ -8,7 +8,7 @@ import 'package:flutter/services.dart';
 import '../Tundide_valimis_Lehed/Graafik_Seadmete_valik/DynaamilineGraafikusseSeadmeteValik.dart';
 
 import 'package:vibration/vibration.dart';
-
+import 'package:testuus4/parameters.dart';
 import 'dart:math';
 
 import 'package:testuus4/Arhiiv/kaksTabelit.dart';

@@ -7,7 +7,7 @@ import 'package:testuus4/lehed/P%C3%B5hi_Lehed/dynamicKoduLeht.dart';
 //import '/SeadmeSeaded.dart';
 import 'package:testuus4/lehed/uuedSeadmed.dart';
 import 'package:testuus4/main.dart';
-
+import 'package:testuus4/parameters.dart';
 class LoginPage extends StatefulWidget {
   @override
   _LoginPageState createState() => _LoginPageState();
@@ -77,6 +77,7 @@ class _LoginPageState extends State<LoginPage> {
         json.decode(seadmeteSaamiseVastus.body) as Map<String, dynamic>;
     print(' vastus ============================ \n $seadmeteSaamiseVastusJSON');
     var seadedKasutajalt = seadmeteSaamiseVastusJSON['data']['devices'];
+    print("seaded: $seadedKasutajalt");
     var i = 0;
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var storedJsonMap = prefs.getString('seadmed');
@@ -94,8 +95,9 @@ class _LoginPageState extends State<LoginPage> {
       for (var device in seadedKasutajalt.values) {
         if (!seadmeteMap.containsKey(device['id'])) {
           var seade = new Map<String, dynamic>();
-          //seade['Seadme_ID'] = device['id'];
-          seade['Seadme_nimi'] = device['name'];
+
+          if(!device['id'].endsWith("_1")) {
+                    seade['Seadme_nimi'] = device['name'];
           seade['Seadme_pistik'] = device['name'];
           seade['Seadme_generatsioon'] = device['gen'];
           seade['Seadme_cat'] = device['category'];
@@ -116,6 +118,8 @@ class _LoginPageState extends State<LoginPage> {
           i++;
 
           uuedSeadmedString.add(device['name']);
+          }
+  
         }
       }
 
@@ -136,7 +140,8 @@ class _LoginPageState extends State<LoginPage> {
       for (var device in seadedKasutajalt.values) {
         var seade = new Map<String, dynamic>();
         //seade['Seadme_ID'] = device['id'];
-        seade['Seadme_nimi'] = device['name'];
+        if(!device['id'].endsWith("_1")) {
+                seade['Seadme_nimi'] = device['name'];
         seade['Seadme_pistik'] = device['name'];
         seade['Seadme_generatsioon'] = device['gen'];
         seade['Seadme_cat'] = device['category'];
@@ -156,6 +161,8 @@ class _LoginPageState extends State<LoginPage> {
         i++;
 
         uuedSeadmedString.add(device['name']);
+          }
+    
       }
 
       // await prefs.setString('seadmed', seadmedMap);

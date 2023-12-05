@@ -6,7 +6,7 @@ import 'dart:async';
 import '../../funktsioonid/salvestaGrupp.dart';
 import '../Tundide_valimis_Lehed/Graafik_Seadmete_valik/DynaamilineGraafikusseSeadmeteValik.dart';
 import '../Põhi_Lehed/dynamicKoduLeht.dart';
-import 'package:testuus4/funktsioonid/seisukord.dart';
+import 'package:testuus4/funktsioonid/seisukord.dart';import 'package:testuus4/parameters.dart';
 import 'package:testuus4/main.dart';
 import '../Seadme_Lehed/dynamicSeadmeInfo.dart';
 

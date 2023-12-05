@@ -7,7 +7,7 @@ import '../lehed/Tundide_valimis_Lehed/Graafik_Seadmete_valik/graafikuseSeadmete
 import 'token.dart';
 import 'package:intl/intl.dart';
 import 'package:testuus4/main.dart';
-
+import 'package:testuus4/parameters.dart';
 /// The function `gen2GraafikuLoomine` creates and deletes schedules for a device based on selected
 /// values and user preferences.
 ///
