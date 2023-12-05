@@ -2,12 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:testuus4/funktsioonid/lulitamine.dart';
 import 'dart:async';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:testuus4/lehed/P%C3%B5hi_Lehed/dynamicKoduLeht.dart';
-import 'dart:convert';
 import 'package:testuus4/funktsioonid/seisukord.dart';
 import 'package:testuus4/main.dart';
-import 'package:get/get.dart';
 import 'Seadme_Lehed/dynamicSeadmeInfo.dart';
 import 'Tundide_valimis_Lehed/Graafik_Seadmete_valik/DynaamilineGraafikusseSeadmeteValik.dart';
 import 'Tundide_valimis_Lehed/Graafik_Seadmete_valik/graafikuseSeadmeteValik_yksikud.dart';
@@ -173,17 +170,25 @@ class _SeadmeteList_anduridState extends State<SeadmeteList_andurid> {
                           height: double.infinity,
                           child: Stack(
                             children: [
-                              AspectRatio(
-                                aspectRatio: 1,
-                                child: ClipRRect(
-                                  child: Image.asset(
-                                    pilt,
-                                    fit: BoxFit.cover,
+                              Container(
+                                decoration: BoxDecoration(
+                                  border: Border.all(
+                                    color: Colors.white,
+                                    width: 8,
+                                  ),
+                                ),
+                                child: AspectRatio(
+                                  aspectRatio: 1,
+                                  child: ClipRRect(
+                                    child: Image.asset(
+                                      pilt,
+                                      fit: BoxFit.cover,
+                                    ),
                                   ),
                                 ),
                               ),
                               Positioned(
-                                bottom: 0,
+                                bottom: 8,
                                 left: 0,
                                 right: 0,
                                 child: Container(
@@ -202,6 +207,7 @@ class _SeadmeteList_anduridState extends State<SeadmeteList_andurid> {
                                 ),
                               ),
                               Positioned(
+                                // Gradient from https://learnui.design/tools/gradient-generator.html
                                 top: 0,
                                 left: 0,
                                 right: 0,
@@ -209,19 +215,74 @@ class _SeadmeteList_anduridState extends State<SeadmeteList_andurid> {
                                   height: 8,
                                   decoration: const BoxDecoration(
                                     gradient: LinearGradient(
+                                      colors: [
+                                        Color(0xff041036),
+                                        Color(0xff000000),
+                                        Color(0xff4a0000)
+                                      ],
                                       begin: Alignment.topLeft,
-                                      end: Alignment(0.8, 1),
-                                      colors: <Color>[
-                                        Color(0xff1f005c),
-                                        Color(0xff5b0060),
-                                        Color(0xff870160),
-                                        Color(0xffac255e),
-                                        Color(0xffca485c),
-                                        Color(0xffe16b5c),
-                                        Color(0xfff39060),
-                                        Color(0xffffb56b),
-                                      ], // Gradient from https://learnui.design/tools/gradient-generator.html
-                                      tileMode: TileMode.mirror,
+                                      end: Alignment.bottomLeft,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Positioned(
+                                left: 0,
+                                top: 0,
+                                bottom: 0,
+                                child: Container(
+                                  width: 8,
+                                  decoration: const BoxDecoration(
+                                    gradient: LinearGradient(
+                                      colors: [
+                                        Color(0xff041036),
+                                        Color(0xff051850),
+                                        Color(0xff0a2c94),
+                                        Color(0xff114cff),
+                                      ],
+                                      begin: Alignment.topLeft,
+                                      end: Alignment.bottomLeft,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              // Right Border
+                              Positioned(
+                                right: 0,
+                                top: 0,
+                                bottom: 0,
+                                child: Container(
+                                  width: 8,
+                                  decoration: const BoxDecoration(
+                                    gradient: LinearGradient(
+                                      colors: [
+                                        Color(0xff4a0000),
+                                        Color(0xff7b0000),
+                                        Color(0xffca0000),
+                                        Color(0xffff0000)
+                                      ],
+                                      begin: Alignment.topLeft,
+                                      end: Alignment.bottomLeft,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              // Bottom Border
+                              Positioned(
+                                bottom: 0,
+                                left: 0,
+                                right: 0,
+                                child: Container(
+                                  height: 8,
+                                  decoration: const BoxDecoration(
+                                    gradient: LinearGradient(
+                                      colors: [
+                                        Color(0xff114cff),
+                                        Color(0xffe008ff),
+                                        Color(0xffff0000)
+                                      ],
+                                      begin: Alignment.bottomLeft,
+                                      end: Alignment.bottomRight,
                                     ),
                                   ),
                                 ),
