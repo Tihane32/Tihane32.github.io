@@ -85,7 +85,6 @@ class _MGraafikState extends State<MGraafik> {
   setPaevamaksumus(paevaList) {
     setState(() {
       paevaMaksumus = paevaList;
-      print("käes $paevaList");
     });
   }
 
@@ -500,13 +499,12 @@ class _MGraafikState extends State<MGraafik> {
                                 majorGridLines: MajorGridLines(width: 0.0),
                                 isVisible: false,
                                 title: AxisTitle(
-                                  
                                   text: 'Eurot',
                                   textStyle: fontVaike,
                                 ),
                                 labelStyle: fontVaike,
-                               labelAlignment: LabelAlignment.start,
-                        labelRotation: 0,
+                                labelAlignment: LabelAlignment.start,
+                                labelRotation: 0,
                               ),
                               NumericAxis(
                                 majorGridLines: MajorGridLines(width: 0.0),
@@ -589,10 +587,11 @@ class _MGraafikState extends State<MGraafik> {
                                   offset: const Offset(15, 0),
                                   opacity: 0.8,
                                   isVisible: true,
-                                  labelAlignment: ChartDataLabelAlignment.middle,
-                                  labelIntersectAction: LabelIntersectAction.none,
-                            
-    useSeriesColor: true,
+                                  labelAlignment:
+                                      ChartDataLabelAlignment.middle,
+                                  labelIntersectAction:
+                                      LabelIntersectAction.none,
+                                  useSeriesColor: true,
                                   textStyle: fontEritiVaike,
                                   angle: 270,
                                 ),
@@ -611,7 +610,6 @@ class _MGraafikState extends State<MGraafik> {
                                     const MarkerSettings(isVisible: true),
                                 color: Colors.blue,
                                 width: 5,
-                                
                                 dataSource: chartData,
                                 yAxisName: 'secondAxis',
                                 xValueMapper: (_ChartData data, _) => data.date,
@@ -629,10 +627,11 @@ class _MGraafikState extends State<MGraafik> {
                                   showZeroValue: false,
                                   offset: const Offset(-15, 0),
                                   isVisible: true,
-                                  labelAlignment: ChartDataLabelAlignment.middle,
-                                  labelIntersectAction: LabelIntersectAction.none,
-                            
-    useSeriesColor: true,
+                                  labelAlignment:
+                                      ChartDataLabelAlignment.middle,
+                                  labelIntersectAction:
+                                      LabelIntersectAction.none,
+                                  useSeriesColor: true,
                                   textStyle: fontEritiVaike,
                                   angle: 270,
                                 ),

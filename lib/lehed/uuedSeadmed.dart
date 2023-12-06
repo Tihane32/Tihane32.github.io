@@ -166,8 +166,6 @@ Future<void> sort(
   for (j = 0; j < i; j++) {
     print("$j $checkboxValues");
     if (checkboxValues[j] == false) {
-      print("this is false $j");
-      print("uuedSeadmed $uuedSeadmedString");
       uuedSeadmedString.remove(j);
     }
   }
@@ -177,10 +175,6 @@ Future<void> sort(
   var anduridJSON = prefs.getString('andurid');
   Map<String, Map<String, dynamic>> confShelly = {};
   confShelly = await saaShellyConf();
-
-  print('T: confShelly =$confShelly');
-  print('T:uuedSeadmedString =$uuedSeadmedString');
-  print('T:seadmedJSON =$seadmedJSON');
 
   Map<String, dynamic> ajutine_seadmeteMap = {};
   Map<String, dynamic> ajutine_anduriteMap = {};
@@ -237,7 +231,7 @@ Future<void> sort(
       } else {
         ajutine_seadmeteMap.addAll(innerMap);
       }
-    } //else statmenti lisada funktsioon mis taiendaks seadmete conf faili
+    } //else statmenti lisada funktsioon mis taiendaks seadmete conf faili dunamiliselt
   }
   if (seadmedJSON != null) {
     String seadmed = json.encode(seadmeteMap);

@@ -1,13 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:testuus4/funktsioonid/lulitamine.dart';
+import 'package:testuus4/funktsioonid/niiskusMoodis.dart';
+import 'package:testuus4/funktsioonid/tempmoodis.dart';
 import 'dart:async';
 import 'package:testuus4/lehed/P%C3%B5hi_Lehed/dynamicKoduLeht.dart';
 import 'package:testuus4/funktsioonid/seisukord.dart';
 import 'package:testuus4/main.dart';
-import 'Seadme_Lehed/dynamicSeadmeInfo.dart';
 import 'Tundide_valimis_Lehed/Graafik_Seadmete_valik/DynaamilineGraafikusseSeadmeteValik.dart';
-import 'Tundide_valimis_Lehed/Graafik_Seadmete_valik/graafikuseSeadmeteValik_yksikud.dart';
 
 class SeadmeteList_andurid extends StatefulWidget {
   const SeadmeteList_andurid({Key? key}) : super(key: key);
@@ -22,9 +22,8 @@ class _SeadmeteList_anduridState extends State<SeadmeteList_andurid> {
   //String onoffNupp = 'Shelly ON';
   @override
   void initState() {
-    SeadmeGraafikKontrollimineGen1();
-    SeadmeGraafikKontrollimineGen2();
-
+    tempMoodis();
+    niiskusMoodis();
     super.initState();
     fetchData();
   }
@@ -107,12 +106,11 @@ class _SeadmeteList_anduridState extends State<SeadmeteList_andurid> {
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
                 ),
-                itemCount: seadmeteMap.length + 1,
+                itemCount: anduriteMap.length + 1,
                 itemBuilder: (context, index) {
-                  if (index == seadmeteMap.length) {
+                  if (index == anduriteMap.length) {
                     return GestureDetector(
                       onTap: () {
-                        print(seadmeteMap);
                         Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -142,23 +140,10 @@ class _SeadmeteList_anduridState extends State<SeadmeteList_andurid> {
                     );
                   }
 
-                  final seade = seadmeteMap.keys.elementAt(index);
-                  final pilt = seadmeteMap[seade]["Seadme_pilt"];
-                  final staatus = seadmeteMap[seade]["Seadme_olek"];
-                  print('Staatus: $staatus');
+                  final andur = anduriteMap.keys.elementAt(index);
+                  final pilt = anduriteMap[andur]["Seadme_pilt"];
                   return GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => DunaamilineSeadmeLeht(
-                            seadmeNimi: seadmeteMap.keys.elementAt(index),
-                            SeadmeteMap: seadmeteMap,
-                            valitud: 0,
-                          ),
-                        ),
-                      );
-                    },
+                    onTap: () {},
                     child: Padding(
                       padding: const EdgeInsets.all(1),
                       child: Container(
@@ -191,7 +176,7 @@ class _SeadmeteList_anduridState extends State<SeadmeteList_andurid> {
                                 bottom: 50,
                                 right: 0,
                                 child: Container(
-                                  width: 70,
+                                  width: 90,
                                   height: 40,
                                   decoration: BoxDecoration(
                                     color: Colors.red.withOpacity(0.6),
@@ -202,7 +187,8 @@ class _SeadmeteList_anduridState extends State<SeadmeteList_andurid> {
                                   ),
                                   child: Center(
                                     child: Text(
-                                      ' 25° C ',
+                                      anduriteMap[andur]['temp'].toString() +
+                                          '° C ',
                                       style: TextStyle(
                                         color: Colors.white,
                                         fontSize: 18,
@@ -216,7 +202,7 @@ class _SeadmeteList_anduridState extends State<SeadmeteList_andurid> {
                                 bottom: 50,
                                 left: 0,
                                 child: Container(
-                                  width: 70,
+                                  width: 90,
                                   height: 40,
                                   decoration: BoxDecoration(
                                     color: Colors.blue.withOpacity(0.6),
@@ -227,7 +213,8 @@ class _SeadmeteList_anduridState extends State<SeadmeteList_andurid> {
                                   ),
                                   child: Center(
                                     child: Text(
-                                      ' 55 % ',
+                                      anduriteMap[andur]['niiskus'].toString() +
+                                          ' % ',
                                       style: TextStyle(
                                         color: Colors.white,
                                         fontSize: 18,
@@ -302,7 +289,7 @@ class _SeadmeteList_anduridState extends State<SeadmeteList_andurid> {
                                   padding: EdgeInsets.symmetric(vertical: 8),
                                   child: Center(
                                     child: Text(
-                                      seadmeteMap[seade]["Seadme_nimi"],
+                                      anduriteMap[andur]["Seadme_nimi"],
                                       style: TextStyle(
                                         color: Colors.white,
                                         fontSize: 18,
@@ -419,7 +406,6 @@ SaaSeadmePilt(Map<String, dynamic> SeadmeteMap, SeadmeNimi) {
 }
 
 SaaSeadmeolek(Map<String, dynamic> SeadmeteMap, SeadmeNimi) {
-  print("seamdetMap $seadmeteMap");
   String deviceInfo = seadmeteMap[SeadmeNimi]["Seadme_olek"];
   if (deviceInfo != null) {
     String pilt = deviceInfo;

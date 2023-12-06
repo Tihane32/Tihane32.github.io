@@ -4,8 +4,7 @@ import 'package:testuus4/main.dart';
 import 'token.dart';
 import 'package:http/http.dart' as http;
 
-tempMoodis() async {
-  num mod = pow(10.0, 1);
+niiskusMoodis() async {
   anduriteMap.forEach((key, value) async {
     String ID = '';
     String KEY = '';
@@ -23,9 +22,12 @@ tempMoodis() async {
       'auth_key': KEY,
     };
 
+    print('Tprint: data $data');
+
     var url =
         Uri.parse('https://shelly-79-eu.shelly.cloud/statistics/sensor/values');
     var res = await http.post(url, headers: headers, body: data);
+    print('Tprint: res: $res');
 
     if (res.statusCode != 200)
       throw Exception('http.post error: statusCode= ${res.statusCode}');
@@ -34,11 +36,10 @@ tempMoodis() async {
     List<dynamic> history = jsonResponseMap['data']['history'];
 
     if (history.isNotEmpty) {
-      double lastTemperature = history.last['max_temperature'];
-      lastTemperature = ((lastTemperature * mod).round().toDouble() / mod);
-      anduriteMap[key]['temp'] = lastTemperature.toString();
+      double lastMoisture = history.last['humidity'];
+      anduriteMap[key]['niiskus'] = lastMoisture.toString();
     } else {
-      anduriteMap[key]['temp'] = 'xx';
+      anduriteMap[key]['niiskus'] = 'xx';
     }
   });
 }

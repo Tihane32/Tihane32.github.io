@@ -304,9 +304,9 @@ class _GruppiKoostamineState extends State<GruppiKoostamine> {
                         ),
                       ],
                       onTap: (int kodu) {
-                        String? tempAid = andurIDsaaamine(tempAndur);
-                        String? niiskusAid = andurIDsaaamine(niiskusAndur);
-                        String? valgusAid = andurIDsaaamine(valgusAndur);
+                        String tempAid = andurIDsaaamine(tempAndur);
+                        String niiskusAid = andurIDsaaamine(niiskusAndur);
+                        String valgusAid = andurIDsaaamine(valgusAndur);
                         SalvestaUusGrupp(gruppiNimi, ValitudSeadmed, tempAid,
                             niiskusAid, valgusAid);
                       })),
@@ -338,10 +338,10 @@ andurListiKoostamine(List<String> list, String tuup) {
   return list;
 }
 
-String? andurIDsaaamine(String andurNimi) {
+String andurIDsaaamine(String andurNimi) {
   if (anduriteMap.isNotEmpty) {
     for (var id in anduriteMap.keys) {
-      var nimi = anduriteMap['Seadme_nimi'];
+      var nimi = anduriteMap[id]['Seadme_nimi'];
       if (nimi == andurNimi) {
         return id;
       }

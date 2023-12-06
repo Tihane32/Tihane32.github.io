@@ -3,7 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../main.dart';
 
 SalvestaUusGrupp(String gruppiNimi, Map<String, bool> valitudSeadmed,
-    String? tempAid, String? niiskusAid, String? valgusAid) async {
+    String tempAid, String niiskusAid, String valgusAid) async {
   gruppiMap['Kõik Seadmed']['Grupi_Seadmed'] = seadmeteMap.keys.toList();
   if (gruppiNimi != 'Kõik Seadmed') {
     List<String> seadmed = [];
@@ -33,8 +33,6 @@ SalvestaUusGrupp(String gruppiNimi, Map<String, bool> valitudSeadmed,
     }
 
     gruppiMap['$gruppiNimi'] = uusGrupp;
-    print(valitudSeadmed);
-    print(gruppiMap);
   }
   SharedPreferences prefs = await SharedPreferences.getInstance();
   String gMap = json.encode(gruppiMap);
