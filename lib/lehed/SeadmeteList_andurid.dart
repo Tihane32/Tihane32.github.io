@@ -7,6 +7,7 @@ import 'dart:async';
 import 'package:testuus4/lehed/P%C3%B5hi_Lehed/dynamicKoduLeht.dart';
 import 'package:testuus4/funktsioonid/seisukord.dart';
 import 'package:testuus4/main.dart';
+import 'package:testuus4/parameters.dart';
 import 'Tundide_valimis_Lehed/Graafik_Seadmete_valik/DynaamilineGraafikusseSeadmeteValik.dart';
 
 class SeadmeteList_andurid extends StatefulWidget {
