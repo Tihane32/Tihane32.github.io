@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:js';
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -7,6 +8,7 @@ import 'package:testuus4/funktsioonid/seisukord.dart';
 import 'package:testuus4/funktsioonid/token.dart';
 import 'package:testuus4/lehed/P%C3%B5hi_Lehed/dynamicKoduLeht.dart';
 import 'package:testuus4/main.dart';
+import 'package:testuus4/widgets/teavitus.dart';
 import '../funktsioonid/saaShellyConf.dart';
 import '../funktsioonid/salvestaGrupp.dart';
 
@@ -117,7 +119,7 @@ class _uuedSeadmedState extends State<uuedSeadmed> {
           ),
           GestureDetector(
             onTap: () async {
-              await sort(checkboxValues, newMap);
+              await sort(checkboxValues, newMap, context);
               // Navigate to another page when the button is pressed
               Navigator.push(
                 context,
@@ -155,8 +157,10 @@ class _uuedSeadmedState extends State<uuedSeadmed> {
   }
 }
 
-Future<void> sort(List<bool> checkboxValues,
-    Map<int, Map<String, dynamic>> uuedSeadmedString) async {
+Future<void> sort(
+    List<bool> checkboxValues,
+    Map<int, Map<String, dynamic>> uuedSeadmedString,
+    BuildContext context) async {
   int i = uuedSeadmedString.length;
   int j = 0;
   for (j = 0; j < i; j++) {
@@ -180,15 +184,15 @@ Future<void> sort(List<bool> checkboxValues,
 
   Map<String, dynamic> ajutine_seadmeteMap = {};
   Map<String, dynamic> ajutine_anduriteMap = {};
+  int loop = 0;
 
   for (var innerMap in uuedSeadmedString.values) {
-    print('T: inermap = $innerMap');
+    loop++;
+    print('---------------------------------------------------------$loop');
     var keys = innerMap.keys.toList();
     var firstKey = keys[0];
     String cat = innerMap[firstKey]['Seadme_cat'];
-    print('T: seadme cat = $cat');
     var tuupKey = innerMap[firstKey]['Seadme_tuup'];
-    print('T: tuupKey>: $tuupKey');
 
     if (confShelly.containsKey(tuupKey)) {
       if (confShelly[tuupKey]!['temperature'] == 'true') {
