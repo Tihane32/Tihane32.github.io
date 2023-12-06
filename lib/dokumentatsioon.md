@@ -251,6 +251,15 @@ Määrab gruppile oleku, loogikaga:
  kui kumbki tingimus ei ole täidetud on grupp "off"
 
 
+## Lisa 5 conf fail to map
+
+```dart
+Future<Map<String, Map<String, dynamic>>> saaShellyConf() async {
+  return confShelly;
+}
+```
+
+saadab tagsi conf failist alusel kooostatud conf mapi
 
 # 2. Muutujate kujud
 

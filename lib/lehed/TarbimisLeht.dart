@@ -86,7 +86,6 @@ class _MGraafikState extends State<MGraafik> {
   setPaevamaksumus(paevaList) {
     setState(() {
       paevaMaksumus = paevaList;
-      print("käes $paevaList");
     });
   }
 

@@ -1,14 +1,7 @@
-import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:testuus4/funktsioonid/graafikGen2.dart';
-import 'package:testuus4/Arhiiv/energiaGraafik.dart';
 import 'package:testuus4/main.dart';
 import 'dart:convert';
-import 'token.dart';
-import 'package:testuus4/Arhiiv/kaksTabelit.dart';
 import 'package:http/http.dart' as http;
-import 'package:syncfusion_flutter_charts/charts.dart';
-import 'package:testuus4/funktsioonid/Elering.dart';
 import 'package:intl/intl.dart';
 
 Future maksumus(String vahemik) async {
@@ -32,7 +25,6 @@ Future maksumus(String vahemik) async {
 
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    
     double katse = 0;
     double hind = 0;
     var k = 0;
@@ -139,7 +131,6 @@ Future maksumus(String vahemik) async {
 
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    
     double katse = 0;
     double hind = 0;
     var k = 0;
@@ -266,7 +257,6 @@ Future maksumus(String vahemik) async {
     var ajutine2 = ajutine.entries.toList();
     var hinnagraafik = ajutine2[0].value;
 
-    
     double katse = 0;
     double hind = 0;
     var k = 0;

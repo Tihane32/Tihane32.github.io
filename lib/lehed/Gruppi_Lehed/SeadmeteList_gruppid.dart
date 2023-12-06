@@ -1,14 +1,11 @@
 import 'dart:async';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:testuus4/funktsioonid/seisukord.dart';
 import 'package:testuus4/lehed/Tundide_valimis_Lehed/Graafik_Seadmete_valik/DynaamilineGraafikusseSeadmeteValik.dart';
 import 'package:testuus4/lehed/Gruppi_Lehed/dynaamilineGrupiLeht.dart';
-import 'package:testuus4/lehed/Gruppi_Lehed/gruppiKoostamine.dart';
 import 'package:testuus4/lehed/P%C3%B5hi_Lehed/dynamicKoduLeht.dart';
 import 'package:testuus4/main.dart';
-
 import '../../funktsioonid/saaGruppiOlek.dart';
 import '../../funktsioonid/salvestaGrupp.dart';
 import '../Tundide_valimis_Lehed/Graafik_Seadmete_valik/graafikuseSeadmeteValik_yksikud.dart';
@@ -29,7 +26,6 @@ class _SeadmeteList_gruppidState extends State<SeadmeteList_gruppid> {
     SeadmeGraafikKontrollimineGen2();
 
     super.initState();
-    bool isLoading = false;
   }
 
   int koduindex = 1;
@@ -149,7 +145,6 @@ class _SeadmeteList_gruppidState extends State<SeadmeteList_gruppid> {
                   final gruppiPilt = gruppiMap[grupp]["Gruppi_pilt"];
                   final grupiOlek = saaGrupiOlek(grupp);
                   final grupiTemp = gruppiMap[grupp]['Grupi_temp'];
-                  SalvestaUusGrupp(grupp, {}, '', '', '');
 
                   return GestureDetector(
                     onTap: () {
