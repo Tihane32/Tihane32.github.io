@@ -37,9 +37,9 @@ class _GruppiKoostamineState extends State<GruppiKoostamine> {
   void initState() {
     super.initState();
     ValitudSeadmed = valitudSeadmeteNullimine();
-    listTemp = andurListiKoostamine(listTemp, 'Temp_andurid');
-    listNiis = andurListiKoostamine(listNiis, 'Niiskus_andurid');
-    listValg = andurListiKoostamine(listValg, 'Valgus_andurid');
+    listTemp = andurListiKoostamine(listTemp, 'Temperatuur_tajuv');
+    listNiis = andurListiKoostamine(listNiis, 'Niiskus_tajuv');
+    listValg = andurListiKoostamine(listValg, 'Valgus_tajuv');
   }
 
   @override
@@ -304,14 +304,11 @@ class _GruppiKoostamineState extends State<GruppiKoostamine> {
                         ),
                       ],
                       onTap: (int kodu) {
-                        String? tempAid =
-                            andurIDsaaamine('Temp_andurid', tempAndur);
-                        String? niiskusAid =
-                            andurIDsaaamine('Niiskus_andurid', niiskusAndur);
-                        String? ValgusAid =
-                            andurIDsaaamine('Valgus_andurid', valgusAndur);
+                        String? tempAid = andurIDsaaamine(tempAndur);
+                        String? niiskusAid = andurIDsaaamine(niiskusAndur);
+                        String? valgusAid = andurIDsaaamine(valgusAndur);
                         SalvestaUusGrupp(gruppiNimi, ValitudSeadmed, tempAid,
-                            niiskusAid, ValgusAid);
+                            niiskusAid, valgusAid);
                       })),
             ],
           ),
@@ -330,33 +327,25 @@ Map<String, bool> valitudSeadmeteNullimine() {
 }
 
 andurListiKoostamine(List<String> list, String tuup) {
-  print(list);
-  print(tuup);
-  print(anduriteMap);
-  List<String> listUus = list;
   if (anduriteMap.isNotEmpty) {
-    if (anduriteMap[tuup].isNotEmpty) {
-      anduriteMap[tuup].forEach((id, value) {
+    anduriteMap.forEach((id, value) {
+      if (value[tuup] == true) {
         var anduriNimi = value['Seadme_nimi'];
-        listUus.add(anduriNimi);
-      });
-    }
+        list.add(anduriNimi);
+      }
+    });
   }
-  return listUus;
+  return list;
 }
 
-String? andurIDsaaamine(String tuup, String andurNimi) {
-  var anduriteMapTuup = anduriteMap[tuup];
-  if (anduriteMapTuup.isNotEmpty) {
-    for (var id in anduriteMapTuup.keys) {
-      var anduriMap = anduriteMapTuup[id];
-      var nimi = anduriMap?['Anduri_nimi'];
+String? andurIDsaaamine(String andurNimi) {
+  if (anduriteMap.isNotEmpty) {
+    for (var id in anduriteMap.keys) {
+      var nimi = anduriteMap['Seadme_nimi'];
       if (nimi == andurNimi) {
-        print('$andurNimi: $id');
         return id;
       }
     }
   }
-  print('$andurNimi: xxxxxxx');
   return '';
 }

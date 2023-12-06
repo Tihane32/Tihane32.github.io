@@ -97,7 +97,6 @@ class _SeadmeteListValimine_guruppidState
                   final grupp = gruppiMap.keys.elementAt(index);
                   final gruppiPilt = gruppiMap[grupp]["Gruppi_pilt"];
                   final grupiOlek = saaGrupiOlek(grupp);
-                  SalvestaUusGrupp(grupp, {}, '', '', '');
 
                   return GestureDetector(
                       onTap: () {

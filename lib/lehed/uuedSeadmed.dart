@@ -194,9 +194,16 @@ Future<void> sort(
     String cat = innerMap[firstKey]['Seadme_cat'];
     var tuupKey = innerMap[firstKey]['Seadme_tuup'];
 
+    innerMap[firstKey]['Temperatuur_tajuv'] = false;
+    innerMap[firstKey]['Niiskus_tajuv'] = false;
+    innerMap[firstKey]['Valgus_tajuv'] = false;
+    innerMap[firstKey]['temp'] = 'xx';
+    innerMap[firstKey]['niiskus'] = 'xx';
+    innerMap[firstKey]['valgus'] = 'xx';
+
     if (confShelly.containsKey(tuupKey)) {
       if (confShelly[tuupKey]!['temperature'] == 'true') {
-        innerMap[firstKey]['temperatuur_tajuv'] = true;
+        innerMap[firstKey]['Temperatuur_tajuv'] = true;
       }
       if (confShelly[tuupKey]!['moisture'] == 'true') {
         innerMap[firstKey]['Niiskus_tajuv'] = true;
@@ -224,7 +231,13 @@ Future<void> sort(
           ajutine_anduriteMap.addAll(innerMap);
         }
       }
-    }
+    } else {
+      if (seadmedJSON != null) {
+        seadmeteMap.addAll(innerMap);
+      } else {
+        ajutine_seadmeteMap.addAll(innerMap);
+      }
+    } //else statmenti lisada funktsioon mis taiendaks seadmete conf faili
   }
   if (seadmedJSON != null) {
     String seadmed = json.encode(seadmeteMap);
@@ -246,147 +259,6 @@ Future<void> sort(
 
   await getToken3();
   await seisukord();
-
-  print("---------------------");
-  print('Tprint: $seadmeteMap');
-  print("---------------------");
-  print('Tprint: $anduriteMap');
-  print("---------------------");
   //kirjutamegruppimappi koik seadmed
   SalvestaUusGrupp('Kõik Seadmed', {}, '', '', '');
 }
-
-
-/*
-Future<void> sort(List<bool> checkboxValues,
-    Map<int, Map<String, dynamic>> uuedSeadmedString) async {
-  int i = uuedSeadmedString.length;
-  int j = 0;
-  Map<int, Map<String, dynamic>> reindexedMap = {};
-  for (j = 0; j < i; j++) {
-    print("$j $checkboxValues");
-    if (checkboxValues[j] == false) {
-      print("this is false $j");
-      print("uuedSeadmed $uuedSeadmedString");
-      uuedSeadmedString.remove(j);
-
-// Update the original map with the reindexed map
-    }
-  }
-  uuedSeadmedString;
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  var seadmedJSON = prefs.getString('seadmed');
-  var anduridJSON = prefs.getString('andurid');
-  Map<String, Map<String, dynamic>> confShelly = {};
-  confShelly = await saaShellyConf();
-  print('T: confShelly =$confShelly');
-  print('T:uuedSeadmedString =$uuedSeadmedString');
-  print('T:seadmedJSON =$seadmedJSON');
-  if (seadmedJSON != null) {
-    Map<String, dynamic> temperaMap = {};
-    Map<String, dynamic> niiskusMap = {};
-    Map<String, dynamic> valgusMap = {};
-    temperaMap = anduriteMap['Temp_andurid'] as Map<String, dynamic>;
-    niiskusMap = anduriteMap['Niiskus_andurid'] as Map<String, dynamic>;
-    valgusMap = anduriteMap['Valgus_andurid'] as Map<String, dynamic>;
-
-    for (var innerMap in uuedSeadmedString.values) {
-      print('T: inermap = $innerMap');
-      var keys = innerMap.keys.toList();
-      var firstKey = keys[0];
-      String cat = innerMap[firstKey]['Seadme_cat'];
-      print('T: seadme cat = $cat');
-      var tuupKey = innerMap[firstKey]['Seadme_tuup'];
-      print('T: tuupKey>: $tuupKey');
-      var values = innerMap.values;
-      print('T: values: $values');
-      if (cat == 'relay') {
-        seadmeteMap.addAll(innerMap);
-      }
-      print(confShelly[tuupKey]!['temperature']);
-      if (confShelly[tuupKey]!['temperature'] == 'true') {
-        innerMap.forEach((key, value) {
-          temperaMap[firstKey] = value;
-        });
-      }
-      if (confShelly[tuupKey]!['moisture'] == 'true') {
-        innerMap.forEach((key, value) {
-          niiskusMap[firstKey] = value;
-        });
-      }
-      if (confShelly[tuupKey]!['ligth'] == 'true') {
-        innerMap.forEach((key, value) {
-          valgusMap[firstKey] = value;
-        });
-      }
-    }
-
-    anduriteMap['Temp_andurid'] = temperaMap;
-    anduriteMap['Niiskus_andurid'] = niiskusMap;
-    anduriteMap['Valgus_andurid'] = valgusMap;
-
-    String aMap = json.encode(anduriteMap);
-    await prefs.setString('andurid', aMap);
-    String seadmedMap = json.encode(seadmeteMap);
-    await prefs.setString('seadmed', seadmedMap);
-    await getToken3();
-    await seisukord();
-  } else {
-    Map<String, dynamic> convertedMap = {};
-    Map<String, dynamic> temperaMap = {};
-    Map<String, dynamic> niiskusMap = {};
-    Map<String, dynamic> valgusMap = {};
-    //temperaMap = anduriteMap['Temp_andurid'] as Map<String, dynamic>;
-    //niiskusMap = anduriteMap['Niiskus_andurid'] as Map<String, dynamic>;
-    //valgusMap = anduriteMap['Valgus_andurid'] as Map<String, dynamic>;
-
-    for (var innerMap in uuedSeadmedString.values) {
-      print('T: inermap = $innerMap');
-      var keys = innerMap.keys.toList();
-      var firstKey = keys[0];
-      String cat = innerMap[firstKey]['Seadme_cat'];
-      print('T: seadme cat = $cat');
-      var tuupKey = innerMap[firstKey]['Seadme_tuup'];
-      print('T: tuupKey>: $tuupKey');
-      var values = innerMap.values;
-      print('T: values: $values');
-      if (cat == 'relay') {
-        convertedMap.addAll(innerMap);
-      }
-      print(confShelly[tuupKey]!['temperature']);
-      if (confShelly[tuupKey]!['temperature'] == 'true') {
-        innerMap.forEach((key, value) {
-          temperaMap[firstKey] = value;
-        });
-      }
-      if (confShelly[tuupKey]!['moisture'] == 'true') {
-        innerMap.forEach((key, value) {
-          niiskusMap[firstKey] = value;
-        });
-      }
-      if (confShelly[tuupKey]!['ligth'] == 'true') {
-        innerMap.forEach((key, value) {
-          valgusMap[firstKey] = value;
-        });
-      }
-    }
-    anduriteMap['Temp_andurid'] = temperaMap;
-    anduriteMap['Niiskus_andurid'] = niiskusMap;
-    anduriteMap['Valgus_andurid'] = valgusMap;
-    String aMap = json.encode(anduriteMap);
-    await prefs.setString('andurid', aMap);
-    seadmeteMap = convertedMap;
-    String seadmedMap = json.encode(convertedMap);
-    await prefs.setString('seadmed', seadmedMap);
-    await getToken3();
-    await seisukord();
-  }
-  print("---------------------");
-  print('Tprint: $seadmeteMap');
-  print("---------------------");
-  print('Tprint: $anduriteMap');
-  print("---------------------");
-  //kirjutamegruppimappi koik seadmed
-  SalvestaUusGrupp('Kõik Seadmed', {}, '', '', '');
-}
-*/

@@ -22,6 +22,7 @@ Future<Map<String, Map<String, dynamic>>> saaShellyConf() async {
       'moisture': rowData[5],
       'ligth': rowData[6],
       'name': rowData[7],
+      'gen': rowData[8],
     };
 
     confShelly[rowData[0]] = values;
