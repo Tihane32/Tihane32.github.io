@@ -9,7 +9,7 @@ import 'package:testuus4/lehed/Seadme_Lehed/SeadmeGraafikLeht.dart';
 import 'package:testuus4/lehed/TarbimisLeht.dart';
 import 'package:testuus4/lehed/P%C3%B5hi_Lehed/dynamicKoduLeht.dart';
 import 'package:testuus4/main.dart';
-import 'GrupiSeadmed.dart';
+import 'GrupiSeadmed.dart';import 'package:testuus4/parameters.dart';
 import '../Seadme_Lehed/SeadmePildiMuutmine.dart';
 import '../Seadme_Lehed/SeadmeYldInfo.dart';
 import 'gruppiKoostamine.dart';

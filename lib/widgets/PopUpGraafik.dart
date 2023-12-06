@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../main.dart';
-
+import 'package:testuus4/parameters.dart';
 void PopUpGraafik(BuildContext context, String pealkiri, seadmeGraafik) {
   showDialog(
     context: context,

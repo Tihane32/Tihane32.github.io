@@ -11,6 +11,7 @@ import 'package:testuus4/main.dart';
 import 'package:testuus4/widgets/teavitus.dart';
 import '../funktsioonid/saaShellyConf.dart';
 import '../funktsioonid/salvestaGrupp.dart';
+import '../parameters.dart';
 
 class uuedSeadmed extends StatefulWidget {
   uuedSeadmed({required this.uuedSeadmedString});

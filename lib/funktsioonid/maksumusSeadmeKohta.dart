@@ -5,7 +5,7 @@ import 'package:testuus4/lehed/P%C3%B5hi_Lehed/koduleht.dart';
 import 'dart:convert';
 import '../main.dart';
 import 'package:http/http.dart' as http;
-import 'package:intl/intl.dart';
+import 'package:intl/intl.dart';import 'package:testuus4/parameters.dart';
 
 seadmeMaksumus(String value, [Function? setPaevamaksumus]) async {
   Map<int, List<double>> paevaMaksumus = {};

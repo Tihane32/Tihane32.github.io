@@ -11,7 +11,7 @@ import 'dart:convert';
 import 'package:testuus4/funktsioonid/seisukord.dart';
 import 'package:testuus4/main.dart';
 
-import 'package:get/get.dart';
+import 'package:get/get.dart';import 'package:testuus4/parameters.dart';
 
 import '../Tundide_valimis_Lehed/Graafik_Seadmete_valik/graafikuseSeadmeteValik_yksikud.dart';
 import 'dynamicSeadmeInfo.dart';

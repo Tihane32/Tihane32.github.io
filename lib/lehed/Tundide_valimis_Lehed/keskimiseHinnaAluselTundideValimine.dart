@@ -8,6 +8,7 @@ import '../../funktsioonid/Elering.dart';
 import '../../funktsioonid/KeskmineHindArvutus.dart';
 import '../../funktsioonid/salvestaSeadistus.dart';
 import '../../main.dart';
+import '../../parameters.dart';
 import '../../widgets/AbiLeht.dart';
 import '../../widgets/hoitatus.dart';
 import '../Põhi_Lehed/koduleht.dart';

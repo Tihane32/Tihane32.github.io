@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:testuus4/main.dart';
-
+import 'package:testuus4/parameters.dart';
 /// The function `gen1GraafikLoomine` creates a graph based on the provided data and sends a POST
 /// request to update the schedule rules for a device.
 ///

@@ -6,7 +6,8 @@ import 'package:testuus4/lehed/Tundide_valimis_Lehed/Graafik_Seadmete_valik/Dyna
 import 'package:testuus4/lehed/Gruppi_Lehed/dynaamilineGrupiLeht.dart';
 import 'package:testuus4/lehed/P%C3%B5hi_Lehed/dynamicKoduLeht.dart';
 import 'package:testuus4/main.dart';
-import '../../funktsioonid/saaGruppiOlek.dart';
+
+import '../../funktsioonid/saaGruppiOlek.dart';import 'package:testuus4/parameters.dart';
 import '../../funktsioonid/salvestaGrupp.dart';
 import '../Tundide_valimis_Lehed/Graafik_Seadmete_valik/graafikuseSeadmeteValik_yksikud.dart';
 

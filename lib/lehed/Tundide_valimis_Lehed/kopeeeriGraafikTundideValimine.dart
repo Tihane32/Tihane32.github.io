@@ -7,6 +7,7 @@ import 'package:testuus4/lehed/P%C3%B5hi_Lehed/dynamicKoduLeht.dart';
 import 'package:testuus4/lehed/Tundide_valimis_Lehed/keskimiseHinnaAluselTundideValimine.dart';
 import '../../funktsioonid/seisukord.dart';
 import '../../main.dart';
+import '../../parameters.dart';
 import '../../widgets/AbiLeht.dart';
 import 'Graafik_Seadmete_valik/graafikuseSeadmeteValik_yksikud.dart';
 import 'hinnaPiiriAluselTunideValimine.dart';

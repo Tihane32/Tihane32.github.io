@@ -2,7 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:intl/intl.dart';
+import 'package:intl/intl.dart';import 'package:testuus4/parameters.dart';
 import 'package:testuus4/funktsioonid/tarbimine.dart';
 import 'package:testuus4/lehed/tarbimiseGraafik.dart';
 import 'package:testuus4/lehed/tarbimiseGraafikSpline.dart';

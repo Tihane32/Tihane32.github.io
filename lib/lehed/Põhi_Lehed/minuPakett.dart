@@ -4,7 +4,7 @@ import 'package:testuus4/main.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:testuus4/widgets/hoitatus.dart';
 import 'package:testuus4/widgets/kinnitus.dart';
-
+import 'package:testuus4/parameters.dart';
 import '../../Arhiiv/navigationBar.dart';
 
 import 'package:flutter/material.dart';

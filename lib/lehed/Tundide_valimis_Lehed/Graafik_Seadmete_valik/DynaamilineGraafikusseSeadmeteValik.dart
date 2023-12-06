@@ -7,6 +7,7 @@ import '../../Põhi_Lehed/dynamicKoduLeht.dart';
 import 'package:testuus4/main.dart';
 import 'graafikuseSeadmeteValik_gruppid.dart';
 import 'graafikuseSeadmeteValik_yksikud.dart';
+import 'package:testuus4/parameters.dart';
 
 class SeadmeteListValimine_dynaamiline extends StatefulWidget {
   const SeadmeteListValimine_dynaamiline({Key? key}) : super(key: key);

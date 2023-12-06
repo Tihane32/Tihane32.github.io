@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../main.dart';
+import '../../parameters.dart';
 import 'DynaamilineTundideValimine.dart';
 
 class AutoTundideValik extends StatefulWidget {

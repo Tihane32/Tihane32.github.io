@@ -5,7 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:testuus4/lehed/P%C3%B5hi_Lehed/dynamicKoduLeht.dart';
 import 'package:testuus4/lehed/P%C3%B5hi_Lehed/koduleht.dart';
 import 'package:testuus4/lehed/P%C3%B5hi_Lehed/minuPakett.dart';
-import 'package:testuus4/main.dart';
+import 'package:testuus4/main.dart';import 'package:testuus4/parameters.dart';
 import 'package:testuus4/widgets/kinnitus.dart';
 
 class KasutajaSeaded extends StatefulWidget {

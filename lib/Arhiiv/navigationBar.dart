@@ -8,7 +8,7 @@ import '../lehed/Põhi_Lehed/dynamicKoduLeht.dart';
 import 'kaksTabelit.dart';
 import '../lehed/Põhi_Lehed/hindJoonise.dart';
 import 'package:get/get.dart';
-
+import 'package:testuus4/parameters.dart';
 class AppNavigationBar extends StatelessWidget {
   final int i;
   const AppNavigationBar({

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:testuus4/parameters.dart';
 import '../../funktsioonid/salvestaSeadistus.dart';
 import '../../main.dart';
 import 'DynaamilineTundideValimine.dart';

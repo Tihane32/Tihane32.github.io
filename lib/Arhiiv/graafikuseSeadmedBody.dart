@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../funktsioonid/seisukord.dart';
 import 'package:testuus4/main.dart';
-
+import 'package:testuus4/parameters.dart';
 import '../lehed/Tundide_valimis_Lehed/Graafik_Seadmete_valik/DynaamilineGraafikusseSeadmeteValik.dart';
 
 class SeadmeteListValimineBody extends StatefulWidget {

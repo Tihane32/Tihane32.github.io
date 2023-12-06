@@ -7,6 +7,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:testuus4/funktsioonid/graafikGen1.dart';
 import 'package:testuus4/funktsioonid/graafikGen2.dart';
 import 'package:testuus4/lehed/Seadme_Lehed/SeadmeGraafikLeht.dart';
+import 'package:testuus4/parameters.dart';
 import 'package:testuus4/widgets/hoitatus.dart';
 import '../../../funktsioonid/seisukord.dart';
 import '../../../funktsioonid/token.dart';
