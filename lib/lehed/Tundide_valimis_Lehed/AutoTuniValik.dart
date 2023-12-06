@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 import '../../main.dart';
 import '../../parameters.dart';
 import 'DynaamilineTundideValimine.dart';
-import 'package:intl/intl.dart';
 
 class AutoTundideValik extends StatefulWidget {
   final Function updateValitudSeadmed;
