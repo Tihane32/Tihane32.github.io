@@ -22,21 +22,21 @@ keskonnaMoodis() async {
     var data = {
       'id': ID,
       'auth_key': KEY,
+      'channel': '0',
       'date_range': 'day',
-      'date_from': DateFormat('yyyy-MM-dd').format(DateTime.now()),
+      'date_from': DateFormat('yyyy-MM-dd').format(DateTime.now()).toString() +
+          " 00:00:00",
     };
 
-    var url = anduriteMap[key]['Seadme_generatsioon'] == 2 //'Gen 1'
-        ? Uri.parse(
-            "https://shelly-77-eu.shelly.cloud/statistics/sensor/values")
-        : Uri.parse(
-            "https://shelly-79-eu.shelly.cloud/statistics/sensor/values");
+    print('Tprint $data');
+
+    var url =
+        Uri.parse("${anduriteMap[ID]['api_url']}/statistics/sensor/values");
 
     var res = await http.post(url, headers: headers, body: data);
 
     print(
-        'Tprint ${DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now()).toString()}');
-    print('Tprint ${res.body}');
+        'Tprint ${DateFormat('yyyy-MM-dd').format(DateTime.now()).toString()}');
 
     if (res.statusCode != 200)
       throw Exception('http.post error: statusCode= ${res.statusCode}');
@@ -44,8 +44,10 @@ keskonnaMoodis() async {
     Map<String, dynamic> jsonResponseMap = json.decode(res.body);
     List<dynamic> history = jsonResponseMap['data']['history'];
 
+    print('Tprint id $key ; History = $history');
+    print('Tprint res ${res.body}');
     print(
-        'Tprint Gen ${anduriteMap[key]['Seadme_generatsioon']} = ; History = $history');
+        'Tprint vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv');
 
     if (history.isNotEmpty) {
       double lastTemperature = history.last['max_temperature'];
