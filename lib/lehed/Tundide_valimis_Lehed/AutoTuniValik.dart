@@ -6,22 +6,28 @@ import 'DynaamilineTundideValimine.dart';
 
 class AutoTundideValik extends StatefulWidget {
   final Function updateValitudSeadmed;
+  
+  final Function updateSoovitudTunnid;
   AutoTundideValik(
-      {Key? key, this.valitudSeadmed, required this.updateValitudSeadmed})
+      {Key? key, this.valitudSeadmed, required this.updateValitudSeadmed, required this.updateSoovitudTunnid})
       : super(key: key);
   final valitudSeadmed;
   @override
   _AutoTundideValikState createState() => _AutoTundideValikState(
       valitudSeadmed: valitudSeadmed,
-      updateValitudSeadmed: updateValitudSeadmed);
+      updateValitudSeadmed: updateValitudSeadmed,
+      updateSoovitudTunnid:updateSoovitudTunnid);
 }
 
 class _AutoTundideValikState extends State<AutoTundideValik> {
+  
+
   _AutoTundideValikState(
       {Key? key,
       required this.valitudSeadmed,
-      required this.updateValitudSeadmed});
+      required this.updateValitudSeadmed, required this.updateSoovitudTunnid});
   Function updateValitudSeadmed;
+  Function updateSoovitudTunnid;
   var valitudSeadmed;
   int koduindex = 1;
   bool isLoading = true;
@@ -179,7 +185,9 @@ class _AutoTundideValikState extends State<AutoTundideValik> {
                             parsedValue = 24;
                           }
                           valitudTunnid = parsedValue;
+                          updateSoovitudTunnid(valitudTunnid);
                         });
+
                       },
                       decoration: InputDecoration(
                         border: InputBorder.none,

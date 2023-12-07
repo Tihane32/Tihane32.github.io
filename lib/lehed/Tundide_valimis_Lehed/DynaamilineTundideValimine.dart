@@ -79,7 +79,7 @@ class _DynamilineTundideValimineState extends State<DynamilineTundideValimine> {
   int leht;
   var valitudSeadmed;
   Map<String, bool> ValitudGraafik = {};
-
+  int soovitudTunnid = 10;
   double vahe = 10;
   int valitudTunnid = 10;
   Color boxColor = sinineKast;
@@ -118,7 +118,8 @@ class _DynamilineTundideValimineState extends State<DynamilineTundideValimine> {
           updateValitudSeadmed: updateValitudSeamded),
       AutoTundideValik(
           valitudSeadmed: valitudSeadmed,
-          updateValitudSeadmed: updateValitudSeamded),
+          updateValitudSeadmed: updateValitudSeamded,
+          updateSoovitudTunnid: updateSoovitudTunnid),
       KeelatudTunnid(
         valitudSeadmed: valitudSeadmed,
         luba: luba,
@@ -131,20 +132,22 @@ class _DynamilineTundideValimineState extends State<DynamilineTundideValimine> {
   }
 
   updateLulitusMap(Map<int, dynamic> updatedMap, String leht) {
-    print("valitud leht: $selectedPageGlobal");
     if (leht == selectedPageGlobal) {
       setState(() {
         lulitusMap = updatedMap;
       });
-      print("valitud uus leht: $leht");
     }
-
-    print("lulitusmap update: $lulitusMap");
   }
 
   updateValitudSeamded(Map<String, bool> ValitudGraafikuus) {
     setState(() {
       ValitudGraafik = ValitudGraafikuus;
+    });
+  }
+
+  updateSoovitudTunnid(int soovitudTunnidUus) {
+    setState(() {
+      soovitudTunnid = soovitudTunnidUus;
     });
   }
 
@@ -296,6 +299,7 @@ class _DynamilineTundideValimineState extends State<DynamilineTundideValimine> {
                       currentIndex: 1,
                       onTap: (int kodu) async {
                         koduindex = kodu;
+
                         if (koduindex == 0) {
                           Navigator.push(
                             context,
@@ -305,7 +309,14 @@ class _DynamilineTundideValimineState extends State<DynamilineTundideValimine> {
                             ),
                           );
                         } else if (koduindex == 1) {
-                          if (selectedPageGlobal == "Kopeeri graafik") {
+                          if (leht == 3) {
+                            autoTunnid(soovitudTunnid, valitudSeadmed);
+
+                            Navigator.pop(context);
+
+                            Kinnitus(context, "Graafik seadmetele saadetud");
+                            HapticFeedback.vibrate();
+                          } else if (selectedPageGlobal == "Kopeeri graafik") {
                             await graafikuKopeerimine(
                                 ValitudGraafik, valitudSeadmed);
                           } else {
@@ -334,11 +345,8 @@ class _DynamilineTundideValimineState extends State<DynamilineTundideValimine> {
                           // Close the CircularProgressIndicator dialog
                           Navigator.pop(context);
 
-
                           Kinnitus(context, "Graafik seadmetele saadetud");
                           HapticFeedback.vibrate();
-
-                          
                         }
                       }),
             ),
@@ -349,15 +357,20 @@ class _DynamilineTundideValimineState extends State<DynamilineTundideValimine> {
   }
 }
 
+void autoTunnid(int soovitudTunnid, valitudSeadmed) {
+  valitudSeadmed.forEach((key, value) async {
+    if (value == true) {
+      sendAutoTunnidtoServer(soovitudTunnid, value);
+    }
+  });
+}
+
 Future graafikuteSaatmine(Map<String, bool> valitudSeadmed,
     Map<int, dynamic> lulitusMap, Color paev, String selectedPage) async {
-  print("lulitusmap valik: $selectedPage");
-  print("lulitusmap alguses: $lulitusMap");
   String valitudPaev = "homme";
   if (paev == Colors.green) {
     valitudPaev = "täna";
   }
-  print(paevAbi);
   valitudSeadmed.forEach((key, value) async {
     if (value == true) {
       if (seadmeteMap[key]['Seadme_generatsioon'] == 1) {

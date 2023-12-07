@@ -96,6 +96,16 @@ def receive_log(table_name):
     return 'Log received and saved successfully\n'
 
 
+@app.route('/log/automatic/<table_name>', methods=['POST'])
+def receive_log(table_name):
+    log_message = request.get_json()
+    print(log_message)
+    
+    # Process log data
+    
+
+    return 'Log received and saved successfully\n'
+
 if __name__ == '__main__':
     
     app.run(host='0.0.0.0', port=5500)
