@@ -46,7 +46,7 @@ Future<void> sendLogToServer(Map<dynamic, dynamic> log, String value) async {
     print("sending log: $log");
     try {
       await http.post(
-        Uri.parse("http://$serverUrl:5000/log/cost_daily/_$value"),
+        Uri.parse("http://$serverUrl:5500/log/cost_daily/_$value"),
         body: jsonEncode(log),
         headers: {
           'Content-Type': 'application/json'
