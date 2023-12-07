@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:testuus4/funktsioonid/lulitamine.dart';
-import 'package:testuus4/funktsioonid/niiskusMoodis.dart';
-import 'package:testuus4/funktsioonid/tempmoodis.dart';
+import 'package:testuus4/Arhiiv/niiskusMoodis.dart';
+import 'package:testuus4/funktsioonid/keskonnaMoodis.dart';
 import 'dart:async';
 import 'package:testuus4/lehed/P%C3%B5hi_Lehed/dynamicKoduLeht.dart';
 import 'package:testuus4/funktsioonid/seisukord.dart';
@@ -23,8 +23,7 @@ class _SeadmeteList_anduridState extends State<SeadmeteList_andurid> {
   //String onoffNupp = 'Shelly ON';
   @override
   void initState() {
-    tempMoodis();
-    niiskusMoodis();
+    keskonnaMoodis();
     super.initState();
     fetchData();
   }
