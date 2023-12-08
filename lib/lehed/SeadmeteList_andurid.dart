@@ -198,49 +198,59 @@ class _SeadmeteList_anduridState extends State<SeadmeteList_andurid> {
                                   ),
                                 ),
                               ),
-                              Positioned(
-                                bottom: 50,
-                                left: 0,
-                                child: Container(
-                                  width: 90,
-                                  height: 40,
-                                  decoration: BoxDecoration(
-                                    color: Colors.blue.withOpacity(0.6),
-                                    borderRadius: BorderRadius.only(
-                                      topRight: Radius.circular(15.0),
-                                      bottomRight: Radius.circular(15.0),
+                              Visibility(
+                                visible:
+                                    anduriteMap[andur]['Niiskus_tajuv'] == true,
+                                child: Positioned(
+                                  bottom: 50,
+                                  left: 0,
+                                  child: Container(
+                                    width: 90,
+                                    height: 40,
+                                    decoration: BoxDecoration(
+                                      color: Colors.blue.withOpacity(0.6),
+                                      borderRadius: BorderRadius.only(
+                                        topRight: Radius.circular(15.0),
+                                        bottomRight: Radius.circular(15.0),
+                                      ),
                                     ),
-                                  ),
-                                  child: Center(
-                                    child: Text(
-                                      anduriteMap[andur]['niiskus'].toString() +
-                                          ' % ',
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.bold,
+                                    child: Center(
+                                      child: Text(
+                                        anduriteMap[andur]['niiskus']
+                                                .toString() +
+                                            ' % ',
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold,
+                                        ),
                                       ),
                                     ),
                                   ),
                                 ),
                               ),
-                              Positioned(
-                                top: 0,
-                                left:
-                                    MediaQuery.of(context).size.width / 4 - 20,
-                                child: Container(
-                                  width: 40,
-                                  height: 50,
-                                  decoration: BoxDecoration(
-                                    color: Colors.black.withOpacity(0.6),
-                                    borderRadius: BorderRadius.only(
-                                      bottomLeft: Radius.circular(15.0),
-                                      bottomRight: Radius.circular(15.0),
+                              Visibility(
+                                visible: anduriteMap[andur]
+                                        ['Seadme_generatsioon'] ==
+                                    2,
+                                child: Positioned(
+                                  top: 0,
+                                  left: MediaQuery.of(context).size.width / 4 -
+                                      20,
+                                  child: Container(
+                                    width: 40,
+                                    height: 50,
+                                    decoration: BoxDecoration(
+                                      color: Colors.black.withOpacity(0.6),
+                                      borderRadius: BorderRadius.only(
+                                        bottomLeft: Radius.circular(15.0),
+                                        bottomRight: Radius.circular(15.0),
+                                      ),
                                     ),
-                                  ),
-                                  child: Icon(
-                                    Icons.light_mode_rounded,
-                                    color: Colors.yellow,
+                                    child: Icon(
+                                      Icons.light_mode_rounded,
+                                      color: Colors.yellow,
+                                    ),
                                   ),
                                 ),
                               ),
