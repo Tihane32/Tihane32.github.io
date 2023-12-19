@@ -267,16 +267,25 @@ class _SeadmeteList_yksikudState extends State<SeadmeteList_yksikud> {
                                     ),
                                   ),
                                   child: Center(
-                                    child: Text(
-                                      seadmeteMap[seade]['Hetke_voimsus']
-                                              .toString() +
-                                          ' W ',
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
+                                    child: staatus == 'on'
+                                        ? Text(
+                                            seadmeteMap[seade]['Hetke_voimsus']
+                                                    .toString() +
+                                                ' W ',
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          )
+                                        : Text(
+                                            '0' + ' W ',
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
                                   ),
                                 ),
                               ),

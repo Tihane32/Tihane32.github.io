@@ -7,7 +7,8 @@ import 'package:testuus4/lehed/Gruppi_Lehed/dynaamilineGrupiLeht.dart';
 import 'package:testuus4/lehed/P%C3%B5hi_Lehed/dynamicKoduLeht.dart';
 import 'package:testuus4/main.dart';
 
-import '../../funktsioonid/saaGruppiOlek.dart';import 'package:testuus4/parameters.dart';
+import '../../funktsioonid/saaGruppiOlek.dart';
+import 'package:testuus4/parameters.dart';
 import '../../funktsioonid/salvestaGrupp.dart';
 import '../Tundide_valimis_Lehed/Graafik_Seadmete_valik/graafikuseSeadmeteValik_yksikud.dart';
 
@@ -25,7 +26,14 @@ class _SeadmeteList_gruppidState extends State<SeadmeteList_gruppid> {
     seisukord();
     SeadmeGraafikKontrollimineGen1();
     SeadmeGraafikKontrollimineGen2();
-
+    Timer.periodic(Duration(seconds: 1), (Timer timer) {
+      if (ModalRoute.of(context)?.isCurrent == true) {
+        setState(() {
+          gruppiVoimsus();
+          gruppiMap = gruppiMap;
+        });
+      }
+    });
     super.initState();
   }
 
@@ -290,7 +298,9 @@ class _SeadmeteList_gruppidState extends State<SeadmeteList_gruppid> {
                                   ),
                                   child: Center(
                                     child: Text(
-                                      ' 50,3 W ',
+                                      gruppiMap[grupp]['Gruppi_voimsus']
+                                              .toString() +
+                                          ' W',
                                       style: TextStyle(
                                         color: Colors.white,
                                         fontSize: 18,
@@ -311,6 +321,27 @@ class _SeadmeteList_gruppidState extends State<SeadmeteList_gruppid> {
       ),
     );
   }
+}
+
+void gruppiVoimsus() async {
+  gruppiMap.forEach((key, value) async {
+    double sumVoimsus = 0;
+    List<String> seadmed = [];
+
+    print('Tprint ${gruppiMap[key]['Grupi_Seadmed']}');
+//peatub siin
+    seadmed = gruppiMap[key]['Grupi_Seadmed'] as List<String>;
+
+    print('Tprint $seadmed');
+
+    seadmed.forEach((element) {
+      print('Tprint ${seadmeteMap[element]['Hetke_voimsus']}');
+      sumVoimsus = sumVoimsus + seadmeteMap[element]['Hetke_voimsus'];
+    });
+
+    gruppiMap[key]['Gruppi_voimsus'] = sumVoimsus;
+    print('Tprint $sumVoimsus');
+  });
 }
 
 Widget _buildIconButton(IconData icon, Function onTap) {

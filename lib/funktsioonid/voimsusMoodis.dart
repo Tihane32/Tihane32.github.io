@@ -29,8 +29,6 @@ voimsusMoodis() async {
 
     Map<String, dynamic> jsonResponseMap = json.decode(res.body);
 
-    print('Tprint voimsus ${jsonResponseMap}');
-
     if (jsonResponseMap.isNotEmpty) {
       if (value['Seadme_generatsioon'] as int == 1) {
         seadmeteMap[key]['Hetke_voimsus'] =

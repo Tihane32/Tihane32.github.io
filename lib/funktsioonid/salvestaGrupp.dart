@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../main.dart';import 'package:testuus4/parameters.dart';
+import '../main.dart';
+import 'package:testuus4/parameters.dart';
 
 SalvestaUusGrupp(String gruppiNimi, Map<String, bool> valitudSeadmed,
     String tempAid, String niiskusAid, String valgusAid) async {
@@ -15,6 +16,7 @@ SalvestaUusGrupp(String gruppiNimi, Map<String, bool> valitudSeadmed,
       'Grupi_valgus_andur': '',
       'Grupi_temp': 27.3,
       'Gruppi_olek': 'on',
+      'Gruppi_voimsus': 0,
     };
     valitudSeadmed.forEach((key, value) async {
       if (value == true) {
