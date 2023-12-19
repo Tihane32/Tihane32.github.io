@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:testuus4/funktsioonid/lulitamine.dart';
+import 'package:testuus4/funktsioonid/voimsusMoodis.dart';
 import 'dart:async';
 import 'package:testuus4/lehed/Seadme_Lehed/SeadmeGraafikLeht.dart';
 import 'package:shared_preferences/shared_preferences.dart';
