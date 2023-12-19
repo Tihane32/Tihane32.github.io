@@ -53,6 +53,14 @@ def create_table(table_name, cursor, log_pairs):
         )
     ''')
 
+def create_table2(table_name, cursor):
+    # Create table if it doesn't exist
+    cursor.execute(f''' 
+        CREATE TABLE IF NOT EXISTS "{table_name}" (
+            soovitud_tunnid INT
+        )
+    ''')
+
 def process_log_data(log_message):
     # Convert the log_message dictionary into a list of tuples (date, cost, consumption)
     log_data = [
@@ -91,6 +99,31 @@ def receive_log(table_name):
             if count == 0:
                 cursor.execute(f"INSERT INTO {table_name} (date, cost, consumption) VALUES (?, ?, ?)", entry)
 
+        conn.commit()
+
+    return 'Log received and saved successfully\n'
+
+
+@app.route('/log/automatic/<table_name>', methods=['POST'])
+def receive_log2(table_name):
+    log_message = request.get_json()
+    print(log_message)
+    print(table_name)
+
+    with sqlite3.connect('automatic.db') as conn:
+        cursor = conn.cursor()
+
+        # Check if the table exists, create it if not
+        create_table2(table_name, cursor)
+
+        cursor.execute(f"SELECT COUNT(*) FROM {table_name} WHERE soovitud_tunnid IS NOT NULL")
+        count_result = cursor.fetchone()
+
+        if count_result and count_result[0] > 0:
+            # Update the soovitud_tunnid column
+            cursor.execute(f"UPDATE {table_name} SET soovitud_tunnid = ?", (log_message,))
+        else:
+            cursor.execute(f"INSERT INTO {table_name} (soovitud_tunnid) VALUES ({log_message})")
         conn.commit()
 
     return 'Log received and saved successfully\n'

@@ -17,19 +17,15 @@ import 'package:http/http.dart' as http;
 //Maini käivitamine, home on koduleht.
 //bool graafikuNahtavus = true;
 
-
 ping() async {
   final int port = 5500; // You can adjust the port number
 
   try {
     final socket =
         await Socket.connect(serverUrl, port, timeout: Duration(seconds: 2));
-    print('Connected to $serverUrl:$port');
     socket.close();
     useServer = true;
-  } catch (e) {
-    print('Error: $e');
-  }
+  } catch (e) {}
 }
 
 Future<void> sendLogToServer(Map<dynamic, dynamic> log, String value) async {
@@ -40,10 +36,8 @@ Future<void> sendLogToServer(Map<dynamic, dynamic> log, String value) async {
     if (log.containsKey(todayTimestamp)) {
       // Remove the key corresponding to today's date
       log.remove(todayTimestamp);
-      print('Key for today removed successfully.');
     }
 
-    print("sending log: $log");
     try {
       await http.post(
         Uri.parse("http://$serverUrl:5500/log/cost_daily/_$value"),
@@ -52,16 +46,26 @@ Future<void> sendLogToServer(Map<dynamic, dynamic> log, String value) async {
           'Content-Type': 'application/json'
         }, // Set the correct content type
       );
-    } catch (e) {
-      print('Error logdata: $e');
-    }
+    } catch (e) {}
+  }
+}
+
+sendAutoTunnidtoServer(int soovitudTunnid, value) async {
+  if (useServer == true) {
+    try {
+      await http.post(
+        Uri.parse("http://$serverUrl:5500/log/automatic/_$value"),
+        body: jsonEncode(soovitudTunnid),
+        headers: {
+          'Content-Type': 'application/json'
+        }, // Set the correct content type
+      );
+    } catch (e) {}
   }
 }
 
 Future<List> fetchDataFromServer(
     value, DateTime firstDayOfMonth, DateTime lastDayOfMonth) async {
-  print("fecthib");
-
   String month = DateFormat('MM').format(firstDayOfMonth);
   List<dynamic> ListData = [];
   Map<String, dynamic> data = {};
@@ -75,19 +79,14 @@ Future<List> fetchDataFromServer(
         data = json.decode(response.body);
 
         // Access the data and handle it as needed
-        print('Data received from server: ${data['data']}');
-        print(data);
         ListData = data['data'];
       } else {
         // Handle errors or non-200 status codes
-        print('Failed to fetch data. Status code: ${response.statusCode}');
       }
     } catch (e) {
       // Handle network errors or exceptions
-      print('Error fetchdata: $e');
     }
   }
-  print("list $ListData");
   return ListData;
 }
 
