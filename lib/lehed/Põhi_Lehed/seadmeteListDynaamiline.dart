@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:testuus4/funktsioonid/keskonnaMoodis.dart';
 import 'package:testuus4/funktsioonid/lulitamine.dart';
+import 'package:testuus4/funktsioonid/voimsusMoodis.dart';
 import 'dart:async';
 import 'package:testuus4/lehed/Seadme_Lehed/SeadmeGraafikLeht.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -34,11 +36,11 @@ class _SeadmeteListState extends State<SeadmeteList> {
   void initState() {
     super.initState();
     if (seadmeteListIndex == 0) {
-      xAlign = -1;
+      xAlign = loginAlign;
     } else if (seadmeteListIndex == 1) {
-      xAlign = 1;
-    } else {
       xAlign = 0;
+    } else if (seadmeteListIndex == 2) {
+      xAlign = signInAlign;
     }
   }
 

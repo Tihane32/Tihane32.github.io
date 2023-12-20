@@ -1,18 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:testuus4/funktsioonid/hetketarbimine.dart';
 import 'package:testuus4/funktsioonid/lulitamine.dart';
+import 'package:testuus4/funktsioonid/voimsusMoodis.dart';
 import 'dart:async';
-
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:testuus4/lehed/P%C3%B5hi_Lehed/dynamicKoduLeht.dart';
 import '../Tundide_valimis_Lehed/Graafik_Seadmete_valik/DynaamilineGraafikusseSeadmeteValik.dart';
-
-import 'dart:convert';
 import 'package:testuus4/funktsioonid/seisukord.dart';
-import 'package:testuus4/main.dart';
-
-import 'package:get/get.dart';import 'package:testuus4/parameters.dart';
-
+import 'package:testuus4/parameters.dart';
 import '../Tundide_valimis_Lehed/Graafik_Seadmete_valik/graafikuseSeadmeteValik_yksikud.dart';
 import 'dynamicSeadmeInfo.dart';
 
@@ -31,9 +26,18 @@ class _SeadmeteList_yksikudState extends State<SeadmeteList_yksikud> {
   void initState() {
     SeadmeGraafikKontrollimineGen1();
     SeadmeGraafikKontrollimineGen2();
-
     super.initState();
     fetchData();
+    // uuenda seadme voimsust iga 3me sekundi tagant
+    voimsusMoodis();
+    Timer.periodic(Duration(seconds: 3), (Timer timer) {
+      if (ModalRoute.of(context)?.isCurrent == true) {
+        setState(() {
+          voimsusMoodis();
+          seadmeteMap = seadmeteMap;
+        });
+      }
+    });
   }
 
   Future<void> fetchData() async {
@@ -247,6 +251,41 @@ class _SeadmeteList_yksikudState extends State<SeadmeteList_yksikud> {
                                         fontWeight: FontWeight.bold,
                                       ),
                                     ),
+                                  ),
+                                ),
+                              ),
+                              Positioned(
+                                top: 0,
+                                left: 0,
+                                child: Container(
+                                  width: 90,
+                                  height: 40,
+                                  decoration: BoxDecoration(
+                                    color: Colors.black.withOpacity(0.6),
+                                    borderRadius: BorderRadius.only(
+                                      bottomRight: Radius.circular(15.0),
+                                    ),
+                                  ),
+                                  child: Center(
+                                    child: staatus == 'on'
+                                        ? Text(
+                                            seadmeteMap[seade]['Hetke_voimsus']
+                                                    .toString() +
+                                                ' W ',
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          )
+                                        : Text(
+                                            '0' + ' W ',
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
                                   ),
                                 ),
                               ),

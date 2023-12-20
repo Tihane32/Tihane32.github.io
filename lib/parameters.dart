@@ -23,8 +23,9 @@ Map<String, dynamic> gruppiMap = {
     'Grupi_temp_andur': [],
     'Grupi_niiskus_andur': [],
     'Grupi_valgus_andur': [],
-    'Grupi_temp': 27.3,
+    'Grupi_temp': 0,
     'Gruppi_olek': 'on',
+    'Gruppi_voimsus': 0,
   },
 };
 

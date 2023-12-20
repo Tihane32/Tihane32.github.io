@@ -1,13 +1,16 @@
 import 'dart:async';
+import 'dart:math';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:testuus4/funktsioonid/keskonnaMoodis.dart';
 import 'package:testuus4/funktsioonid/seisukord.dart';
 import 'package:testuus4/lehed/Tundide_valimis_Lehed/Graafik_Seadmete_valik/DynaamilineGraafikusseSeadmeteValik.dart';
 import 'package:testuus4/lehed/Gruppi_Lehed/dynaamilineGrupiLeht.dart';
 import 'package:testuus4/lehed/P%C3%B5hi_Lehed/dynamicKoduLeht.dart';
 import 'package:testuus4/main.dart';
 
-import '../../funktsioonid/saaGruppiOlek.dart';import 'package:testuus4/parameters.dart';
+import '../../funktsioonid/saaGruppiOlek.dart';
+import 'package:testuus4/parameters.dart';
 import '../../funktsioonid/salvestaGrupp.dart';
 import '../Tundide_valimis_Lehed/Graafik_Seadmete_valik/graafikuseSeadmeteValik_yksikud.dart';
 
@@ -25,7 +28,15 @@ class _SeadmeteList_gruppidState extends State<SeadmeteList_gruppid> {
     seisukord();
     SeadmeGraafikKontrollimineGen1();
     SeadmeGraafikKontrollimineGen2();
-
+    Timer.periodic(Duration(seconds: 3), (Timer timer) {
+      if (ModalRoute.of(context)?.isCurrent == true) {
+        setState(() {
+          gruppiVoimsus();
+          gruppiKeskond();
+          gruppiMap = gruppiMap;
+        });
+      }
+    });
     super.initState();
   }
 
@@ -251,13 +262,16 @@ class _SeadmeteList_gruppidState extends State<SeadmeteList_gruppid> {
                                     color: Colors.black.withOpacity(
                                         0.5), // changed background to black
                                   ),
-                                  child: Center(
-                                    child: Text(
-                                      '' + grupiTemp.toString() + '° C ',
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.bold,
+                                  child: Visibility(
+                                    visible: grupp != 'Kõik Seadmed',
+                                    child: Center(
+                                      child: Text(
+                                        '' + grupiTemp.toString() + '° C ',
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold,
+                                        ),
                                       ),
                                     ),
                                   ),
@@ -290,7 +304,9 @@ class _SeadmeteList_gruppidState extends State<SeadmeteList_gruppid> {
                                   ),
                                   child: Center(
                                     child: Text(
-                                      ' 50,3 W ',
+                                      gruppiMap[grupp]['Gruppi_voimsus']
+                                              .toString() +
+                                          ' W',
                                       style: TextStyle(
                                         color: Colors.white,
                                         fontSize: 18,
@@ -311,6 +327,33 @@ class _SeadmeteList_gruppidState extends State<SeadmeteList_gruppid> {
       ),
     );
   }
+}
+
+void gruppiKeskond() {
+  gruppiMap.forEach((key, value) async {
+    String tempID = '';
+    tempID = gruppiMap[key]['Grupi_temp_andur'];
+    print('Tprint tempID ${gruppiMap[key]['Grupi_temp_andur']}');
+    if (tempID != '') {
+      gruppiMap[key]['Grupi_temp'] = anduriteMap[tempID]['temp'];
+      print('Tprint tempG ${gruppiMap[key]['Grupi_temp']}');
+    }
+  });
+}
+
+void gruppiVoimsus() async {
+  num mod = pow(10.0, 1);
+  gruppiMap.forEach((key, value) async {
+    double sumVoimsus = 0;
+
+    gruppiMap[key]['Grupi_Seadmed'].forEach((element) {
+      if (seadmeteMap[element]['Seadme_olek'] == 'on') {
+        sumVoimsus = sumVoimsus + seadmeteMap[element]['Hetke_voimsus'];
+      }
+    });
+    sumVoimsus = ((sumVoimsus * mod).round().toDouble() / mod);
+    gruppiMap[key]['Gruppi_voimsus'] = sumVoimsus;
+  });
 }
 
 Widget _buildIconButton(IconData icon, Function onTap) {

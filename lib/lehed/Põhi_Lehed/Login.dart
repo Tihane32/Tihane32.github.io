@@ -8,6 +8,7 @@ import 'package:testuus4/lehed/P%C3%B5hi_Lehed/dynamicKoduLeht.dart';
 import 'package:testuus4/lehed/uuedSeadmed.dart';
 import 'package:testuus4/main.dart';
 import 'package:testuus4/parameters.dart';
+
 class LoginPage extends StatefulWidget {
   @override
   _LoginPageState createState() => _LoginPageState();
@@ -96,30 +97,29 @@ class _LoginPageState extends State<LoginPage> {
         if (!seadmeteMap.containsKey(device['id'])) {
           var seade = new Map<String, dynamic>();
 
-          if(!device['id'].endsWith("_1")) {
-                    seade['Seadme_nimi'] = device['name'];
-          seade['Seadme_pistik'] = device['name'];
-          seade['Seadme_generatsioon'] = device['gen'];
-          seade['Seadme_cat'] = device['category'];
-          seade['Seadme_tuup'] = device['type'];
-          seade['api_url'] = apiUrl;
-          seade['Seadme_pilt'] = "assets/boiler1.jpg";
-          seade['Cloud_key'] = keyMap;
-          seade['Username'] = ajutineKastuajanimi;
-          seade['Password'] = sha1Hash;
-          seade['Valitud_Tunnid'] = 12;
-          seade['Hinnapiir'] = 50.50;
-          seade['Seadistus_lubatud'] = false;
-          seade['Max_jarjest_valjas'] = 12.0;
-          seade['Kelleatud_tunnid'] = [];
-          seade['Lubatud_tunnid'] = [];
+          if (!device['id'].endsWith("_1")) {
+            seade['Seadme_nimi'] = device['name'];
+            seade['Seadme_pistik'] = device['name'];
+            seade['Seadme_generatsioon'] = device['gen'];
+            seade['Seadme_cat'] = device['category'];
+            seade['Seadme_tuup'] = device['type'];
+            seade['api_url'] = apiUrl;
+            seade['Seadme_pilt'] = "assets/boiler1.jpg";
+            seade['Cloud_key'] = keyMap;
+            seade['Username'] = ajutineKastuajanimi;
+            seade['Password'] = sha1Hash;
+            seade['Valitud_Tunnid'] = 12;
+            seade['Hinnapiir'] = 50.50;
+            seade['Seadistus_lubatud'] = false;
+            seade['Max_jarjest_valjas'] = 12.0;
+            seade['Kelleatud_tunnid'] = [];
+            seade['Lubatud_tunnid'] = [];
+            seade['Hetke_voimsus'] = 0;
+            seadmed['${device['id']}'] = seade;
+            i++;
 
-          seadmed['${device['id']}'] = seade;
-          i++;
-
-          uuedSeadmedString.add(device['name']);
+            uuedSeadmedString.add(device['name']);
           }
-  
         }
       }
 
@@ -140,29 +140,29 @@ class _LoginPageState extends State<LoginPage> {
       for (var device in seadedKasutajalt.values) {
         var seade = new Map<String, dynamic>();
         //seade['Seadme_ID'] = device['id'];
-        if(!device['id'].endsWith("_1")) {
-                seade['Seadme_nimi'] = device['name'];
-        seade['Seadme_pistik'] = device['name'];
-        seade['Seadme_generatsioon'] = device['gen'];
-        seade['Seadme_cat'] = device['category'];
-        seade['Seadme_tuup'] = device['type'];
-        seade['api_url'] = apiUrl;
-        seade['Seadme_pilt'] = "assets/boiler1.jpg";
-        seade['Cloud_key'] = keyMap;
-        seade['Username'] = ajutineKastuajanimi;
-        seade['Password'] = sha1Hash;
-        seade['Valitud_Tunnid'] = 12;
-        seade['Hinnapiir'] = 50.50;
-        seade['Seadistus_lubatud'] = false;
-        seade['Max_jarjest_valjas'] = 1.0;
-        seade['Kelleatud_tunnid'] = [];
-        seade['Lubatud_tunnid'] = [];
-        seadmed['${device['id']}'] = seade;
-        i++;
+        if (!device['id'].endsWith("_1")) {
+          seade['Seadme_nimi'] = device['name'];
+          seade['Seadme_pistik'] = device['name'];
+          seade['Seadme_generatsioon'] = device['gen'];
+          seade['Seadme_cat'] = device['category'];
+          seade['Seadme_tuup'] = device['type'];
+          seade['api_url'] = apiUrl;
+          seade['Seadme_pilt'] = "assets/boiler1.jpg";
+          seade['Cloud_key'] = keyMap;
+          seade['Username'] = ajutineKastuajanimi;
+          seade['Password'] = sha1Hash;
+          seade['Valitud_Tunnid'] = 12;
+          seade['Hinnapiir'] = 50.50;
+          seade['Seadistus_lubatud'] = false;
+          seade['Max_jarjest_valjas'] = 1.0;
+          seade['Kelleatud_tunnid'] = [];
+          seade['Lubatud_tunnid'] = [];
+          seade['Hetke_voimsus'] = 0;
+          seadmed['${device['id']}'] = seade;
+          i++;
 
-        uuedSeadmedString.add(device['name']);
-          }
-    
+          uuedSeadmedString.add(device['name']);
+        }
       }
 
       // await prefs.setString('seadmed', seadmedMap);

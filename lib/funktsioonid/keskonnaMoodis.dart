@@ -28,26 +28,16 @@ keskonnaMoodis() async {
           " 00:00:00",
     };
 
-    print('Tprint $data');
-
     var url =
         Uri.parse("${anduriteMap[ID]['api_url']}/statistics/sensor/values");
 
     var res = await http.post(url, headers: headers, body: data);
-
-    print(
-        'Tprint ${DateFormat('yyyy-MM-dd').format(DateTime.now()).toString()}');
 
     if (res.statusCode != 200)
       throw Exception('http.post error: statusCode= ${res.statusCode}');
 
     Map<String, dynamic> jsonResponseMap = json.decode(res.body);
     List<dynamic> history = jsonResponseMap['data']['history'];
-
-    print('Tprint id $key ; History = $history');
-    print('Tprint res ${res.body}');
-    print(
-        'Tprint vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv');
 
     if (history.isNotEmpty) {
       double lastTemperature = history.last['max_temperature'];

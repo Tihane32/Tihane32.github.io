@@ -23,7 +23,14 @@ class _SeadmeteList_anduridState extends State<SeadmeteList_andurid> {
   //String onoffNupp = 'Shelly ON';
   @override
   void initState() {
-    keskonnaMoodis();
+    Timer.periodic(Duration(seconds: 3), (Timer timer) {
+      if (ModalRoute.of(context)?.isCurrent == true) {
+        setState(() {
+          keskonnaMoodis();
+          anduriteMap = anduriteMap;
+        });
+      }
+    });
     super.initState();
     fetchData();
   }
