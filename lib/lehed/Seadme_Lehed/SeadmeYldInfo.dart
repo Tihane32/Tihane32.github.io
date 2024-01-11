@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:testuus4/funktsioonid/lulitamine.dart';
+import 'package:testuus4/lehed/P%C3%B5hi_Lehed/dynamicKoduLeht.dart';
 import 'package:testuus4/widgets/AbiLeht.dart';
 import 'package:testuus4/lehed/Seadme_Lehed/SeadmeGraafikLeht.dart';
 import 'package:testuus4/lehed/Seadme_Lehed/SeadmePildiMuutmine.dart';
@@ -12,6 +13,7 @@ import 'package:testuus4/main.dart';
 import '../../Arhiiv/SeadmeTarbimisLeht.dart';
 import 'dynamicSeadmeInfo.dart';
 import 'package:testuus4/parameters.dart';
+
 class SeadmeYldinfoLeht extends StatefulWidget {
   const SeadmeYldinfoLeht(
       {Key? key, required this.seadmeNimi, required this.SeadmeteMap})
@@ -56,8 +58,6 @@ class _SeadmeYldinfoLehtState extends State<SeadmeYldinfoLeht> {
 
   init() {
     setState(() {
-      print("siiiiin");
-      print(SeadmeteMap[seadmeNimi]);
       mudel = SeadmeteMap[seadmeNimi]["Seadme_pistik"];
       id = seadmeNimi;
     });
@@ -228,6 +228,44 @@ class _SeadmeYldinfoLehtState extends State<SeadmeYldinfoLeht> {
                 ),
               ),
             ),
+            SizedBox(height: vahe),
+            Align(
+              alignment: Alignment.centerLeft,
+              child: GestureDetector(
+                onTap: () {
+                  seadmeteMap.remove(id);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => DynaamilenieKoduLeht(i: 1),
+                    ),
+                  );
+                },
+                child: Container(
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                      color: boxColor,
+                      borderRadius: BorderRadius.circular(5.0),
+                      border: Border.all(
+                        color: Color.fromARGB(0, 0, 0, 0),
+                        width: 2,
+                      )),
+                  width: sinineKastLaius,
+                  height: sinineKastKorgus,
+                  child: RichText(
+                    text: TextSpan(
+                      style: const TextStyle(
+                        fontSize: 20,
+                        color: Colors.black,
+                      ),
+                      children: [
+                        TextSpan(text: 'Kustuta seade', style: font),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
           ],
         ),
       ),
@@ -264,8 +302,6 @@ muudaSeadmeOlek(SeadmeNimi) {
 }
 
 nimeMuutmine(String seadmeNimi, String uusNimi) async {
-  print(seadmeNimi);
-  print(seadmeteMap);
   SharedPreferences prefs = await SharedPreferences.getInstance();
   //await prefs.clear();
 
@@ -280,7 +316,6 @@ nimeMuutmine(String seadmeNimi, String uusNimi) async {
     String keyMap = json.encode(storedMap);
     prefs.setString('seadmed', keyMap);
     seadmeteMap = storedMap;
-    print(storedMap[seadmeNimi]['Seadme_nimi']);
   }
 }
 
@@ -295,8 +330,6 @@ pildiMuutmine(String seadmeNimi, String uusPilt) async {
 
     storedMap[seadmeNimi]['Seadme_pilt'] = uusPilt;
     String keyMap = json.encode(storedMap);
-    print("uus");
-    print(keyMap);
     prefs.setString('seadmed', keyMap);
     seadmeteMap = storedMap;
   }
