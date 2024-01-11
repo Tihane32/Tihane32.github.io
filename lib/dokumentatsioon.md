@@ -19,12 +19,24 @@
     - [1.2.1 lulitamine](#121-lulitamine)
     - [1.2.2 graafikGen1ToLulitusMap](#122-graafikgen1tolulitusmap)
 - [Lisa funktsioonid](#lisa-funktsioonid)
+  - [Lisa 1, mällu salvestamine](#lisa-1-mällu-salvestamine)
+  - [Lisa 2](#lisa-2)
+  - [Lisa 3](#lisa-3)
+  - [Lisa 4](#lisa-4)
+  - [Lisa 5 conf fail to map](#lisa-5-conf-fail-to-map)
 - [2. Muutujate kujud](#2-muutujate-kujud)
   - [2.1 lulitus](#21-lulitus)
   - [2.2 seadmeteMap](#22-seadmetemap)
 - [3. Shelly graafikute kujud](#3-shelly-graafikute-kujud)
   - [3.1 Generatsioon 1](#31-generatsioon-1)
   - [3.2 Generatsioon 2](#32-generatsioon-2)
+- [4. Graafiku koostamis funktsioonid](#4-graafiku-koostamis-funktsioonid)
+  - [4.1 keskmisehinna alusel graafiku loomine](#41-keskmisehinna-alusel-graafiku-loomine)
+    - [4.1.1 keskmisehinna arvutus](#411-keskmisehinna-arvutus)
+  - [4.2 Hinnapiiri alusel graafiku loomine](#42-hinnapiiri-alusel-graafiku-loomine)
+- [5. Eleringi API-ga seotud funktioonid](#5-eleringi-api-ga-seotud-funktioonid)
+  - [5.1 Eesti hetke elektrihinna saamine](#51-eesti-hetke-elektrihinna-saamine)
+  - [5.2 Hinnapiiri alusel graafiku loomine](#52-hinnapiiri-alusel-graafiku-loomine)
 
 # 1. Shelly seadmete funktsioonid
 
@@ -355,16 +367,19 @@ xxxx
 
 # 5. Eleringi API-ga seotud funktioonid
 
-## 5.1 keskmisehinna alusel graafiku loomine
+## 5.1 Eesti hetke elektrihinna saamine
 
 ```dart
+// File: (hetke_hind.dart)[lib/funktsioonid/hetke_hind.dart]
 
-keskmineHindArvutaus(Map<int, dynamic> lulitus) {
- return double;
+Future<double> getCurrentPrice() async {
+  return CurrentPrice;
 }
+
 ```
 
-saadab tagasi keskmise hinna
+Saadab tagasi Eesti hetke elektrihinna ilma käibemaksuta.
+Ühikuks on €/MWh.
 
 ---
 
