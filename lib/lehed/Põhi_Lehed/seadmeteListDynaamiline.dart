@@ -34,6 +34,8 @@ class _SeadmeteListState extends State<SeadmeteList> {
   double width = 200;
   double height = 40;
   void initState() {
+    keskonnaMoodis();
+    voimsusMoodis();
     super.initState();
     if (seadmeteListIndex == 0) {
       xAlign = loginAlign;
