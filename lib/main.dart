@@ -98,8 +98,6 @@ Future<void> main() async {
 //backround start
   await ping();
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  getCurrentPrice();
-  []; //Võtab mälust 'users'-i asukohast väärtused
   var seadmedJSONmap = prefs.getString('seadmed');
   //print(seadmedJSONmap);
   if (seadmedJSONmap != null) {

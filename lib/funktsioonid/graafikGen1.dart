@@ -5,6 +5,7 @@ import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:testuus4/main.dart';
 import 'package:testuus4/parameters.dart';
+
 /// The function `gen1GraafikLoomine` creates a graph based on the provided data and sends a POST
 /// request to update the schedule rules for a device.
 ///
@@ -141,6 +142,15 @@ gen1GraafikLoomine(
   }
 }
 
+/// The function `graafikGen1Lugemine` is used to get a Shelly generation 1 device schedule
+///
+/// Example:
+///```dart
+///List schedule = await graafikGen1Lugemine("device_id");
+///print(schedule); //[0055-3-on, 0050-012-on, 2100-01-on]
+///
+///
+///```
 graafikGen1Lugemine(String id) async {
   var headers = {
     'Content-Type': 'application/x-www-form-urlencoded',
@@ -155,17 +165,6 @@ graafikGen1Lugemine(String id) async {
   var url = Uri.parse('${seadmeteMap[id]['api_url']}/device/settings');
 
   var res = await http.post(url, headers: headers, body: data);
-  //Kui post läheb läbi siis:
-  /*if (res.body.toString() ==
-      """{"isok":false,"errors":{"max_req":"Request limit reached!"}}""") {
-    print("ootab");
-
-    await Future.delayed(Duration(seconds: 2));
-
-    res = await http.post(url, headers: headers, body: data);
-    //Kui post läheb läbi siis:
-    print("ootas ära");
-  }*/
 
   while (res.body.toString() ==
       """{"isok":false,"errors":{"max_req":"Request limit reached!"}}""") {
@@ -182,6 +181,15 @@ graafikGen1Lugemine(String id) async {
   return scheduleRules1;
 }
 
+///The function `graafikGen1Saatmine` is used to give a Shelly generation 1 device a schedule
+///
+///Example:
+///```dart
+///List<dynamic> schedule = ["0055-3-on", "0050-012-on", "2100-01-on"];
+///await graafikGen1Saatmine(schedule,"device_id");
+///
+///
+///```
 graafikGen1Saatmine(List<dynamic> graafik, String id) async {
   if (seadmeteMap[id]['Seadme_olek'] != 'Offline') {
     String graafikString = graafik.join(',');

@@ -48,6 +48,8 @@
 
 #### 1.1.1.1 graafikGen1Lugemine
 
+File: [graafikGen1.dart](funktsioonid/graafikGen1.dart)
+
 ```dart
 graafikGen1Lugemine(String id) async {
 return List<dynamic>;
@@ -62,6 +64,8 @@ id = seadme id, mille graafikut soovitakse saada.
 ---
 
 #### 1.1.1.2 graafikGen1Saatmine
+
+File: [graafikGen1.dart](funktsioonid/graafikGen1.dart)
 
 ```dart
 graafikGen1Saatmine(List<dynamic> graafik, String id) async {
@@ -369,8 +373,10 @@ xxxx
 
 ## 5.1 Eesti hetke elektrihinna saamine
 
+File: [hetke_hind.dart](funktsioonid/hetke_hind.dart)
+
 ```dart
-// File: (hetke_hind.dart)[lib/funktsioonid/hetke_hind.dart]
+
 
 Future<double> getCurrentPrice() async {
   return CurrentPrice;
