@@ -212,6 +212,7 @@ salvestaSeadistus(
 }
 
 ```
+
 Salvestab mällu iga valitud seadme kohta parameetri
 
 ---
@@ -225,7 +226,6 @@ return int;
 ```
 
 Annab tänase nädalapäeva numbri.
-
 
 ## Lisa 3
 
@@ -249,7 +249,6 @@ Määrab gruppile oleku, loogikaga:
  kui vähemalt 1 seade "Offline" siis on grupp "Offline"
  kui kõik seadmed on "on" siis on grupp "on"
  kui kumbki tingimus ei ole täidetud on grupp "off"
-
 
 ## Lisa 5 conf fail to map
 
@@ -343,6 +342,33 @@ saadab tagasi keskmise hinna
 ---
 
 ## 4.2 Hinnapiiri alusel graafiku loomine
+
+```dart
+
+f
+
+```
+
+xxxx
+
+---
+
+# 5. Eleringi API-ga seotud funktioonid
+
+## 5.1 keskmisehinna alusel graafiku loomine
+
+```dart
+
+keskmineHindArvutaus(Map<int, dynamic> lulitus) {
+ return double;
+}
+```
+
+saadab tagasi keskmise hinna
+
+---
+
+## 5.2 Hinnapiiri alusel graafiku loomine
 
 ```dart
 
