@@ -8,6 +8,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:testuus4/funktsioonid/hetke_hind.dart';
 import 'package:testuus4/funktsioonid/keskonnaMoodis.dart';
 import 'package:testuus4/funktsioonid/token.dart';
 import 'package:testuus4/funktsioonid/voimsusMoodis.dart';
@@ -97,8 +98,6 @@ Future<void> main() async {
 //backround start
   await ping();
   SharedPreferences prefs = await SharedPreferences.getInstance();
-
-  []; //Võtab mälust 'users'-i asukohast väärtused
   var seadmedJSONmap = prefs.getString('seadmed');
   //print(seadmedJSONmap);
   if (seadmedJSONmap != null) {

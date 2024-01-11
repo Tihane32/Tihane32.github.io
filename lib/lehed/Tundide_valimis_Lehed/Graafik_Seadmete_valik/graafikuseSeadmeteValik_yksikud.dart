@@ -207,7 +207,6 @@ class _SeadmeteListValimine_yksikudState
                                               });
                                             }
                                           }
-                                          print(seadmeGraafik);
 
                                           PopUpGraafik(
                                               context,
@@ -274,111 +273,21 @@ Map<String, bool> valitudSeadmeteNullimine() {
 
 SeadmeGraafikKoostamineGen1(String value) async {
   bool grafikOlems = false;
-  DateTime now = DateTime.now();
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  String? storedKey = prefs.getString('key');
-  String storedKeyString = jsonDecode(storedKey!);
-  var headers = {
-    'Content-Type': 'application/x-www-form-urlencoded',
-  };
+  List<dynamic> seadmeGraafik1 = await graafikGen1Lugemine(value);
 
-  var data = {
-    'channel': '0',
-    'id': value,
-    'auth_key': storedKeyString,
-  };
-
-  var url = Uri.parse('${seadmeteMap[value]["api_url"]}/device/settings');
-
-  var res = await http.post(url, headers: headers, body: data);
-
-  await Future.delayed(const Duration(seconds: 2));
-  //Kui post läheb läbi siis:
-
-  final httpPackageJson = json.decode(res.body) as Map<String, dynamic>;
-
-  var seadmeGraafik1 =
-      httpPackageJson['data']['device_settings']['relays'][0]['schedule_rules'];
-
-  int paev = 0;
-
-  if (now.weekday == 7) {
-    paev = 0;
-  } else {
-    paev = now.weekday - 1;
-  }
-
+  int paev = getCurrentDayOfWeek();
+  seadmeGraafik1 = graafikGen1Filtreerimine(seadmeGraafik1, [paev]);
   for (var i = 0; i < seadmeGraafik1.length; i++) {
     String mainString = seadmeGraafik1[i];
     if (mainString.contains("-$paev-")) {
       grafikOlems = true;
+      break;
     }
   }
-
+  seadmeGraafik1 = graafikGen1TabeliLoomine(seadmeGraafik1);
   if (grafikOlems) {
-    List<String> filledTimes = [];
-    List<String> graafikParis = [];
-    String? lastState;
-
-    for (var i = 0; i < seadmeGraafik1.length; i++) {
-      var parts = seadmeGraafik1[i].split('-');
-      var currentTime = int.parse(parts[0]);
-      var state = parts[2];
-
-      if (i == 0) {
-        filledTimes.add(seadmeGraafik1[i]);
-      } else {
-        var prevParts = seadmeGraafik1[i - 1].split('-');
-        var prevTime = int.parse(prevParts[0]);
-        var timeDiff = currentTime - prevTime;
-
-        if (timeDiff > 100) {
-          for (var j = 1; j < timeDiff / 100; j++) {
-            filledTimes.add(
-                "${(prevTime + 100 * j).toString().padLeft(4, '0')}-0-$lastState");
-          }
-        }
-        filledTimes.add(seadmeGraafik1[i]);
-      }
-      lastState = state;
-    }
-
-    var lastParts = filledTimes.last.split('-');
-    var lastTime = int.parse(lastParts[0]);
-
-    while (lastTime < 2400) {
-      lastTime += 100;
-      filledTimes.add("${lastTime.toString().padLeft(4, '0')}-0-$lastState");
-    }
-    if (filledTimes[0] != '0000-$paev-on' ||
-        filledTimes[0] != '0000-$paev-off') {
-      int maramataPaevad = 24 - filledTimes.length;
-      for (int i = 0; i < 24; i++) {
-        String tunnike = '';
-        if (i < maramataPaevad + 1) {
-          if (i < 10) {
-            tunnike = '0$i';
-          } else {
-            tunnike = '$i';
-          }
-          graafikParis.add("${tunnike}00-0-off");
-        } else {
-          graafikParis.add(filledTimes[i - maramataPaevad - 1]);
-        }
-      }
-    }
-
-    List<String> onOffStatus = [];
-
-    for (var timeEntry in graafikParis) {
-      var parts = timeEntry.split('-');
-      var status = parts[2];
-
-      if (status == "on" || status == "off") {
-        onOffStatus.add(status);
-      }
-    }
-    return onOffStatus;
+    print(("J: $seadmeGraafik1"));
+    return seadmeGraafik1;
   } else {
     List<String> tuhi = ['pole graafikut'];
     return tuhi;
@@ -389,98 +298,50 @@ SeadmeGraafikKoostamineGen2(
   String value,
 ) async {
   bool grafikOlems = false;
-  DateTime now = DateTime.now();
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  String? storedKey = prefs.getString('key');
-  String storedKeyString = jsonDecode(storedKey!);
-
   List<dynamic> seadmeGraafik1 = await graafikGen2Lugemine(value);
   seadmeGraafik1 = graafikGen2ToGraafikGen1(seadmeGraafik1);
-  print(seadmeGraafik1);
-
-  int paev = 0;
-
-  if (now.weekday == 7) {
-    paev = 0;
-  } else {
-    paev = now.weekday - 1;
-  }
-
+  int paev = getCurrentDayOfWeek();
   for (var i = 0; i < seadmeGraafik1.length; i++) {
     String mainString = seadmeGraafik1[i];
     if (mainString.contains("-$paev-")) {
       grafikOlems = true;
+      break;
     }
   }
-
+  List test = graafikGen1Filtreerimine(seadmeGraafik1, [paev]);
+  test = graafikGen1TabeliLoomine(test);
   if (grafikOlems) {
-    List<String> filledTimes = [];
-    List<String> graafikParis = [];
-    String? lastState;
-
-    for (var i = 0; i < seadmeGraafik1.length; i++) {
-      var parts = seadmeGraafik1[i].split('-');
-      var currentTime = int.parse(parts[0]);
-      var state = parts[2];
-
-      if (i == 0) {
-        filledTimes.add(seadmeGraafik1[i]);
-      } else {
-        var prevParts = seadmeGraafik1[i - 1].split('-');
-        var prevTime = int.parse(prevParts[0]);
-        var timeDiff = currentTime - prevTime;
-
-        if (timeDiff > 100) {
-          for (var j = 1; j < timeDiff / 100; j++) {
-            filledTimes.add(
-                "${(prevTime + 100 * j).toString().padLeft(4, '0')}-0-$lastState");
-          }
-        }
-        filledTimes.add(seadmeGraafik1[i]);
-      }
-      lastState = state;
-    }
-
-    var lastParts = filledTimes.last.split('-');
-    var lastTime = int.parse(lastParts[0]);
-
-    while (lastTime < 2400) {
-      lastTime += 100;
-      filledTimes.add("${lastTime.toString().padLeft(4, '0')}-0-$lastState");
-    }
-    if (filledTimes[0] != '0000-$paev-on' ||
-        filledTimes[0] != '0000-$paev-off') {
-      int maramataPaevad = 24 - filledTimes.length;
-      for (int i = 0; i < 24; i++) {
-        String tunnike = '';
-        if (i < maramataPaevad + 1) {
-          if (i < 10) {
-            tunnike = '0$i';
-          } else {
-            tunnike = '$i';
-          }
-          graafikParis.add("${tunnike}00-0-off");
-        } else {
-          graafikParis.add(filledTimes[i - maramataPaevad - 1]);
-        }
-      }
-    }
-
-    List<String> onOffStatus = [];
-
-    for (var timeEntry in graafikParis) {
-      var parts = timeEntry.split('-');
-      var status = parts[2];
-
-      if (status == "on" || status == "off") {
-        onOffStatus.add(status);
-      }
-    }
-    return onOffStatus;
+    return test;
   } else {
     List<String> tuhi = ['pole graafikut'];
     return tuhi;
   }
+}
+
+List graafikGen1TabeliLoomine(seadmeGraafik1) {
+  List timeList = [];
+  List uusGraafik = [];
+  seadmeGraafik1.sort((a, b) {
+    final timeA = int.parse(a.substring(0, 4));
+    final timeB = int.parse(b.substring(0, 4));
+
+    return timeA.compareTo(timeB);
+  });
+
+  for (var i = 0; i < seadmeGraafik1.length; i++) {
+    List parts = seadmeGraafik1[i].split('-');
+
+    timeList.add(int.parse(parts[0].substring(0, 2)));
+  }
+  for (int j = 0; j < 24; j++) {
+    if (timeList.contains(j)) {
+      List parts = seadmeGraafik1[timeList.indexOf(j)].split('-');
+      uusGraafik.add(parts[2]);
+    } else {
+      uusGraafik.add(uusGraafik[j - 1]);
+    }
+  }
+  return uusGraafik;
 }
 
 SeadmeGraafikKontrollimineGen1() async {
@@ -489,12 +350,9 @@ SeadmeGraafikKontrollimineGen1() async {
   String graafik = '';
   seadmeteMap.forEach((key, value) async {
     if (value['Seadme_generatsioon'] == 1) {
-      print("saadab $key");
       List<dynamic> seadmeGraafik1 = await graafikGen1Lugemine(key);
-      print("sai $key");
       graafik = seadmeGraafik1.join(", ");
       int paev = getCurrentDayOfWeek();
-      print("seadme graafik: $graafik");
       if (graafik.contains("-$paev-")) {
         grafikOlems = true;
       }
