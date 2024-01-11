@@ -8,6 +8,7 @@ import 'token.dart';
 import 'package:intl/intl.dart';
 import 'package:testuus4/main.dart';
 import 'package:testuus4/parameters.dart';
+
 /// The function `gen2GraafikuLoomine` creates and deletes schedules for a device based on selected
 /// values and user preferences.
 ///
@@ -32,7 +33,6 @@ gen2GraafikuLoomine(
     paevad.add(i);
     paev = getTommorowDayOfWeek();
   }
-  print("lulitusmap siin: $lulitus");
   List<dynamic> graafik = await graafikGen2Lugemine(id);
   List<dynamic> abi = graafik;
 
@@ -397,7 +397,6 @@ delete(value, List temp) async {
         '${seadmeteMap[value]['api_url']}/fast/device/gen2_generic_command');
     var res1 = await http.post(url, headers: headers, body: data);
     //await Future.delayed(const Duration(seconds: 2));
-    print("delete this:  ${res1.body}");
   }
 }
 
@@ -446,23 +445,42 @@ graafikGen2ToGraafikGen1(List<dynamic> graafik) {
     if (job is Map && job.containsKey('timespec') && job.containsKey('calls')) {
       String timespec = job['timespec'];
       List<String> timespecParts = timespec.split(' ');
-
       // Extract the relevant components
       if (timespecParts.length == 6) {
-        String time = timespecParts[2];
-        String day = timespecParts[5];
-        String switchState = job['calls'][0]['params']['on'] ? 'on' : 'off';
+        if (timespecParts[5].contains(",")) {
+          List<String> newParts = timespecParts[5].split(",");
+          for (int i = 0; i < newParts.length; i++) {
+            String time = timespecParts[2];
+            String day = newParts[i];
+            String switchState = job['calls'][0]['params']['on'] ? 'on' : 'off';
 
-        // Convert the day name to a number using the dayMap
-        int? dayNumber = dayMap[day];
-        if (int.parse(time) < 10) {
-          time = "0${time}00";
+            // Convert the day name to a number using the dayMap
+            int? dayNumber = dayMap[day];
+            if (int.parse(time) < 10) {
+              time = "0${time}00";
+            } else {
+              time = "${time}00";
+            }
+            // Create the formatted string and add it to the result list
+            String formattedJob = '$time-$dayNumber-$switchState';
+            result.add(formattedJob);
+          }
         } else {
-          time = "${time}00";
+          String time = timespecParts[2];
+          String day = timespecParts[5];
+          String switchState = job['calls'][0]['params']['on'] ? 'on' : 'off';
+
+          // Convert the day name to a number using the dayMap
+          int? dayNumber = dayMap[day];
+          if (int.parse(time) < 10) {
+            time = "0${time}00";
+          } else {
+            time = "${time}00";
+          }
+          // Create the formatted string and add it to the result list
+          String formattedJob = '$time-$dayNumber-$switchState';
+          result.add(formattedJob);
         }
-        // Create the formatted string and add it to the result list
-        String formattedJob = '$time-$dayNumber-$switchState';
-        result.add(formattedJob);
       }
     }
   }
@@ -535,8 +553,6 @@ graafikGen2DeleteAll(String id) async {
   var url = Uri.parse(
       '${seadmeteMap[id]['api_url']}/fast/device/gen2_generic_command');
   var res1 = await http.post(url, headers: headers, body: data);
-  print("delete all");
-  print(res1.body);
 }
 
 graafikGen2DeleteSome(String id, List<dynamic> graafikUus) async {
@@ -592,8 +608,6 @@ graafikGen2Filtreerimine(String id, List<dynamic> graafikUus) async {
 
 // 1.1.2.3 graafikGen2SaatmineGraafikuga
 graafikGen2SaatmineGraafikuga(List<dynamic> graafik, String id) async {
-  print(graafik);
-
   if (seadmeteMap[id]['Seadme_olek'] != 'Offline') {
     for (int i = 0; i < graafik.length; i++) {
       var headers = {
@@ -609,8 +623,6 @@ graafikGen2SaatmineGraafikuga(List<dynamic> graafik, String id) async {
       var url = Uri.parse(
           '${seadmeteMap[id]['api_url']}/fast/device/gen2_generic_command');
       var res = await http.post(url, headers: headers, body: data);
-      print(res.body);
-      print("sent this: $id ${graafik[i]}");
     }
   }
   mitmeSeadmeKinnitus.add(true);
