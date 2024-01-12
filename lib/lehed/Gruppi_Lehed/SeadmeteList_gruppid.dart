@@ -2,16 +2,14 @@ import 'dart:async';
 import 'dart:math';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:testuus4/funktsioonid/keskonnaMoodis.dart';
+import 'package:testuus4/funktsioonid/lulitamine.dart';
 import 'package:testuus4/funktsioonid/seisukord.dart';
 import 'package:testuus4/lehed/Tundide_valimis_Lehed/Graafik_Seadmete_valik/DynaamilineGraafikusseSeadmeteValik.dart';
 import 'package:testuus4/lehed/Gruppi_Lehed/dynaamilineGrupiLeht.dart';
 import 'package:testuus4/lehed/P%C3%B5hi_Lehed/dynamicKoduLeht.dart';
-import 'package:testuus4/main.dart';
-
+import '../../Arhiiv/graafikuseSeadmedBody.dart';
 import '../../funktsioonid/saaGruppiOlek.dart';
 import 'package:testuus4/parameters.dart';
-import '../../funktsioonid/salvestaGrupp.dart';
 import '../Tundide_valimis_Lehed/Graafik_Seadmete_valik/graafikuseSeadmeteValik_yksikud.dart';
 
 class SeadmeteList_gruppid extends StatefulWidget {
@@ -26,6 +24,7 @@ class _SeadmeteList_gruppidState extends State<SeadmeteList_gruppid> {
   @override
   void initState() {
     seisukord();
+    saaGrupiOlek();
     SeadmeGraafikKontrollimineGen1();
     SeadmeGraafikKontrollimineGen2();
     Timer.periodic(Duration(seconds: 3), (Timer timer) {
@@ -33,6 +32,7 @@ class _SeadmeteList_gruppidState extends State<SeadmeteList_gruppid> {
         setState(() {
           gruppiVoimsus();
           gruppiKeskond();
+          saaGrupiOlek();
           gruppiMap = gruppiMap;
         });
       }
@@ -50,24 +50,49 @@ class _SeadmeteList_gruppidState extends State<SeadmeteList_gruppid> {
 
   bool canPressButton = true;
 
-  void _handleButtonPress(seade) {
-    if (!canPressButton) return;
+  void _gruppSwitching(grupp) async {
+    if (!canPressButton) {
+      return;
+    }
 
-    /*
     setState(() {
       canPressButton = false;
-      seadmeteMap = muudaSeadmeOlek(seadmeteMap, seade);
-    });
-    */
-    setState(() {
-      if (gruppiMap[seade]["Gruppi_olek"] == 'on') {
-        gruppiMap[seade]["Gruppi_olek"] = 'off';
-      } else {
-        gruppiMap[seade]["Gruppi_olek"] = 'on';
-      }
     });
 
-    Timer(Duration(seconds: 3), () {
+    List seadmed = [];
+    String olek = 'on';
+
+    seadmed = gruppiMap[grupp]['Grupi_Seadmed'];
+
+    if (gruppiMap[grupp]["Gruppi_olek"] == 'on') {
+      olek = 'off';
+    } else {
+      olek = 'on';
+    }
+
+    setState(() {
+      gruppiMap[grupp]["Gruppi_olek"] = olek;
+      gruppiMap = gruppiMap;
+    });
+
+    for (var item in seadmed) {
+      try {
+        if (seadmeteMap[item]['Seadme_olek'] != olek) {
+          lulitamine(item);
+          await Future.delayed(Duration(milliseconds: 100));
+        }
+      } catch (e) {
+        // Handle errors, e.g., log the error or show a message to the user
+        print('Error in _gruppSwitching: $e');
+      }
+    }
+
+    //saaGrupiOlek();
+
+    setState(() {
+      canPressButton = true;
+    });
+    Timer(Duration(seconds: 1), () {
       setState(() {
         canPressButton = true;
       });
@@ -155,7 +180,7 @@ class _SeadmeteList_gruppidState extends State<SeadmeteList_gruppid> {
 
                   final grupp = gruppiMap.keys.elementAt(index);
                   final gruppiPilt = gruppiMap[grupp]["Gruppi_pilt"];
-                  final grupiOlek = saaGrupiOlek(grupp);
+                  final grupiOlek = gruppiMap[grupp]["Gruppi_olek"];
                   final grupiTemp = gruppiMap[grupp]['Grupi_temp'];
 
                   return GestureDetector(
@@ -206,7 +231,7 @@ class _SeadmeteList_gruppidState extends State<SeadmeteList_gruppid> {
                                       icon: Icon(Icons.power_settings_new),
                                       color: Colors.white,
                                       onPressed: () {
-                                        _handleButtonPress(grupp);
+                                        _gruppSwitching(grupp);
                                       },
                                     ),
                             ),
@@ -332,11 +357,9 @@ class _SeadmeteList_gruppidState extends State<SeadmeteList_gruppid> {
 void gruppiKeskond() {
   gruppiMap.forEach((key, value) async {
     String tempID = '';
-    tempID = gruppiMap[key]['Grupi_temp_andur'];
-    print('Tprint tempID ${gruppiMap[key]['Grupi_temp_andur']}');
-    if (tempID != '') {
+    if (gruppiMap[key]['Grupi_temp_andur'].isNotEmpty) {
+      tempID = gruppiMap[key]['Grupi_temp_andur'];
       gruppiMap[key]['Grupi_temp'] = anduriteMap[tempID]['temp'];
-      print('Tprint tempG ${gruppiMap[key]['Grupi_temp']}');
     }
   });
 }
@@ -354,38 +377,4 @@ void gruppiVoimsus() async {
     sumVoimsus = ((sumVoimsus * mod).round().toDouble() / mod);
     gruppiMap[key]['Gruppi_voimsus'] = sumVoimsus;
   });
-}
-
-Widget _buildIconButton(IconData icon, Function onTap) {
-  return Container(
-    decoration: BoxDecoration(
-      color: Colors.blue.withOpacity(0.6),
-      borderRadius: BorderRadius.circular(25),
-    ),
-    width: 50,
-    height: 50,
-    child: IconButton(
-      padding: EdgeInsets.all(0),
-      iconSize: 40,
-      color: Colors.white,
-      icon: Icon(icon),
-      onPressed: () {},
-    ),
-  );
-}
-
-Widget _buildInfoBox(String info) {
-  return Container(
-    decoration: BoxDecoration(
-      color: Colors.blue.withOpacity(0.6),
-      borderRadius: BorderRadius.circular(10),
-    ),
-    width: 70,
-    height: 50,
-    alignment: Alignment.center,
-    child: Text(
-      info,
-      style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-    ),
-  );
 }
