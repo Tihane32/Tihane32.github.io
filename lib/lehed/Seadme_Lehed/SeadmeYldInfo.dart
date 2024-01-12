@@ -234,6 +234,7 @@ class _SeadmeYldinfoLehtState extends State<SeadmeYldinfoLeht> {
               child: GestureDetector(
                 onTap: () {
                   seadmeteMap.remove(id);
+                  gruppiMap.remove(id);
                   Navigator.push(
                     context,
                     MaterialPageRoute(
