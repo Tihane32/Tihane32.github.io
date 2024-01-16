@@ -16,7 +16,7 @@ import 'package:testuus4/parameters.dart';
 import 'lehed/Põhi_Lehed/dynamicKoduLeht.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
-
+import 'extensions.dart';
 //Maini käivitamine, home on koduleht.
 //bool graafikuNahtavus = true;
 
@@ -96,6 +96,7 @@ Future<List> fetchDataFromServer(
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 //backround start
+
   await ping();
   SharedPreferences prefs = await SharedPreferences.getInstance();
   var seadmedJSONmap = prefs.getString('seadmed');
@@ -122,7 +123,14 @@ Future<void> main() async {
   }
   await getToken3();
 //backround end
+  /*String deviceId = "80646f81ad9a";
+  int id = deviceId.gen;
+  String nimi = deviceId.nimi;
+  String api = deviceId.apiURL;
 
+  print('J: $seadmeteMap');
+  print("J: $id $api $nimi");
+  */
   //await fetchDataFromServer();
   runApp(MaterialApp(
     theme: ThemeData(brightness: Brightness.light),

@@ -6,9 +6,10 @@ import 'token.dart';
 import 'graafikGen1.dart';
 import 'package:testuus4/main.dart';
 import 'package:testuus4/parameters.dart';
+
 /// The function `genMaaramine` determines which generation of a device is being used and calls the
 /// appropriate function.
-/// 
+///
 /// Args:
 ///   lulitus (Map<int, dynamic>): A map containing information about the devices.
 ///   paev (String): The parameter "paev" is a String representing the day for which the graph needs to
