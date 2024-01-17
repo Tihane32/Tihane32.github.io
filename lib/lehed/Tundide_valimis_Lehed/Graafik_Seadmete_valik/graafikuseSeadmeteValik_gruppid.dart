@@ -77,7 +77,7 @@ class _SeadmeteListValimine_guruppidState
   initState() {
     //_submitForm();
     ValitudSeadmed = valitudSeadmeteNullimine();
-
+    saaGrupiOlek();
     super.initState();
   }
 
@@ -97,7 +97,7 @@ class _SeadmeteListValimine_guruppidState
                 itemBuilder: (context, index) {
                   final grupp = gruppiMap.keys.elementAt(index);
                   final gruppiPilt = gruppiMap[grupp]["Gruppi_pilt"];
-                  final grupiOlek = saaGrupiOlek(grupp);
+                  final grupiOlek = gruppiMap[grupp]["Gruppi_olek"];
 
                   return GestureDetector(
                       onTap: () {

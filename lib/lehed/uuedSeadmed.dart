@@ -3,8 +3,10 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:testuus4/funktsioonid/keskonnaMoodis.dart';
 import 'package:testuus4/funktsioonid/seisukord.dart';
 import 'package:testuus4/funktsioonid/token.dart';
+import 'package:testuus4/funktsioonid/voimsusMoodis.dart';
 import 'package:testuus4/lehed/P%C3%B5hi_Lehed/dynamicKoduLeht.dart';
 import 'package:testuus4/main.dart';
 import 'package:testuus4/widgets/teavitus.dart';
@@ -253,6 +255,8 @@ Future<void> sort(
 
   await getToken3();
   await seisukord();
+  keskonnaMoodis();
+  voimsusMoodis();
   //kirjutamegruppimappi koik seadmed
   SalvestaUusGrupp('Kõik Seadmed', {}, '', '', '');
 }
