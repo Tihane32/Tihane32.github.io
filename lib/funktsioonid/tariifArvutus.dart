@@ -7,7 +7,7 @@ import '../main.dart';
 
 List<double> tariifArvutus(List<double> perioodiHinnad) {
   //Kontroll, kas on tarfiif ja seejärel tariifiga elektrihinna arvutamine
-
+  print("J: ${perioodiHinnad.length}");
   if (tariif.isNotEmpty) {
     for (int i = 0; i < perioodiHinnad.length; i++) {
       //Vaatab, kas on ühetariifne või kahetariifne
@@ -22,7 +22,7 @@ List<double> tariifArvutus(List<double> perioodiHinnad) {
       //Kahetariifne:
       else {
         if (DateTime.now().weekday < 6) {
-          if (i < 8 || i > 21) {
+          if (i < 7 || i > 21) {
             double newPrice =
                 (perioodiHinnad[i] * kaibemaks + tariif[1] * kaibemaks * 10);
             perioodiHinnad[i] = double.parse(newPrice.toStringAsFixed(2));
@@ -38,8 +38,8 @@ List<double> tariifArvutus(List<double> perioodiHinnad) {
         }
       }
     }
-  } 
-  
+  }
+
   //Juhul kui tariife ei ole, siis tehakse ainult käibemaksu arvutus
   else {
     for (int i = 0; i < perioodiHinnad.length; i++) {

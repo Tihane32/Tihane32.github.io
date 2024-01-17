@@ -1,1 +1,1 @@
-double kaibemaks = 1.2;
+double kaibemaks = 1;

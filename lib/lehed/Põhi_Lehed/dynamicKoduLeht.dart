@@ -48,7 +48,7 @@ class _DynaamilenieKoduLehtState extends State<DynaamilenieKoduLeht> {
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: backround,
-        appBar: i == 6
+        appBar: i == 5
             ? AppBar(
                 automaticallyImplyLeading: false,
                 backgroundColor: appbar,
