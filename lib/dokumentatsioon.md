@@ -82,6 +82,8 @@ id = seade, millele saadatakse graafik
 
 #### 1.1.1.3 graafikGen1Filtreerimine
 
+File: [graafikGen1.dart](funktsioonid/graafikGen1.dart)
+
 ```dart
 graafikGen1Filtreerimine(List<dynamic> graafik, List<int> paevad){
 return List<dynamic>;

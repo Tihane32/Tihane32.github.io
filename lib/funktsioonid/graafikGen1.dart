@@ -214,9 +214,23 @@ graafikGen1Saatmine(List<dynamic> graafik, String id) async {
   seadmeKinnitus = true;
 }
 
-graafikGen1Filtreerimine(List<dynamic> graafik, List<int> paevad) {
+///The function `graafikGen1Filtreerimine` is used to filter out unwanted weekdays from a
+///Shelly generation 1 device schedule.
+///
+///Example:
+///```dart
+///List<dynamic> schedule = ["0055-3-on", "0050-012-on", "2100-01-on"];
+///schedule = graafikGen1Filtreerimine(schedule,[0]);
+///print(schedule);//"[0050-0-on, 2100-0-on]"
+///
+///
+///```
+
+List<String> graafikGen1Filtreerimine(List<dynamic> graafik, List<int> paevad) {
   List<String> newList = [];
   List<String> newGraafik = [];
+  print("J: $graafik");
+  print("J: $paevad");
   for (String item in graafik) {
     List<String> parts = item.split('-');
     if (parts[1].length > 1) {
@@ -238,6 +252,7 @@ graafikGen1Filtreerimine(List<dynamic> graafik, List<int> paevad) {
       }
     }
   }
+  print("J: $newGraafik");
   return newGraafik;
 }
 
