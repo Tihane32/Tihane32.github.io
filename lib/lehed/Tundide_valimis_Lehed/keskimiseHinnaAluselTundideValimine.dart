@@ -554,13 +554,17 @@ class _KeskmiseHinnaAluselTundideValimineState
                   child: SfCartesianChart(
                     onChartTouchInteractionDown:
                         (ChartTouchInteractionArgs args) {
-                      int puutePunkt = ((args.position.dx /
-                                  (MediaQuery.of(context).size.height - 70)) *
-                              25)
-                          .round();
+                      int puutePunkt =
+                          ((args.position.dx / (context.size!.height - 70)) *
+                                      25)
+                                  .round() -
+                              1;
                       print(context.size?.height);
                       print(args.position.dx);
                       print(puutePunkt);
+                      print(((args.position.dx / (context.size!.height - 70)) *
+                              25) -
+                          1);
                       if (puutePunkt > -1) {
                         setState(() {
                           lulitusMapVasak =
