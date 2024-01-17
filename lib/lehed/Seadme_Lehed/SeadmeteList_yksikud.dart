@@ -36,6 +36,8 @@ class _SeadmeteList_yksikudState extends State<SeadmeteList_yksikud> {
           voimsusMoodis();
           seadmeteMap = seadmeteMap;
         });
+      } else {
+        timer.cancel();
       }
     });
   }

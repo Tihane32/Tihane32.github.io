@@ -237,8 +237,9 @@ class _KeskmiseHinnaAluselTundideValimineState
       22: ['22.00', 24.4, false],
       23: ['23.00', 44.1, false],
     };
-var data = await getElering(DateTime.now(),DateTime.now().add(Duration(days: 1)));
-    
+    var data =
+        await getElering(DateTime.now(), DateTime.now().add(Duration(days: 1)));
+
     for (var i = 0; i < 24; i++) {
       lulitusTana[i][1] = data[i];
     }
@@ -246,7 +247,8 @@ var data = await getElering(DateTime.now(),DateTime.now().add(Duration(days: 1))
     if (date.hour >=
         15) //Kui kell on vähem, kui 15 või on saadetud String 'täna'
     {
-      var data = await getElering(DateTime.now().add(Duration(days: 1)),DateTime.now().add(Duration(days: 2)));
+      var data = await getElering(DateTime.now().add(Duration(days: 1)),
+          DateTime.now().add(Duration(days: 2)));
       for (var i = 0; i < 24; i++) {
         lulitusHomme[i][1] = data[i];
       }
@@ -307,397 +309,400 @@ var data = await getElering(DateTime.now(),DateTime.now().add(Duration(days: 1))
 
   @override
   Widget build(BuildContext context) {
-    return CustomScrollView(
-      slivers: <Widget>[
-        SliverAppBar(
-          elevation: 0.0,
-          centerTitle: true,
-          automaticallyImplyLeading: false,
-          backgroundColor: Colors.white,
-          pinned: true,
-          title: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(left: 50),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          if (tana == valge) {
-                            paevAbi = "täna";
-                            lulitus = lulitusTana;
-                            tana = green;
-                            tanaFont = fontValge;
-                            homme = valge;
-                            hommeFont = font;
-                            hindAVG = keskmineHindArvutaus(lulitus);
-                            hind = KeskHindString(hind, hindAVG);
-                            keskHind = keskmineHindMapVaartustamine(
-                                hindAVG, keskHind, lulitus);
-                            lulitus = OdavimadTunnidOn(lulitus, valitudTunnid);
-                            lulitusMapVasak = LulitusMapVasakVaartustamine(
-                                hindAVG, lulitus, lulitusMapVasak);
-                            lulitusMapParem = LulitusParemVaartustamine(
-                                hindAVG, lulitus, lulitusMapParem);
-                            temp = hindAVG / 4;
-                            if (temp < 40 && hindAVG > 40) {
-                              temp = 40;
-                            } else if (hindAVG < 40) {
-                              temp = hindAVG / 2;
-                            }
-                            HapticFeedback.vibrate();
-                          } /*else {
+    return Scaffold(
+      appBar: AppBar(
+        elevation: 0.0,
+        centerTitle: true,
+        automaticallyImplyLeading: false,
+        backgroundColor: Colors.white,
+        toolbarHeight: 70,
+        title: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 50),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        if (tana == valge) {
+                          paevAbi = "täna";
+                          lulitus = lulitusTana;
+                          tana = green;
+                          tanaFont = fontValge;
+                          homme = valge;
+                          hommeFont = font;
+                          hindAVG = keskmineHindArvutaus(lulitus);
+                          hind = KeskHindString(hind, hindAVG);
+                          keskHind = keskmineHindMapVaartustamine(
+                              hindAVG, keskHind, lulitus);
+                          lulitus = OdavimadTunnidOn(lulitus, valitudTunnid);
+                          lulitusMapVasak = LulitusMapVasakVaartustamine(
+                              hindAVG, lulitus, lulitusMapVasak);
+                          lulitusMapParem = LulitusParemVaartustamine(
+                              hindAVG, lulitus, lulitusMapParem);
+                          temp = hindAVG / 4;
+                          if (temp < 40 && hindAVG > 40) {
+                            temp = 40;
+                          } else if (hindAVG < 40) {
+                            temp = hindAVG / 2;
+                          }
+                          HapticFeedback.vibrate();
+                        } /*else {
                             lulitus = lulitusHomme;
                             tana = valge;
                             tanaFont = font;
                             homme = green;
                             hommeFont = fontValge;
                           }*/
-                        });
-                      },
-                      child: Container(
-                        width: 100,
-                        height: 30,
-                        decoration: BoxDecoration(
-                            color: tana,
-                            borderRadius: BorderRadius.circular(20.0),
-                            border: Border.all(
-                              color: Colors.green,
-                              width: 3,
-                            )),
-                        child: Center(
-                            child: RichText(
-                          text: TextSpan(
-                            text: 'Täna',
-                            style: tanaFont,
-                          ),
-                          textAlign: TextAlign.center,
-                        )),
-                      ),
+                      });
+                    },
+                    child: Container(
+                      width: 100,
+                      height: 30,
+                      decoration: BoxDecoration(
+                          color: tana,
+                          borderRadius: BorderRadius.circular(20.0),
+                          border: Border.all(
+                            color: Colors.green,
+                            width: 3,
+                          )),
+                      child: Center(
+                          child: RichText(
+                        text: TextSpan(
+                          text: 'Täna',
+                          style: tanaFont,
+                        ),
+                        textAlign: TextAlign.center,
+                      )),
                     ),
-                    //SizedBox(width: MediaQuery.of(context).size.width * 0.1),
-                    Container(
-                      child: hommeNahtav
-                          ? GestureDetector(
-                              onTap: () {
-                                setState(() {
-                                  if (homme == valge) {
-                                    paevAbi = "homme";
-                                    lulitus = lulitusHomme;
-                                    homme = green;
-                                    hommeFont = fontValge;
-                                    tana = valge;
-                                    tanaFont = font;
-                                    hindAVG = keskmineHindArvutaus(lulitus);
-                                    hind = KeskHindString(hind, hindAVG);
-                                    keskHind = keskmineHindMapVaartustamine(
-                                        hindAVG, keskHind, lulitus);
-                                    lulitus = OdavimadTunnidOn(
-                                        lulitus, valitudTunnid);
-                                    lulitusMapVasak =
-                                        LulitusMapVasakVaartustamine(
-                                            hindAVG, lulitus, lulitusMapVasak);
-                                    lulitusMapParem = LulitusParemVaartustamine(
-                                        hindAVG, lulitus, lulitusMapParem);
-                                    temp = hindAVG / 4;
-                                    if (temp < 40 && hindAVG > 40) {
-                                      temp = 40;
-                                    } else if (hindAVG < 40) {
-                                      temp = hindAVG / 2;
-                                    }
-                                    HapticFeedback.vibrate();
-                                  } /*else {
+                  ),
+                  //SizedBox(width: MediaQuery.of(context).size.width * 0.1),
+                  Container(
+                    child: hommeNahtav
+                        ? GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                if (homme == valge) {
+                                  paevAbi = "homme";
+                                  lulitus = lulitusHomme;
+                                  homme = green;
+                                  hommeFont = fontValge;
+                                  tana = valge;
+                                  tanaFont = font;
+                                  hindAVG = keskmineHindArvutaus(lulitus);
+                                  hind = KeskHindString(hind, hindAVG);
+                                  keskHind = keskmineHindMapVaartustamine(
+                                      hindAVG, keskHind, lulitus);
+                                  lulitus =
+                                      OdavimadTunnidOn(lulitus, valitudTunnid);
+                                  lulitusMapVasak =
+                                      LulitusMapVasakVaartustamine(
+                                          hindAVG, lulitus, lulitusMapVasak);
+                                  lulitusMapParem = LulitusParemVaartustamine(
+                                      hindAVG, lulitus, lulitusMapParem);
+                                  temp = hindAVG / 4;
+                                  if (temp < 40 && hindAVG > 40) {
+                                    temp = 40;
+                                  } else if (hindAVG < 40) {
+                                    temp = hindAVG / 2;
+                                  }
+                                  HapticFeedback.vibrate();
+                                } /*else {
                                 lulitus = lulitusTana;
                                 homme = valge;
                                 hommeFont = font;
                                 tana = green;
                                 tanaFont = fontValge;
                               }*/
+                              });
+                            },
+                            child: Container(
+                              width: 100,
+                              height: 30,
+                              decoration: BoxDecoration(
+                                  color: homme,
+                                  borderRadius: BorderRadius.circular(30.0),
+                                  border: Border.all(
+                                    color: Colors.green,
+                                    width: 3,
+                                  )),
+                              child: Center(
+                                  child: RichText(
+                                text: TextSpan(
+                                  text: 'Homme',
+                                  style: hommeFont,
+                                ),
+                                textAlign: TextAlign.center,
+                              )),
+                            ),
+                          )
+                        : GestureDetector(
+                            onTap: () {
+                              Hoiatus(context,
+                                  'Homne graafik ei ole hetkel kättesaadav \n Proovige uuesti kell 15.00');
+                            },
+                            child: Container(
+                              width: 100,
+                              height: 30,
+                              decoration: BoxDecoration(
+                                  color: Color.fromARGB(255, 209, 205, 205),
+                                  borderRadius: BorderRadius.circular(30.0),
+                                  border: Border.all(
+                                    color: Color.fromARGB(255, 12, 12, 12),
+                                    width: 3,
+                                  )),
+                              child: Center(
+                                  child: RichText(
+                                text: TextSpan(text: 'Homme', style: font),
+                                textAlign: TextAlign.center,
+                              )),
+                            ),
+                          ),
+                  )
+                ],
+              ),
+            ),
+            Container(
+              height: 30,
+              alignment: Alignment.center,
+              child: RichText(
+                text: TextSpan(
+                  style: TextStyle(
+                    fontSize: 20,
+                    color: Colors.black,
+                  ),
+                  children: [
+                    TextSpan(text: '  Valitud tunnid:  ', style: font),
+                    WidgetSpan(
+                      alignment: PlaceholderAlignment.bottom,
+                      child: Container(
+                        height: 25,
+                        width: 45,
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.grey),
+                          borderRadius: BorderRadius.circular(4.0),
+                        ),
+                        child: Center(
+                          child: TextField(
+                              keyboardType: TextInputType.number,
+                              inputFormatters: [
+                                FilteringTextInputFormatter.digitsOnly,
+                              ],
+                              onSubmitted: (value) {
+                                setState(() {
+                                  int parsedValue = int.tryParse(value) ?? 0;
+                                  if (parsedValue > 24) {
+                                    parsedValue = 24;
+                                  }
+                                  valitudTunnid = parsedValue;
+                                  salvestaSeadistus('Valitud_Tunnid',
+                                      valitudTunnid, valitudSeadmed);
+                                  lulitus =
+                                      OdavimadTunnidOn(lulitus, valitudTunnid);
+                                  lulitusMapVasak =
+                                      LulitusMapVasakVaartustamine(
+                                          hindAVG, lulitus, lulitusMapVasak);
+                                  lulitusMapParem = LulitusParemVaartustamine(
+                                      hindAVG, lulitus, lulitusMapParem);
                                 });
                               },
-                              child: Container(
-                                width: 100,
-                                height: 30,
-                                decoration: BoxDecoration(
-                                    color: homme,
-                                    borderRadius: BorderRadius.circular(30.0),
-                                    border: Border.all(
-                                      color: Colors.green,
-                                      width: 3,
-                                    )),
-                                child: Center(
-                                    child: RichText(
-                                  text: TextSpan(
-                                    text: 'Homme',
-                                    style: hommeFont,
-                                  ),
-                                  textAlign: TextAlign.center,
-                                )),
+                              decoration: InputDecoration(
+                                border: InputBorder.none,
+                                isDense: true,
+                                hintText: valitudTunnid.toString(),
+                                contentPadding:
+                                    EdgeInsets.symmetric(vertical: 3.0),
                               ),
-                            )
-                          : GestureDetector(
-                              onTap: () {
-                                Hoiatus(context,
-                                    'Homne graafik ei ole hetkel kättesaadav \n Proovige uuesti kell 15.00');
-                              },
-                              child: Container(
-                                width: 100,
-                                height: 30,
-                                decoration: BoxDecoration(
-                                    color: Color.fromARGB(255, 209, 205, 205),
-                                    borderRadius: BorderRadius.circular(30.0),
-                                    border: Border.all(
-                                      color: Color.fromARGB(255, 12, 12, 12),
-                                      width: 3,
-                                    )),
-                                child: Center(
-                                    child: RichText(
-                                  text: TextSpan(text: 'Homme', style: font),
-                                  textAlign: TextAlign.center,
-                                )),
-                              ),
-                            ),
-                    )
+                              style: font),
+                        ),
+                      ),
+                    ),
                   ],
                 ),
               ),
-              Container(
-                height: 20,
-                alignment: Alignment.center,
-                child: RichText(
-                  text: TextSpan(
-                    style: TextStyle(
-                      fontSize: 20,
-                      color: Colors.black,
-                    ),
-                    children: [
-                      TextSpan(text: '  Valitud tunnid:  ', style: font),
-                      WidgetSpan(
-                        alignment: PlaceholderAlignment.bottom,
-                        child: Container(
-                          height: 20,
-                          width: 45,
-                          decoration: BoxDecoration(
-                            border: Border.all(color: Colors.grey),
-                            borderRadius: BorderRadius.circular(4.0),
-                          ),
-                          child: Center(
-                            child: TextField(
-                                keyboardType: TextInputType.number,
-                                inputFormatters: [
-                                  FilteringTextInputFormatter.digitsOnly,
-                                ],
-                                onSubmitted: (value) {
-                                  setState(() {
-                                    int parsedValue = int.tryParse(value) ?? 0;
-                                    if (parsedValue > 24) {
-                                      parsedValue = 24;
-                                    }
-                                    valitudTunnid = parsedValue;
-                                    salvestaSeadistus('Valitud_Tunnid',
-                                        valitudTunnid, valitudSeadmed);
-                                    lulitus = OdavimadTunnidOn(
-                                        lulitus, valitudTunnid);
-                                    lulitusMapVasak =
-                                        LulitusMapVasakVaartustamine(
-                                            hindAVG, lulitus, lulitusMapVasak);
-                                    lulitusMapParem = LulitusParemVaartustamine(
-                                        hindAVG, lulitus, lulitusMapParem);
-                                  });
-                                },
-                                decoration: InputDecoration(
-                                  border: InputBorder.none,
-                                  isDense: true,
-                                  hintText: valitudTunnid.toString(),
-                                  contentPadding:
-                                      EdgeInsets.symmetric(vertical: 3.0),
-                                ),
-                                style: font),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          ),
-          actions: [
-            IconButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => DynamilineTundideValimine(
-                              valitudSeadmed: valitudSeadmed,
-                              i: 5,
-                              luba: '',
-                              eelmineleht: 0,
-                            )),
-                  );
-                },
-                icon: Icon(
-                  Icons.settings,
-                  color: Colors.black,
-                  size: 30.0,
-                ))
+            ),
           ],
         ),
-        SliverList(
-          delegate: SliverChildBuilderDelegate(
-            (BuildContext context, int index) {
-              return Container(
-                  color: Colors.white,
-                  height: MediaQuery.of(context).size.height * 0.791,
-                  child: Center(
-                      child: RotatedBox(
-                          quarterTurns: 1,
-                          child: Container(
-                            width: double.infinity,
-                            height: double.infinity,
-                            child: SfCartesianChart(
-                              enableSideBySideSeriesPlacement: false,
-                              primaryXAxis: CategoryAxis(
-                                interval: 1,
-                                labelRotation: 270,
-                                visibleMaximum: 24,
-                              ),
-                              primaryYAxis: NumericAxis(
-                                isVisible: false,
-                                labelRotation: 270,
-                                title: AxisTitle(text: ' €/kWh'),
-                              ),
-                              series: <ChartSeries>[
-                                SplineSeries(
-                                  dataSource: hind.values.toList(),
-                                  xValueMapper: (inf, _) => inf[0],
-                                  yValueMapper: (inf, _) => inf[1],
-                                  dataLabelMapper: (data, _) => data[2],
-                                  dataLabelSettings: DataLabelSettings(
-                                    isVisible: true,
-                                    labelAlignment:
-                                        ChartDataLabelAlignment.middle,
-                                    textStyle: fontVaike,
-                                    angle: 270,
-                                  ),
-                                  pointColorMapper: (data, _) =>
-                                      Colors.transparent,
-                                ),
-                                ColumnSeries(
-                                  width: 0.9,
-                                  spacing: 0.1,
-                                  onPointTap: (pointInteractionDetails) {
-                                    int? rowIndex =
-                                        pointInteractionDetails.pointIndex;
-                                    setState(() {
-                                      lulitusMapVasak = TunniVarviMuutus(
-                                          rowIndex, lulitusMapVasak);
-                                      lulitusMapParem = TunniVarviMuutus(
-                                          rowIndex, lulitusMapParem);
-                                      lulitusMap = lulitusMapParem;
-                                    });
-                                    print("tana $tana");
-                                    updateLulitusMap(
-                                        lulitusMap, 'Odavaimad tunnid');
-                                  },
-                                  borderRadius: BorderRadius.only(
-                                      bottomLeft: Radius.circular(20),
-                                      bottomRight: Radius.circular(20)),
-                                  dataSource: lulitusMapVasak.values.toList(),
-                                  xValueMapper: (data, _) => data[0],
-                                  yValueMapper: (data, _) {
-                                    final yValue = data[1];
-                                    if (yValue != 0) {
-                                      return yValue > -temp ? -temp : yValue;
-                                    } else {
-                                      return 0;
-                                    }
-                                  },
-                                  dataLabelMapper: (data, _) => data[1] < 0
-                                      ? (((data[1] + hindAVG) * pow(10.0, 2))
-                                                  .round()
-                                                  .toDouble() /
-                                              pow(10.0, 2))
-                                          .toString()
-                                      : '',
-                                  pointColorMapper: (data, _) => data[2]
-                                      ? Colors.green
-                                      : const Color.fromARGB(
-                                          255, 164, 159, 159),
-                                  dataLabelSettings: DataLabelSettings(
-                                    isVisible: true,
-                                    labelAlignment:
-                                        ChartDataLabelAlignment.bottom,
-                                    offset: const Offset(0, 45),
-                                    textStyle: fontVaike,
-                                    angle: 270,
-                                  ),
-                                ),
-                                ColumnSeries(
-                                  width: 0.9,
-                                  spacing: 0.1,
-                                  onPointTap: (pointInteractionDetails) {
-                                    int? rowIndex =
-                                        pointInteractionDetails.pointIndex;
-
-                                    setState(() {
-                                      lulitusMapVasak = TunniVarviMuutus(
-                                          rowIndex, lulitusMapVasak);
-                                      lulitusMapParem = TunniVarviMuutus(
-                                          rowIndex, lulitusMapParem);
-                                      lulitusMap = lulitusMapParem;
-                                    });
-                                    updateLulitusMap(
-                                        lulitusMap, 'Odavaimad tunnid');
-                                  },
-                                  borderRadius: const BorderRadius.only(
-                                      topLeft: Radius.circular(20),
-                                      topRight: Radius.circular(20)),
-                                  dataSource: lulitusMapParem.values.toList(),
-                                  xValueMapper: (data, _) => data[0],
-                                  yValueMapper: (data, _) {
-                                    final yValue = data[1];
-                                    if (yValue != 0) {
-                                      return yValue < temp ? temp : yValue;
-                                    } else {
-                                      return 0;
-                                    }
-                                  },
-                                  dataLabelMapper: (data, _) => data[1] > 0
-                                      ? (((data[1] + hindAVG) * pow(10.0, 2))
-                                                  .round()
-                                                  .toDouble() /
-                                              pow(10.0, 2))
-                                          .toString()
-                                      : '',
-                                  pointColorMapper: (data, _) => data[2]
-                                      ? Colors.green
-                                      : Color.fromARGB(255, 164, 159, 159),
-                                  dataLabelSettings: DataLabelSettings(
-                                    isVisible: true,
-                                    labelAlignment:
-                                        ChartDataLabelAlignment.bottom,
-                                    offset: Offset(0, -45),
-                                    textStyle: fontVaike,
-                                    angle: 270,
-                                  ),
-                                ),
-                                SplineSeries(
-                                  dataSource: keskHind.values.toList(),
-                                  xValueMapper: (inf, _) => inf[0],
-                                  yValueMapper: (inf, _) => inf[1],
-                                  pointColorMapper: (data, _) => Colors.black,
-                                ),
-                              ],
-                            ),
-                          ))));
-            },
-            childCount: 1,
-          ),
-        ),
-      ],
+        actions: [
+          IconButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => DynamilineTundideValimine(
+                            valitudSeadmed: valitudSeadmed,
+                            i: 5,
+                            luba: '',
+                            eelmineleht: 0,
+                          )),
+                );
+              },
+              icon: Icon(
+                Icons.settings,
+                color: Colors.black,
+                size: 30.0,
+              ))
+        ],
+      ),
+      body: Container(
+          color: Colors.white,
+          child: Center(
+              child: RotatedBox(
+                  quarterTurns: 1,
+                  child: SfCartesianChart(
+                    onChartTouchInteractionDown:
+                        (ChartTouchInteractionArgs args) {
+                      int puutePunkt = ((args.position.dx /
+                                  (MediaQuery.of(context).size.height - 70)) *
+                              25)
+                          .round();
+                      print(context.size?.height);
+                      print(args.position.dx);
+                      print(puutePunkt);
+                      if (puutePunkt > -1) {
+                        setState(() {
+                          lulitusMapVasak =
+                              TunniVarviMuutus(puutePunkt, lulitusMapVasak);
+                          lulitusMapParem =
+                              TunniVarviMuutus(puutePunkt, lulitusMapParem);
+                          lulitusMap = lulitusMapParem;
+                        });
+                        print("tana $tana");
+                        updateLulitusMap(lulitusMap, 'Odavaimad tunnid');
+                      }
+                    },
+                    enableSideBySideSeriesPlacement: false,
+                    primaryXAxis: CategoryAxis(
+                      interval: 1,
+                      labelRotation: 270,
+                      visibleMaximum: 24,
+                    ),
+                    primaryYAxis: NumericAxis(
+                      isVisible: false,
+                      labelRotation: 270,
+                      title: AxisTitle(text: ' €/kWh'),
+                    ),
+                    series: <ChartSeries>[
+                      SplineSeries(
+                        dataSource: hind.values.toList(),
+                        xValueMapper: (inf, _) => inf[0],
+                        yValueMapper: (inf, _) => inf[1],
+                        dataLabelMapper: (data, _) => data[2],
+                        dataLabelSettings: DataLabelSettings(
+                          isVisible: true,
+                          labelAlignment: ChartDataLabelAlignment.middle,
+                          textStyle: fontVaike,
+                          angle: 270,
+                        ),
+                        pointColorMapper: (data, _) => Colors.transparent,
+                      ),
+                      ColumnSeries(
+                        width: 0.9,
+                        spacing: 0.1,
+                        /*onPointTap: (pointInteractionDetails) {
+                                  int? rowIndex =
+                                      pointInteractionDetails.pointIndex;
+                                  setState(() {
+                                    lulitusMapVasak = TunniVarviMuutus(
+                                        rowIndex, lulitusMapVasak);
+                                    lulitusMapParem = TunniVarviMuutus(
+                                        rowIndex, lulitusMapParem);
+                                    lulitusMap = lulitusMapParem;
+                                  });
+                                  print("tana $tana");
+                                  updateLulitusMap(
+                                      lulitusMap, 'Odavaimad tunnid');
+                                },*/
+                        borderRadius: BorderRadius.only(
+                            bottomLeft: Radius.circular(20),
+                            bottomRight: Radius.circular(20)),
+                        dataSource: lulitusMapVasak.values.toList(),
+                        xValueMapper: (data, _) => data[0],
+                        yValueMapper: (data, _) {
+                          final yValue = data[1];
+                          if (yValue != 0) {
+                            return yValue > -temp ? -temp : yValue;
+                          } else {
+                            return 0;
+                          }
+                        },
+                        dataLabelMapper: (data, _) => data[1] < 0
+                            ? (((data[1] + hindAVG) * pow(10.0, 2))
+                                        .round()
+                                        .toDouble() /
+                                    pow(10.0, 2))
+                                .toString()
+                            : '',
+                        pointColorMapper: (data, _) => data[2]
+                            ? Colors.green
+                            : const Color.fromARGB(255, 164, 159, 159),
+                        dataLabelSettings: DataLabelSettings(
+                          isVisible: true,
+                          labelAlignment: ChartDataLabelAlignment.bottom,
+                          offset: const Offset(0, 45),
+                          textStyle: fontVaike,
+                          angle: 270,
+                        ),
+                      ),
+                      ColumnSeries(
+                        width: 0.9,
+                        spacing: 0.1,
+                        /*
+                                onPointTap: (pointInteractionDetails) {
+                                  int? rowIndex =
+                                      pointInteractionDetails.pointIndex;
+                                          
+                                  setState(() {
+                                    lulitusMapVasak = TunniVarviMuutus(
+                                        rowIndex, lulitusMapVasak);
+                                    lulitusMapParem = TunniVarviMuutus(
+                                        rowIndex, lulitusMapParem);
+                                    lulitusMap = lulitusMapParem;
+                                  });
+                                  updateLulitusMap(
+                                      lulitusMap, 'Odavaimad tunnid');
+                                },*/
+                        borderRadius: const BorderRadius.only(
+                            topLeft: Radius.circular(20),
+                            topRight: Radius.circular(20)),
+                        dataSource: lulitusMapParem.values.toList(),
+                        xValueMapper: (data, _) => data[0],
+                        yValueMapper: (data, _) {
+                          final yValue = data[1];
+                          if (yValue != 0) {
+                            return yValue < temp ? temp : yValue;
+                          } else {
+                            return 0;
+                          }
+                        },
+                        dataLabelMapper: (data, _) => data[1] > 0
+                            ? (((data[1] + hindAVG) * pow(10.0, 2))
+                                        .round()
+                                        .toDouble() /
+                                    pow(10.0, 2))
+                                .toString()
+                            : '',
+                        pointColorMapper: (data, _) => data[2]
+                            ? Colors.green
+                            : Color.fromARGB(255, 164, 159, 159),
+                        dataLabelSettings: DataLabelSettings(
+                          isVisible: true,
+                          labelAlignment: ChartDataLabelAlignment.bottom,
+                          offset: Offset(0, -45),
+                          textStyle: fontVaike,
+                          angle: 270,
+                        ),
+                      ),
+                      SplineSeries(
+                        dataSource: keskHind.values.toList(),
+                        xValueMapper: (inf, _) => inf[0],
+                        yValueMapper: (inf, _) => inf[1],
+                        pointColorMapper: (data, _) => Colors.black,
+                      ),
+                    ],
+                  )))),
     );
   }
 }

@@ -237,8 +237,9 @@ class _HinnaPiiriAluselTundideValimineState
       22: ['22.00', 24.4, false],
       23: ['23.00', 44.1, false],
     };
-    var data = await getElering(DateTime.now(),DateTime.now().add(Duration(days: 1)));
-    
+    var data =
+        await getElering(DateTime.now(), DateTime.now().add(Duration(days: 1)));
+
     for (var i = 0; i < 24; i++) {
       lulitusTana[i][1] = data[i];
     }
@@ -246,7 +247,8 @@ class _HinnaPiiriAluselTundideValimineState
     if (date.hour >=
         15) //Kui kell on vähem, kui 15 või on saadetud String 'täna'
     {
-      var data = await getElering(DateTime.now().add(Duration(days: 1)),DateTime.now().add(Duration(days: 2)));
+      var data = await getElering(DateTime.now().add(Duration(days: 1)),
+          DateTime.now().add(Duration(days: 2)));
       for (var i = 0; i < 24; i++) {
         lulitusHomme[i][1] = data[i];
       }
@@ -309,6 +311,7 @@ class _HinnaPiiriAluselTundideValimineState
           automaticallyImplyLeading: false,
           backgroundColor: Colors.white,
           pinned: true,
+          toolbarHeight: 70,
           title: Column(
             children: [
               Padding(
@@ -455,7 +458,7 @@ class _HinnaPiiriAluselTundideValimineState
                 ),
               ),
               Container(
-                height: 20,
+                height: 30,
                 alignment: Alignment.center,
                 child: RichText(
                   text: TextSpan(
@@ -468,7 +471,7 @@ class _HinnaPiiriAluselTundideValimineState
                       WidgetSpan(
                         alignment: PlaceholderAlignment.bottom,
                         child: Container(
-                          height: 20,
+                          height: 25,
                           width: 45,
                           decoration: BoxDecoration(
                             border: Border.all(color: Colors.grey),

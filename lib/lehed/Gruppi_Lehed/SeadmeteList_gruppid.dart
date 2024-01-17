@@ -35,6 +35,8 @@ class _SeadmeteList_gruppidState extends State<SeadmeteList_gruppid> {
           saaGrupiOlek();
           gruppiMap = gruppiMap;
         });
+      } else {
+        timer.cancel();
       }
     });
     super.initState();
