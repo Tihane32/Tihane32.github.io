@@ -69,7 +69,6 @@ class _KeskmiseHinnaAluselTundideValimineState
   late Map<int, dynamic> lulitusTana;
   late Map<int, dynamic> lulitusHomme;
   late double hindAVG;
-  late double temp = 0;
   Map<int, dynamic> keskHind = {
     0: ['00.00', 0, false],
     1: ['01.00', 0, false],
@@ -266,7 +265,6 @@ class _KeskmiseHinnaAluselTundideValimineState
       }
 
       hindAVG = keskmineHindArvutaus(lulitus);
-      temp = hindAVG / 4;
 
       hind = KeskHindString(hind, hindAVG);
 
@@ -342,12 +340,6 @@ class _KeskmiseHinnaAluselTundideValimineState
                               hindAVG, lulitus, lulitusMapVasak);
                           lulitusMapParem = LulitusParemVaartustamine(
                               hindAVG, lulitus, lulitusMapParem);
-                          temp = hindAVG / 4;
-                          if (temp < 40 && hindAVG > 40) {
-                            temp = 40;
-                          } else if (hindAVG < 40) {
-                            temp = hindAVG / 2;
-                          }
                           HapticFeedback.vibrate();
                         } /*else {
                             lulitus = lulitusHomme;
@@ -402,12 +394,6 @@ class _KeskmiseHinnaAluselTundideValimineState
                                           hindAVG, lulitus, lulitusMapVasak);
                                   lulitusMapParem = LulitusParemVaartustamine(
                                       hindAVG, lulitus, lulitusMapParem);
-                                  temp = hindAVG / 4;
-                                  if (temp < 40 && hindAVG > 40) {
-                                    temp = 40;
-                                  } else if (hindAVG < 40) {
-                                    temp = hindAVG / 2;
-                                  }
                                   HapticFeedback.vibrate();
                                 } /*else {
                                 lulitus = lulitusTana;
@@ -554,28 +540,25 @@ class _KeskmiseHinnaAluselTundideValimineState
                   child: SfCartesianChart(
                     onChartTouchInteractionDown:
                         (ChartTouchInteractionArgs args) {
-                      int puutePunkt =
-                          ((args.position.dx / (context.size!.height - 70)) *
-                                      25)
-                                  .round() -
-                              1;
-                      print(context.size?.height);
+                      int puutePunkt = (args.position.dx /
+                                  ((context.size!.height - 70) / 25))
+                              .round() -
+                          1;
+                      print(context.size?.width);
                       print(args.position.dx);
                       print(puutePunkt);
                       print(((args.position.dx / (context.size!.height - 70)) *
                               25) -
                           1);
-                      if (puutePunkt > -1) {
-                        setState(() {
-                          lulitusMapVasak =
-                              TunniVarviMuutus(puutePunkt, lulitusMapVasak);
-                          lulitusMapParem =
-                              TunniVarviMuutus(puutePunkt, lulitusMapParem);
-                          lulitusMap = lulitusMapParem;
-                        });
-                        print("tana $tana");
-                        updateLulitusMap(lulitusMap, 'Odavaimad tunnid');
-                      }
+                      setState(() {
+                        lulitusMapVasak =
+                            TunniVarviMuutus(puutePunkt, lulitusMapVasak);
+                        lulitusMapParem =
+                            TunniVarviMuutus(puutePunkt, lulitusMapParem);
+                        lulitusMap = lulitusMapParem;
+                      });
+                      print("tana $tana");
+                      updateLulitusMap(lulitusMap, 'Odavaimad tunnid');
                     },
                     enableSideBySideSeriesPlacement: false,
                     primaryXAxis: CategoryAxis(
@@ -624,14 +607,7 @@ class _KeskmiseHinnaAluselTundideValimineState
                             bottomRight: Radius.circular(20)),
                         dataSource: lulitusMapVasak.values.toList(),
                         xValueMapper: (data, _) => data[0],
-                        yValueMapper: (data, _) {
-                          final yValue = data[1];
-                          if (yValue != 0) {
-                            return yValue > -temp ? -temp : yValue;
-                          } else {
-                            return 0;
-                          }
-                        },
+                        yValueMapper: (data, _) => data[1],
                         dataLabelMapper: (data, _) => data[1] < 0
                             ? (((data[1] + hindAVG) * pow(10.0, 2))
                                         .round()
@@ -673,14 +649,7 @@ class _KeskmiseHinnaAluselTundideValimineState
                             topRight: Radius.circular(20)),
                         dataSource: lulitusMapParem.values.toList(),
                         xValueMapper: (data, _) => data[0],
-                        yValueMapper: (data, _) {
-                          final yValue = data[1];
-                          if (yValue != 0) {
-                            return yValue < temp ? temp : yValue;
-                          } else {
-                            return 0;
-                          }
-                        },
+                        yValueMapper: (data, _) => data[1],
                         dataLabelMapper: (data, _) => data[1] > 0
                             ? (((data[1] + hindAVG) * pow(10.0, 2))
                                         .round()
