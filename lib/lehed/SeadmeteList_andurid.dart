@@ -29,6 +29,8 @@ class _SeadmeteList_anduridState extends State<SeadmeteList_andurid> {
           keskonnaMoodis();
           anduriteMap = anduriteMap;
         });
+      } else {
+        timer.cancel();
       }
     });
     super.initState();

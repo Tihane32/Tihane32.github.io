@@ -60,92 +60,98 @@ class _TunniSeadedState extends State<TunniSeaded> {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
-      child: Scaffold(
-        body: ListView(
-          children: <Widget>[
-            ListTile(
-              title: Text(
-                'Rakenda seaded graafikule',
-                style: font,
-              ),
-              trailing: Switch(
-                value: seadista,
-                onChanged: (bool value) {
-                  setState(() {
-                    seadista = value;
-                    salvestaSeadistus(
-                        'Seadistus_lubatud', seadista, valitudSeadmed);
-                  });
-                },
-              ),
-            ),
-            ListTile(
+      child: GestureDetector(
+        onTapDown: (TapDownDetails details) {
+          var y = details.globalPosition.dy;
+          print('Tprint: $y');
+        },
+        child: Scaffold(
+          body: ListView(
+            children: <Widget>[
+              ListTile(
                 title: Text(
-                  'Tunnid kus seade peab töötama',
+                  'Rakenda seaded graafikule',
                   style: font,
                 ),
-                trailing: IconButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => DynamilineTundideValimine(
-                                  valitudSeadmed: valitudSeadmed,
-                                  i: 4,
-                                  luba: 'jah',
-                                  eelmineleht: 0,
-                                )),
-                      );
-                    },
-                    icon: Icon(
-                      Icons.more_time_rounded,
-                      color: Colors.green,
-                      size: 30,
-                    ))),
-            ListTile(
+                trailing: Switch(
+                  value: seadista,
+                  onChanged: (bool value) {
+                    setState(() {
+                      seadista = value;
+                      salvestaSeadistus(
+                          'Seadistus_lubatud', seadista, valitudSeadmed);
+                    });
+                  },
+                ),
+              ),
+              ListTile(
+                  title: Text(
+                    'Tunnid kus seade peab töötama',
+                    style: font,
+                  ),
+                  trailing: IconButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => DynamilineTundideValimine(
+                                    valitudSeadmed: valitudSeadmed,
+                                    i: 4,
+                                    luba: 'jah',
+                                    eelmineleht: 0,
+                                  )),
+                        );
+                      },
+                      icon: Icon(
+                        Icons.more_time_rounded,
+                        color: Colors.green,
+                        size: 30,
+                      ))),
+              ListTile(
+                  title: Text(
+                    'Tunnid kus seade ei tohi töödata',
+                    style: font,
+                  ),
+                  trailing: IconButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => DynamilineTundideValimine(
+                                    valitudSeadmed: valitudSeadmed,
+                                    i: 4,
+                                    luba: 'ei',
+                                    eelmineleht: 0,
+                                  )),
+                        );
+                      },
+                      icon: Icon(
+                        Icons.more_time_rounded,
+                        color: Colors.red,
+                        size: 30,
+                      ))),
+              ListTile(
                 title: Text(
-                  'Tunnid kus seade ei tohi töödata',
+                  'Maksimum järjest väljas: ${maxTunnid} tundi',
                   style: font,
                 ),
-                trailing: IconButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => DynamilineTundideValimine(
-                                  valitudSeadmed: valitudSeadmed,
-                                  i: 4,
-                                  luba: 'ei',
-                                  eelmineleht: 0,
-                                )),
-                      );
-                    },
-                    icon: Icon(
-                      Icons.more_time_rounded,
-                      color: Colors.red,
-                      size: 30,
-                    ))),
-            ListTile(
-              title: Text(
-                'Maksimum järjest väljas: ${maxTunnid} tundi',
-                style: font,
+                subtitle: Slider(
+                  value: maxTunnid,
+                  onChanged: (newValue) {
+                    setState(() {
+                      maxTunnid = newValue;
+                      salvestaSeadistus(
+                          'Max_jarjest_valjas', maxTunnid, valitudSeadmed);
+                    });
+                  },
+                  divisions: 11,
+                  min: 1,
+                  max: 12,
+                  label: maxTunnid.toString(),
+                ),
               ),
-              subtitle: Slider(
-                value: maxTunnid,
-                onChanged: (newValue) {
-                  setState(() {
-                    maxTunnid = newValue;
-                    salvestaSeadistus(
-                        'Max_jarjest_valjas', maxTunnid, valitudSeadmed);
-                  });
-                },
-                divisions: 11,
-                min: 1,
-                max: 12,
-                label: maxTunnid.toString(),
-              ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
