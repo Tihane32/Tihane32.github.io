@@ -56,7 +56,9 @@ class _TarbimiseGraafikState extends State<TarbimiseGraafik> {
     int j = 0;
 
     for (var key in seadmeteMap.keys) {
-      Map<DateTime, double> dataMap = await seadmeMaksumus(key);
+      //Map<DateTime, double> dataMap = await seadmeMaksumus(key);
+      Map<DateTime, double> dataMap =
+          await getSeadmeMaksumus(key, firstDayOfMonth, lastDayOfMonth);
       double temp = calculateSum(dataMap);
       String abi = temp.toStringAsFixed(4);
       temp = double.parse(abi);
@@ -437,14 +439,24 @@ class PieChartSample extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(backgroundColor: Colors.white, automaticallyImplyLeading: false, elevation: 0, centerTitle: true, title: Column(
-        children: [Text('Esmaspäev', style: fontVaike,),
-          Text('Kokku 80€', style: font,),
-           
-        ],
-
-      ),
-      toolbarHeight: 50,
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        automaticallyImplyLeading: false,
+        elevation: 0,
+        centerTitle: true,
+        title: Column(
+          children: [
+            Text(
+              'Esmaspäev',
+              style: fontVaike,
+            ),
+            Text(
+              'Kokku 80€',
+              style: font,
+            ),
+          ],
+        ),
+        toolbarHeight: 50,
       ),
       body: SfCircularChart(
         legend: Legend(
@@ -462,7 +474,7 @@ class PieChartSample extends StatelessWidget {
             pointColorMapper: (PieData data, _) => data.color,
             radius: '70%',
             dataLabelSettings: DataLabelSettings(
-              useSeriesColor: true,
+                useSeriesColor: true,
                 isVisible: true,
                 textStyle: fontVaikeLight,
                 labelPosition: ChartDataLabelPosition.outside),

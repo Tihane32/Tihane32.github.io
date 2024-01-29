@@ -11,7 +11,6 @@ saaGrupiOlek() {
     int onSeadmed = 0;
     gruppiNimi = key;
     seadmed = gruppiMap[gruppiNimi]['Grupi_Seadmed'];
-
     for (var item in seadmed) {
       if (seadmeteMap[item]['Seadme_olek'] == 'Offline') {
         olek = 'Offline';

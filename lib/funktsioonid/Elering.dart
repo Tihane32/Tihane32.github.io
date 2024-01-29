@@ -5,9 +5,10 @@ TalTech
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
-
+import 'package:timezone/timezone.dart';
 import '../main.dart';
 import 'tariifArvutus.dart';
+import 'package:timezone/data/latest.dart' as tz;
 
 /// The function `getElering` retrieves the price graph data for electricity in Estonia from the Elering
 /// API for a specified date.
@@ -167,9 +168,16 @@ Future<List<double>> getElering(DateTime startDate, DateTime endDate) async {
   var entryList;
   startDate = startDate.add(const Duration(days: -1));
   endDate = endDate.add(const Duration(days: -1));
-
+  tz.initializeTimeZones();
+  String targetTimeZone = 'Europe/Helsinki';
+  Location targetLocation = getLocation(targetTimeZone);
+  TZDateTime targetDateTime = TZDateTime.from(startDate, targetLocation);
+  TZDateTime targetDateTimeEnd = TZDateTime.from(startDate, targetLocation);
+  print("J: ${targetDateTime.timeZoneOffset.inHours}");
+  print("J: ${endDate.timeZoneOffset.inHours}");
   String url =
-      'https://dashboard.elering.ee/api/nps/price?start=${DateFormat('yyyy-MM-dd').format(startDate)}T${24 - startDate.timeZoneOffset.inHours}%3A00%3A00Z&end=${DateFormat('yyyy-MM-dd').format(endDate)}T${23 - endDate.timeZoneOffset.inHours}%3A00%3A00Z';
+      'https://dashboard.elering.ee/api/nps/price?start=${DateFormat('yyyy-MM-dd').format(startDate)}T${24 - targetDateTime.timeZoneOffset.inHours}%3A00%3A00Z&end=${DateFormat('yyyy-MM-dd').format(endDate)}T${23 - targetDateTimeEnd.timeZoneOffset.inHours}%3A00%3A00Z';
+  print("J: $url");
   final httpPackageUrl = Uri.parse(url);
   final httpPackageInfo = await http.read(httpPackageUrl);
   final httpPackageJson = json.decode(httpPackageInfo) as Map<String, dynamic>;

@@ -91,15 +91,14 @@ class _MGraafikState extends State<MGraafik> {
   }
 
   fetchData(value) async {
-
     // Calculate the first day of the current month
-  DateTime firstDayOfMonth =
+    DateTime firstDayOfMonth =
         DateTime(tarbimisFirstDay.year, tarbimisFirstDay.month);
 
     // Calculate the last day of the current month
     DateTime lastDayOfMonth =
         DateTime(firstDayOfMonth.year, firstDayOfMonth.month + 1, 1);
-  
+
     // Create the map with dates and initial values of 0
     //Map<DateTime, double> temp = {};
     setState(() {
@@ -120,6 +119,7 @@ class _MGraafikState extends State<MGraafik> {
       consumption[j] = k;
     }
     double abi = 0;
+    //temp = await seadmeMaksumus2(value, setPaevamaksumus);
     temp = await seadmeMaksumus2(value, setPaevamaksumus);
     for (DateTime date = firstDayOfMonth;
         date.isBefore(lastDayOfMonth);

@@ -10,7 +10,7 @@ import 'package:testuus4/main.dart';
 import 'package:testuus4/parameters.dart';
 import 'Seadme_Lehed/dynamicSeadmeInfo.dart';
 import 'Põhi_Lehed/koduleht.dart';
-
+/*
 class MaksumuseGraafik extends StatefulWidget {
   @override
   State<MaksumuseGraafik> createState() => _MaksumuseGraafikState();
@@ -24,7 +24,6 @@ class _MaksumuseGraafikState extends State<MaksumuseGraafik> {
   void initState() {
     function();
 
-    print("chartdata $chartData");
     super.initState();
   }
 
@@ -37,23 +36,15 @@ class _MaksumuseGraafikState extends State<MaksumuseGraafik> {
       double sum = 0.0;
       data.values.forEach((value) {
         sum += value;
-        print("sum: $sum");
       });
       kokku = kokku + sum;
-      print("kokku: $kokku");
       return sum;
     }
 
     int j = 0;
 
     for (var key in seadmeteMap.keys) {
-      print("--------------");
-      print(seadmeteMap[key]["Seadme_nimi"]);
-      print("--------------");
       Map<DateTime, double> dataMap = await seadmeMaksumus(key);
-      print("--------------");
-      print("${seadmeteMap[key]["Seadme_nimi"]} datamap: $dataMap");
-      print("--------------");
       double temp = calculateSum(dataMap);
       String abi = temp.toStringAsFixed(4);
       temp = double.parse(abi);
@@ -63,7 +54,6 @@ class _MaksumuseGraafikState extends State<MaksumuseGraafik> {
         chartData.add(ChartData(entry.key, entry.value));
       }
 
-      print("siin: $chartData");
       setState(() {
         chartData = chartData;
         kokku = kokku;
@@ -227,3 +217,4 @@ class ChartData {
   final String x;
   final double? y;
 }
+*/

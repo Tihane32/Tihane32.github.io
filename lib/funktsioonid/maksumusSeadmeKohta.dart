@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:testuus4/funktsioonid/Elering.dart';
 import 'package:testuus4/funktsioonid/tarbmineSeadmeKohta.dart';
@@ -5,19 +7,22 @@ import 'package:testuus4/lehed/P%C3%B5hi_Lehed/koduleht.dart';
 import 'dart:convert';
 import '../main.dart';
 import 'package:http/http.dart' as http;
-import 'package:intl/intl.dart';import 'package:testuus4/parameters.dart';
+import 'package:intl/intl.dart';
+import 'package:testuus4/parameters.dart';
 
-seadmeMaksumus(String value, [Function? setPaevamaksumus]) async {
+/*seadmeMaksumus(String value) async {
   Map<int, List<double>> paevaMaksumus = {};
   Map<DateTime, double> maksumusSeade = {};
   Map<dynamic, dynamic> dataLog = {};
   DateTime now = DateTime.now();
+
   DateTime startOfMonth = DateTime(now.year, now.month, 1);
   DateTime endOfMonth = lastDayOfMonth;
 
   List<DateTime> monthDates = [];
   DateTime date = firstDayOfMonth;
   List<dynamic> dataList = [];
+
   if (useServer == true) {
     dataList =
         await fetchDataFromServer(value, firstDayOfMonth, lastDayOfMonth);
@@ -31,9 +36,6 @@ seadmeMaksumus(String value, [Function? setPaevamaksumus]) async {
           dateTime.isAtSameMomentAs(firstDayOfMonth)) {
         if (dateTime.isBefore(lastDayOfMonth) ||
             dateTime.isAtSameMomentAs(lastDayOfMonth)) {
-          print("datetime $dateTime");
-          print("firstday $firstDayOfMonth");
-          print(lastDayOfMonth);
           double value = data[2];
           maksumusSeade[dateTime] = value;
         }
@@ -103,6 +105,7 @@ seadmeMaksumus(String value, [Function? setPaevamaksumus]) async {
     var url = Uri.parse(
         '${seadmeteMap[value]["api_url"]}/statistics/relay/consumption');
     var res = await http.post(url, headers: headers, body: data);
+
     formattedDate = '${formattedDate}T20';
     String abi = test;
     test = '${test}T20';
@@ -158,26 +161,29 @@ seadmeMaksumus(String value, [Function? setPaevamaksumus]) async {
     // Set the "consumption" key for the timestamp
     dataLog["$timestamp"]["cost"] = temp;
     dataLog["$timestamp"]["consumption"] = tarbimine;
-    print("testing cost $u $temp");
-    print("testing consumption $u $tarbimine");
     u++;
   }
 
-  //print(paevaMaksumus);
-  if (setPaevamaksumus != null) {
-    setPaevamaksumus(paevaMaksumus);
-  }
+  //if (setPaevamaksumus != null) {
+  // setPaevamaksumus(paevaMaksumus);
+  // }
 
   if (useServer) {
     await sendLogToServer(dataLog, value);
   }
   return maksumusSeade;
 }
-
+*/
 Future<Map<DateTime, double>> getSeadmeMaksumus(
     String value, DateTime startDate, DateTime endDate) async {
   Map<dynamic, dynamic> dataLog = {};
+
   List<double> eleringHinnad = await getElering(startDate, endDate);
+  if (endDate.year == DateTime.now().year &&
+      endDate.month == DateTime.now().month &&
+      endDate.day == DateTime.now().day) {
+    endDate = endDate.subtract(Duration(days: 1));
+  }
   List<double> tarbimine = await getTarbimineList(value, startDate, endDate);
   Map<DateTime, double> maksumusSeade = {};
   int i = 0;
@@ -210,13 +216,12 @@ Future<Map<DateTime, double>> getSeadmeMaksumus(
 
   //print(paevaMaksumus);
 
-  await sendLogToServer(dataLog, value);
+  //await sendLogToServer(dataLog, value);
 
   return maksumusSeade;
 }
 
 seadmeMaksumus2(String value, [Function? setPaevamaksumus]) async {
-  print("teeb siin");
   Map<int, List<double>> paevaMaksumus = {};
   Map<DateTime, double> maksumusSeade = {};
   Map<dynamic, dynamic> dataLog = {};
@@ -235,7 +240,6 @@ seadmeMaksumus2(String value, [Function? setPaevamaksumus]) async {
     monthDates.add(date);
     date = date.add(const Duration(days: 1));
   }
-  print("päevad: $monthDates");
   // Formatting the dates
   DateFormat formatter = DateFormat('yyyy-MM-dd');
   List<String> formattedDates =
@@ -267,7 +271,6 @@ seadmeMaksumus2(String value, [Function? setPaevamaksumus]) async {
     var headers = {
       'Authorization': 'Bearer ${tokenMap[value]}',
     };
-    print(test);
     var data = {
       'id': value,
       'channel': '0',
@@ -278,32 +281,39 @@ seadmeMaksumus2(String value, [Function? setPaevamaksumus]) async {
     var url = Uri.parse(
         '${seadmeteMap[value]["api_url"]}/statistics/relay/consumption');
     var res = await http.post(url, headers: headers, body: data);
-    formattedDate = '${formattedDate}T20';
     String abi = test;
-    test = '${test}T20';
-
-    if (res.statusCode != 200) {
-      return;
-    }
     final jsonData = json.decode(res.body);
     var resJson = json.decode(res.body) as Map<String, dynamic>;
-    //print(res.body);
     final historyData = jsonData['data']['history'] as List<dynamic>;
-    var url1 = Uri.parse(
-        'https://dashboard.elering.ee/api/nps/price?start=$formattedDate%3A59%3A59.999Z&end=$test%3A59%3A59.999Z');
-    var res1 = await http.get(url1);
-    if (res1.statusCode != 200) {
-      throw Exception('http.get error: statusCode= ${res1.statusCode}');
-    }
-    //print(res1.body);
-    final httpPackageJson = json.decode(res1.body) as Map<String, dynamic>;
-    List<MapEntry<String, dynamic>> entryList;
-    entryList = httpPackageJson.entries.toList();
-
-    //Võtab Listist Eesti hinnagraafiku
-    var ajutine = entryList[1].value;
-    var ajutine2 = ajutine.entries.toList();
-    var hinnagraafik = ajutine2[0].value;
+    var hinnagraafik =
+        await getElering(DateTime.parse(formattedDate), DateTime.parse(test));
+    /**
+      formattedDate = '${formattedDate}T20';
+      
+      test = '${test}T20';
+  
+      if (res.statusCode != 200) {
+        return;
+      }
+      
+      //print(res.body);
+      
+      var url1 = Uri.parse(
+          'https://dashboard.elering.ee/api/nps/price?start=$formattedDate%3A59%3A59.999Z&end=$test%3A59%3A59.999Z');
+      var res1 = await http.get(url1);
+      if (res1.statusCode != 200) {
+        throw Exception('http.get error: statusCode= ${res1.statusCode}');
+      }
+      //print(res1.body);
+      final httpPackageJson = json.decode(res1.body) as Map<String, dynamic>;
+      List<MapEntry<String, dynamic>> entryList;
+      entryList = httpPackageJson.entries.toList();
+  
+      //Võtab Listist Eesti hinnagraafiku
+      var ajutine = entryList[1].value;
+      var ajutine2 = ajutine.entries.toList();
+      var hinnagraafik = ajutine2[0].value;
+    */
     paevaMaksumus[u] = [];
     double tarbimine = 0.0;
     for (var i = 0; i < 24; i++) {
@@ -317,10 +327,10 @@ seadmeMaksumus2(String value, [Function? setPaevamaksumus]) async {
       tarbimine = tarbimine + ajutineTarb;
       katse = katse + ajutineTarb;
       // print(historyData);
-      temp = temp + ajutineTarb * hinnagraafik[i]['price'];
-      hind = hind + (ajutineTarb * hinnagraafik[i]['price']);
+      temp = temp + ajutineTarb * hinnagraafik[i];
+      hind = hind + (ajutineTarb * hinnagraafik[i]);
 
-      paevaMaksumus[u]?.add(ajutineTarb * hinnagraafik[i]['price']);
+      paevaMaksumus[u]?.add(ajutineTarb * hinnagraafik[i]);
     }
     u++;
     maksumusSeade[DateTime.parse(abi)] = temp;

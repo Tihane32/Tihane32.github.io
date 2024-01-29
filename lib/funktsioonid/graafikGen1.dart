@@ -229,8 +229,6 @@ graafikGen1Saatmine(List<dynamic> graafik, String id) async {
 List<String> graafikGen1Filtreerimine(List<dynamic> graafik, List<int> paevad) {
   List<String> newList = [];
   List<String> newGraafik = [];
-  print("J: $graafik");
-  print("J: $paevad");
   for (String item in graafik) {
     List<String> parts = item.split('-');
     if (parts[1].length > 1) {
@@ -252,7 +250,6 @@ List<String> graafikGen1Filtreerimine(List<dynamic> graafik, List<int> paevad) {
       }
     }
   }
-  print("J: $newGraafik");
   return newGraafik;
 }
 
