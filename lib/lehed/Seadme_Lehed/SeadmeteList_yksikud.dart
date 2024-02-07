@@ -31,7 +31,7 @@ class _SeadmeteList_yksikudState extends State<SeadmeteList_yksikud> {
     // uuenda seadme voimsust iga 3me sekundi tagant
     voimsusMoodis();
     Timer.periodic(Duration(seconds: 3), (Timer timer) {
-      if (ModalRoute.of(context)?.isCurrent == true) {
+      if (mounted) {
         setState(() {
           voimsusMoodis();
           seadmeteMap = seadmeteMap;

@@ -41,9 +41,6 @@ keskonnaMoodis() async {
       Map<String, dynamic> jsonResponseMap = json.decode(res.body);
       List<dynamic> history = jsonResponseMap['data']['history'];
 
-      print(
-          'T: $history ==================================================================');
-
       if (history.isNotEmpty) {
         if (history.last.containsKey('max_temperature')) {
           double lastTemperature = history.last['max_temperature'];
