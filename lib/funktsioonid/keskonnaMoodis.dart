@@ -41,13 +41,24 @@ keskonnaMoodis() async {
       Map<String, dynamic> jsonResponseMap = json.decode(res.body);
       List<dynamic> history = jsonResponseMap['data']['history'];
 
+      print(
+          'T: $history ==================================================================');
+
       if (history.isNotEmpty) {
-        double lastTemperature = history.last['max_temperature'];
-        lastTemperature = ((lastTemperature * mod).round().toDouble() / mod);
-        anduriteMap[key]['temp'] = lastTemperature.toString();
-        double lastMoisture = history.last['humidity'];
-        lastMoisture = ((lastMoisture * mod).round().toDouble() / mod);
-        anduriteMap[key]['niiskus'] = lastMoisture.toString();
+        if (history.last.containsKey('max_temperature')) {
+          double lastTemperature = history.last['max_temperature'];
+          lastTemperature = ((lastTemperature * mod).round().toDouble() / mod);
+          anduriteMap[key]['temp'] = lastTemperature.toString();
+        } else {
+          anduriteMap[key]['temp'] = 'xx';
+        }
+        if (history.last.containsKey('humidity')) {
+          double lastMoisture = history.last['humidity'];
+          lastMoisture = ((lastMoisture * mod).round().toDouble() / mod);
+          anduriteMap[key]['niiskus'] = lastMoisture.toString();
+        } else {
+          anduriteMap[key]['niiskus'] = 'xx';
+        }
       } else {
         anduriteMap[key]['temp'] = 'xx';
         anduriteMap[key]['niiskus'] = 'xx';
