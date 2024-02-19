@@ -544,12 +544,6 @@ class _KeskmiseHinnaAluselTundideValimineState
                                   ((context.size!.height - 70) / 25))
                               .round() -
                           1;
-                      print(context.size?.width);
-                      print(args.position.dx);
-                      print(puutePunkt);
-                      print(((args.position.dx / (context.size!.height - 70)) *
-                              25) -
-                          1);
                       setState(() {
                         lulitusMapVasak =
                             TunniVarviMuutus(puutePunkt, lulitusMapVasak);
@@ -557,7 +551,6 @@ class _KeskmiseHinnaAluselTundideValimineState
                             TunniVarviMuutus(puutePunkt, lulitusMapParem);
                         lulitusMap = lulitusMapParem;
                       });
-                      print("tana $tana");
                       updateLulitusMap(lulitusMap, 'Odavaimad tunnid');
                     },
                     enableSideBySideSeriesPlacement: false,
@@ -732,22 +725,30 @@ KeskHindString(Map<int, dynamic> keskHind, double hindAVG) {
 }
 
 OdavimadTunnidOn(Map<int, dynamic> lulitus, int tunnid) {
-// Convert the map to a list of entries and sort it by the price
   var sortedEntries = lulitus.entries.toList()
     ..sort((a, b) => a.value[1].compareTo(b.value[1]));
 
-  // Update the first 12 to true
   for (int i = 0; i < tunnid; i++) {
     var key = sortedEntries[i].key;
     lulitus[key][2] = true;
   }
 
-  // Update the rest to false
   for (int i = tunnid; i < sortedEntries.length; i++) {
     var key = sortedEntries[i].key;
     lulitus[key][2] = false;
   }
 
+  //Siia panna tunnid mis
+  List soovitudTunnidSees = [13, 16];
+
+  for (int i = 0; i < soovitudTunnidSees.length; i++) {
+    if (lulitus[soovitudTunnidSees[i]][2] == false) {
+      lulitus[soovitudTunnidSees[i]][2] = true;
+      tunnid = tunnid - 1;
+      var key = sortedEntries[tunnid].key;
+      lulitus[key][2] = false;
+    }
+  }
   return lulitus;
 }
 
