@@ -40,5 +40,6 @@ voimsusMoodis() async {
     } else {
       seadmeteMap[key]['Hetke_voimsus'] = 0;
     }
+    print('T: ${jsonResponseMap['data']['device_status']}');
   });
 }

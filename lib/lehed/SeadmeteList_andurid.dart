@@ -24,7 +24,7 @@ class _SeadmeteList_anduridState extends State<SeadmeteList_andurid> {
   @override
   void initState() {
     Timer.periodic(Duration(seconds: 600), (Timer timer) {
-      if (ModalRoute.of(context)?.isCurrent == true) {
+      if (mounted) {
         setState(() {
           keskonnaMoodis();
           anduriteMap = anduriteMap;
@@ -33,6 +33,7 @@ class _SeadmeteList_anduridState extends State<SeadmeteList_andurid> {
         timer.cancel();
       }
     });
+
     super.initState();
     fetchData();
   }

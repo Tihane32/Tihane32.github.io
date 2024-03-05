@@ -4,12 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:testuus4/lehed/Gruppi_Lehed/gruppiYldinfo.dart';
 import 'package:testuus4/widgets/AbiLeht.dart';
 import 'package:testuus4/lehed/Seadme_Lehed/SeadmeGraafikLeht.dart';
 import 'package:testuus4/lehed/TarbimisLeht.dart';
 import 'package:testuus4/lehed/P%C3%B5hi_Lehed/dynamicKoduLeht.dart';
 import 'package:testuus4/main.dart';
-import 'GrupiSeadmed.dart';import 'package:testuus4/parameters.dart';
+import 'GrupiSeadmed.dart';
+import 'package:testuus4/parameters.dart';
 import '../Seadme_Lehed/SeadmePildiMuutmine.dart';
 import '../Seadme_Lehed/SeadmeYldInfo.dart';
 import 'gruppiKoostamine.dart';
@@ -54,7 +56,9 @@ class _DunaamilineGrupiLehtState extends State<DunaamilineGrupiLeht> {
       AbiLeht(),
       AbiLeht(),
       GruppiSeadmed(gruppNimi: gruppNimi),
-      AbiLeht(),
+      GruppiYldinfoLeht(
+        gruppNimi: gruppNimi,
+      ),
       GruppiKoostamine(),
     ];
   }
