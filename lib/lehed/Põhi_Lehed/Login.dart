@@ -97,7 +97,7 @@ class _LoginPageState extends State<LoginPage> {
         if (!seadmeteMap.containsKey(device['id'])) {
           var seade = new Map<String, dynamic>();
 
-          if (!device['id'].endsWith("_1")) {
+          if (!(device['id'].toString()).endsWith("_1")) {
             seade['Seadme_nimi'] = device['name'];
             seade['Seadme_pistik'] = device['name'];
             seade['Seadme_generatsioon'] = device['gen'];
@@ -140,7 +140,7 @@ class _LoginPageState extends State<LoginPage> {
       for (var device in seadedKasutajalt.values) {
         var seade = new Map<String, dynamic>();
         //seade['Seadme_ID'] = device['id'];
-        if (!device['id'].endsWith("_1")) {
+        if (!(device['id'].toString()).endsWith("_1")) {
           seade['Seadme_nimi'] = device['name'];
           seade['Seadme_pistik'] = device['name'];
           seade['Seadme_generatsioon'] = device['gen'];
