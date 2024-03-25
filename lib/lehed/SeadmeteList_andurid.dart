@@ -240,9 +240,8 @@ class _SeadmeteList_anduridState extends State<SeadmeteList_andurid> {
                                 ),
                               ),
                               Visibility(
-                                visible: anduriteMap[andur]
-                                        ['Seadme_generatsioon'] ==
-                                    2,
+                                visible:
+                                    false, //anduriteMap[andur]['Seadme_generatsioon'] ==2,
                                 child: Positioned(
                                   top: 0,
                                   left: MediaQuery.of(context).size.width / 4 -

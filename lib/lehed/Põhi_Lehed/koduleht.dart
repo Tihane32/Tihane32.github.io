@@ -2,7 +2,8 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:intl/intl.dart';import 'package:testuus4/parameters.dart';
+import 'package:intl/intl.dart';
+import 'package:testuus4/parameters.dart';
 import 'package:testuus4/funktsioonid/tarbimine.dart';
 import 'package:testuus4/lehed/tarbimiseGraafik.dart';
 import 'package:testuus4/lehed/tarbimiseGraafikSpline.dart';
@@ -276,8 +277,10 @@ class _KoduLehtState extends State<KoduLeht> {
                                 // Perform the desired action with the selected range
                                 setState(() {
                                   print("määratud ${_rangeStart?.month}");
-                                  tarbimisLastDay = DateTime(_rangeEnd!.year, _rangeEnd!.month);
-                                  tarbimisFirstDay = DateTime(_rangeStart!.year, _rangeStart!.month);
+                                  tarbimisLastDay = DateTime(
+                                      _rangeEnd!.year, _rangeEnd!.month);
+                                  tarbimisFirstDay = DateTime(
+                                      _rangeStart!.year, _rangeStart!.month);
                                   firstDayOfMonth = _rangeStart!;
                                   lastDayOfMonth = _rangeEnd!;
                                 });
