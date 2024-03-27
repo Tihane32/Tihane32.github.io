@@ -1,0 +1,7 @@
+type;category;channels;relay;temperature;moisture;ligth;name;gen
+SHPLG-S;relay;1;true;false;false;false;Shelly Plug S;1
+SHHT-1;sensor;1;false;true;true;false;Shelly H&T;1
+SHTRV-01;thermostat;1;false;true;false;false;Shelly TRV;1
+SPSW-202PE16EU;relay;2;true;false;false;false;Shelly Pro 2PM v.1;2
+SNSN-0013A;sensor;1;false;true;true;false;Shelly Plus H&T;2
+SNSW-001P8EU;relay;1;true;false;false;false;Shelly Plus 1PM Mini;2

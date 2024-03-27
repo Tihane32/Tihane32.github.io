@@ -1,9 +1,0 @@
-
-SEADMED
-Shelly seaded on salvestatud telefoni/seadme mallu. Seadmeid kutsutakse telefoni malust voimalikult vahe.
-Malust kutsutakse seadmed esile programmi kaivitamisel ja juhul, kui seadmete vaartuseid muudetakse, 
-nt kui toimub lulitamine kirjutatakse umber seadme oleku parameeter. Seadmed on salvestatud kohale "seadmed".
-Seadmed on salvestatud Map<String, dynamic> kujul ja nimetuseks on "seadmeteMap".
-Map<String, dyanmic> naeb valja jargneval kujul: 
-Seadme_ID : {"Seadme_nimi" : "value", "Seadme_pistik" : "value", "Seadme_generatsioon" : "value", 
-"api_url" : "value", "Seadme_pilt" : "value", "Seadme_olek" : "value", "Cloud_key" : "value"} 
